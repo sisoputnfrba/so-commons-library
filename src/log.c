@@ -123,6 +123,8 @@ void log_write_in_level(t_logger logger, t_log_level level, const char* message_
 			printf("%s", buffer);
 			fflush(stdout);
 		}
+		string_destroy(message);
+		string_destroy(buffer);
 	}
 }
 
