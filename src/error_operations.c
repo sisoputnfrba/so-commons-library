@@ -18,6 +18,7 @@ void error_show(t_string message, ...) {
 	error_message = string_append(error_message, message);
 
 	vprintf(error_message, arguments);
-
+	
+	string_destroy(error_message);
 	va_end(arguments);
 }
