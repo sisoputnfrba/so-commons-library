@@ -32,13 +32,12 @@ char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "ERROR"}
  */
 void log_write_in_level(t_logger logger, t_log_level level, const char* message_template, va_list arguments);
 bool isEnableLevelInLogger(t_logger logger, t_log_level level);
-bool isEnableConsole(t_logger logger);
 
 /**
  * Public Functions
  */
 
-t_logger log_create(char* file, t_string program_name, t_console_mode console_mode, t_log_level detail) {
+t_logger log_create(char* file, t_string program_name, bool is_active_console, t_log_level detail) {
 	t_logger logger = malloc(sizeof(t_log_object));
 
 	if (logger == NULL) {
@@ -55,7 +54,7 @@ t_logger log_create(char* file, t_string program_name, t_console_mode console_mo
 	}
 
 	logger->file = file_opened;
-	logger->mode = console_mode;
+	logger->is_active_console = is_active_console;
 	logger->detail = detail;
 	logger->pid = getpid();
 	logger->program_name = string_new(program_name);
@@ -120,7 +119,7 @@ void log_write_in_level(t_logger logger, t_log_level level, const char* message_
 
 		fprintf(logger->file, "%s", buffer);
 		fflush(logger->file);
-		if (isEnableConsole(logger)) {
+		if (logger->is_active_console) {
 			printf("%s", buffer);
 			fflush(stdout);
 		}
@@ -145,10 +144,6 @@ t_log_level log_level_from_string(t_string level) {
 	return -1;
 }
 
-
-bool isEnableConsole(t_logger logger) {
-	return logger->mode == ACTIVE;
-}
 
 bool isEnableLevelInLogger(t_logger logger, t_log_level level) {
 	return level >= logger->detail;

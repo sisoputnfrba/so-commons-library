@@ -13,11 +13,6 @@
 #include <sys/types.h>
 
 typedef enum {
-	ACTIVE,
-	INACTIVE
-}t_console_mode;
-
-typedef enum {
 	TRACE,
 	DEBUG,
 	INFO,
@@ -27,7 +22,7 @@ typedef enum {
 
 typedef struct {
 	FILE* file;
-	t_console_mode mode;
+	bool is_active_console;
 	t_log_level detail;
 	t_string program_name;
 	pid_t pid;
@@ -35,7 +30,7 @@ typedef struct {
 
 typedef t_log_object* t_logger;
 
-t_logger log_create(char* file, t_string program_name, t_console_mode console_mode, t_log_level level);
+t_logger log_create(char* file, t_string program_name, bool is_active_console, t_log_level level);
 void log_destroy(t_logger logger);
 
 void log_trace(t_logger logger, const char* message, ...);
