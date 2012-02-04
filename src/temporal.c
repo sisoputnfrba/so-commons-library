@@ -13,12 +13,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/timeb.h>
+#include <string.h>
 
 t_string temporal_get_string_time() {
 	time_t log_time;
 	struct tm *log_tm;
 	struct timeb tmili;
-	t_string str_time = malloc(8 + 1);
+	t_string str_time = malloc(strlen("hh:mm:ss:mmmm") + 1);
 
 	if ((log_time = time(NULL)) == -1) {
 		error_show("Error getting date!");
@@ -32,7 +33,7 @@ t_string temporal_get_string_time() {
 		return 0;
 	}
 
-	t_string partial_time = malloc(8 + 1);
+	t_string partial_time = malloc(strlen("hh:mm:ss") + 1);
 	strftime(partial_time, 127, "%H:%M:%S", log_tm);
 	sprintf(str_time, "%s:%hu", partial_time, tmili.millitm);
 	string_destroy(partial_time);

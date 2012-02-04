@@ -62,7 +62,8 @@ t_logger log_create(char* file, t_string program_name, bool is_active_console, t
 }
 
 void log_destroy(t_logger logger) {
-	free(logger->program_name);
+	string_destroy(logger->program_name);
+	fclose(logger->file);
 	free(logger);
 }
 
@@ -104,7 +105,7 @@ void log_error(t_logger logger, const char* message_template, ...) {
 void log_write_in_level(t_logger logger, t_log_level level, const char* message_template, va_list list_arguments) {
 
 	if (isEnableLevelInLogger(logger, level)) {
-		t_string message, time;
+		t_string message, time, buffer;
 		unsigned int thread_id;
 
 		message = malloc(LOG_MAX_LENGTH_MESSAGE + 1);
@@ -112,7 +113,7 @@ void log_write_in_level(t_logger logger, t_log_level level, const char* message_
 		time = temporal_get_string_time();
 		thread_id = pthread_self();
 
-		t_string buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
+		buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
 		sprintf(buffer, "%s %s/%d:%d [%s]: %s\n",
 				time, logger->program_name, logger->pid, thread_id,
 				log_level_as_string(logger->detail), message);
@@ -123,6 +124,8 @@ void log_write_in_level(t_logger logger, t_log_level level, const char* message_
 			printf("%s", buffer);
 			fflush(stdout);
 		}
+
+		string_destroy(time);
 		string_destroy(message);
 		string_destroy(buffer);
 	}
