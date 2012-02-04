@@ -2,3 +2,7 @@
 .cproject
 .o
 .so
+.d
+makefile
+.mk
+.a
