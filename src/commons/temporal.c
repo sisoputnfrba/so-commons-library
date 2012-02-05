@@ -38,5 +38,7 @@ t_string temporal_get_string_time() {
 	sprintf(str_time, "%s:%hu", partial_time, tmili.millitm);
 	string_destroy(partial_time);
 
+	//Adjust memory allocation
+	str_time = realloc(str_time, strlen(str_time) + 1);
 	return str_time;
 }
