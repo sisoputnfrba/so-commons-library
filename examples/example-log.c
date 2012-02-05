@@ -5,7 +5,7 @@
  *      Author: Prieto, Gaston
  */
 
-#include <log.h>
+#include <commons/log.h>
 
 int main(int argc, char **argv) {
 	t_logger logger = log_create("log.txt", "EXAMPLE", true, INFO);

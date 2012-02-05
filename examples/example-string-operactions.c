@@ -5,7 +5,7 @@
  *      Author: shinichi
  */
 
-#include <string_operations.h>
+#include <commons/string_operations.h>
 
 #include <stdio.h>
 
