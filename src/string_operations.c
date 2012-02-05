@@ -22,7 +22,7 @@ void string_append(t_string* original, t_string string_to_add) {
 }
 
 bool string_equals_ignore_case(t_string actual, t_string expected) {
-	return strcasecmp(actual, expected);
+	return strcasecmp(actual, expected) == 0;
 }
 
 void string_destroy(t_string string) {
