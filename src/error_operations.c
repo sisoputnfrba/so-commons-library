@@ -15,7 +15,7 @@ void error_show(t_string message, ...) {
 	va_list arguments;
 	va_start(arguments, message);
 
-	t_string error_message = string_new("[[ERROR]]");
+	t_string error_message = string_duplicate("[[ERROR]]");
 	string_append(&error_message, message);
 
 	vprintf(error_message, arguments);

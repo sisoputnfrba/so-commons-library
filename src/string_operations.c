@@ -10,10 +10,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-t_string string_new(char* original_string) {
-	t_string string = calloc(1, strlen(original_string) + 1);
-	strcpy(string, original_string);
-	return string;
+t_string string_new(){
+	return calloc(1, 255 + 1);
+}
+
+t_string string_duplicate(char* original_string) {
+	return strdup(original_string);
 }
 
 void string_append(t_string* original, t_string string_to_add) {

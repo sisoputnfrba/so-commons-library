@@ -57,7 +57,7 @@ t_logger log_create(char* file, t_string program_name, bool is_active_console, t
 	logger->is_active_console = is_active_console;
 	logger->detail = detail;
 	logger->pid = getpid();
-	logger->program_name = string_new(program_name);
+	logger->program_name = string_duplicate(program_name);
 	return logger;
 }
 
