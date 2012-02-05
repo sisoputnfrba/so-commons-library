@@ -15,7 +15,7 @@ typedef char* t_string;
 t_string string_new(char *original_text);
 void string_destroy(t_string string);
 
-t_string string_append(t_string original, t_string string_to_add);
+void string_append(t_string* original, t_string string_to_add);
 bool string_equals_ignore_case(t_string actual, t_string expected);
 
 #endif /* STRING_OPERATIONS_H_ */

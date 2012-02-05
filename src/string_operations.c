@@ -16,10 +16,9 @@ t_string string_new(char* original_string) {
 	return string;
 }
 
-t_string string_append(t_string original, t_string string_to_add) {
-	t_string string = realloc(original, strlen(original) + strlen(string_to_add) + 1);
-	strcat(string, string_to_add);
-	return string;
+void string_append(t_string* original, t_string string_to_add) {
+	*original = realloc(*original, strlen(*original) + strlen(string_to_add) + 1);
+	strcat(*original, string_to_add);
 }
 
 bool string_equals_ignore_case(t_string actual, t_string expected) {
