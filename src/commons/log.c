@@ -26,13 +26,13 @@
 #define LOG_MAX_LENGTH_BUFFER LOG_MAX_LENGTH_MESSAGE + 100
 #define LOG_ENUM_SIZE 5
 
-char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "ERROR"};
+static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "ERROR"};
 
 /**
  * Private Functions
  */
-void log_write_in_level(t_logger logger, t_log_level level, const char* message_template, va_list arguments);
-bool isEnableLevelInLogger(t_logger logger, t_log_level level);
+static void log_write_in_level(t_logger logger, t_log_level level, const char* message_template, va_list arguments);
+static bool isEnableLevelInLogger(t_logger logger, t_log_level level);
 
 /**
  * Public Functions
@@ -103,7 +103,25 @@ void log_error(t_logger logger, const char* message_template, ...) {
 	va_end(arguments);
 }
 
-void log_write_in_level(t_logger logger, t_log_level level, const char* message_template, va_list list_arguments) {
+t_string log_level_as_string(t_log_level level) {
+	return enum_names[level];
+}
+
+t_log_level log_level_from_string(t_string level) {
+	int i;
+
+	for (i = 0; i < LOG_ENUM_SIZE; i++) {
+		if (string_equals_ignore_case(level, enum_names[i])){
+			return i;
+		}
+	}
+
+	error_show("Invalid value level (%s) to map a enum", level);
+
+	return -1;
+}
+
+static void log_write_in_level(t_logger logger, t_log_level level, const char* message_template, va_list list_arguments) {
 
 	if (isEnableLevelInLogger(logger, level)) {
 		t_string message, time, buffer;
@@ -132,25 +150,6 @@ void log_write_in_level(t_logger logger, t_log_level level, const char* message_
 	}
 }
 
-t_string log_level_as_string(t_log_level level) {
-	return enum_names[level];
-}
-
-t_log_level log_level_from_string(t_string level) {
-	int i;
-
-	for (i = 0; i < LOG_ENUM_SIZE; i++) {
-		if (string_equals_ignore_case(level, enum_names[i])){
-			return i;
-		}
-	}
-
-	error_show("Invalid value level (%s) to map a enum", level);
-
-	return -1;
-}
-
-
-bool isEnableLevelInLogger(t_logger logger, t_log_level level) {
+static bool isEnableLevelInLogger(t_logger logger, t_log_level level) {
 	return level >= logger->detail;
 }
