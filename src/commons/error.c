@@ -6,7 +6,7 @@
  */
 
 
-#include "error_operations.h"
+#include "error.h"
 
 #include <stdarg.h>
 #include <stdio.h>

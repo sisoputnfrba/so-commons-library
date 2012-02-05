@@ -5,7 +5,7 @@
  *      Author: Prieto, Gaston
  */
 
-#include "string_operations.h"
+#include "string.h"
 
 #include <stdlib.h>
 #include <string.h>

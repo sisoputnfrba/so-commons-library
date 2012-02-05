@@ -8,9 +8,10 @@
 #ifndef LOG_H_
 #define LOG_H_
 
-#include "string_operations.h"
 #include <stdio.h>
 #include <sys/types.h>
+#include "string.h"
+
 
 typedef enum {
 	TRACE,

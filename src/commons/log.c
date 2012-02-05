@@ -7,9 +7,9 @@
 
 #include "log.h"
 
-#include "string_operations.h"
+#include "string.h"
 #include "temporal.h"
-#include "error_operations.h"
+#include "error.h"
 
 #include <stdlib.h>
 #include <stdbool.h>

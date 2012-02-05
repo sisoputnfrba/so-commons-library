@@ -8,7 +8,7 @@
 #ifndef ERROR_OPERATIONS_H_
 #define ERROR_OPERATIONS_H_
 
-#include "string_operations.h"
+#include "string.h"
 
 void error_show(t_string message, ...);
 

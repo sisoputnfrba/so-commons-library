@@ -6,7 +6,7 @@
  */
 
 #include "temporal.h"
-#include "error_operations.h"
+#include "error.h"
 
 #include <stdlib.h>
 #include <time.h>

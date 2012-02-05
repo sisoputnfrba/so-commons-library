@@ -8,7 +8,7 @@
 #ifndef TEMPORAL_H_
 #define TEMPORAL_H_
 
-#include "string_operations.h"
+#include "string.h"
 
 t_string temporal_get_string_time();
 
