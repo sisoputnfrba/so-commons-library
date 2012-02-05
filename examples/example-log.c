@@ -2,7 +2,7 @@
  * log.c
  *
  *  Created on: Feb 3, 2012
- *      Author: shinichi
+ *      Author: Prieto, Gaston
  */
 
 #include <log.h>
