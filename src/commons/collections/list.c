@@ -180,10 +180,10 @@ void *list_remove( t_list *list, int num ){
 }
 
 /*
- * @NAME: list_removeByClosure2
+ * @NAME: list_remove_by_closure
  * @DESC: Remueve el primer elemento de la lista que haga que el closure devuelva != 0.
  */
-void* list_removeByClosure2( t_list *list, int (*closure)(void*) ){
+void* list_remove_by_closure( t_list *list, int (*closure)(void*) ){
 	t_link_element *element_aux, *element_ant, *element;
 	void *data = NULL;
 
@@ -217,10 +217,10 @@ void* list_removeByClosure2( t_list *list, int (*closure)(void*) ){
 }
 
 /*
- * @NAME: list_remove_and_destroy
+ * @NAME: list_delete
  * @DESC: Remueve un elemento de la lista de una determinada posicion y libera la memoria.
  */
-void list_removeAndDestroy( t_list *list, int num, void (*data_destroyer)(void*) ){
+void list_delete( t_list *list, int num, void (*data_destroyer)(void*) ){
 	void *data = NULL;
 	t_link_element *aux_element = NULL;
 
@@ -244,10 +244,10 @@ void list_removeAndDestroy( t_list *list, int num, void (*data_destroyer)(void*)
 }
 
 /*
- * @NAME: list_removeByClosure
+ * @NAME: list_remove_by_closure
  * @DESC: Remueve y destruye los elementos de la lista que hagan que el closure devuelva != 0.
  */
-void list_removeByClosure( t_list *list, int (*closure)(void*), void (*data_destroyer)(void*) ){
+void list_delete_by_closure( t_list *list, int (*closure)(void*), void (*data_destroyer)(void*) ){
 	t_link_element *element_aux, *element_ant, *element;
 
 	element_ant = NULL;
@@ -278,14 +278,6 @@ void list_removeByClosure( t_list *list, int (*closure)(void*), void (*data_dest
 }
 
 /*
- * @NAME: list_removeByPointer
- * @DESC: Remueve un elemento de la lista cuyo puntero sea igual al indicado en el argumento
- */
-void list_removeByPointer( t_list *list, void *data,  void (*data_destroyer)(void*) ){
-	/*TODO Hay que implementarlo*/
-}
-
-/*
  * @NAME: list_size
  * @DESC: Retorna el tamaño de la lista
  */
@@ -294,10 +286,10 @@ int list_size( t_list *list ){
 }
 
 /*
- * @NAME: list_isEmpty
+ * @NAME: list_isempty
  * @DESC: Verifica si la lista esta vacia
  */
-int list_isEmpty( t_list *list ){
+int list_isempty( t_list *list ){
 	return list_size(list) == 0;
 }
 

@@ -34,12 +34,11 @@
 	void	   *list_find( t_list *list, int (*closure)(void*) );
 	void		list_iterator( t_list *list, void (*closure)(void*) );
 	void   	   *list_remove( t_list *list, int num );
-	void        list_removeAndDestroy( t_list *list, int num, void (*data_destroyer)(void*) );
-	void    	list_removeByPointer( t_list *list, void *data, void (*data_destroyer)(void*) );
-	void    	list_removeByClosure( t_list *list, int (*closure)(void*), void (*data_destroyer)(void*) );
-	void	   *list_removeByClosure2( t_list *list, int (*closure)(void*) );
+	void        list_delete( t_list *list, int num, void (*data_destroyer)(void*) );
+	void    	list_delete_by_closure( t_list *list, int (*closure)(void*), void (*data_destroyer)(void*) );
+	void	   *list_remove_by_closure( t_list *list, int (*closure)(void*) );
 	int     	list_size( t_list *list );
-	int     	list_isEmpty( t_list *list );
+	int     	list_isempty( t_list *list );
 	void 		list_clean( t_list *list, void (*data_destroyer)(void*) );
 	void 		list_destroy( t_list *list, void (*data_destroyer)(void*) );
 
