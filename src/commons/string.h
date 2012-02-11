@@ -5,8 +5,8 @@
  *      Author: Prieto, Gaston
  */
 
-#ifndef STRING_OPERATIONS_H_
-#define STRING_OPERATIONS_H_
+#ifndef STRING_H_
+#define STRING_H_
 
 #include <stdbool.h>
 
@@ -31,4 +31,4 @@ int string_length(t_string text);
 bool string_is_empty(t_string text);
 bool string_equals_ignore_case(t_string actual, t_string expected);
 
-#endif /* STRING_OPERATIONS_H_ */
+#endif /* STRING_H_ */

@@ -5,11 +5,11 @@
  *      Author: Prieto, Gaston
  */
 
-#ifndef ERROR_OPERATIONS_H_
-#define ERROR_OPERATIONS_H_
+#ifndef ERROR_H_
+#define ERROR_H_
 
 #include "string.h"
 
 void error_show(t_string message, ...);
 
-#endif /* ERROR_OPERATIONS_H_ */
+#endif /* ERROR_H_ */
