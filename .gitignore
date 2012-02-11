@@ -1,9 +1,9 @@
 .project
 .cproject
-.o
-.so
-.d
-makefile
-.mk
-.a
 .settings
+makefile
+*.o
+*.so
+*.d
+*.mk
+*.a
