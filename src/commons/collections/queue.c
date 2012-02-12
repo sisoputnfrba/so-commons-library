@@ -95,18 +95,6 @@ void* queue_pop( t_queue *queue ){
 }
 
 /*
- * @NAME: queue_iterator
- * @DESC: Itera la lista llamando al closure por cada elemento
- */
-void queue_iterator( t_queue* queue, void (*closure)(void*) ){
-	t_link_element *element = queue->head;
-	while( element != NULL ){
-		closure(element->data);
-		element = element->next;
-	}
-}
-
-/*
  * @NAME: queue_size
  * @DESC: Devuelve la cantidad de elementos de la cola
  */
@@ -118,7 +106,7 @@ int queue_size( t_queue* queue ){
  * @NAME: queue_isEmpty
  * @DESC: Verifica si la cola esta vacia
  */
-int queue_isempty( t_queue *queue ){
+int queue_is_empty( t_queue *queue ){
 	return queue_size(queue) == 0;
 }
 

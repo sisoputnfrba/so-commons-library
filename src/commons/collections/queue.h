@@ -18,21 +18,22 @@
 #define QUEUE_H_
 
 
-	#include "node.h"
+#include "node.h"
 
-	typedef struct{
-		t_link_element* head;
-		t_link_element* tail;
-		int elements_count;
-	}t_queue;
+typedef struct{
+	t_link_element* head;
+	t_link_element* tail;
+	int elements_count;
+}t_queue;
 
-	t_queue		*queue_create();
-	void 		queu_clean( t_queue *queue, void (*data_destroyer)(void*) );
-	void 		queue_destroy( t_queue *queue, void (*data_destroyer)(void*) );
-	void 		queue_push( t_queue *queue, void *element  );
-	void		*queue_pop( t_queue *queue );
-	void		queue_iterator( t_queue *queue, void (*closure)(void*) );
-	int 		queue_size( t_queue *queue );
-	int 		queue_isempty( t_queue *queue );
+t_queue		*queue_create();
+void 		queue_destroy( t_queue *queue, void (*data_destroyer)(void*) );
+
+void 		queue_push( t_queue *queue, void *element  );
+void		*queue_pop( t_queue *queue );
+void 		queu_clean( t_queue *queue, void (*data_destroyer)(void*) );
+
+int 		queue_size( t_queue *queue );
+int 		queue_is_empty( t_queue *queue );
 
 #endif /*OLD_QUEUE_H_*/
