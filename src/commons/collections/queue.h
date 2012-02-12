@@ -18,7 +18,7 @@
 #define QUEUE_H_
 
 
-	#include "collections.h"
+	#include "node.h"
 
 	typedef struct{
 		t_link_element* head;

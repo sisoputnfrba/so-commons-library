@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COLLECTIONS_H_
-#define COLLECTIONS_H_
+#ifndef NODE_H_
+#define NODE_H_
 
 
 	struct link_element{
@@ -24,11 +24,11 @@
 	};
 	typedef struct link_element t_link_element;
 
-	struct dlink_element{
-		struct dlink_element *previous;
+	struct double_link_element{
+		struct double_link_element *previous;
 		void *data;
-		struct dlink_element *next;
+		struct double_link_element *next;
 	};
-	typedef struct dlink_element t_dlink_element;
+	typedef struct double_link_element t_double_link_element;
 
-#endif /*COLLECTIONS_H_*/
+#endif /*NODE_H_*/
