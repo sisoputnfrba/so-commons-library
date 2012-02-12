@@ -18,29 +18,32 @@
 #define LIST_H_
 
 
-	#include "node.h"
+#include "node.h"
 
-	typedef struct{
-		t_link_element *head;
-		int elements_count;
-	}t_list;
+typedef struct{
+	t_link_element *head;
+	int elements_count;
+}t_list;
 
-	t_list     *list_create();
-	int     	list_add( t_list *list, void *data );
-	void       *list_get( t_list *list, int num );
-	void		list_put( t_list *list, int num, void *data );
-	void	   *list_switch( t_list* list, int num, void* data );
-	void 		list_set( t_list* list, int num, void* data, void (*data_destroyer)(void*));
-	void	   *list_find( t_list *list, int (*closure)(void*) );
-	void		list_iterator( t_list *list, void (*closure)(void*) );
-	void   	   *list_remove( t_list *list, int num );
-	void        list_delete( t_list *list, int num, void (*data_destroyer)(void*) );
-	void    	list_delete_by_closure( t_list *list, int (*closure)(void*), void (*data_destroyer)(void*) );
-	void	   *list_remove_by_closure( t_list *list, int (*closure)(void*) );
-	int     	list_size( t_list *list );
-	int     	list_isempty( t_list *list );
-	void 		list_clean( t_list *list, void (*data_destroyer)(void*) );
-	void 		list_destroy( t_list *list, void (*data_destroyer)(void*) );
+t_list *    list_create();
+void 		list_destroy( t_list *list, void (*data_destroyer)(void*) );
+
+int     	list_add( t_list *list, void *element );
+void       *list_get( t_list *list, int index );
+void		list_put( t_list *list, int index, void *element );
+void	   *list_switch( t_list* list, int index, void* element );
+void 		list_replace( t_list* list, int index, void* element, void (*data_destroyer)(void*));
+void   	   *list_remove( t_list *list, int index );
+void        list_delete( t_list *list, int index, void (*data_destroyer)(void*) );
+void	   *list_remove_by_closure( t_list *list, int (*closure)(void*) );
+void    	list_delete_by_closure( t_list *list, int (*closure)(void*), void (*data_destroyer)(void*) );
+void 		list_clean( t_list *list, void (*data_destroyer)(void*) );
+
+void		list_iterator( t_list *list, void (*closure)(void*) );
+void	   *list_find( t_list *list, int (*closure)(void*) );
+int     	list_size( t_list *list );
+int     	list_is_empty( t_list *list );
+
 
 #endif /*LIST_H_*/
 

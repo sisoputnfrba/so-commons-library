@@ -114,7 +114,7 @@ void *list_switch( t_list *list, int num, void *data ){
  * @NAME: list_set
  * @DESC: Coloca un valor en una de la posiciones de la lista liberando el valor anterior
  */
-void list_set( t_list *list, int num, void *data, void (*data_destroyer)(void*)){
+void list_replace( t_list *list, int num, void *data, void (*data_destroyer)(void*)){
 	void *old_data = list_switch( list, num, data );
 	if( old_data != NULL ){
 		data_destroyer(old_data);
@@ -289,7 +289,7 @@ int list_size( t_list *list ){
  * @NAME: list_isempty
  * @DESC: Verifica si la lista esta vacia
  */
-int list_isempty( t_list *list ){
+int list_is_empty( t_list *list ){
 	return list_size(list) == 0;
 }
 
