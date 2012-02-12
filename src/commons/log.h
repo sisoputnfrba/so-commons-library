@@ -22,11 +22,11 @@
 
 
 typedef enum {
-	TRACE,
-	DEBUG,
-	INFO,
-	WARNING,
-	ERROR
+	LOG_LEVEL_TRACE,
+	LOG_LEVEL_DEBUG,
+	LOG_LEVEL_INFO,
+	LOG_LEVEL_WARNING,
+	LOG_LEVEL_ERROR
 }t_log_level;
 
 typedef struct {

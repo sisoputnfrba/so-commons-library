@@ -79,35 +79,35 @@ void log_destroy(t_logger logger) {
 void log_trace(t_logger logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
-	log_write_in_level(logger, TRACE, message_template, arguments);
+	log_write_in_level(logger, LOG_LEVEL_TRACE, message_template, arguments);
 	va_end(arguments);
 }
 
 void log_debug(t_logger logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
-	log_write_in_level(logger, DEBUG, message_template, arguments);
+	log_write_in_level(logger, LOG_LEVEL_DEBUG, message_template, arguments);
 	va_end(arguments);
 }
 
 void log_info(t_logger logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
-	log_write_in_level(logger, INFO, message_template, arguments);
+	log_write_in_level(logger, LOG_LEVEL_INFO, message_template, arguments);
 	va_end(arguments);
 }
 
 void log_warning(t_logger logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
-	log_write_in_level(logger, WARNING, message_template, arguments);
+	log_write_in_level(logger, LOG_LEVEL_WARNING, message_template, arguments);
 	va_end(arguments);
 }
 
 void log_error(t_logger logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
-	log_write_in_level(logger, ERROR, message_template, arguments);
+	log_write_in_level(logger, LOG_LEVEL_ERROR, message_template, arguments);
 	va_end(arguments);
 }
 

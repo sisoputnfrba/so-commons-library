@@ -8,7 +8,7 @@
 #include <commons/log.h>
 
 int main(int argc, char **argv) {
-	t_logger logger = log_create("log.txt", "EXAMPLE", true, INFO);
+	t_logger logger = log_create("log.txt", "EXAMPLE", true, LOG_LEVEL_INFO);
 
 	log_trace(logger, "Mensaje de tipo %s", "TRACE");
 	log_debug(logger, "Mensaje de tipo %s", "DEBUG");
