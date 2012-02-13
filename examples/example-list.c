@@ -12,7 +12,7 @@
 #include <commons/collections/list.h>
 
 int main(int argc, char **argv) {
-	t_list * list = list_create();
+	t_list * list = list_create(free);
 
 	char *val1 = malloc( sizeof("Hola") );
 	strcpy(val1, "Hola");
@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 	// warning con el tipo de dato
 	list_iterator(list, (void*)print_element);
 
-	list_destroy(list, free);
+	list_destroy(list);
 
 	return EXIT_SUCCESS;
 }

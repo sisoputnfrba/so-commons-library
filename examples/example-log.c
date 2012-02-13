@@ -5,6 +5,7 @@
  *      Author: Prieto, Gaston
  */
 
+#include <stdlib.h>
 #include <commons/log.h>
 
 int main(int argc, char **argv) {
@@ -18,5 +19,5 @@ int main(int argc, char **argv) {
 
 	log_destroy(logger);
 
-	return 0;
+	return EXIT_SUCCESS;
 }

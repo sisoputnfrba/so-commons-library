@@ -5,9 +5,10 @@
  *      Author: Prieto, Gaston
  */
 
-#include <commons/temporal.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <commons/temporal.h>
 
 int main(int argc, char **argv) {
 	int i = 0;
@@ -19,5 +20,5 @@ int main(int argc, char **argv) {
 		string_destroy(time);
 		usleep(500);
 	}
-	return 0;
+	return EXIT_SUCCESS;
 }

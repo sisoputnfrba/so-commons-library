@@ -5,9 +5,10 @@
  *      Author: shinichi
  */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <commons/string.h>
 
-#include <stdio.h>
 
 int main(int argc, char **argv) {
 	t_string string = string_new("");
@@ -43,6 +44,6 @@ int main(int argc, char **argv) {
 	printf("|%s|\n", string);
 	string_destroy(string);
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
