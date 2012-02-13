@@ -31,4 +31,12 @@
 	};
 	typedef struct double_link_element t_double_link_element;
 
+	struct hash_element{
+		char *key;
+		unsigned int hashcode;
+		void *data;
+		struct hash_element *next;
+	};
+	typedef struct hash_element t_hash_element;
+
 #endif /*NODE_H_*/

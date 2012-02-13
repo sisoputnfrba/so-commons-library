@@ -37,4 +37,4 @@
 	int queue_size(t_queue *);
 	int queue_is_empty(t_queue *);
 
-#endif /*OLD_QUEUE_H_*/
+#endif /*QUEUE_H_*/
