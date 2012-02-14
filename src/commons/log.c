@@ -54,12 +54,16 @@ t_logger log_create(char* file, t_string program_name, bool is_active_console, t
 		return NULL;
 	}
 
-	FILE *file_opened = fopen(file, "a");
+	FILE *file_opened = NULL;
 
-	if (file_opened == NULL) {
-		perror("Cannot create/open log file");
-		free(logger);
-		return NULL;
+	if (file != NULL) {
+		file_opened = fopen(file, "a");
+
+		if (file_opened == NULL) {
+			perror("Cannot create/open log file");
+			free(logger);
+			return NULL;
+		}
 	}
 
 	logger->file = file_opened;
@@ -72,7 +76,9 @@ t_logger log_create(char* file, t_string program_name, bool is_active_console, t
 
 void log_destroy(t_logger logger) {
 	string_destroy(logger->program_name);
-	fclose(logger->file);
+	if (logger->file != NULL) {
+		fclose(logger->file);
+	}
 	free(logger);
 }
 
@@ -145,8 +151,11 @@ static void log_write_in_level(t_logger logger, t_log_level level, const char* m
 				time, logger->program_name, logger->pid, thread_id,
 				log_level_as_string(logger->detail), message);
 
-		fprintf(logger->file, "%s", buffer);
-		fflush(logger->file);
+		if (logger->file != NULL) {
+			fprintf(logger->file, "%s", buffer);
+			fflush(logger->file);
+		}
+
 		if (logger->is_active_console) {
 			printf("%s", buffer);
 			fflush(stdout);

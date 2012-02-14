@@ -10,8 +10,20 @@
 #include <assert.h>
 #include <string.h>
 #include <commons/collections/list.h>
+#include <CUnit/CUnit.h>
 
-int main(int argc, char **argv) {
+#include "test_tools.h"
+
+static int init_suite(){
+	return 0;
+}
+
+
+static int clean_suite(){
+	return 0;
+}
+
+static void test_list_add() {
 	t_list * list = list_create(free);
 
 	char *val1 = malloc( sizeof("Hola") );
@@ -25,22 +37,27 @@ int main(int argc, char **argv) {
 
 	char * val = list_get(list, 0);
 
-	assert( strcmp("Hola", val) == 0 );
+	CU_ASSERT_STRING_EQUAL( val, "Hola");
 
 	val = list_get(list, 1);
 
-	assert( strcmp("Mundo", val) == 0 );
-
-
-	void print_element(char *val){
-		printf("%s\n", val);
-	}
-
-	// print_element es casteado a void* solo para que el compilador no tire
-	// warning con el tipo de dato
-	list_iterator(list, (void*)print_element);
+	CU_ASSERT_STRING_EQUAL( val, "Mundo");
 
 	list_destroy(list);
-
-	return EXIT_SUCCESS;
+	free(val1);
+	free(val2);
 }
+
+/**********************************************************************************************
+ *  							Building the test for CUnit
+ *********************************************************************************************/
+
+static CU_TestInfo tests[] = {
+  { "Test Add List Element", test_list_add },
+  CU_TEST_INFO_NULL,
+};
+
+CU_SuiteInfo list_suite = { "List TAD Suite", init_suite, clean_suite, tests };
+
+TEST_TOOLS_ADD_SUITE(list_suite)
+

@@ -7,17 +7,36 @@
 
 #include <stdlib.h>
 #include <commons/log.h>
+#include <CUnit/CUnit.h>
 
-int main(int argc, char **argv) {
-	t_logger logger = log_create("log.txt", "EXAMPLE", true, LOG_LEVEL_INFO);
+#include "test_tools.h"
 
-	log_trace(logger, "Mensaje de tipo %s", "TRACE");
-	log_debug(logger, "Mensaje de tipo %s", "DEBUG");
-	log_info(logger, "Mensaje de tipo %s", "INFO");
-	log_warning(logger, "Mensaje de tipo %s", "WARNING");
-	log_error(logger, "Mensaje de tipo %s", "ERROR");
+static int init_suite(){
+	return 0;
+}
+
+
+static int clean_suite(){
+	return 0;
+}
+
+static void test_log() {
+	t_logger logger = log_create(NULL, "EXAMPLE", true, LOG_LEVEL_INFO);
 
 	log_destroy(logger);
-
-	return EXIT_SUCCESS;
 }
+
+/**********************************************************************************************
+ *  							Building the test for CUnit
+ *********************************************************************************************/
+
+static CU_TestInfo tests[] = {
+  { "Test Log Functions", test_log },
+  CU_TEST_INFO_NULL,
+};
+
+CU_SuiteInfo log_suite = { "Log TAD Suite", init_suite, clean_suite, tests };
+
+TEST_TOOLS_ADD_SUITE(log_suite)
+
+
