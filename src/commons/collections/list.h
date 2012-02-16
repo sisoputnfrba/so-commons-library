@@ -30,16 +30,16 @@
 
 	int list_add(t_list *, void *element);
 	void *list_get(t_list *, int index);
-	void list_put(t_list *, int index, void *element);
-	void *list_switch(t_list*, int index, void* element);
-	void list_replace(t_list*, int index, void* element);
+	void list_add_in_index(t_list *, int index, void *element);
+	void *list_replace(t_list*, int index, void* element);
+	void list_replace_and_destroy(t_list*, int index, void* element);
 	void *list_remove(t_list *, int index);
-	void list_delete(t_list *, int index);
+	void list_remove_and_destroy(t_list *, int index);
 	void *list_remove_by_closure(t_list *, int(*closure)(void*));
-	void list_delete_by_closure(t_list *, int(*closure)(void*));
+	void list_remove_and_destroy_by_closure(t_list *, int(*closure)(void*));
 	void list_clean(t_list *);
 
-	void list_iterator(t_list *, void(*closure)(void*));
+	void list_iterate(t_list *, void(*closure)(void*));
 	void *list_find(t_list *, int(*closure)(void*));
 	int list_size(t_list *);
 	int list_is_empty(t_list *);

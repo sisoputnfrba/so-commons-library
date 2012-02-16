@@ -26,26 +26,19 @@ static int clean_suite(){
 static void test_list_add() {
 	t_list * list = list_create(free);
 
-	char *val1 = malloc( sizeof("Hola") );
-	strcpy(val1, "Hola");
-
-	char *val2 = malloc( sizeof("Mundo") );
-	strcpy(val2, "Mundo");
+	char *val1 = strdup("Hola");
+	char *val2 = strdup("Mundo");
 
 	list_add(list, val1);
 	list_add(list, val2);
 
-	char * val = list_get(list, 0);
-
+	char *val = list_get(list, 0);
 	CU_ASSERT_STRING_EQUAL( val, "Hola");
 
 	val = list_get(list, 1);
-
 	CU_ASSERT_STRING_EQUAL( val, "Mundo");
 
 	list_destroy(list);
-	free(val1);
-	free(val2);
 }
 
 /**********************************************************************************************

@@ -19,6 +19,10 @@
 #include "list.h"
 
 static void list_data_destroy(t_list *self, void *data);
+static void list_link_element(t_link_element* previous, t_link_element* next);
+static t_link_element* list_create_element(void* data);
+static t_link_element* list_get_element(t_list* self, int index);
+static t_link_element* list_find_element(t_list *self, int(*condition)(void*), int* index);
 
 /*
  * @NAME: list_create
@@ -41,19 +45,12 @@ t_list *list_create(void(*data_destroyer)(void*)) {
  * @DESC: Agrega un elemento al final de la lista
  */
 int list_add(t_list *self, void *data) {
-	t_link_element *new_element = malloc(sizeof(t_link_element));
-	new_element->data = data;
-	new_element->next = NULL;
+	t_link_element *new_element = list_create_element(data);
 
-	if (self->head == NULL) {
-		new_element->next = self->head;
+	if (self->elements_count == 0) {
 		self->head = new_element;
 	} else {
-		t_link_element* element = self->head;
-		while (element->next != NULL) {
-			element = element->next;
-		}
-		element->next = new_element;
+		list_link_element(list_get_element(self, self->elements_count - 1), new_element);
 	}
 	self->elements_count++;
 	return self->elements_count - 1;
@@ -63,39 +60,32 @@ int list_add(t_list *self, void *data) {
  * @NAME: list_get
  * @DESC: Retorna el contenido de una posicion determianda de la lista
  */
-void* list_get(t_list *self, int num) {
-	void* data = NULL;
-	int cont;
-
-	if ((self->elements_count > num) && (num >= 0)) {
-		t_link_element *element = self->head;
-		for (cont = 0; cont < num; element = element->next, cont++)
-			;
-		data = element->data;
-	}
-	return data;
+void* list_get(t_list *self, int index) {
+	t_link_element* element_in_index = list_get_element(self, index);
+	return element_in_index != NULL ? element_in_index->data : NULL;
 }
 
 /*
  * @NAME: list_put
  * @DESC: Agrega un elemento en una posicion determinada de la lista
  */
-void list_put(t_list *self, int num, void *data) {
-	t_link_element* element = NULL;
+void list_add_in_index(t_list *self, int index, void *data) {
+	t_link_element* next = NULL;
 	t_link_element* new_element = NULL;
-	int cont;
-	if ((self->elements_count > num) && (num >= 0)) {
-		new_element = malloc(sizeof(t_link_element));
-		new_element->data = data;
-		if (num == 0) {
-			new_element->next = self->head;
+	t_link_element* previous = NULL;
+
+	if ((self->elements_count > index) && (index >= 0)) {
+		new_element = list_create_element(data);
+
+		if (index == 0) {
+			list_link_element(new_element, self->head);
 			self->head = new_element;
 		} else {
-			element = self->head;
-			for (cont = 0; cont < num; element = element->next, cont++)
-				;
-			new_element->next = element->next;
-			element->next = new_element;
+			next = list_get_element(self, index);
+			previous = list_get_element(self, index - 1);
+
+			list_link_element(previous, new_element);
+			list_link_element(new_element, next);
 		}
 		self->elements_count++;
 	}
@@ -105,17 +95,15 @@ void list_put(t_list *self, int num, void *data) {
  * @NAME: list_switch
  * @DESC: Coloca un valor en una de la posiciones de la lista retornando el valor anterior
  */
-void *list_switch(t_list *self, int num, void *data) {
+void *list_replace(t_list *self, int index, void *data) {
 	void *old_data = NULL;
-	int cont;
 
-	if ((self->elements_count > num) && (num >= 0)) {
-		t_link_element *element = self->head;
-		for (cont = 0; cont < num; element = element->next, cont++)
-			;
+	t_link_element *element = list_get_element(self, index);
+	if (element != NULL) {
 		old_data = element->data;
 		element->data = data;
 	}
+
 	return old_data;
 }
 
@@ -123,8 +111,8 @@ void *list_switch(t_list *self, int num, void *data) {
  * @NAME: list_set
  * @DESC: Coloca un valor en una de la posiciones de la lista liberando el valor anterior
  */
-void list_replace(t_list *self, int num, void *data) {
-	void *old_data = list_switch(self, num, data);
+void list_replace_and_destroy(t_list *self, int num, void *data) {
+	void *old_data = list_replace(self, num, data);
 	if (old_data != NULL) {
 		list_data_destroy(self, old_data);
 	}
@@ -134,28 +122,19 @@ void list_replace(t_list *self, int num, void *data) {
  * @NAME: list_find
  * @DESC: Retorna el primer valor encontrado, el cual haga que el closure devuelva != 0
  */
-void* list_find(t_list *self, int(*closure)(void*)) {
-	t_link_element *element = self->head;
-	void *data = NULL;
-
-	while (element != NULL) {
-		if (closure(element->data)) {
-			data = element->data;
-			break;
-		}
-		element = element->next;
-	}
-	return data;
+void* list_find(t_list *self, int(*condition)(void*)) {
+	t_link_element *element = list_find_element(self, condition, NULL);
+	return element != NULL ? element->data : NULL;
 }
 
 /*
  * @NAME: list_iterator
  * @DESC: Itera la lista llamando al closure por cada elemento
  */
-void list_iterator(t_list* self, void(*closure)(void*)) {
+void list_iterate(t_list* self, void(*condition)(void*)) {
 	t_link_element *element = self->head;
 	while (element != NULL) {
-		closure(element->data);
+		condition(element->data);
 		element = element->next;
 	}
 }
@@ -164,26 +143,22 @@ void list_iterator(t_list* self, void(*closure)(void*)) {
  * @NAME: list_remove
  * @DESC: Remueve un elemento de la lista de una determinada posicion y lo retorna.
  */
-void *list_remove(t_list *self, int num) {
+void *list_remove(t_list *self, int index) {
 	void *data = NULL;
 	t_link_element *aux_element = NULL;
 
-	if (self->head == NULL
-		) return NULL;
+	if (self->head == NULL) return NULL;
 
-	if (num == 0) {
-		aux_element = self->head;
-		data = self->head->data;
-		self->head = self->head->next;
-	} else if ((self->elements_count > num) && (num > 0)) {
-		t_link_element *element = self->head;
-		int cont;
-		for (cont = 0; cont < (num - 1); element = element->next, cont++)
-			;
-		data = element->next->data;
-		aux_element = element->next;
-		element->next = element->next->next;
+	aux_element = list_get_element(self, index);
+	data = aux_element->data;
+
+	if (index == 0) {
+		self->head = aux_element->next;
+	} else {
+		t_link_element* previous = list_get_element(self, index - 1);
+		list_link_element(previous, aux_element->next);
 	}
+
 	self->elements_count--;
 	free(aux_element);
 	return data;
@@ -193,65 +168,23 @@ void *list_remove(t_list *self, int num) {
  * @NAME: list_remove_by_closure
  * @DESC: Remueve el primer elemento de la lista que haga que el closure devuelva != 0.
  */
-void* list_remove_by_closure(t_list *self, int(*closure)(void*)) {
-	t_link_element *element_aux, *element_ant, *element;
-	void *data = NULL;
+void* list_remove_by_closure(t_list *self, int(*condition)(void*)) {
+	int index = 0;
 
-	element_ant = NULL;
-	element = self->head;
-	while (element != NULL) {
-		if (closure(element->data)) {
-			if (self->head->next == NULL) {
-				element_aux = self->head;
-				self->head = self->head->next;
-				element = NULL;
-			} else if (element_ant == NULL) {
-				element_aux = element;
-				self->head = self->head->next;
-				element = self->head;
-			} else {
-				element_aux = element;
-				element = element->next;
-				element_ant->next = element;
-			}
-			data = element_aux->data;
-			free(element_aux);
-			self->elements_count--;
-			break;
-		} else {
-			element_ant = element;
-			element = element->next;
-		}
+	t_link_element* element = list_find_element(self, condition, &index);
+	if (element != NULL) {
+		return list_remove(self, index);
 	}
-	return data;
+
+	return NULL;
 }
 
 /*
  * @NAME: list_delete
  * @DESC: Remueve un elemento de la lista de una determinada posicion y libera la memoria.
  */
-void list_delete(t_list *self, int num) {
-	void *data = NULL;
-	t_link_element *aux_element = NULL;
-
-	if (self->head == NULL)
-		return;
-
-	if (num == 0) {
-		aux_element = self->head;
-		data = self->head->data;
-		self->head = self->head->next;
-	} else if ((self->elements_count > num) && (num > 0)) {
-		t_link_element *element = self->head;
-		int cont;
-		for (cont = 0; cont < (num - 1); element = element->next, cont++)
-			;
-		data = element->next->data;
-		aux_element = element->next;
-		element->next = element->next->next;
-	}
-	self->elements_count--;
-	free(aux_element);
+void list_remove_and_destroy(t_list *self, int index) {
+	void* data = list_remove(self, index);
 	list_data_destroy(self, data);
 }
 
@@ -259,34 +192,9 @@ void list_delete(t_list *self, int num) {
  * @NAME: list_remove_by_closure
  * @DESC: Remueve y destruye los elementos de la lista que hagan que el closure devuelva != 0.
  */
-void list_delete_by_closure(t_list *self, int(*closure)(void*)) {
-	t_link_element *element_aux, *element_ant, *element;
-
-	element_ant = NULL;
-	element = self->head;
-	while (element != NULL) {
-		if (closure(element->data)) {
-			if (self->head->next == NULL) {
-				element_aux = self->head;
-				self->head = self->head->next;
-				element = NULL;
-			} else if (element_ant == NULL) {
-				element_aux = element;
-				self->head = self->head->next;
-				element = self->head;
-			} else {
-				element_aux = element;
-				element = element->next;
-				element_ant->next = element;
-			}
-			list_data_destroy(self, element->data);
-			free(element_aux);
-			self->elements_count--;
-		} else {
-			element_ant = element;
-			element = element->next;
-		}
-	}
+void list_remove_and_destroy_by_closure(t_list *self, int(*condition)(void*)) {
+	void* data = list_remove_by_closure(self, condition);
+	list_data_destroy(self, data);
 }
 
 /*
@@ -340,3 +248,45 @@ static void list_data_destroy(t_list *self, void *data) {
 	}
 }
 
+static void list_link_element(t_link_element* previous, t_link_element* next) {
+	if (previous != NULL) {
+		previous->next = next;
+	}
+}
+
+static t_link_element* list_create_element(void* data) {
+	t_link_element* element = malloc(sizeof(t_link_element));
+	element->data = data;
+	element->next = NULL;
+	return element;
+}
+
+static t_link_element* list_get_element(t_list* self, int index) {
+	int cont = 0;
+
+	if ((self->elements_count > index) && (index >= 0)) {
+		t_link_element *element = self->head;
+		while (cont < index) {
+			element = element->next;
+			cont++;
+		}
+		return element;
+	}
+	return NULL;
+}
+
+static t_link_element* list_find_element(t_list *self, int(*condition)(void*), int* index) {
+	t_link_element *element = self->head;
+	int position = 0;
+
+	while (element != NULL && condition(element->data)) {
+		element = element->next;
+		position++;
+	}
+
+	if (index != NULL) {
+		*index = position;
+	}
+
+	return element;
+}
