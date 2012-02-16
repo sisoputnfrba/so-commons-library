@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <CUnit/Basic.h>
 
-#include "test_suites.h"
+#include "cunit_def.h"
 
 int main(int argc, char **argv) {
 

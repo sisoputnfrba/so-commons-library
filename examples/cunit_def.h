@@ -5,8 +5,8 @@
  *      Author: fviale
  */
 
-#ifndef EXAMPLES_H_
-#define EXAMPLES_H_
+#ifndef CUNIT_DEF_H_
+#define CUNIT_DEF_H_
 
 	#include <CUnit/Basic.h>
 
@@ -18,4 +18,4 @@
 
 	extern CU_SuiteInfo suites[] = { [ 0 ... (DEFAULT_MAX_SUITES - 1)] = CU_SUITE_INFO_NULL};
 
-#endif /* EXAMPLES_H_ */
+#endif /* CUNIT_DEF_H_ */

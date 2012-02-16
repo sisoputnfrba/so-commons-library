@@ -12,7 +12,7 @@
 #include <commons/collections/list.h>
 #include <CUnit/CUnit.h>
 
-#include "test_tools.h"
+#include "cunit_tools.h"
 
 static int init_suite(){
 	return 0;
@@ -52,12 +52,11 @@ static void test_list_add() {
  *  							Building the test for CUnit
  *********************************************************************************************/
 
+
+
 static CU_TestInfo tests[] = {
   { "Test Add List Element", test_list_add },
   CU_TEST_INFO_NULL,
 };
 
-CU_SuiteInfo list_suite = { "List TAD Suite", init_suite, clean_suite, tests };
-
-TEST_TOOLS_ADD_SUITE(list_suite)
-
+CUNIT_MAKE_SUITE(list, "Test Add List Element", init_suite, clean_suite, tests)

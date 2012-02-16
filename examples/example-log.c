@@ -9,7 +9,7 @@
 #include <commons/log.h>
 #include <CUnit/CUnit.h>
 
-#include "test_tools.h"
+#include "cunit_tools.h"
 
 static int init_suite(){
 	return 0;
@@ -30,13 +30,10 @@ static void test_log() {
  *  							Building the test for CUnit
  *********************************************************************************************/
 
-static CU_TestInfo tests[] = {
-  { "Test Log Functions", test_log },
+static CU_TestInfo tests[] = {{ "Test Log Functions", test_log },
   CU_TEST_INFO_NULL,
 };
 
-CU_SuiteInfo log_suite = { "Log TAD Suite", init_suite, clean_suite, tests };
-
-TEST_TOOLS_ADD_SUITE(log_suite)
+CUNIT_MAKE_SUITE(log, "Log TAD Suite", init_suite, clean_suite, tests)
 
 
