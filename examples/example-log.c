@@ -30,8 +30,9 @@ static void test_log() {
  *  							Building the test for CUnit
  *********************************************************************************************/
 
-static CU_TestInfo tests[] = {{ "Test Log Functions", test_log },
-  CU_TEST_INFO_NULL,
+static CU_TestInfo tests[] = {
+		{ "Test Log Functions", test_log },
+		CU_TEST_INFO_NULL,
 };
 
 CUNIT_MAKE_SUITE(log, "Log TAD Suite", init_suite, clean_suite, tests)

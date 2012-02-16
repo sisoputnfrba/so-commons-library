@@ -55,8 +55,8 @@ static void test_list_add() {
 
 
 static CU_TestInfo tests[] = {
-  { "Test Add List Element", test_list_add },
-  CU_TEST_INFO_NULL,
+		{ "Test Add List Element", test_list_add },
+		CU_TEST_INFO_NULL,
 };
 
 CUNIT_MAKE_SUITE(list, "Test Add List Element", init_suite, clean_suite, tests)
