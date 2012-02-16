@@ -10,15 +10,15 @@
 #include <stdlib.h>
 #include <commons/temporal.h>
 
-int main(int argc, char **argv) {
-	int i = 0;
-	t_string time;
-
-	for (i = 0; i < 100; ++i) {
-		time = temporal_get_string_time();
-		puts(time);
-		string_destroy(time);
-		usleep(500);
-	}
-	return EXIT_SUCCESS;
-}
+//int main(int argc, char **argv) {
+//	int i = 0;
+//	t_string time;
+//
+//	for (i = 0; i < 100; ++i) {
+//		time = temporal_get_string_time();
+//		puts(time);
+//		string_destroy(time);
+//		usleep(500);
+//	}
+//	return EXIT_SUCCESS;
+//}
