@@ -66,7 +66,7 @@ void* list_get(t_list *self, int index) {
 }
 
 /*
- * @NAME: list_put
+ * @NAME: list_add_in_index
  * @DESC: Agrega un elemento en una posicion determinada de la lista
  */
 void list_add_in_index(t_list *self, int index, void *data) {
@@ -92,7 +92,7 @@ void list_add_in_index(t_list *self, int index, void *data) {
 }
 
 /*
- * @NAME: list_switch
+ * @NAME: list_replace
  * @DESC: Coloca un valor en una de la posiciones de la lista retornando el valor anterior
  */
 void *list_replace(t_list *self, int index, void *data) {
@@ -108,7 +108,7 @@ void *list_replace(t_list *self, int index, void *data) {
 }
 
 /*
- * @NAME: list_set
+ * @NAME: list_replace_and_destroy
  * @DESC: Coloca un valor en una de la posiciones de la lista liberando el valor anterior
  */
 void list_replace_and_destroy(t_list *self, int num, void *data) {
@@ -131,10 +131,10 @@ void* list_find(t_list *self, int(*condition)(void*)) {
  * @NAME: list_iterator
  * @DESC: Itera la lista llamando al closure por cada elemento
  */
-void list_iterate(t_list* self, void(*condition)(void*)) {
+void list_iterate(t_list* self, void(*closure)(void*)) {
 	t_link_element *element = self->head;
 	while (element != NULL) {
-		condition(element->data);
+		closure(element->data);
 		element = element->next;
 	}
 }
@@ -180,7 +180,7 @@ void* list_remove_by_closure(t_list *self, int(*condition)(void*)) {
 }
 
 /*
- * @NAME: list_delete
+ * @NAME: list_remove_and_destroy
  * @DESC: Remueve un elemento de la lista de una determinada posicion y libera la memoria.
  */
 void list_remove_and_destroy(t_list *self, int index) {
@@ -189,7 +189,7 @@ void list_remove_and_destroy(t_list *self, int index) {
 }
 
 /*
- * @NAME: list_remove_by_closure
+ * @NAME: list_remove_and_destroy_by_closure
  * @DESC: Remueve y destruye los elementos de la lista que hagan que el closure devuelva != 0.
  */
 void list_remove_and_destroy_by_closure(t_list *self, int(*condition)(void*)) {
@@ -206,7 +206,7 @@ int list_size(t_list *list) {
 }
 
 /*
- * @NAME: list_isempty
+ * @NAME: list_is_empty
  * @DESC: Verifica si la lista esta vacia
  */
 int list_is_empty(t_list *list) {
@@ -279,7 +279,7 @@ static t_link_element* list_find_element(t_list *self, int(*condition)(void*), i
 	t_link_element *element = self->head;
 	int position = 0;
 
-	while (element != NULL && condition(element->data)) {
+	while (element != NULL && !condition(element->data)) {
 		element = element->next;
 		position++;
 	}
