@@ -1,15 +1,14 @@
 # Commons Library For C #
 
-Library with Commons Structures and Functions, the design of library is with ADT (Abstract Data Type).
+Biblioteca con Abstracciones utilizadas normalmente en aplicaciones desarrolladas en C, se ha diseñado orientandola al uso de TADs (Tipo Abstracto de Datos).
 
-Provided ADTs for this Library:
+Provee los siguientes TADs:
 
-* Logging
-* String Manipulation
-* Set of Elements
-  * Array
-  * List
-  * Set
-  * Dictionary
-  * Queue
-* Reader of Configuration File
+* Logging (commons/log.h)
+* Manipulación de Strings (commons/string.h)
+* Conjunto de elementos
+  * List (commons/list.h)
+  * Set (commons/set.h)
+  * Dictionary (commons/dictionary.h)
+  * Queue (commons/queue.h)
+* Manipulación de archivos de configuración (commons/config.h)
