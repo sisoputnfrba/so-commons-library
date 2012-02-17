@@ -216,6 +216,7 @@ static void test_list_remove_by_closure() {
 	CU_ASSERT_PTR_NOT_NULL( aux);
 	CU_ASSERT_STRING_EQUAL( aux->name, "Daniela");
 	CU_ASSERT_EQUAL( aux->age, 19);
+	persona_destroy(aux);
 
 	CU_ASSERT_EQUAL(list_size(list), 4);
 
