@@ -18,7 +18,7 @@
 
 #include "list.h"
 
-static void list_data_destroy(t_list *self, void *data);
+static void list_destroy_element(t_list *self, void *data);
 static void list_link_element(t_link_element* previous, t_link_element* next);
 static t_link_element* list_create_element(void* data);
 static t_link_element* list_get_element(t_list* self, int index);
@@ -114,7 +114,7 @@ void *list_replace(t_list *self, int index, void *data) {
 void list_replace_and_destroy(t_list *self, int num, void *data) {
 	void *old_data = list_replace(self, num, data);
 	if (old_data != NULL) {
-		list_data_destroy(self, old_data);
+		list_destroy_element(self, old_data);
 	}
 }
 
@@ -185,7 +185,7 @@ void* list_remove_by_closure(t_list *self, int(*condition)(void*)) {
  */
 void list_remove_and_destroy(t_list *self, int index) {
 	void* data = list_remove(self, index);
-	list_data_destroy(self, data);
+	list_destroy_element(self, data);
 }
 
 /*
@@ -194,7 +194,7 @@ void list_remove_and_destroy(t_list *self, int index) {
  */
 void list_remove_and_destroy_by_closure(t_list *self, int(*condition)(void*)) {
 	void* data = list_remove_by_closure(self, condition);
-	list_data_destroy(self, data);
+	list_destroy_element(self, data);
 }
 
 /*
@@ -222,7 +222,7 @@ void list_clean(t_list *self) {
 	while (self->head != NULL) {
 		element = self->head;
 		self->head = self->head->next;
-		list_data_destroy(self, element->data);
+		list_destroy_element(self, element->data);
 		free(element);
 	}
 	self->elements_count = 0;
@@ -236,16 +236,6 @@ void list_clean(t_list *self) {
 void list_destroy(t_list *self) {
 	list_clean(self);
 	free(self);
-}
-
-/*
- * @NAME: list_data_destroy
- * @DESC: Destruye el contenido de un nodo de la lista
- */
-static void list_data_destroy(t_list *self, void *data) {
-	if (self->data_destroyer != NULL) {
-		self->data_destroyer(data);
-	}
 }
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {
@@ -273,6 +263,16 @@ static t_link_element* list_get_element(t_list* self, int index) {
 		return element;
 	}
 	return NULL;
+}
+
+/*
+ * @NAME: list_data_destroy
+ * @DESC: Destruye el contenido de un nodo de la lista
+ */
+static void list_destroy_element(t_list *self, void *data) {
+	if (self->data_destroyer != NULL) {
+		self->data_destroyer(data);
+	}
 }
 
 static t_link_element* list_find_element(t_list *self, int(*condition)(void*), int* index) {
