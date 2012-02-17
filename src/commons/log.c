@@ -39,15 +39,15 @@ static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "
 /**
  * Private Functions
  */
-static void log_write_in_level(t_logger logger, t_log_level level, const char* message_template, va_list arguments);
-static bool isEnableLevelInLogger(t_logger logger, t_log_level level);
+static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list arguments);
+static bool isEnableLevelInLogger(t_log* logger, t_log_level level);
 
 /**
  * Public Functions
  */
 
-t_logger log_create(char* file, t_string program_name, bool is_active_console, t_log_level detail) {
-	t_logger logger = malloc(sizeof(t_log_object));
+t_log* log_create(char* file, t_string program_name, bool is_active_console, t_log_level detail) {
+	t_log* logger = malloc(sizeof(t_log));
 
 	if (logger == NULL) {
 		perror("Cannot create logger");
@@ -74,7 +74,7 @@ t_logger log_create(char* file, t_string program_name, bool is_active_console, t
 	return logger;
 }
 
-void log_destroy(t_logger logger) {
+void log_destroy(t_log* logger) {
 	string_destroy(logger->program_name);
 	if (logger->file != NULL) {
 		fclose(logger->file);
@@ -82,35 +82,35 @@ void log_destroy(t_logger logger) {
 	free(logger);
 }
 
-void log_trace(t_logger logger, const char* message_template, ...) {
+void log_trace(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
 	log_write_in_level(logger, LOG_LEVEL_TRACE, message_template, arguments);
 	va_end(arguments);
 }
 
-void log_debug(t_logger logger, const char* message_template, ...) {
+void log_debug(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
 	log_write_in_level(logger, LOG_LEVEL_DEBUG, message_template, arguments);
 	va_end(arguments);
 }
 
-void log_info(t_logger logger, const char* message_template, ...) {
+void log_info(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
 	log_write_in_level(logger, LOG_LEVEL_INFO, message_template, arguments);
 	va_end(arguments);
 }
 
-void log_warning(t_logger logger, const char* message_template, ...) {
+void log_warning(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
 	log_write_in_level(logger, LOG_LEVEL_WARNING, message_template, arguments);
 	va_end(arguments);
 }
 
-void log_error(t_logger logger, const char* message_template, ...) {
+void log_error(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
 	log_write_in_level(logger, LOG_LEVEL_ERROR, message_template, arguments);
@@ -135,7 +135,7 @@ t_log_level log_level_from_string(t_string level) {
 	return -1;
 }
 
-static void log_write_in_level(t_logger logger, t_log_level level, const char* message_template, va_list list_arguments) {
+static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
 
 	if (isEnableLevelInLogger(logger, level)) {
 		t_string message, time, buffer;
@@ -167,6 +167,6 @@ static void log_write_in_level(t_logger logger, t_log_level level, const char* m
 	}
 }
 
-static bool isEnableLevelInLogger(t_logger logger, t_log_level level) {
+static bool isEnableLevelInLogger(t_log* logger, t_log_level level) {
 	return level >= logger->detail;
 }

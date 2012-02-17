@@ -16,39 +16,38 @@
 #ifndef LOG_H_
 #define LOG_H_
 
-#include <stdio.h>
-#include <sys/types.h>
-#include "string.h"
+	#include <stdio.h>
+	#include <sys/types.h>
+	#include "string.h"
 
 
-typedef enum {
-	LOG_LEVEL_TRACE,
-	LOG_LEVEL_DEBUG,
-	LOG_LEVEL_INFO,
-	LOG_LEVEL_WARNING,
-	LOG_LEVEL_ERROR
-}t_log_level;
+	typedef enum {
+		LOG_LEVEL_TRACE,
+		LOG_LEVEL_DEBUG,
+		LOG_LEVEL_INFO,
+		LOG_LEVEL_WARNING,
+		LOG_LEVEL_ERROR
+	}t_log_level;
 
-typedef struct {
-	FILE* file;
-	bool is_active_console;
-	t_log_level detail;
-	t_string program_name;
-	pid_t pid;
-}t_log_object;
+	typedef struct {
+		FILE* file;
+		bool is_active_console;
+		t_log_level detail;
+		t_string program_name;
+		pid_t pid;
+	}t_log;
 
-typedef t_log_object* t_logger;
 
-t_logger log_create(char* file, t_string program_name, bool is_active_console, t_log_level level);
-void log_destroy(t_logger logger);
+	t_log* 		log_create(char* file, t_string program_name, bool is_active_console, t_log_level level);
+	void 		log_destroy(t_log* logger);
 
-void log_trace(t_logger logger, const char* message, ...);
-void log_debug(t_logger logger, const char* message, ...);
-void log_info(t_logger logger, const char* message, ...);
-void log_warning(t_logger logger, const char* message, ...);
-void log_error(t_logger logger, const char* message, ...);
+	void 		log_trace(t_log* logger, const char* message, ...);
+	void 		log_debug(t_log* logger, const char* message, ...);
+	void 		log_info(t_log* logger, const char* message, ...);
+	void 		log_warning(t_log* logger, const char* message, ...);
+	void 		log_error(t_log* logger, const char* message, ...);
 
-t_string log_level_as_string(t_log_level level);
-t_log_level log_level_from_string(t_string level);
+	t_string 	log_level_as_string(t_log_level level);
+	t_log_level log_level_from_string(t_string level);
 
 #endif /* LOG_H_ */

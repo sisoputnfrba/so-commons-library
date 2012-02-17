@@ -21,7 +21,7 @@ static int clean_suite(){
 }
 
 static void test_log() {
-	t_logger logger = log_create(NULL, "EXAMPLE", true, LOG_LEVEL_INFO);
+	t_log* logger = log_create(NULL, "EXAMPLE", true, LOG_LEVEL_INFO);
 
 	log_destroy(logger);
 }
