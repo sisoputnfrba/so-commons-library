@@ -45,8 +45,6 @@ static void test_list_add() {
  *  							Building the test for CUnit
  *********************************************************************************************/
 
-
-
 static CU_TestInfo tests[] = {
 		{ "Test Add List Element", test_list_add },
 		CU_TEST_INFO_NULL,

@@ -32,7 +32,7 @@ t_string string_duplicate(char* original_string) {
 }
 
 t_string string_repeat(char character, int count) {
-	t_string text = malloc(count + 1);
+	t_string text = calloc(count + 1, 1);
 	int i = 0;
 	for (i = 0; i < count; ++i) {
 		text[i] = character;
