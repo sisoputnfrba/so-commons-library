@@ -243,7 +243,7 @@ static void test_list_iterate() {
 	int index = 0;
 	void _list_elements(t_person *p) {
 		CU_ASSERT_PTR_NOT_NULL( p);
-		CU_ASSERT_STRING_EQUAL(ayudantes[index], p->name);
+		CU_ASSERT_STRING_EQUAL(ayudantes[index]->name, p->name);
 		index++;
 	}
 
