@@ -15,7 +15,7 @@
 	int 		  dictionary_put(t_dictionary *, char *key, void *data);
 	void 		 *dictionary_get(t_dictionary *, char *key);
 	void 		 *dictionary_remove(t_dictionary *, char *key);
-	void 		  dictionary_delete(t_dictionary *, char *key);
+	void 		  dictionary_remove_and_destroy(t_dictionary *, char *key);
 	void 		  dictionary_iterator(t_dictionary *, void(*closure)(void*));
 	void 		  dictionary_clean(t_dictionary *);
 	int 		  dictionary_is_empty(t_dictionary *);
