@@ -32,7 +32,7 @@
 	void queue_push(t_queue *, void *element);
 	void *queue_pop(t_queue *);
 	void *queue_peek(t_queue *);
-	void queu_clean(t_queue *);
+	void queue_clean(t_queue *);
 
 	int queue_size(t_queue *);
 	int queue_is_empty(t_queue *);

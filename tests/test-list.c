@@ -21,14 +21,14 @@ typedef struct {
 	unsigned char age;
 } t_person;
 
-t_person *persona_create(char *name, unsigned char age){
+static  t_person *persona_create(char *name, unsigned char age){
 	t_person *new = malloc( sizeof(t_person) );
 	new->name = strdup(name);
 	new->age = age;
 	return new;
 }
 
-void persona_destroy(t_person *self){
+static void persona_destroy(t_person *self){
 	free(self->name);
 	free(self);
 }
@@ -286,8 +286,8 @@ static CU_TestInfo tests[] = {
 		{ "Test Remove List Element", test_list_remove },
 		{ "Test Remove And Destroy List Element", test_list_remove_and_destroy },
 		{ "Test Remove By Closure List Element", test_list_remove_by_closure },
-		{ "Test Iterator List Element", test_list_iterate },
-		{ "Test Clean List Element", test_list_clean },
+		{ "Test Iterator List Elements", test_list_iterate },
+		{ "Test Clean List Elements", test_list_clean },
 		CU_TEST_INFO_NULL, };
 
-CUNIT_MAKE_SUITE(list, "Test Add List Element", init_suite, clean_suite, tests)
+CUNIT_MAKE_SUITE(list, "Test List TAD", init_suite, clean_suite, tests)
