@@ -46,6 +46,13 @@ static bool isEnableLevelInLogger(t_log* logger, t_log_level level);
  * Public Functions
  */
 
+
+/**
+ * @NAME: log_create
+ * @DESC: Crea una instancia de logger, tomando por parametro
+ * el nombre del programa, el nombre del archivo donde se van a generar los logs,
+ * el nivel de detalle minimo a loguear y si además se muestra por pantalla lo que se loguea.
+ */
 t_log* log_create(char* file, t_string program_name, bool is_active_console, t_log_level detail) {
 	t_log* logger = malloc(sizeof(t_log));
 
@@ -74,14 +81,24 @@ t_log* log_create(char* file, t_string program_name, bool is_active_console, t_l
 	return logger;
 }
 
+
+/**
+ * @NAME: log_destroy
+ * @DESC: Destruye una instancia de logger
+ */
 void log_destroy(t_log* logger) {
 	string_destroy(logger->program_name);
-	if (logger->file != NULL) {
-		fclose(logger->file);
-	}
+	fclose(logger->file);
 	free(logger);
 }
 
+/**
+ * @NAME: log_trace
+ * @DESC: Loguea un mensaje con el siguiente formato
+ *
+ * [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+ *
+ */
 void log_trace(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
@@ -89,6 +106,13 @@ void log_trace(t_log* logger, const char* message_template, ...) {
 	va_end(arguments);
 }
 
+/**
+ * @NAME: log_debug
+ * @DESC: Loguea un mensaje con el siguiente formato
+ *
+ * [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+ *
+ */
 void log_debug(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
@@ -96,6 +120,13 @@ void log_debug(t_log* logger, const char* message_template, ...) {
 	va_end(arguments);
 }
 
+/**
+ * @NAME: log_info
+ * @DESC: Loguea un mensaje con el siguiente formato
+ *
+ * [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+ *
+ */
 void log_info(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
@@ -103,6 +134,13 @@ void log_info(t_log* logger, const char* message_template, ...) {
 	va_end(arguments);
 }
 
+/**
+ * @NAME: log_warning
+ * @DESC: Loguea un mensaje con el siguiente formato
+ *
+ * [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+ *
+ */
 void log_warning(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
@@ -110,6 +148,13 @@ void log_warning(t_log* logger, const char* message_template, ...) {
 	va_end(arguments);
 }
 
+/**
+ * @NAME: log_
+ * @DESC: Loguea un mensaje con el siguiente formato
+ *
+ * [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+ *
+ */
 void log_error(t_log* logger, const char* message_template, ...) {
 	va_list arguments;
 	va_start(arguments, message_template);
@@ -117,10 +162,18 @@ void log_error(t_log* logger, const char* message_template, ...) {
 	va_end(arguments);
 }
 
+/**
+ * @NAME: log_level_as_string
+ * @DESC: Convierte un t_log_level a su representacion en string
+ */
 t_string log_level_as_string(t_log_level level) {
 	return enum_names[level];
 }
 
+/**
+ * @NAME: log_level_from_string
+ * @DESC: Convierte un string a su representacion en t_log_level
+ */
 t_log_level log_level_from_string(t_string level) {
 	int i;
 
@@ -130,10 +183,10 @@ t_log_level log_level_from_string(t_string level) {
 		}
 	}
 
-	error_show("Invalid value level (%s) to map a enum", level);
-
 	return -1;
 }
+
+/** PRIVATE FUNCTIONS **/
 
 static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
 
@@ -147,9 +200,10 @@ static void log_write_in_level(t_log* logger, t_log_level level, const char* mes
 		thread_id = pthread_self();
 
 		buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
-		sprintf(buffer, "%s %s/%d:%d [%s]: %s\n",
-				time, logger->program_name, logger->pid, thread_id,
-				log_level_as_string(logger->detail), message);
+		sprintf(buffer, "[%s] %s %s/(%d:%d): %s\n",
+				log_level_as_string(logger->detail), time,
+				logger->program_name, logger->pid, thread_id,
+				message);
 
 		if (logger->file != NULL) {
 			fprintf(logger->file, "%s", buffer);

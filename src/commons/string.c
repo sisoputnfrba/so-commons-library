@@ -23,14 +23,30 @@ static void string_do(t_string text, void (*closure)(char*));
 static void string_lower_element(char* ch);
 static void string_upper_element(char* ch);
 
+/**
+ * @NAME: string_new
+ * @DESC: Crea un string vacio ("")
+ */
 t_string string_new() {
 	return calloc(1, 1);
 }
 
+/**
+ * @NAME: string_duplicate
+ * @DESC: Crea un string nuevo desde un string pasado por parametro
+ */
 t_string string_duplicate(char* original_string) {
 	return strdup(original_string);
 }
 
+/**
+ * @NAME: string_repeat
+ * @DESC: Crea un string de longitud 'count' con el mismo caracter.
+ *
+ * Ejemplo:
+ * string_repeat('a', 5) = "aaaaa"
+ *
+ */
 t_string string_repeat(char character, int count) {
 	t_string text = calloc(count + 1, 1);
 	int i = 0;
@@ -40,20 +56,43 @@ t_string string_repeat(char character, int count) {
 	return text;
 }
 
+/**
+ * @NAME: string_append
+ * @DESC: Agrega al primer string el segundo
+ *
+ * Ejemplo:
+ * t_string unaPalabra = "HOLA ";
+ * t_string otraPalabra = "PEPE";
+ *
+ * string_append(&unaPalabra, otraPalabra);
+ *
+ * => unaPalabra = "HOLA PEPE"
+ */
 void string_append(t_string* original, t_string string_to_add) {
 	*original = realloc(*original, strlen(*original) + strlen(string_to_add) + 1);
 	strcat(*original, string_to_add);
 }
 
-
+/**
+ * @NAME: string_to_upper
+ * @DESC: Pone en mayuscula todos los caracteres de un string
+ */
 void string_to_upper(t_string text) {
 	string_do(text, &string_upper_element);
 }
 
+/**
+ * @NAME: string_to_lower
+ * @DESC: Pone en minuscula todos los caracteres de un string
+ */
 void string_to_lower(t_string text) {
 	string_do(text, &string_lower_element);
 }
 
+/**
+ * @NAME: string_capitalized
+ * @DESC: Capitaliza un string
+ */
 void string_capitalized(t_string text) {
 	if (!string_is_empty(text)) {
 		string_upper_element(text);
@@ -63,11 +102,21 @@ void string_capitalized(t_string text) {
 	}
 }
 
+/**
+ * @NAME: string_trim
+ * @DESC: Remueve todos los caracteres
+ * vacios de la derecha y la izquierda
+ */
 void string_trim(t_string* text) {
 	string_trim_left(text);
 	string_trim_right(text);
 }
 
+/**
+ * @NAME: string_trim_left
+ * @DESC: Remueve todos los caracteres
+ * vacios de la izquierda
+ */
 void string_trim_left(t_string* text) {
 	t_string string_without_blank = *text;
 
@@ -81,6 +130,11 @@ void string_trim_left(t_string* text) {
 	*text = new_string;
 }
 
+/**
+ * @NAME: string_trim_right
+ * @DESC: Remueve todos los caracteres
+ * vacios de la derecha
+ */
 void string_trim_right(t_string* text) {
 	t_string string_without_blank = *text;
 	int i = string_length(*text) - 1;
@@ -91,21 +145,40 @@ void string_trim_right(t_string* text) {
 	*text = realloc(*text, strlen(string_without_blank) + 1);
 }
 
+/**
+ * @NAME: string_length
+ * @DESC: Retorna la longitud de un string
+ */
 int string_length(t_string text) {
 	return strlen(text);
 }
 
+/**
+ * @NAME: string_is_empty
+ * @DESC: Retorna si un string es ""
+ */
 bool string_is_empty(t_string text) {
 	return string_length(text) == 0;
 }
 
+/**
+ * @NAME: string_equals_ignore_case
+ * @DESC: Retorna si dos strings son iguales
+ * ignorando las mayusculas y minusculas
+ */
 bool string_equals_ignore_case(t_string actual, t_string expected) {
 	return strcasecmp(actual, expected) == 0;
 }
 
+/**
+ * @NAME: string_destroy
+ * @DESC: Libera la memoria utilizada por un string
+ */
 void string_destroy(t_string string) {
 	free(string);
 }
+
+/** PRIVATE FUNCTIONS **/
 
 static void string_upper_element(char* ch) {
 	*ch = toupper(*ch);

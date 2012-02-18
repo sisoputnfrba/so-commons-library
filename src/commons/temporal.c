@@ -23,6 +23,11 @@
 #include <sys/timeb.h>
 #include <string.h>
 
+/**
+ * @NAME: temporal_get_string_time
+ * @DESC: Retorna un string con la hora actual,
+ * con el siguiente formato: hh:mm:ss:mmmm
+ */
 t_string temporal_get_string_time() {
 	time_t log_time;
 	struct tm *log_tm;
