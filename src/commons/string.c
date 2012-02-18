@@ -178,6 +178,46 @@ void string_destroy(t_string string) {
 	free(string);
 }
 
+/**
+ * @NAME: string_split
+ * @DESC: Separa un string dado un separador
+ */
+t_string* string_split(t_string text, t_string regex) {
+	t_string* substrings = NULL;
+	int size = 0;
+
+	t_string text_to_iterate = string_duplicate(text);
+	t_string token = NULL, next = NULL;
+	for (token = strtok_r(text_to_iterate, regex, &next) ;
+		 token ;
+		 token = strtok_r(NULL, regex, &next)) {
+
+		size++;
+		substrings = realloc(substrings, sizeof(t_string) * size);
+		substrings[size - 1] = strdup(token);
+	}
+
+	size++;
+	substrings = realloc(substrings, sizeof(t_string) * size);
+	substrings[size - 1] = NULL;
+
+	free(text_to_iterate);
+	return substrings;
+}
+
+/**
+ * @NAME: string_iterate_lines
+ * @DESC: Itera un array de strings aplicando
+ * el closure a cada string
+ */
+void string_iterate_lines(t_string* strings, void (*closure)(t_string)) {
+	while (*strings != NULL) {
+		closure(*strings);
+		strings++;
+	}
+}
+
+
 /** PRIVATE FUNCTIONS **/
 
 static void string_upper_element(char* ch) {

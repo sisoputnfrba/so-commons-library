@@ -38,5 +38,8 @@ void string_trim_right(t_string* text);
 int string_length(t_string text);
 bool string_is_empty(t_string text);
 bool string_equals_ignore_case(t_string actual, t_string expected);
+t_string* string_split(t_string text, t_string regex);
+
+void string_iterate_lines(t_string* strings, void (*closure)(t_string));
 
 #endif /* STRING_H_ */

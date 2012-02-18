@@ -179,6 +179,22 @@ static void test_string_length() {
 	string_destroy(string);
 }
 
+static void test_string_split() {
+	t_string line = "Hola planeta tierra";
+	t_string* substrings = string_split(line, " ");
+
+	CU_ASSERT_PTR_NOT_NULL(substrings);
+	CU_ASSERT_STRING_EQUAL(substrings[0], "Hola");
+	CU_ASSERT_STRING_EQUAL(substrings[1], "planeta");
+	CU_ASSERT_STRING_EQUAL(substrings[2], "tierra");
+	CU_ASSERT_PTR_NULL(substrings[3]);
+
+	free(substrings[0]);
+	free(substrings[1]);
+	free(substrings[2]);
+	free(substrings);
+}
+
 
 /**********************************************************************************************
  *  							Building the test for CUnit
@@ -198,6 +214,7 @@ static CU_TestInfo tests[] = {
 		{ "Test trim", test_string_trim},
 		{ "Test isEmpty a string", test_string_is_empty},
 		{ "Test length a string", test_string_length},
+		{ "Test split a string", test_string_split},
 		CU_TEST_INFO_NULL,
 };
 
