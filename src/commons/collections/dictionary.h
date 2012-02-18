@@ -17,7 +17,7 @@
 #ifndef DICTIONARY_H_
 #define DICTIONARY_H_
 
-	#define DEFAULT_DICTIONARY_INITIAL_SIZE 50
+	#define DEFAULT_DICTIONARY_INITIAL_SIZE 20
 
 	#include "node.h"
 
