@@ -17,13 +17,10 @@
 #ifndef QUEUE_H_
 #define QUEUE_H_
 
-	#include "node.h"
+	#include "list.h"
 
 	typedef struct {
-		t_link_element* head;
-		t_link_element* tail;
-		void (*data_destroyer)(void*);
-		int elements_count;
+		t_list* elements;
 	} t_queue;
 
 	t_queue *queue_create(void(*data_destroyer)(void*));
