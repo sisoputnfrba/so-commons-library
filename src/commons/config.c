@@ -2,18 +2,25 @@
  * config.c
  *
  *  Created on: Feb 18, 2012
- *      Author: shinichi
+ *      Ex-Author: shinichi
+ *      New-Author: fviale
  */
 
 
-#include "config.h"
-#include "stdlib.h"
-#include "stdio.h"
-#include "string.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
 
-t_dictionary* config_read_from_file(t_string path) {
-	t_dictionary* config = dictionary_create(free);
+#include "config.h"
+#include "string.h"
+#include "collections/dictionary.h"
+
+t_config *config_create(char *path){
+	t_config *config = malloc( sizeof(t_config) );
+
+	config->path = strdup(path);
+	config->properties = dictionary_create(free);
 
 	struct stat stat_file;
 	stat(path, &stat_file);
@@ -21,16 +28,17 @@ t_dictionary* config_read_from_file(t_string path) {
 
 	char* buffer = calloc(1, stat_file.st_size + 1);
 	fread(buffer, stat_file.st_size, 1, file);
+
 	t_string* lines = string_split(buffer, "\n");
 
 	void add_cofiguration(t_string line) {
 		t_string* keyAndValue = string_split(line, "=");
-		dictionary_put(config, keyAndValue[0], keyAndValue[1]);
+		dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
 		free(keyAndValue);
 	}
 	string_iterate_lines(lines, add_cofiguration);
+	string_iterate_lines(lines, (void*)free);
 
-	string_iterate_lines(lines, (void*)(char*)free);
 	free(lines);
 	free(buffer);
 	fclose(file);
@@ -38,14 +46,36 @@ t_dictionary* config_read_from_file(t_string path) {
 	return config;
 }
 
-void config_write_in_file(t_string path, t_dictionary* dictionary) {
-	FILE* file = fopen(path, "w");
-	void writeProperty(void* hash_element) {
-		t_hash_element *element = hash_element;
-		fprintf(file, "%s=%s\n", element->key, element->data);
+char *config_get_string_value(t_config *self, char *key){
+	return dictionary_get(self->properties, key);
+}
+
+int config_get_int_value(t_config *self, char *key){
+	char *value = config_get_string_value(self, key);
+	if(value != NULL){
+		return atoi(value);
 	}
+	return 0;
+}
 
-	dictionary_iterator(dictionary, writeProperty);
+long  config_get_long_value(t_config *self, char *key){
+	char *value = config_get_string_value(self, key);
+	if(value != NULL){
+		return atol(value);
+	}
+	return 0;
+}
 
-	fclose(file);
+double config_get_double_value(t_config *self, char *key){
+	char *value = config_get_string_value(self, key);
+	if(value != NULL){
+		return atof(value);
+	}
+	return 0;
+}
+
+void config_destroy(t_config *config){
+	free(config->path);
+	dictionary_destroy(config->properties);
+	free(config);
 }
