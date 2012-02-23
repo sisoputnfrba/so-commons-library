@@ -22,6 +22,7 @@
 	int 	  config_get_int_value(t_config*, char *key);
 	long	  config_get_long_value(t_config*, char *key);
 	double 	  config_get_double_value(t_config*, char *key);
+	int 	  config_keys_amount(t_config*);
 	void 	  config_destroy(t_config *config);
 
 #endif /* CONFIG_H_ */

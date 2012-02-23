@@ -31,7 +31,7 @@ t_config *config_create(char *path) {
 	t_string* lines = string_split(buffer, "\n");
 
 	void add_cofiguration(t_string line) {
-		if (string_length(line) > 0) {
+		if (string_length(line) > 0 && strncmp(line, "#", 1) != 0) {
 			t_string* keyAndValue = string_split(line, "=");
 			dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
 			free(keyAndValue);
@@ -77,6 +77,10 @@ double config_get_double_value(t_config *self, char *key) {
 		return atof(value);
 	}
 	return 0;
+}
+
+int config_keys_amount(t_config *self) {
+	return dictionary_size(self->properties);
 }
 
 void config_destroy(t_config *config) {

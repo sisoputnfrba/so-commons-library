@@ -22,6 +22,8 @@ static int clean_suite() {
 void test_read_config() {
 	t_config* config = config_create("resources/config.cfg");
 
+	CU_ASSERT_EQUAL_FATAL(config_keys_amount(config), 4);
+
 	CU_ASSERT_TRUE_FATAL(config_has_property(config, "IP"));
 	CU_ASSERT_STRING_EQUAL(config_get_string_value(config, "IP"), "127.0.0.1");
 
