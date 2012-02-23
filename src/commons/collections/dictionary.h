@@ -35,7 +35,7 @@
 	void 		 *dictionary_get(t_dictionary *, char *key);
 	void 		 *dictionary_remove(t_dictionary *, char *key);
 	void 		  dictionary_remove_and_destroy(t_dictionary *, char *key);
-	void 		  dictionary_iterator(t_dictionary *, void(*closure)(void*));
+	void 		  dictionary_iterator(t_dictionary *, void(*closure)(char*,void*));
 	void 		  dictionary_clean(t_dictionary *);
 	bool 		  dictionary_has_key(t_dictionary *, char* key);
 	bool 		  dictionary_is_empty(t_dictionary *);

@@ -116,7 +116,7 @@ void dictionary_remove_and_destroy(t_dictionary *self, char *key) {
 	}
 }
 
-void dictionary_iterator(t_dictionary *self, void(*closure)(void*)) {
+void dictionary_iterator(t_dictionary *self, void(*closure)(char*,void*)) {
 	int table_index;
 	for (table_index = 0; table_index < self->table_max_size; table_index++) {
 		t_hash_element *element = self->elements[table_index];
@@ -130,7 +130,7 @@ void dictionary_iterator(t_dictionary *self, void(*closure)(void*)) {
 
 			next_element = element->next;
 
-			closure(element);
+			closure(element->key, element);
 
 		} while (next_element != NULL);
 	}
