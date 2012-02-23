@@ -15,13 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * examples.c
- *
- *  Created on: 14/02/2012
- *      Author: fviale
- */
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <CUnit/Basic.h>
