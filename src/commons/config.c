@@ -31,9 +31,11 @@ t_config *config_create(char *path) {
 	t_string* lines = string_split(buffer, "\n");
 
 	void add_cofiguration(t_string line) {
-		t_string* keyAndValue = string_split(line, "=");
-		dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
-		free(keyAndValue);
+		if (string_length(line) > 0) {
+			t_string* keyAndValue = string_split(line, "=");
+			dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
+			free(keyAndValue);
+		}
 	}
 	string_iterate_lines(lines, add_cofiguration);
 	string_iterate_lines(lines, (void*) free);
