@@ -20,6 +20,7 @@
 	#define DEFAULT_DICTIONARY_INITIAL_SIZE 20
 
 	#include "node.h"
+	#include <stdbool.h>
 
 	typedef struct {
 		t_hash_element **elements;
@@ -36,7 +37,8 @@
 	void 		  dictionary_remove_and_destroy(t_dictionary *, char *key);
 	void 		  dictionary_iterator(t_dictionary *, void(*closure)(void*));
 	void 		  dictionary_clean(t_dictionary *);
-	int 		  dictionary_is_empty(t_dictionary *);
+	bool 		  dictionary_has_key(t_dictionary *, char* key);
+	bool 		  dictionary_is_empty(t_dictionary *);
 	int 		  dictionary_size(t_dictionary *);
 	void 		  dictionary_destroy(t_dictionary *);
 

@@ -163,7 +163,11 @@ void dictionary_clean(t_dictionary *self) {
 	self->elements_amount = 0;
 }
 
-int dictionary_is_empty(t_dictionary *self) {
+bool dictionary_has_key(t_dictionary *self, char* key) {
+	return dictionary_get_element(self, key) != NULL;
+}
+
+bool dictionary_is_empty(t_dictionary *self) {
 	return self->elements_amount == 0;
 }
 
