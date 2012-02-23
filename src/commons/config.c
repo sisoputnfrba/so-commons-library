@@ -65,26 +65,17 @@ char *config_get_string_value(t_config *self, char *key) {
 
 int config_get_int_value(t_config *self, char *key) {
 	char *value = config_get_string_value(self, key);
-	if (value != NULL) {
-		return atoi(value);
-	}
-	return 0;
+	return atoi(value);
 }
 
 long config_get_long_value(t_config *self, char *key) {
 	char *value = config_get_string_value(self, key);
-	if (value != NULL) {
-		return atol(value);
-	}
-	return 0;
+	return atol(value);
 }
 
 double config_get_double_value(t_config *self, char *key) {
 	char *value = config_get_string_value(self, key);
-	if (value != NULL) {
-		return atof(value);
-	}
-	return 0;
+	return atof(value);
 }
 
 int config_keys_amount(t_config *self) {
