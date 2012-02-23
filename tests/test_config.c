@@ -20,28 +20,18 @@ static int clean_suite() {
 }
 
 void test_read_config() {
-	t_dictionary* config = config_read_from_file("resources/config.cfg");
+	t_config* config = config_create("resources/config.cfg");
 
-	CU_ASSERT_PTR_NOT_NULL_FATAL(dictionary_get(config, "IP"));
-	CU_ASSERT_STRING_EQUAL(dictionary_get(config, "IP"), "127.0.0.1");
+	CU_ASSERT_TRUE_FATAL(config_has_property(config, "IP"));
+	CU_ASSERT_STRING_EQUAL(config_get_string_value(config, "IP"), "127.0.0.1");
 
-	CU_ASSERT_PTR_NOT_NULL_FATAL(dictionary_get(config, "PORT"));
-	CU_ASSERT_STRING_EQUAL(dictionary_get(config, "PORT"), "8080");
+	CU_ASSERT_TRUE_FATAL(config_has_property(config, "PORT"));
+	CU_ASSERT_EQUAL_FATAL(config_get_int_value(config, "PORT"), 8080);
 
-	CU_ASSERT_PTR_NOT_NULL_FATAL(dictionary_get(config, "PROCESS_NAME"));
-	CU_ASSERT_STRING_EQUAL(dictionary_get(config, "PROCESS_NAME"), "TEST");
+	CU_ASSERT_TRUE_FATAL(config_has_property(config, "PROCESS_NAME"));
+	CU_ASSERT_EQUAL_FATAL(config_get_double_value(config, "PROCESS_NAME"), 0.5);
 
-	dictionary_destroy(config);
-}
-
-void test_write_config() {
-	t_dictionary* config = dictionary_create(NULL);
-	dictionary_put(config, string_duplicate("IP"), "192.168.1.1");
-	dictionary_put(config, string_duplicate("PORT"), "25");
-	dictionary_put(config, string_duplicate("PATH"), "/home/gaston");
-
-	config_write_in_file("resources/write.cfg", config);
-	dictionary_destroy(config);
+	config_destroy(config);
 }
 
 /**********************************************************************************************
@@ -50,7 +40,6 @@ void test_write_config() {
 
 static CU_TestInfo tests[] = {
 		{ "Test read config", test_read_config },
-		{ "Test write config", test_write_config },
 		CU_TEST_INFO_NULL };
 
 CUNIT_MAKE_SUITE(config, "Test Dictionary TAD", init_suite, clean_suite, tests)
