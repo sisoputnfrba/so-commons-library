@@ -45,6 +45,10 @@ t_config *config_create(char *path) {
 	return config;
 }
 
+bool config_has_property(t_config *self, char* key) {
+	return dictionary_has_key(self->properties, key);
+}
+
 char *config_get_string_value(t_config *self, char *key) {
 	return dictionary_get(self->properties, key);
 }

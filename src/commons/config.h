@@ -17,6 +17,7 @@
 	} t_config;
 
 	t_config *config_create(char *path);
+	bool 	  config_has_property(t_dictionary *, char* key);
 	char 	 *config_get_string_value(t_config*, char *key);
 	int 	  config_get_int_value(t_config*, char *key);
 	long	  config_get_long_value(t_config*, char *key);
