@@ -26,7 +26,7 @@
 t_config *config_create(char *path) {
 	t_config *config = malloc(sizeof(t_config));
 
-	config->path = strdup(path);
+	config->path = string_duplicate(path);
 	config->properties = dictionary_create(free);
 
 	struct stat stat_file;
@@ -39,7 +39,7 @@ t_config *config_create(char *path) {
 	t_string* lines = string_split(buffer, "\n");
 
 	void add_cofiguration(t_string line) {
-		if (string_length(line) > 0 && strncmp(line, "#", 1) != 0) {
+		if (!string_begin_with(line, "#")) {
 			t_string* keyAndValue = string_split(line, "=");
 			dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
 			free(keyAndValue);
@@ -83,7 +83,7 @@ int config_keys_amount(t_config *self) {
 }
 
 void config_destroy(t_config *config) {
-	free(config->path);
 	dictionary_destroy(config->properties);
+	free(config->path);
 	free(config);
 }
