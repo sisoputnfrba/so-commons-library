@@ -163,6 +163,15 @@ bool string_is_empty(t_string text) {
 }
 
 /**
+ * @NAME: string_begin_with
+ * @DESC: Retorna si un string comienza con el
+ * string pasado por parametro
+ */
+bool string_begin_with(t_string text, t_string begin){
+	return strncmp(text, begin, string_length(begin)) == 0;
+}
+
+/**
  * @NAME: string_equals_ignore_case
  * @DESC: Retorna si dos strings son iguales
  * ignorando las mayusculas y minusculas
@@ -195,7 +204,7 @@ t_string* string_split(t_string text, t_string regex) {
 
 		size++;
 		substrings = realloc(substrings, sizeof(t_string) * size);
-		substrings[size - 1] = strdup(token);
+		substrings[size - 1] = string_duplicate(token);
 	}
 
 	size++;

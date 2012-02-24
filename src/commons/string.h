@@ -27,7 +27,6 @@ t_string string_duplicate(char *original_text);
 t_string string_repeat(char ch, int count);
 void string_append(t_string* original, t_string string_to_add);
 
-
 void string_to_upper(t_string text);
 void string_to_lower(t_string text);
 void string_capitalized(t_string text);
@@ -37,6 +36,7 @@ void string_trim_right(t_string* text);
 
 int string_length(t_string text);
 bool string_is_empty(t_string text);
+bool string_begin_with(t_string text, t_string begin);
 bool string_equals_ignore_case(t_string actual, t_string expected);
 t_string* string_split(t_string text, t_string regex);
 
