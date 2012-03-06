@@ -243,6 +243,28 @@ void list_destroy_and_destroy_elements(t_list *self, void(*element_destroyer)(vo
 	free(self);
 }
 
+t_list* list_take(t_list* self, int count) {
+	t_list* sublist = list_create();
+	int i = 0;
+	for (i = 0; i < count; ++i) {
+		void* element = list_get(self, i);
+		list_add(sublist, element);
+	}
+	return sublist;
+}
+
+t_list* list_take_and_remove(t_list* self, int count) {
+	t_list* sublist = list_create();
+	int i = 0;
+	for (i = 0; i < count; ++i) {
+		void* element = list_remove(self, 0);
+		list_add(sublist, element);
+	}
+	return sublist;
+}
+
+/********* PRIVATE FUNCTIONS **************/
+
 static void list_link_element(t_link_element* previous, t_link_element* next) {
 	if (previous != NULL) {
 		previous->next = next;

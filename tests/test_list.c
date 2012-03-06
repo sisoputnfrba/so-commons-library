@@ -42,13 +42,25 @@ static void persona_destroy(t_person *self){
 	free(self);
 }
 
+t_person *ayudantes[5];
+
 // --------------------------------------------------------
 
 static int init_suite() {
+	ayudantes[0] = persona_create("Matias", 24);
+	ayudantes[1] = persona_create("Gaston", 25);
+	ayudantes[2] = persona_create("Sebastian", 21);
+	ayudantes[3] = persona_create("Daniela", 19);
+	ayudantes[4] = persona_create("Facundo", 25);
 	return 0;
 }
 
 static int clean_suite() {
+	persona_destroy(ayudantes[0]);
+	persona_destroy(ayudantes[1]);
+	persona_destroy(ayudantes[2]);
+	persona_destroy(ayudantes[3]);
+	persona_destroy(ayudantes[4]);
 	return 0;
 }
 
@@ -232,14 +244,6 @@ static void test_list_remove_by_closure() {
 
 static void test_list_iterate() {
 
-	t_person *ayudantes[] = {
-			persona_create("Matias", 24),
-			persona_create("Gaston", 25),
-			persona_create("Sebastian", 21),
-			persona_create("Daniela", 19),
-			persona_create("Facundo", 25),
-	};
-
 	t_list * list = list_create();
 
 	list_add(list, ayudantes[0]);
@@ -258,7 +262,7 @@ static void test_list_iterate() {
 
 	list_iterate(list, (void*) _list_elements);
 
-	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
+	list_destroy(list);
 }
 
 
@@ -281,6 +285,64 @@ static void test_list_clean() {
 	list_destroy(list);
 }
 
+static void test_list_take() {
+	t_list* list = list_create();
+	list_add(list, ayudantes[0]);
+	list_add(list, ayudantes[1]);
+	list_add(list, ayudantes[2]);
+	list_add(list, ayudantes[3]);
+	list_add(list, ayudantes[4]);
+
+	t_list* sublist = list_take(list, 3);
+	CU_ASSERT_PTR_NOT_NULL(sublist);
+	CU_ASSERT_EQUAL(list_size(list), 5);
+	CU_ASSERT_EQUAL(list_size(sublist), 3);
+
+	t_person* element = list_get(sublist, 0);
+	CU_ASSERT_STRING_EQUAL(element->name, ayudantes[0]->name);
+
+	element = list_get(sublist, 1);
+	CU_ASSERT_STRING_EQUAL(element->name, ayudantes[1]->name);
+
+	element = list_get(sublist, 2);
+	CU_ASSERT_STRING_EQUAL(element->name, ayudantes[2]->name);
+
+	list_destroy(sublist);
+	list_destroy(list);
+}
+
+static void test_list_take_and_remove() {
+	t_list* list = list_create();
+	list_add(list, ayudantes[0]);
+	list_add(list, ayudantes[1]);
+	list_add(list, ayudantes[2]);
+	list_add(list, ayudantes[3]);
+	list_add(list, ayudantes[4]);
+
+	t_list* sublist = list_take_and_remove(list, 3);
+	CU_ASSERT_PTR_NOT_NULL(sublist);
+	CU_ASSERT_EQUAL(list_size(list), 2);
+	CU_ASSERT_EQUAL(list_size(sublist), 3);
+
+	t_person* element = list_get(sublist, 0);
+	CU_ASSERT_STRING_EQUAL(element->name, ayudantes[0]->name);
+
+	element = list_get(sublist, 1);
+	CU_ASSERT_STRING_EQUAL(element->name, ayudantes[1]->name);
+
+	element = list_get(sublist, 2);
+	CU_ASSERT_STRING_EQUAL(element->name, ayudantes[2]->name);
+
+	element = list_get(list, 0);
+	CU_ASSERT_STRING_EQUAL(element->name, ayudantes[3]->name);
+
+	element = list_get(list, 1);
+	CU_ASSERT_STRING_EQUAL(element->name, ayudantes[4]->name);
+
+	list_destroy(sublist);
+	list_destroy(list);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -295,6 +357,8 @@ static CU_TestInfo tests[] = {
 		{ "Test Remove By Closure List Element", test_list_remove_by_closure },
 		{ "Test Iterator List Elements", test_list_iterate },
 		{ "Test Clean List Elements", test_list_clean },
+		{ "Test take without remove elements", test_list_take},
+		{ "Test take with remove elements", test_list_take_and_remove},
 		CU_TEST_INFO_NULL, };
 
 CUNIT_MAKE_SUITE(list, "Test List TAD", init_suite, clean_suite, tests)
