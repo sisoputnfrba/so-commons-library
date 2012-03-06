@@ -53,8 +53,7 @@ static int clean_suite() {
 }
 
 static void test_list_add() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	t_person *p1 = persona_create("Matias", 24);
 
@@ -62,23 +61,23 @@ static void test_list_add() {
 	list_add(list, persona_create("Gaston", 25));
 
 	t_person *aux = list_get(list, 0);
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Matias");
-	CU_ASSERT_EQUAL( aux->age, 24);
+	CU_ASSERT_PTR_NOT_NULL(aux);
+	CU_ASSERT_STRING_EQUAL(aux->name, "Matias");
+	CU_ASSERT_EQUAL(aux->age, 24);
 
 	aux = list_get(list, 1);
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Gaston");
-	CU_ASSERT_EQUAL( aux->age, 25);
+	CU_ASSERT_PTR_NOT_NULL(aux);
+	CU_ASSERT_STRING_EQUAL(aux->name, "Gaston");
+	CU_ASSERT_EQUAL(aux->age, 25);
 
 	CU_ASSERT_EQUAL(list_size(list), 2);
 
-	list_destroy(list);
+	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
 }
 
 static void test_list_add_in_index() {
 	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	list_add(list, persona_create("Matias", 24));
 	list_add(list, persona_create("Gaston", 25));
@@ -103,11 +102,11 @@ static void test_list_add_in_index() {
 
 	CU_ASSERT_EQUAL(list_size(list), 4);
 
-	list_destroy(list);
+	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
 }
 
 static void test_list_find() {
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	list_add(list, persona_create("Matias", 24));
 	list_add(list, persona_create("Gaston", 25));
@@ -134,12 +133,11 @@ static void test_list_find() {
 
 	CU_ASSERT_EQUAL(list_size(list), 5);
 
-	list_destroy(list);
+	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
 }
 
 static void test_list_replace() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	list_add(list, persona_create("Matias", 24));
 	list_add(list, persona_create("Gaston", 25));
@@ -160,11 +158,11 @@ static void test_list_replace() {
 
 	CU_ASSERT_EQUAL(list_size(list), 5);
 
-	list_destroy(list);
+	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
 }
 
 static void test_list_remove() {
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	t_person *p1 = persona_create("Matias", 24);
 
@@ -184,7 +182,7 @@ static void test_list_remove() {
 	CU_ASSERT_STRING_EQUAL( aux->name, "Gaston");
 	CU_ASSERT_EQUAL( aux->age, 25);
 
-	list_destroy(list);
+	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
 }
 
 static void test_list_remove_and_destroy() {
@@ -200,15 +198,16 @@ static void test_list_remove_and_destroy() {
 	CU_ASSERT_EQUAL(list_size(list), 1);
 
 	t_person *aux = list_get(list, 0);
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Gaston");
-	CU_ASSERT_EQUAL( aux->age, 25);
+	CU_ASSERT_PTR_NOT_NULL(aux);
+	CU_ASSERT_STRING_EQUAL(aux->name, "Gaston");
+	CU_ASSERT_EQUAL(aux->age, 25);
+	persona_destroy(aux);
 
 	list_destroy(list);
 }
 
 static void test_list_remove_by_closure() {
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	list_add(list, persona_create("Matias", 24));
 	list_add(list, persona_create("Gaston", 25));
@@ -228,7 +227,7 @@ static void test_list_remove_by_closure() {
 
 	CU_ASSERT_EQUAL(list_size(list), 4);
 
-	list_destroy(list);
+	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
 }
 
 static void test_list_iterate() {
@@ -241,7 +240,7 @@ static void test_list_iterate() {
 			persona_create("Facundo", 25),
 	};
 
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	list_add(list, ayudantes[0]);
 	list_add(list, ayudantes[1]);
@@ -257,19 +256,18 @@ static void test_list_iterate() {
 		index++;
 	}
 
-	// Usamos (void*) para inferir el tipo, y que el compilador no tire error de casteo
 	list_iterate(list, (void*) _list_elements);
 
-	list_destroy(list);
+	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
 }
 
 
 static void test_list_clean() {
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	list_add(list, persona_create("Matias", 24));
 	list_add(list, persona_create("Gaston", 25));
-	list_clean(list);
+	list_clean_and_destroy_elements(list, (void*) persona_destroy);
 
 	CU_ASSERT_EQUAL(list_size(list), 0);
 	CU_ASSERT_TRUE(list_is_empty(list));

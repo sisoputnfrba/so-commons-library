@@ -54,7 +54,7 @@ static int clean_suite() {
 
 static void test_queue_push_and_pop() {
 	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_queue * queue = queue_create((void*) persona_destroy);
+	t_queue * queue = queue_create();
 
 	t_person *p1 = persona_create("Matias", 24);
 
@@ -89,8 +89,7 @@ static void test_queue_push_and_pop() {
 }
 
 static void test_queue_peek() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_queue * queue = queue_create((void*) persona_destroy);
+	t_queue * queue = queue_create();
 
 	queue_push(queue, persona_create("Matias", 24));
 	queue_push(queue, persona_create("Gaston", 25));
@@ -102,7 +101,6 @@ static void test_queue_peek() {
 	CU_ASSERT_PTR_NOT_NULL( aux);
 	CU_ASSERT_STRING_EQUAL( aux->name, "Matias");
 	CU_ASSERT_EQUAL( aux->age, 24);
-
 	CU_ASSERT_EQUAL(queue_size(queue), 2);
 
 	aux = queue_peek(queue);
@@ -112,12 +110,11 @@ static void test_queue_peek() {
 
 	CU_ASSERT_EQUAL(queue_size(queue), 2);
 
-	queue_destroy(queue);
+	queue_destroy_and_destroy_elements(queue, (void*) persona_destroy);
 }
 
 static void test_queue_clean() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_queue * queue = queue_create((void*) persona_destroy);
+	t_queue * queue = queue_create();
 
 	queue_push(queue, persona_create("Matias", 24));
 	queue_push(queue, persona_create("Gaston", 25));
@@ -125,7 +122,7 @@ static void test_queue_clean() {
 	CU_ASSERT_EQUAL(queue_size(queue), 2);
 	CU_ASSERT_FALSE(queue_is_empty(queue));
 
-	queue_clean(queue);
+	queue_clean_and_destroy_elements(queue, (void*) persona_destroy);
 
 	CU_ASSERT_EQUAL(queue_size(queue), 0);
 	CU_ASSERT_TRUE(queue_is_empty(queue));
