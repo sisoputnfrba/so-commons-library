@@ -263,6 +263,19 @@ t_list* list_take_and_remove(t_list* self, int count) {
 	return sublist;
 }
 
+t_list* list_filter(t_list* self, bool(*condition)(void*)){
+	t_list* filtered = list_create();
+
+	void _add_if_apply(void* element) {
+		if (condition(element)) {
+			list_add(filtered, element);
+		}
+	}
+
+	list_iterate(self, _add_if_apply);
+	return filtered;
+}
+
 /********* PRIVATE FUNCTIONS **************/
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {

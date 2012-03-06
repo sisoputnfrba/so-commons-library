@@ -343,6 +343,37 @@ static void test_list_take_and_remove() {
 	list_destroy(list);
 }
 
+static void test_list_filter() {
+	t_list* list = list_create();
+	list_add(list, ayudantes[0]);
+	list_add(list, ayudantes[1]);
+	list_add(list, ayudantes[2]);
+	list_add(list, ayudantes[3]);
+	list_add(list, ayudantes[4]);
+
+	bool _is_young(t_person* person) {
+		return person->age <= 21;
+	}
+
+	t_list* filtered = list_filter(list, (void*) _is_young);
+	CU_ASSERT_PTR_NOT_NULL(filtered);
+	CU_ASSERT_EQUAL(list_size(list), 5);
+	CU_ASSERT_EQUAL(list_size(filtered), 2);
+	list_destroy(filtered);
+
+	bool _is_old(t_person* person) {
+		return person->age > 80;
+	}
+
+	filtered = list_filter(list, (void*) _is_old);
+	CU_ASSERT_PTR_NOT_NULL(filtered);
+	CU_ASSERT_EQUAL(list_size(list), 5);
+	CU_ASSERT_EQUAL(list_size(filtered), 0);
+	list_destroy(filtered);
+
+	list_destroy(list);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -359,6 +390,7 @@ static CU_TestInfo tests[] = {
 		{ "Test Clean List Elements", test_list_clean },
 		{ "Test take without remove elements", test_list_take},
 		{ "Test take with remove elements", test_list_take_and_remove},
+		{ "Test filter list", test_list_filter},
 		CU_TEST_INFO_NULL, };
 
 CUNIT_MAKE_SUITE(list, "Test List TAD", init_suite, clean_suite, tests)
