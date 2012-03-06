@@ -204,12 +204,12 @@ static void test_string_split() {
 	free(substrings);
 }
 
-static void test_string_begin_with() {
-	CU_ASSERT_TRUE(string_begin_with("#Comentario", "#"));
-	CU_ASSERT_TRUE(string_begin_with("Comentario", "Comen"));
-	CU_ASSERT_FALSE(string_begin_with("Comentario", "comen"));
-	CU_ASSERT_FALSE(string_begin_with("Comentario", "lala"));
-	CU_ASSERT_FALSE(string_begin_with("", "#"));
+static void test_string_starts_with() {
+	CU_ASSERT_TRUE(string_starts_with("#Comentario", "#"));
+	CU_ASSERT_TRUE(string_starts_with("Comentario", "Comen"));
+	CU_ASSERT_FALSE(string_starts_with("Comentario", "comen"));
+	CU_ASSERT_FALSE(string_starts_with("Comentario", "lala"));
+	CU_ASSERT_FALSE(string_starts_with("", "#"));
 }
 
 
@@ -232,7 +232,7 @@ static CU_TestInfo tests[] = {
 		{ "Test isEmpty a string", test_string_is_empty},
 		{ "Test length a string", test_string_length},
 		{ "Test split a string", test_string_split},
-		{ "Test string begin with", test_string_begin_with},
+		{ "Test string begin with", test_string_starts_with},
 		CU_TEST_INFO_NULL,
 };
 

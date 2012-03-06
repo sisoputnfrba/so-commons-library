@@ -36,7 +36,7 @@ void string_trim_right(t_string* text);
 
 int string_length(t_string text);
 bool string_is_empty(t_string text);
-bool string_begin_with(t_string text, t_string begin);
+bool string_starts_with(t_string text, t_string begin);
 bool string_equals_ignore_case(t_string actual, t_string expected);
 t_string* string_split(t_string text, t_string regex);
 

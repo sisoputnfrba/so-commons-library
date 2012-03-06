@@ -163,11 +163,11 @@ bool string_is_empty(t_string text) {
 }
 
 /**
- * @NAME: string_begin_with
+ * @NAME: string_starts_with
  * @DESC: Retorna si un string comienza con el
  * string pasado por parametro
  */
-bool string_begin_with(t_string text, t_string begin){
+bool string_starts_with(t_string text, t_string begin){
 	return strncmp(text, begin, string_length(begin)) == 0;
 }
 
