@@ -188,14 +188,14 @@ static void test_list_remove() {
 }
 
 static void test_list_remove_and_destroy() {
-	t_list * list = list_create((void*) persona_destroy);
+	t_list * list = list_create();
 
 	t_person *p1 = persona_create("Matias", 24);
 
 	list_add(list, p1);
 	list_add(list, persona_create("Gaston", 25));
 
-	list_remove_and_destroy(list, 0);
+	list_remove_and_destroy_element(list, 0, (void*) persona_destroy);
 
 	CU_ASSERT_EQUAL(list_size(list), 1);
 
@@ -216,15 +216,14 @@ static void test_list_remove_by_closure() {
 	list_add(list, persona_create("Daniela", 19));
 	list_add(list, persona_create("Facundo", 25));
 
-	int _is_daniela(t_person *p) {
+	bool _is_daniela(t_person *p) {
 		return strcmp(p->name, "Daniela") == 0;
 	}
 
-	// Usamos (void*) para inferir el tipo, y que el compilador no tire error de casteo
-	t_person *aux = list_remove_by_closure(list, (void*) _is_daniela);
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Daniela");
-	CU_ASSERT_EQUAL( aux->age, 19);
+	t_person *aux = list_remove_by_condition(list, (void*) _is_daniela);
+	CU_ASSERT_PTR_NOT_NULL(aux);
+	CU_ASSERT_STRING_EQUAL(aux->name, "Daniela");
+	CU_ASSERT_EQUAL(aux->age, 19);
 	persona_destroy(aux);
 
 	CU_ASSERT_EQUAL(list_size(list), 4);
@@ -251,6 +250,7 @@ static void test_list_iterate() {
 	list_add(list, ayudantes[4]);
 
 	int index = 0;
+
 	void _list_elements(t_person *p) {
 		CU_ASSERT_PTR_NOT_NULL( p);
 		CU_ASSERT_STRING_EQUAL(ayudantes[index]->name, p->name);
