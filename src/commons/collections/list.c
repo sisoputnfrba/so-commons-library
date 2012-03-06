@@ -276,6 +276,18 @@ t_list* list_filter(t_list* self, bool(*condition)(void*)){
 	return filtered;
 }
 
+t_list* list_map(t_list* self, void*(*transformer)(void*)){
+	t_list* mapped = list_create();
+
+	void _add_after_transform(void* element) {
+		void* new_element = transformer(element);
+		list_add(mapped, new_element);
+	}
+
+	list_iterate(self, _add_after_transform);
+	return mapped;
+}
+
 /********* PRIVATE FUNCTIONS **************/
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {
