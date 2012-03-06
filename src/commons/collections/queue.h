@@ -23,7 +23,7 @@
 		t_list* elements;
 	} t_queue;
 
-	t_queue *queue_create(void(*data_destroyer)(void*));
+	t_queue *queue_create();
 	void queue_destroy(t_queue *);
 
 	void queue_push(t_queue *, void *element);
