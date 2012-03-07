@@ -103,7 +103,7 @@ void *list_replace(t_list *self, int index, void *data) {
 }
 
 /*
- * @NAME: list_replace_and_destroy
+ * @NAME: list_replace_and_destroy_element
  * @DESC: Coloca un valor en una de la posiciones de la lista liberando el valor anterior
  */
 void list_replace_and_destroy_element(t_list *self, int num, void *data, void(*element_destroyer)(void*)) {
@@ -113,7 +113,7 @@ void list_replace_and_destroy_element(t_list *self, int num, void *data, void(*e
 
 /*
  * @NAME: list_find
- * @DESC: Retorna el primer valor encontrado, el cual haga que el closure devuelva != 0
+ * @DESC: Retorna el primer valor encontrado, el cual haga que condition devuelva != 0
  */
 void* list_find(t_list *self, bool(*condition)(void*)) {
 	t_link_element *element = list_find_element(self, condition, NULL);
@@ -121,7 +121,7 @@ void* list_find(t_list *self, bool(*condition)(void*)) {
 }
 
 /*
- * @NAME: list_iterator
+ * @NAME: list_iterate
  * @DESC: Itera la lista llamando al closure por cada elemento
  */
 void list_iterate(t_list* self, void(*closure)(void*)) {
@@ -158,8 +158,8 @@ void *list_remove(t_list *self, int index) {
 }
 
 /*
- * @NAME: list_remove_by_closure
- * @DESC: Remueve el primer elemento de la lista que haga que el closure devuelva != 0.
+ * @NAME: list_remove_by_condition
+ * @DESC: Remueve el primer elemento de la lista que haga que condition devuelva != 0.
  */
 void* list_remove_by_condition(t_list *self, bool(*condition)(void*)) {
 	int index = 0;
@@ -173,7 +173,7 @@ void* list_remove_by_condition(t_list *self, bool(*condition)(void*)) {
 }
 
 /*
- * @NAME: list_remove_and_destroy
+ * @NAME: list_remove_and_destroy_element
  * @DESC: Remueve un elemento de la lista de una determinada posicion y libera la memoria.
  */
 void list_remove_and_destroy_element(t_list *self, int index, void(*element_destroyer)(void*)) {
@@ -182,8 +182,8 @@ void list_remove_and_destroy_element(t_list *self, int index, void(*element_dest
 }
 
 /*
- * @NAME: list_remove_and_destroy_by_closure
- * @DESC: Remueve y destruye los elementos de la lista que hagan que el closure devuelva != 0.
+ * @NAME: list_remove_and_destroy_by_condition
+ * @DESC: Remueve y destruye los elementos de la lista que hagan que condition devuelva != 0.
  */
 void list_remove_and_destroy_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*)) {
 	void* data = list_remove_by_condition(self, condition);
@@ -242,6 +242,7 @@ void list_destroy_and_destroy_elements(t_list *self, void(*element_destroyer)(vo
 	list_clean_and_destroy_elements(self, element_destroyer);
 	free(self);
 }
+
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {
 	if (previous != NULL) {

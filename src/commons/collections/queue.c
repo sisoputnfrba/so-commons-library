@@ -55,8 +55,8 @@ void queue_destroy(t_queue *self) {
 }
 
 /*
- * @NAME: queue_destroy
- * @DESC: Destruye una cola, reciviendo como argumento el metodo encargado de liberar cada
+ * @NAME: queue_destroy_and_destroy_elements
+ * @DESC: Destruye una cola, recibiendo como argumento el metodo encargado de liberar cada
  * 		elemento de la cola.
  */
 void queue_destroy_and_destroy_elements(t_queue *self, void(*element_destroyer)(void*)) {
@@ -97,8 +97,8 @@ int queue_size(t_queue* self) {
 }
 
 /*
- * @NAME: queue_isEmpty
- * @DESC: Verifica si la cola esta vacia
+ * @NAME: queue_is_empty
+ * @DESC: Verifica si la cola esta vacía
  */
 int queue_is_empty(t_queue *self) {
 	return list_is_empty(self->elements);

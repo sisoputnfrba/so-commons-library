@@ -19,6 +19,12 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+/*
+ * @NAME: error_show
+ * @DESC: imprime un mensaje con el siguiente formato
+ *
+ * 	[[ERROR]] MESSAGE
+*/
 void error_show(t_string message, ...) {
 	va_list arguments;
 	va_start(arguments, message);

@@ -150,7 +150,7 @@ void log_warning(t_log* logger, const char* message_template, ...) {
 }
 
 /**
- * @NAME: log_
+ * @NAME: log_error
  * @DESC: Loguea un mensaje con el siguiente formato
  *
  * [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
