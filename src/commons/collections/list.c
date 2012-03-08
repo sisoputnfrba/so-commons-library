@@ -243,6 +243,11 @@ void list_destroy_and_destroy_elements(t_list *self, void(*element_destroyer)(vo
 	free(self);
 }
 
+/*
+ * @NAME: list_take
+ * @DESC: Retorna una nueva lista con
+ * los primeros n elementos
+ */
 t_list* list_take(t_list* self, int count) {
 	t_list* sublist = list_create();
 	int i = 0;
@@ -253,6 +258,12 @@ t_list* list_take(t_list* self, int count) {
 	return sublist;
 }
 
+/*
+ * @NAME: list_take_and_remove
+ * @DESC: Retorna una nueva lista con
+ * los primeros n elementos, eliminando
+ * del origen estos elementos
+ */
 t_list* list_take_and_remove(t_list* self, int count) {
 	t_list* sublist = list_create();
 	int i = 0;
@@ -263,6 +274,11 @@ t_list* list_take_and_remove(t_list* self, int count) {
 	return sublist;
 }
 
+/*
+ * @NAME: list_filter
+ * @DESC: Retorna una nueva lista con los
+ * elementos que cumplen la condicion
+ */
 t_list* list_filter(t_list* self, bool(*condition)(void*)){
 	t_list* filtered = list_create();
 
@@ -276,6 +292,11 @@ t_list* list_filter(t_list* self, bool(*condition)(void*)){
 	return filtered;
 }
 
+/*
+ * @NAME: list_map
+ * @DESC: Retorna una nueva lista con los
+ * con los elementos transformados
+ */
 t_list* list_map(t_list* self, void*(*transformer)(void*)){
 	t_list* mapped = list_create();
 
