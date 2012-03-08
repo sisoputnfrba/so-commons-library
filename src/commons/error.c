@@ -16,8 +16,12 @@
 
 #include "error.h"
 
+#include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
+
+#include "string_utils.h"
 
 /*
  * @NAME: error_show
@@ -25,15 +29,15 @@
  *
  * 	[[ERROR]] MESSAGE
 */
-void error_show(t_string message, ...) {
+void error_show(char *message, ...) {
 	va_list arguments;
 	va_start(arguments, message);
 
-	t_string error_message = string_duplicate("[[ERROR]]");
-	string_append(&error_message, message);
+	char *error_message = strdup("[[ERROR]]");
+	string_utils_append(&error_message, message);
 
 	vprintf(error_message, arguments);
 	
-	string_destroy(error_message);
+	free(error_message);
 	va_end(arguments);
 }

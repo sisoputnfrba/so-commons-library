@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 
 #include "config.h"
-#include "string.h"
+#include "string_utils.h"
 #include "collections/dictionary.h"
 
 /*
@@ -32,7 +32,7 @@
 t_config *config_create(char *path) {
 	t_config *config = malloc(sizeof(t_config));
 
-	config->path = string_duplicate(path);
+	config->path = strdup(path);
 	config->properties = dictionary_create(free);
 
 	struct stat stat_file;
@@ -42,17 +42,17 @@ t_config *config_create(char *path) {
 	char* buffer = calloc(1, stat_file.st_size + 1);
 	fread(buffer, stat_file.st_size, 1, file);
 
-	t_string* lines = string_split(buffer, "\n");
+	char** lines = string_utils_split(buffer, "\n");
 
-	void add_cofiguration(t_string line) {
-		if (!string_starts_with(line, "#")) {
-			t_string* keyAndValue = string_split(line, "=");
+	void add_cofiguration(char *line) {
+		if (!string_utils_starts_with(line, "#")) {
+			char** keyAndValue = string_utils_split(line, "=");
 			dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
 			free(keyAndValue);
 		}
 	}
-	string_iterate_lines(lines, add_cofiguration);
-	string_iterate_lines(lines, (void*) free);
+	string_utils_iterate_lines(lines, add_cofiguration);
+	string_utils_iterate_lines(lines, (void*) free);
 
 	free(lines);
 	free(buffer);

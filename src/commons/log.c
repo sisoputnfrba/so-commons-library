@@ -16,12 +16,13 @@
 
 #include "log.h"
 
-#include "string.h"
 #include "temporal.h"
 #include "error.h"
+#include "string_utils.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
@@ -54,7 +55,7 @@ static bool isEnableLevelInLogger(t_log* logger, t_log_level level);
  * el nombre del programa, el nombre del archivo donde se van a generar los logs,
  * el nivel de detalle minimo a loguear y si además se muestra por pantalla lo que se loguea.
  */
-t_log* log_create(char* file, t_string program_name, bool is_active_console, t_log_level detail) {
+t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_level detail) {
 	t_log* logger = malloc(sizeof(t_log));
 
 	if (logger == NULL) {
@@ -78,7 +79,7 @@ t_log* log_create(char* file, t_string program_name, bool is_active_console, t_l
 	logger->is_active_console = is_active_console;
 	logger->detail = detail;
 	logger->pid = getpid();
-	logger->program_name = string_duplicate(program_name);
+	logger->program_name = strdup(program_name);
 	return logger;
 }
 
@@ -88,7 +89,7 @@ t_log* log_create(char* file, t_string program_name, bool is_active_console, t_l
  * @DESC: Destruye una instancia de logger
  */
 void log_destroy(t_log* logger) {
-	string_destroy(logger->program_name);
+	free(logger->program_name);
 	fclose(logger->file);
 	free(logger);
 }
@@ -167,7 +168,7 @@ void log_error(t_log* logger, const char* message_template, ...) {
  * @NAME: log_level_as_string
  * @DESC: Convierte un t_log_level a su representacion en string
  */
-t_string log_level_as_string(t_log_level level) {
+char *log_level_as_string(t_log_level level) {
 	return enum_names[level];
 }
 
@@ -175,11 +176,11 @@ t_string log_level_as_string(t_log_level level) {
  * @NAME: log_level_from_string
  * @DESC: Convierte un string a su representacion en t_log_level
  */
-t_log_level log_level_from_string(t_string level) {
+t_log_level log_level_from_string(char *level) {
 	int i;
 
 	for (i = 0; i < LOG_ENUM_SIZE; i++) {
-		if (string_equals_ignore_case(level, enum_names[i])){
+		if (string_utils_equals_ignore_case(level, enum_names[i])){
 			return i;
 		}
 	}
@@ -192,7 +193,7 @@ t_log_level log_level_from_string(t_string level) {
 static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
 
 	if (isEnableLevelInLogger(logger, level)) {
-		t_string message, time, buffer;
+		char *message, *time, *buffer;
 		unsigned int thread_id;
 
 		message = malloc(LOG_MAX_LENGTH_MESSAGE + 1);
@@ -216,9 +217,9 @@ static void log_write_in_level(t_log* logger, t_log_level level, const char* mes
 			fflush(stdout);
 		}
 
-		string_destroy(time);
-		string_destroy(message);
-		string_destroy(buffer);
+		free(time);
+		free(message);
+		free(buffer);
 	}
 }
 

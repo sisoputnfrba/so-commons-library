@@ -28,11 +28,11 @@
  * @DESC: Retorna un string con la hora actual,
  * con el siguiente formato: hh:mm:ss:mmmm
  */
-t_string temporal_get_string_time() {
+char *temporal_get_string_time() {
 	time_t log_time;
 	struct tm *log_tm;
 	struct timeb tmili;
-	t_string str_time = string_duplicate("hh:mm:ss:mmmm");
+	char *str_time = strdup("hh:mm:ss:mmmm");
 
 	if ((log_time = time(NULL)) == -1) {
 		error_show("Error getting date!");
@@ -46,10 +46,10 @@ t_string temporal_get_string_time() {
 		return 0;
 	}
 
-	t_string partial_time = string_duplicate("hh:mm:ss");
+	char *partial_time = strdup("hh:mm:ss");
 	strftime(partial_time, 127, "%H:%M:%S", log_tm);
 	sprintf(str_time, "%s:%hu", partial_time, tmili.millitm);
-	string_destroy(partial_time);
+	free(partial_time);
 
 	//Adjust memory allocation
 	str_time = realloc(str_time, strlen(str_time) + 1);

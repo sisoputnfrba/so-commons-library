@@ -16,8 +16,6 @@
 #ifndef TEMPORAL_H_
 #define TEMPORAL_H_
 
-#include "string.h"
-
-t_string temporal_get_string_time();
+	char *temporal_get_string_time();
 
 #endif /* TEMPORAL_H_ */
