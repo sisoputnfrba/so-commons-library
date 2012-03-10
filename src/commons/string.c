@@ -140,11 +140,27 @@ bool string_is_empty(char *text) {
 
 /**
  * @NAME: string_starts_with
- * @DESC: Retorna si un string comienza con el
+ * @DESC: Retorna un boolean que indica
+ * si un string comienza con el
  * string pasado por parametro
  */
 bool string_starts_with(char *text, char *begin){
 	return strncmp(text, begin, strlen(begin)) == 0;
+}
+
+/**
+ * @NAME: string_ends_with
+ * @DESC: Retorna un boolean que indica
+ * si un string finaliza con el
+ * string pasado por parametro
+ */
+bool string_ends_with(char* text, char* end) {
+	if (strlen(text) < strlen(end)) {
+		return false;
+	}
+
+	int index = strlen(text) - strlen(end);
+	return strcmp(&text[index], end) == 0;
 }
 
 /**

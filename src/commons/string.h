@@ -32,6 +32,7 @@
 	int 	string_length(char * text);
 	bool 	string_is_empty(char * text);
 	bool 	string_starts_with(char * text, char * begin);
+	bool	string_ends_with(char* text, char* end);
 	bool 	string_equals_ignore_case(char * actual, char * expected);
 	char 	**string_split(char * text, char * separator);
 

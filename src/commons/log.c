@@ -180,7 +180,7 @@ t_log_level log_level_from_string(char *level) {
 	int i;
 
 	for (i = 0; i < LOG_ENUM_SIZE; i++) {
-		if (string_utils_equals_ignore_case(level, enum_names[i])){
+		if (string_equals_ignore_case(level, enum_names[i])){
 			return i;
 		}
 	}

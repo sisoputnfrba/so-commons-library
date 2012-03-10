@@ -184,6 +184,13 @@ static void test_string_starts_with() {
 	CU_ASSERT_FALSE(string_starts_with("", "#"));
 }
 
+static void test_string_ends_with() {
+	CU_ASSERT_TRUE(string_ends_with("MiArchivo.txt", "txt"));
+	CU_ASSERT_TRUE(string_ends_with("MiArchivo.txt", "MiArchivo.txt"));
+	CU_ASSERT_FALSE(string_ends_with("MiArchivo.doc", "txt"));
+	CU_ASSERT_FALSE(string_ends_with("MiDoc", "txt"));
+	CU_ASSERT_FALSE(string_ends_with("", "txt"));
+}
 
 /**********************************************************************************************
  *  							Building the test for CUnit
@@ -202,7 +209,8 @@ static CU_TestInfo tests[] = {
 		{ "Test isEmpty a string", test_string_is_empty},
 		{ "Test split a string", test_string_split},
 		{ "Test string begin with", test_string_starts_with},
+		{ "Test string ends with", test_string_ends_with},
 		CU_TEST_INFO_NULL,
 };
 
-CUNIT_MAKE_SUITE(string, "Test String Utils ADT", init_suite, clean_suite, tests)
+CUNIT_MAKE_SUITE(string, "Test String ADT", init_suite, clean_suite, tests)

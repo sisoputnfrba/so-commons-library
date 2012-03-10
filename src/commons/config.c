@@ -37,26 +37,30 @@ t_config *config_create(char *path) {
 
 	struct stat stat_file;
 	stat(path, &stat_file);
-	FILE* file = fopen(path, "r");
+	FILE* file = NULL;
 
-	char* buffer = calloc(1, stat_file.st_size + 1);
-	fread(buffer, stat_file.st_size, 1, file);
+	file = fopen(path, "r");
 
-	char** lines = string_split(buffer, "\n");
+	if (file != NULL) {
+		char* buffer = calloc(1, stat_file.st_size + 1);
+		fread(buffer, stat_file.st_size, 1, file);
 
-	void add_cofiguration(char *line) {
-		if (!string_starts_with(line, "#")) {
-			char** keyAndValue = string_split(line, "=");
-			dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
-			free(keyAndValue);
+		char** lines = string_split(buffer, "\n");
+
+		void add_cofiguration(char *line) {
+			if (!string_starts_with(line, "#")) {
+				char** keyAndValue = string_split(line, "=");
+				dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
+				free(keyAndValue);
+			}
 		}
-	}
-	string_iterate_lines(lines, add_cofiguration);
-	string_iterate_lines(lines, (void*) free);
+		string_iterate_lines(lines, add_cofiguration);
+		string_iterate_lines(lines, (void*) free);
 
-	free(lines);
-	free(buffer);
-	fclose(file);
+		free(lines);
+		free(buffer);
+		fclose(file);
+	}
 
 	return config;
 }
