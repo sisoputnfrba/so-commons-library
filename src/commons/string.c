@@ -20,25 +20,9 @@
 #include <string.h>
 #include <ctype.h>
 
-static void string_do(t_string text, void (*closure)(char*));
+static void string_do(char *text, void (*closure)(char*));
 static void string_lower_element(char* ch);
 static void string_upper_element(char* ch);
-
-/**
- * @NAME: string_new
- * @DESC: Crea un string vacio ("")
- */
-t_string string_new() {
-	return calloc(1, 1);
-}
-
-/**
- * @NAME: string_duplicate
- * @DESC: Crea un string nuevo desde un string pasado por parametro
- */
-t_string string_duplicate(char* original_string) {
-	return strdup(original_string);
-}
 
 /**
  * @NAME: string_repeat
@@ -48,8 +32,8 @@ t_string string_duplicate(char* original_string) {
  * string_repeat('a', 5) = "aaaaa"
  *
  */
-t_string string_repeat(char character, int count) {
-	t_string text = calloc(count + 1, 1);
+char *string_repeat(char character, int count) {
+	char *text = calloc(count + 1, 1);
 	int i = 0;
 	for (i = 0; i < count; ++i) {
 		text[i] = character;
@@ -62,14 +46,14 @@ t_string string_repeat(char character, int count) {
  * @DESC: Agrega al primer string el segundo
  *
  * Ejemplo:
- * t_string unaPalabra = "HOLA ";
- * t_string otraPalabra = "PEPE";
+ * char *unaPalabra = "HOLA ";
+ * char *otraPalabra = "PEPE";
  *
  * string_append(&unaPalabra, otraPalabra);
  *
  * => unaPalabra = "HOLA PEPE"
  */
-void string_append(t_string* original, t_string string_to_add) {
+void string_append(char** original, char* string_to_add) {
 	*original = realloc(*original, strlen(*original) + strlen(string_to_add) + 1);
 	strcat(*original, string_to_add);
 }
@@ -78,7 +62,7 @@ void string_append(t_string* original, t_string string_to_add) {
  * @NAME: string_to_upper
  * @DESC: Pone en mayuscula todos los caracteres de un string
  */
-void string_to_upper(t_string text) {
+void string_to_upper(char *text) {
 	string_do(text, &string_upper_element);
 }
 
@@ -86,7 +70,7 @@ void string_to_upper(t_string text) {
  * @NAME: string_to_lower
  * @DESC: Pone en minuscula todos los caracteres de un string
  */
-void string_to_lower(t_string text) {
+void string_to_lower(char *text) {
 	string_do(text, &string_lower_element);
 }
 
@@ -94,10 +78,10 @@ void string_to_lower(t_string text) {
  * @NAME: string_capitalized
  * @DESC: Capitaliza un string
  */
-void string_capitalized(t_string text) {
+void string_capitalized(char *text) {
 	if (!string_is_empty(text)) {
 		string_upper_element(text);
-		if (string_length(text) >= 2){
+		if (strlen(text) >= 2){
 			string_to_lower(&text[1]);
 		}
 	}
@@ -108,7 +92,7 @@ void string_capitalized(t_string text) {
  * @DESC: Remueve todos los caracteres
  * vacios de la derecha y la izquierda
  */
-void string_trim(t_string* text) {
+void string_trim(char** text) {
 	string_trim_left(text);
 	string_trim_right(text);
 }
@@ -118,16 +102,16 @@ void string_trim(t_string* text) {
  * @DESC: Remueve todos los caracteres
  * vacios de la izquierda
  */
-void string_trim_left(t_string* text) {
-	t_string string_without_blank = *text;
+void string_trim_left(char** text) {
+	char *string_without_blank = *text;
 
 	while (isblank(*string_without_blank)) {
 		string_without_blank++;
 	}
 
-	t_string new_string = string_duplicate(string_without_blank);
+	char *new_string = strdup(string_without_blank);
 
-	string_destroy(*text);
+	free(*text);
 	*text = new_string;
 }
 
@@ -136,9 +120,9 @@ void string_trim_left(t_string* text) {
  * @DESC: Remueve todos los caracteres
  * vacios de la derecha
  */
-void string_trim_right(t_string* text) {
-	t_string string_without_blank = *text;
-	int i = string_length(*text) - 1;
+void string_trim_right(char** text) {
+	char *string_without_blank = *text;
+	int i = strlen(*text) - 1;
 	while (i >= 0 && isspace(string_without_blank[i])){
 		string_without_blank[i] = '\0';
 		i--;
@@ -147,28 +131,36 @@ void string_trim_right(t_string* text) {
 }
 
 /**
- * @NAME: string_length
- * @DESC: Retorna la longitud de un string
- */
-int string_length(t_string text) {
-	return strlen(text);
-}
-
-/**
  * @NAME: string_is_empty
  * @DESC: Retorna si un string es ""
  */
-bool string_is_empty(t_string text) {
-	return string_length(text) == 0;
+bool string_is_empty(char *text) {
+	return strlen(text) == 0;
 }
 
 /**
  * @NAME: string_starts_with
- * @DESC: Retorna si un string comienza con el
+ * @DESC: Retorna un boolean que indica
+ * si un string comienza con el
  * string pasado por parametro
  */
-bool string_starts_with(t_string text, t_string begin){
-	return strncmp(text, begin, string_length(begin)) == 0;
+bool string_starts_with(char *text, char *begin){
+	return strncmp(text, begin, strlen(begin)) == 0;
+}
+
+/**
+ * @NAME: string_ends_with
+ * @DESC: Retorna un boolean que indica
+ * si un string finaliza con el
+ * string pasado por parametro
+ */
+bool string_ends_with(char* text, char* end) {
+	if (strlen(text) < strlen(end)) {
+		return false;
+	}
+
+	int index = strlen(text) - strlen(end);
+	return strcmp(&text[index], end) == 0;
 }
 
 /**
@@ -176,39 +168,32 @@ bool string_starts_with(t_string text, t_string begin){
  * @DESC: Retorna si dos strings son iguales
  * ignorando las mayusculas y minusculas
  */
-bool string_equals_ignore_case(t_string actual, t_string expected) {
+bool string_equals_ignore_case(char *actual, char *expected) {
 	return strcasecmp(actual, expected) == 0;
 }
 
-/**
- * @NAME: string_destroy
- * @DESC: Libera la memoria utilizada por un string
- */
-void string_destroy(t_string string) {
-	free(string);
-}
 
 /**
  * @NAME: string_split
  * @DESC: Separa un string dado un separador
  */
-t_string* string_split(t_string text, t_string regex) {
-	t_string* substrings = NULL;
+char **string_split(char *text, char *separator) {
+	char **substrings = NULL;
 	int size = 0;
 
-	t_string text_to_iterate = string_duplicate(text);
-	t_string token = NULL, next = NULL;
-	for (token = strtok_r(text_to_iterate, regex, &next) ;
-		 token ;
-		 token = strtok_r(NULL, regex, &next)) {
+	char *text_to_iterate = strdup(text);
+	char *token = NULL, *next = NULL;
+	token = strtok_r(text_to_iterate, separator, &next);
 
+	while (token != NULL) {
 		size++;
-		substrings = realloc(substrings, sizeof(t_string) * size);
-		substrings[size - 1] = string_duplicate(token);
+		substrings = realloc(substrings, sizeof(char*) * size);
+		substrings[size - 1] = strdup(token);
+		token = strtok_r(NULL, separator, &next);
 	}
 
 	size++;
-	substrings = realloc(substrings, sizeof(t_string) * size);
+	substrings = realloc(substrings, sizeof(char*) * size);
 	substrings[size - 1] = NULL;
 
 	free(text_to_iterate);
@@ -220,7 +205,7 @@ t_string* string_split(t_string text, t_string regex) {
  * @DESC: Itera un array de strings aplicando
  * el closure a cada string
  */
-void string_iterate_lines(t_string* strings, void (*closure)(t_string)) {
+void string_iterate_lines(char** strings, void (*closure)(char*)) {
 	while (*strings != NULL) {
 		closure(*strings);
 		strings++;
@@ -238,7 +223,7 @@ static void string_lower_element(char* ch) {
 	*ch = tolower(*ch);
 }
 
-static void string_do(t_string text, void (*closure)(char* c)){
+static void string_do(char *text, void (*closure)(char* c)){
 	int i = 0;
 	while (text[i] != '\0') {
 		closure(&text[i]);
