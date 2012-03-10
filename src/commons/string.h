@@ -33,7 +33,7 @@
 	bool 	string_is_empty(char * text);
 	bool 	string_starts_with(char * text, char * begin);
 	bool 	string_equals_ignore_case(char * actual, char * expected);
-	char 	**string_split(char * text, char * regex);
+	char 	**string_split(char * text, char * separator);
 
 	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
 

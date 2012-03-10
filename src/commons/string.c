@@ -161,19 +161,19 @@ bool string_equals_ignore_case(char *actual, char *expected) {
  * @NAME: string_split
  * @DESC: Separa un string dado un separador
  */
-char **string_split(char *text, char *regex) {
+char **string_split(char *text, char *separator) {
 	char **substrings = NULL;
 	int size = 0;
 
 	char *text_to_iterate = strdup(text);
 	char *token = NULL, *next = NULL;
-	for (token = strtok_r(text_to_iterate, regex, &next) ;
-		 token ;
-		 token = strtok_r(NULL, regex, &next)) {
+	token = strtok_r(text_to_iterate, separator, &next);
 
+	while (token != NULL) {
 		size++;
 		substrings = realloc(substrings, sizeof(char*) * size);
 		substrings[size - 1] = strdup(token);
+		token = strtok_r(NULL, separator, &next);
 	}
 
 	size++;
