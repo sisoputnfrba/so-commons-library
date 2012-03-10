@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "string_utils.h"
+#include "string.h"
 
 /*
  * @NAME: error_show
@@ -34,7 +34,7 @@ void error_show(char *message, ...) {
 	va_start(arguments, message);
 
 	char *error_message = strdup("[[ERROR]]");
-	string_utils_append(&error_message, message);
+	string_append(&error_message, message);
 
 	vprintf(error_message, arguments);
 	

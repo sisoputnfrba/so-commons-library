@@ -20,34 +20,25 @@
 #include <string.h>
 #include <ctype.h>
 
-static void string_do(t_string *text, void (*closure)(char*));
+static void string_do(char *text, void (*closure)(char*));
 static void string_lower_element(char* ch);
 static void string_upper_element(char* ch);
 
 /**
- * @NAME: string_new
- * @DESC: Crea un string a partir de una cadena
+ * @NAME: string_repeat
+ * @DESC: Crea un string de longitud 'count' con el mismo caracter.
+ *
+ * Ejemplo:
+ * string_repeat('a', 5) = "aaaaa"
+ *
  */
-t_string *string_new(char *original_text) {
-	t_string *string = malloc( sizeof(t_string) );
-
-	if( original_text == NULL ){
-		string->str = calloc(1, 1);
-		string->len = 0;
-	} else {
-		string->str = strdup(original_text);
-		string->len = strlen(original_text);
+char *string_repeat(char character, int count) {
+	char *text = calloc(count + 1, 1);
+	int i = 0;
+	for (i = 0; i < count; ++i) {
+		text[i] = character;
 	}
-
-	return string;
-}
-
-/**
- * @NAME: string_duplicate
- * @DESC: Crea una copia del string
- */
-t_string *string_duplicate(t_string *self){
-	return string_new(self->str);
+	return text;
 }
 
 /**
@@ -55,45 +46,23 @@ t_string *string_duplicate(t_string *self){
  * @DESC: Agrega al primer string el segundo
  *
  * Ejemplo:
- * t_string *unaPalabra = string_new("HOLA ");
- * t_string *otraPalabra = string_new("PEPE");
- *
- * string_append(unaPalabra, otraPalabra);
- *
- * => unaPalabra = "HOLA PEPE"
- */
-void string_append(t_string* self, t_string *string_to_add) {
-	self->str = realloc(self->str, self->len + string_to_add->len + 1);
-	strcat(self->str, string_to_add->str);
-	self->len += string_to_add->len;
-}
-
-/**
- * @NAME: string_append_literal
- * @DESC: Agrega al primer string el segundo
- *
- * Ejemplo:
- * t_string *unaPalabra = string_new("HOLA ");
+ * char *unaPalabra = "HOLA ";
  * char *otraPalabra = "PEPE";
  *
- * string_append_literal(unaPalabra, otraPalabra);
+ * string_append(&unaPalabra, otraPalabra);
  *
  * => unaPalabra = "HOLA PEPE"
  */
-void string_append_literal(t_string* self, char *string_to_add) {
-	int string_to_add_len = strlen(string_to_add);
-	self->str = realloc(self->str, self->len + string_to_add_len + 1);
-	strcat(self->str, string_to_add);
-	self->len += string_to_add_len;
+void string_append(char** original, char* string_to_add) {
+	*original = realloc(*original, strlen(*original) + strlen(string_to_add) + 1);
+	strcat(*original, string_to_add);
 }
-
-
 
 /**
  * @NAME: string_to_upper
  * @DESC: Pone en mayuscula todos los caracteres de un string
  */
-void string_to_upper(t_string *text) {
+void string_to_upper(char *text) {
 	string_do(text, &string_upper_element);
 }
 
@@ -101,7 +70,7 @@ void string_to_upper(t_string *text) {
  * @NAME: string_to_lower
  * @DESC: Pone en minuscula todos los caracteres de un string
  */
-void string_to_lower(t_string *text) {
+void string_to_lower(char *text) {
 	string_do(text, &string_lower_element);
 }
 
@@ -109,12 +78,12 @@ void string_to_lower(t_string *text) {
  * @NAME: string_capitalized
  * @DESC: Capitaliza un string
  */
-void string_capitalized(t_string *self) {
-	if (!string_is_empty(self)) {
-		if (string_length(self) >= 2){
-			string_to_lower(self);
+void string_capitalized(char *text) {
+	if (!string_is_empty(text)) {
+		string_upper_element(text);
+		if (strlen(text) >= 2){
+			string_to_lower(&text[1]);
 		}
-		string_upper_element(&self->str[0]);
 	}
 }
 
@@ -123,9 +92,9 @@ void string_capitalized(t_string *self) {
  * @DESC: Remueve todos los caracteres
  * vacios de la derecha y la izquierda
  */
-void string_trim(t_string *self) {
-	string_trim_left(self);
-	string_trim_right(self);
+void string_trim(char** text) {
+	string_trim_left(text);
+	string_trim_right(text);
 }
 
 /**
@@ -133,8 +102,8 @@ void string_trim(t_string *self) {
  * @DESC: Remueve todos los caracteres
  * vacios de la izquierda
  */
-void string_trim_left(t_string *self) {
-	char *string_without_blank = self->str;
+void string_trim_left(char** text) {
+	char *string_without_blank = *text;
 
 	while (isblank(*string_without_blank)) {
 		string_without_blank++;
@@ -142,9 +111,8 @@ void string_trim_left(t_string *self) {
 
 	char *new_string = strdup(string_without_blank);
 
-	free(self->str);
-	self->str = new_string;
-	self->len = strlen(new_string);
+	free(*text);
+	*text = new_string;
 }
 
 /**
@@ -152,31 +120,22 @@ void string_trim_left(t_string *self) {
  * @DESC: Remueve todos los caracteres
  * vacios de la derecha
  */
-void string_trim_right(t_string* self) {
-	char *string_without_blank = self->str;
-	int i = self->len - 1;
+void string_trim_right(char** text) {
+	char *string_without_blank = *text;
+	int i = strlen(*text) - 1;
 	while (i >= 0 && isspace(string_without_blank[i])){
 		string_without_blank[i] = '\0';
 		i--;
 	}
-	self->str = realloc(self->str, strlen(string_without_blank) + 1);
-	self->len = strlen(self->str);
-}
-
-/**
- * @NAME: string_length
- * @DESC: Retorna la longitud de un string
- */
-int string_length(t_string *self) {
-	return self->len;
+	*text = realloc(*text, strlen(string_without_blank) + 1);
 }
 
 /**
  * @NAME: string_is_empty
  * @DESC: Retorna si un string es ""
  */
-bool string_is_empty(t_string *self) {
-	return string_length(self) == 0;
+bool string_is_empty(char *text) {
+	return strlen(text) == 0;
 }
 
 /**
@@ -184,16 +143,8 @@ bool string_is_empty(t_string *self) {
  * @DESC: Retorna si un string comienza con el
  * string pasado por parametro
  */
-bool string_starts_with(t_string *self, t_string *begin){
-	return strncmp(self->str, begin->str, string_length(begin)) == 0;
-}
-
-/**
- * @NAME: string_starts_with_literal
- * @DESC: Retorna si un string comienza con la cadena pasado por parametro
- */
-bool string_starts_with_literal(t_string *self, char *begin){
-	return strncmp(self->str, begin, strlen(begin)) == 0;
+bool string_starts_with(char *text, char *begin){
+	return strncmp(text, begin, strlen(begin)) == 0;
 }
 
 /**
@@ -201,45 +152,32 @@ bool string_starts_with_literal(t_string *self, char *begin){
  * @DESC: Retorna si dos strings son iguales
  * ignorando las mayusculas y minusculas
  */
-bool string_equals_ignore_case(t_string *self, t_string *expected) {
-	return strcasecmp(self->str, expected->str) == 0;
+bool string_equals_ignore_case(char *actual, char *expected) {
+	return strcasecmp(actual, expected) == 0;
 }
 
-/**
- * @NAME: string_equals_ignore_case
- * @DESC: Retorna si un string es igual a una cadena ignorando las mayusculas y minusculas
- */
-bool string_equals_literal_ignore_case(t_string *self, char *expected){
-	return strcasecmp(self->str, expected) == 0;
-}
-
-/**
- * @NAME: string_destroy
- * @DESC: Libera la memoria utilizada por un string
- */
-void string_destroy(t_string *self) {
-	free(self->str);
-	free(self);
-}
 
 /**
  * @NAME: string_split
  * @DESC: Separa un string dado un separador
  */
-t_string** string_split(t_string *self, t_string *regex) {
-	t_string **substrings = NULL;
+char **string_split(char *text, char *regex) {
+	char **substrings = NULL;
 	int size = 0;
 
-	char *text_to_iterate = strdup(self->str);
+	char *text_to_iterate = strdup(text);
 	char *token = NULL, *next = NULL;
-	for (token = strtok_r(text_to_iterate, regex->str, &next) ; token ; token = strtok_r(NULL, regex->str, &next)) {
+	for (token = strtok_r(text_to_iterate, regex, &next) ;
+		 token ;
+		 token = strtok_r(NULL, regex, &next)) {
+
 		size++;
-		substrings = realloc(substrings, sizeof(t_string*) * size);
-		substrings[size - 1] = string_new(token);
+		substrings = realloc(substrings, sizeof(char*) * size);
+		substrings[size - 1] = strdup(token);
 	}
 
 	size++;
-	substrings = realloc(substrings, sizeof(t_string*) * size);
+	substrings = realloc(substrings, sizeof(char*) * size);
 	substrings[size - 1] = NULL;
 
 	free(text_to_iterate);
@@ -251,7 +189,7 @@ t_string** string_split(t_string *self, t_string *regex) {
  * @DESC: Itera un array de strings aplicando
  * el closure a cada string
  */
-void string_iterate_lines(t_string** strings, void (*closure)(t_string*)) {
+void string_iterate_lines(char** strings, void (*closure)(char*)) {
 	while (*strings != NULL) {
 		closure(*strings);
 		strings++;
@@ -262,17 +200,17 @@ void string_iterate_lines(t_string** strings, void (*closure)(t_string*)) {
 /** PRIVATE FUNCTIONS **/
 
 static void string_upper_element(char* ch) {
-	*ch = toupper(ch[0]);
+	*ch = toupper(*ch);
 }
 
 static void string_lower_element(char* ch) {
-	*ch = tolower(ch[0]);
+	*ch = tolower(*ch);
 }
 
-static void string_do(t_string *self, void (*closure)(char* c)){
+static void string_do(char *text, void (*closure)(char* c)){
 	int i = 0;
-	while (self->str[i] != '\0') {
-		closure(&self->str[i]);
+	while (text[i] != '\0') {
+		closure(&text[i]);
 		i++;
 	}
 }

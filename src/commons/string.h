@@ -13,39 +13,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef STRING_H_
 #define STRING_H_
 
 	#include <stdbool.h>
 
-	typedef struct {
-		char *str;
-		int	len;
-	} t_string;
+	char 	*string_repeat(char ch, int count);
+	void 	string_append(char ** original, char * string_to_add);
 
-	t_string 	*string_new(char *original_text);
-	void 		string_destroy(t_string *string);
+	void 	string_to_upper(char * text);
+	void 	string_to_lower(char * text);
+	void 	string_capitalized(char * text);
+	void 	string_trim(char ** text);
+	void 	string_trim_left(char ** text);
+	void 	string_trim_right(char ** text);
 
-	t_string 	*string_duplicate(t_string*);
+	int 	string_length(char * text);
+	bool 	string_is_empty(char * text);
+	bool 	string_starts_with(char * text, char * begin);
+	bool 	string_equals_ignore_case(char * actual, char * expected);
+	char 	**string_split(char * text, char * regex);
 
-	void 		string_append(t_string*, t_string *string_to_add);
-	void 		string_append_literal(t_string* , char *string_to_add);
-
-	void 		string_to_upper(t_string *);
-	void 		string_to_lower(t_string *);
-	void 		string_capitalized(t_string *);
-	void 		string_trim(t_string *);
-	void 		string_trim_left(t_string *);
-	void 		string_trim_right(t_string *);
-
-	int 		string_length(t_string *);
-	bool 		string_is_empty(t_string *);
-	bool 		string_starts_with(t_string *, t_string *begin);
-	bool 		string_starts_with_literal(t_string *, char *begin);
-	bool 		string_equals_ignore_case(t_string *, t_string *expected);
-	bool 		string_equals_literal_ignore_case(t_string *, char *expected);
-	t_string** 	string_split(t_string *text, t_string *regex);
-
-	void 		string_iterate_lines(t_string** strings, void (*closure)(t_string*));
+	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
 
 #endif /* STRING_H_ */

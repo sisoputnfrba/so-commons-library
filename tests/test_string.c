@@ -31,244 +31,157 @@ static int clean_suite(){
 	return 0;
 }
 
-static void test_string_new() {
-	t_string *string = string_new(NULL);
-
-	CU_ASSERT_PTR_NOT_NULL(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "");
-
-	string_destroy(string);
-}
-
 static void test_string_append() {
-	t_string *string = string_new("Hello ");
-	t_string *word_str = string_new("world");
+	char *string = strdup("");
+	string_append(&string, "Hello");
+	string_append(&string, " ");
+	string_append(&string, "world");
 
-	string_append(string, word_str);
+	CU_ASSERT_STRING_EQUAL(string, "Hello world");
 
-	CU_ASSERT_STRING_EQUAL(string->str, "Hello world");
-
-	string_destroy(word_str);
-	string_destroy(string);
-}
-
-static void test_string_append_literal() {
-	t_string *string = string_new(NULL);
-
-	string_append_literal(string, "Hello");
-	string_append_literal(string, " ");
-	string_append_literal(string, "world");
-
-	CU_ASSERT_STRING_EQUAL(string->str, "Hello world");
-
-	string_destroy(string);
+	free(string);
 }
 
 static void test_string_equals_ignore_case() {
-	t_string *string1 = string_new("Hello WorLd");
-	t_string *string2 = string_new("hello world");
+	char *string = strdup("Hello WorLd");
 
-	CU_ASSERT_TRUE(string_equals_ignore_case(string1, string2));
+	CU_ASSERT_TRUE(string_equals_ignore_case(string, "hello world"));
 
-	string_destroy(string1);
-	string_destroy(string2);
+	free(string);
 }
 
-static void test_string_equals_literal_ignore_case() {
-	t_string *string = string_new("Hello WorLd");
+static void test_string_repeat() {
+	char *string = string_repeat('a', 10);
 
-	CU_ASSERT_TRUE(string_equals_literal_ignore_case(string, "hello world"));
+	CU_ASSERT_STRING_EQUAL(string, "aaaaaaaaaa");
+	CU_ASSERT_EQUAL(strlen(string), 10);
 
-	string_destroy(string);
-}
-
-static void test_string_duplicate() {
-	t_string *string = string_new("Hello World!!");
-
-	CU_ASSERT_STRING_EQUAL(string->str, "Hello World!!");
-	CU_ASSERT_PTR_NOT_EQUAL(string->str, "Hello World!!");
-
-	string_destroy(string);
+	free(string);
 }
 
 static void test_string_to_upper() {
-	t_string *string = string_new("Hello World");
+	char *string = strdup("Hello World");
 	string_to_upper(string);
 
-	CU_ASSERT_STRING_EQUAL(string->str, "HELLO WORLD");
+	CU_ASSERT_STRING_EQUAL(string, "HELLO WORLD");
 
-	string_destroy(string);
+	free(string);
 }
 
 static void test_string_to_lower() {
-	t_string *string = string_new("Hello World");
+	char *string = strdup("Hello World");
 	string_to_lower(string);
 
-	CU_ASSERT_STRING_EQUAL(string->str, "hello world");
+	CU_ASSERT_STRING_EQUAL(string, "hello world");
 
-	string_destroy(string);
+	free(string);
 }
 
 static void test_string_capitalized() {
-	t_string *string;
+	char *string;
 
-	string = string_new("hello world");
+	string = strdup("hello world");
 	string_capitalized(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hello world");
-	string_destroy(string);
+	CU_ASSERT_STRING_EQUAL(string, "Hello world");
+	free(string);
 
-	string = string_new("HELLO WORLD");
+	string = strdup("HELLO WORLD");
 	string_capitalized(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hello world");
-	string_destroy(string);
+	CU_ASSERT_STRING_EQUAL(string, "Hello world");
+	free(string);
 
-	string = string_new("hi");
+	string = strdup("hi");
 	string_capitalized(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hi");
-	string_destroy(string);
+	CU_ASSERT_STRING_EQUAL(string, "Hi");
+	free(string);
 
-	string = string_new("h");
+	string = strdup("h");
 	string_capitalized(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "H");
-	string_destroy(string);
+	CU_ASSERT_STRING_EQUAL(string, "H");
+	free(string);
 }
 
 
 static void test_string_trim_left() {
-	t_string *string;
+	char *string;
 
-	string = string_new("Hola");
-	string_trim_left(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hola");
-	string_destroy(string);
+	string = strdup("Hola");
+	string_trim_left(&string);
+	CU_ASSERT_STRING_EQUAL(string, "Hola");
+	free(string);
 
-	string = string_new("   Hola");
-	string_trim_left(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hola");
-	string_destroy(string);
+	string = strdup("   Hola");
+	string_trim_left(&string);
+	CU_ASSERT_STRING_EQUAL(string, "Hola");
+	free(string);
 }
 
 static void test_string_trim_right() {
-	t_string *string;
+	char *string;
 
-	string = string_new("Hola");
-	string_trim_right(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hola");
-	string_destroy(string);
+	string = strdup("Hola");
+	string_trim_right(&string);
+	CU_ASSERT_STRING_EQUAL(string, "Hola");
+	free(string);
 
-	string = string_new("Hola    ");
-	string_trim_right(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hola");
-	string_destroy(string);
+	string = strdup("Hola    ");
+	string_trim_right(&string);
+	CU_ASSERT_STRING_EQUAL(string, "Hola");
+	free(string);
 }
 
 static void test_string_trim() {
-	t_string *string;
+	char *string;
 
-	string = string_new("Hola");
-	string_trim(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hola");
-	string_destroy(string);
+	string = strdup("Hola");
+	string_trim(&string);
+	CU_ASSERT_STRING_EQUAL(string, "Hola");
+	free(string);
 
-	string = string_new("    Hola");
-	string_trim(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hola");
-	string_destroy(string);
+	string = strdup("    Hola");
+	string_trim(&string);
+	CU_ASSERT_STRING_EQUAL(string, "Hola");
+	free(string);
 
-	string = string_new("Hola    ");
-	string_trim(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hola");
-	string_destroy(string);
+	string = strdup("Hola    ");
+	string_trim(&string);
+	CU_ASSERT_STRING_EQUAL(string, "Hola");
+	free(string);
 
-	string = string_new("    Hola    ");
-	string_trim(string);
-	CU_ASSERT_STRING_EQUAL(string->str, "Hola");
-	string_destroy(string);
+	string = strdup("    Hola    ");
+	string_trim(&string);
+	CU_ASSERT_STRING_EQUAL(string, "Hola");
+	free(string);
 }
 
 static void test_string_is_empty() {
-	t_string *string = string_new(NULL);
+	char *string = strdup("");
 	CU_ASSERT_TRUE(string_is_empty(string));
-	string_destroy(string);
-}
-
-static void test_string_length() {
-	t_string *string = string_new(NULL);
-	CU_ASSERT_EQUAL(string_length(string), 0);
-
-	string_append_literal(string, "HOLA");
-	CU_ASSERT_EQUAL(string_length(string), 4);
-
-	string_destroy(string);
+	free(string);
 }
 
 static void test_string_split() {
-	t_string *line = string_new("Hola planeta tierra");
-	t_string *delimitor = string_new(" ");
-	t_string **substrings = string_split(line, delimitor);
+	char *line = "Hola planeta tierra";
+	char** substrings = string_split(line, " ");
 
 	CU_ASSERT_PTR_NOT_NULL(substrings);
-	CU_ASSERT_STRING_EQUAL(substrings[0]->str, "Hola");
-	CU_ASSERT_STRING_EQUAL(substrings[1]->str, "planeta");
-	CU_ASSERT_STRING_EQUAL(substrings[2]->str, "tierra");
+	CU_ASSERT_STRING_EQUAL(substrings[0], "Hola");
+	CU_ASSERT_STRING_EQUAL(substrings[1], "planeta");
+	CU_ASSERT_STRING_EQUAL(substrings[2], "tierra");
 	CU_ASSERT_PTR_NULL(substrings[3]);
 
-	string_destroy(substrings[0]);
-	string_destroy(substrings[1]);
-	string_destroy(substrings[2]);
+	free(substrings[0]);
+	free(substrings[1]);
+	free(substrings[2]);
 	free(substrings);
-
-	string_destroy(line);
-	string_destroy(delimitor);
 }
 
 static void test_string_starts_with() {
-	t_string *string1;
-	t_string *string2;
-
-	string1 = string_new("#Comentario");
-	string2 = string_new("#");
-	CU_ASSERT_TRUE(string_starts_with(string1, string2));
-	string_destroy(string1);
-	string_destroy(string2);
-
-	string1 = string_new("Comentario");
-	string2 = string_new("Comen");
-	CU_ASSERT_TRUE(string_starts_with(string1, string2));
-	string_destroy(string1);
-	string_destroy(string2);
-
-	string1 = string_new("Comentario");
-	string2 = string_new("comen");
-	CU_ASSERT_FALSE(string_starts_with(string1, string2));
-	string_destroy(string1);
-	string_destroy(string2);
-
-	string1 = string_new(NULL);
-	string2 = string_new("#");
-	CU_ASSERT_FALSE(string_starts_with(string1, string2));
-	string_destroy(string1);
-	string_destroy(string2);
-}
-
-static void test_string_starts_with_literal() {
-	t_string *string;
-
-	string = string_new("#Comentario");
-	CU_ASSERT_TRUE(string_starts_with_literal(string, "#"));
-	string_destroy(string);
-
-	string = string_new("Comentario");
-	CU_ASSERT_TRUE(string_starts_with_literal(string, "Comen"));
-	string_destroy(string);
-
-	string = string_new("Comentario");
-	CU_ASSERT_FALSE(string_starts_with_literal(string, "comen"));
-	string_destroy(string);
-
-	string = string_new(NULL);
-	CU_ASSERT_FALSE(string_starts_with_literal(string, "#"));
-	string_destroy(string);
+	CU_ASSERT_TRUE(string_starts_with("#Comentario", "#"));
+	CU_ASSERT_TRUE(string_starts_with("Comentario", "Comen"));
+	CU_ASSERT_FALSE(string_starts_with("Comentario", "comen"));
+	CU_ASSERT_FALSE(string_starts_with("Comentario", "lala"));
+	CU_ASSERT_FALSE(string_starts_with("", "#"));
 }
 
 
@@ -277,12 +190,9 @@ static void test_string_starts_with_literal() {
  *********************************************************************************************/
 
 static CU_TestInfo tests[] = {
-		{ "Test create a new String", test_string_new },
 		{ "Test append string to other string", test_string_append},
-		{ "Test append string literal to other string", test_string_append_literal},
+		{ "Test a create string with repetitions", test_string_repeat},
 		{ "Test equals ignore case", test_string_equals_ignore_case},
-		{ "Test equals literal ignore case", test_string_equals_literal_ignore_case},
-		{ "Test duplicate string", test_string_duplicate},
 		{ "Test to upper", test_string_to_upper},
 		{ "Test to lower string", test_string_to_lower},
 		{ "Test capitalized string", test_string_capitalized},
@@ -290,11 +200,9 @@ static CU_TestInfo tests[] = {
 		{ "Test trim right", test_string_trim_right},
 		{ "Test trim", test_string_trim},
 		{ "Test isEmpty a string", test_string_is_empty},
-		{ "Test length a string", test_string_length},
 		{ "Test split a string", test_string_split},
 		{ "Test string begin with", test_string_starts_with},
-		{ "Test string begin with literal", test_string_starts_with_literal},
 		CU_TEST_INFO_NULL,
 };
 
-CUNIT_MAKE_SUITE(string, "Test String ADT", init_suite, clean_suite, tests)
+CUNIT_MAKE_SUITE(string, "Test String Utils ADT", init_suite, clean_suite, tests)

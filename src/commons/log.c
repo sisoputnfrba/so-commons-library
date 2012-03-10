@@ -18,7 +18,7 @@
 
 #include "temporal.h"
 #include "error.h"
-#include "string_utils.h"
+#include "string.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
