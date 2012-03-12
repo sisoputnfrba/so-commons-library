@@ -139,6 +139,6 @@ static CU_TestInfo tests[] = {
 		{ "Test Push And Pop Queue Element", test_queue_push_and_pop },
 		{ "Test Peek Queue Element", test_queue_peek },
 		{ "Test Clean Queue Elements", test_queue_clean },
-		CU_TEST_INFO_NULL, };
+		CU_TEST_INFO_NULL};
 
 CUNIT_MAKE_SUITE(queue, "Test Queue TAD", init_suite, clean_suite, tests)

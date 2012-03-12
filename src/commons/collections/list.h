@@ -35,6 +35,12 @@
 
 	void *list_get(t_list *, int index);
 
+	t_list* list_take(t_list*, int count);
+	t_list* list_take_and_remove(t_list*, int count);
+
+	t_list* list_filter(t_list*, bool(*condition)(void*));
+	t_list* list_map(t_list*, void*(*transformer)(void*));
+
 	void *list_replace(t_list*, int index, void* element);
 	void list_replace_and_destroy_element(t_list*, int index, void* element, void(*element_destroyer)(void*));
 

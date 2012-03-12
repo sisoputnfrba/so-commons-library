@@ -42,6 +42,15 @@ char *string_repeat(char character, int count) {
 }
 
 /**
+ * @NAME: string_duplicate
+ * @DESC: Retorna una copia del string pasado
+ * como argumento
+ */
+char* string_duplicate(char* original) {
+	return strdup(original);
+}
+
+/**
  * @NAME: string_append
  * @DESC: Agrega al primer string el segundo
  *
@@ -109,7 +118,7 @@ void string_trim_left(char** text) {
 		string_without_blank++;
 	}
 
-	char *new_string = strdup(string_without_blank);
+	char *new_string = string_duplicate(string_without_blank);
 
 	free(*text);
 	*text = new_string;
@@ -181,14 +190,14 @@ char **string_split(char *text, char *separator) {
 	char **substrings = NULL;
 	int size = 0;
 
-	char *text_to_iterate = strdup(text);
+	char *text_to_iterate = string_duplicate(text);
 	char *token = NULL, *next = NULL;
 	token = strtok_r(text_to_iterate, separator, &next);
 
 	while (token != NULL) {
 		size++;
 		substrings = realloc(substrings, sizeof(char*) * size);
-		substrings[size - 1] = strdup(token);
+		substrings[size - 1] = string_duplicate(token);
 		token = strtok_r(NULL, separator, &next);
 	}
 

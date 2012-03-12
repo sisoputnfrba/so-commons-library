@@ -21,6 +21,7 @@
 
 	char 	*string_repeat(char ch, int count);
 	void 	string_append(char ** original, char * string_to_add);
+	char*	string_duplicate(char* original);
 
 	void 	string_to_upper(char * text);
 	void 	string_to_lower(char * text);

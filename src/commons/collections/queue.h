@@ -25,11 +25,13 @@
 
 	t_queue *queue_create();
 	void queue_destroy(t_queue *);
+	void queue_destroy_and_destroy_elements(t_queue*, void(*element_destroyer)(void*));
 
 	void queue_push(t_queue *, void *element);
 	void *queue_pop(t_queue *);
 	void *queue_peek(t_queue *);
 	void queue_clean(t_queue *);
+	void queue_clean_and_destroy_elements(t_queue *, void(*element_destroyer)(void*));
 
 	int queue_size(t_queue *);
 	int queue_is_empty(t_queue *);
