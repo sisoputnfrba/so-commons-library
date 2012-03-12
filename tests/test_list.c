@@ -401,6 +401,29 @@ static void test_list_map() {
 	list_destroy(list);
 }
 
+static void test_list_add_all() {
+	t_list* principal = list_create();
+	t_list* other = list_create();
+
+	list_add(principal, ayudantes[0]);
+	list_add(principal, ayudantes[1]);
+	list_add(principal, ayudantes[2]);
+	list_add(other, ayudantes[3]);
+	list_add(other, ayudantes[4]);
+
+	list_add_all(principal, other);
+
+	CU_ASSERT_EQUAL(list_size(principal), 5);
+	CU_ASSERT_PTR_EQUAL(list_get(principal, 0), ayudantes[0]);
+	CU_ASSERT_PTR_EQUAL(list_get(principal, 1), ayudantes[1]);
+	CU_ASSERT_PTR_EQUAL(list_get(principal, 2), ayudantes[2]);
+	CU_ASSERT_PTR_EQUAL(list_get(principal, 3), ayudantes[3]);
+	CU_ASSERT_PTR_EQUAL(list_get(principal, 4), ayudantes[4]);
+
+	list_destroy(principal);
+	list_destroy(other);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -419,6 +442,7 @@ static CU_TestInfo tests[] = {
 		{ "Test take with remove elements", test_list_take_and_remove},
 		{ "Test filter list", test_list_filter},
 		{ "Test map list", test_list_map},
+		{ "Test add all", test_list_add_all},
 		CU_TEST_INFO_NULL, };
 
 CUNIT_MAKE_SUITE(list, "Test List TAD", init_suite, clean_suite, tests)

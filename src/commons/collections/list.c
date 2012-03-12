@@ -51,6 +51,19 @@ int list_add(t_list *self, void *data) {
 	return self->elements_count - 1;
 }
 
+/**
+ * @NAME: list_add_all
+ * @DESC: Agrega todos los elementos de
+ * la segunda lista en la primera
+ */
+void list_add_all(t_list* self, t_list* other) {
+	void _add_in_list(void* element){
+		list_add(self, element);
+	}
+
+	list_iterate(other, _add_in_list);
+}
+
 /*
  * @NAME: list_get
  * @DESC: Retorna el contenido de una posicion determianda de la lista

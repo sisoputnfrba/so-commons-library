@@ -32,6 +32,7 @@
 
 	int list_add(t_list *, void *element);
 	void list_add_in_index(t_list *, int index, void *element);
+	void list_add_all(t_list*, t_list* other);
 
 	void *list_get(t_list *, int index);
 
