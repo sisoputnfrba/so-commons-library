@@ -12,3 +12,4 @@ Provee los siguientes TADs:
   * Queue (commons/collections/queue.h)
 * Manipulación de archivos de configuración (commons/config.h)
 * Funciones de fechas (commons/temporal.h)
+* BitArray (commons/bitarray.h)
