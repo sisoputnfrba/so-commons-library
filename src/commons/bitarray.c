@@ -46,11 +46,6 @@ bool bitarray_test_bit(t_bitarray *self, off_t bit_index) {
  * @DESC: Setea el valor del bit de la posicion indicada
  */
 void bitarray_set_bit(t_bitarray *self, off_t bit_index) {
-
-	if (bitarray_get_max_bit(self) <= bit_index) {
-		return; /* bit out of range */
-	}
-
 	self->bitarray[BIT_CHAR(bit_index)] |= BIT_IN_CHAR(bit_index);
 }
 
@@ -60,10 +55,6 @@ void bitarray_set_bit(t_bitarray *self, off_t bit_index) {
  */
 void bitarray_clean_bit(t_bitarray *self, off_t bit_index){
     unsigned char mask;
-
-	if (bitarray_get_max_bit(self) <= bit_index) {
-		return; /* bit_index out of range */
-	}
 
     /* create a mask to zero out desired bit */
     mask =  BIT_IN_CHAR(bit_index);

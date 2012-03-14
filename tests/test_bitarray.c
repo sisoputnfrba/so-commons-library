@@ -79,7 +79,7 @@ void test_get_max_bits_bitarray() {
  *********************************************************************************************/
 
 static CU_TestInfo tests[] = {
-		{ "Test gte bit value in bitarray", test_get_bit_value_bitarray },
+		{ "Test get bit value in bitarray", test_get_bit_value_bitarray },
 		{ "Test clean bitarray", test_clean_bitarray },
 		{ "Test set bitarray", test_set_bitarray },
 		{ "Test get max bits in bitarray", test_get_max_bits_bitarray },
