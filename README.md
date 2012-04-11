@@ -24,7 +24,6 @@ Algunas de las consideraciones a tener a la hora de su uso:
 ## Guía de Instalación: ##
 
 Estas Bibliotecas utilizan CUnit para testear todas las funcionalidades, por lo que es necesario tenerlo instalado en el sistema si se quieren correr los test.
-Se puede encontrar la guía de instalación de CUnit en http://w3.scs.ryerson.ca/~schi/cps707/install-linux.html
 
 Para su utilización desde Eclipse coloque commons-library dentro del workspace, luego desde el eclipse cree un proyecto de biblioteca dinámica y coloque como nombre de esta commons-library. Esto va a hacer que Eclipse cree la configuración para utilizar este proyecto como una biblioteca dinámica.
 Si se requiere que un proyecto utilice a esta, siga los pasos pasos para configurar la biblioteca compartida como parte de este y como path de los includes coloque el contenido de la carpeta src. Por lo que los includes quedarían como:
