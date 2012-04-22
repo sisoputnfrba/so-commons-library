@@ -38,6 +38,16 @@
 
 static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "ERROR"};
 
+
+struct t_log_tag
+{
+    FILE *file;
+    bool is_active_console;
+    t_log_level detail;
+    char *program_name;
+    pid_t pid;
+};
+
 /**
  * Private Functions
  */
@@ -190,14 +200,14 @@ t_log_level log_level_from_string(char *level) {
 
 /** PRIVATE FUNCTIONS **/
 
-static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
+static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list arguments) {
 
 	if (isEnableLevelInLogger(logger, level)) {
 		char *message, *time, *buffer;
 		unsigned int thread_id;
 
 		message = malloc(LOG_MAX_LENGTH_MESSAGE + 1);
-		vsprintf(message, message_template, list_arguments);
+		vsprintf(message, message_template, arguments);
 		time = temporal_get_string_time();
 		thread_id = pthread_self();
 
@@ -226,3 +236,4 @@ static void log_write_in_level(t_log* logger, t_log_level level, const char* mes
 static bool isEnableLevelInLogger(t_log* logger, t_log_level level) {
 	return level >= logger->detail;
 }
+
