@@ -29,14 +29,9 @@
 		LOG_LEVEL_ERROR
 	}t_log_level;
 
-	typedef struct {
-		FILE* file;
-		bool is_active_console;
-		t_log_level detail;
-		char *program_name;
-		pid_t pid;
-	}t_log;
+	struct t_log_tag;
 
+    typedef struct t_log_tag t_log;
 
 	t_log* 		log_create(char* file, char *program_name, bool is_active_console, t_log_level level);
 	void 		log_destroy(t_log* logger);
@@ -51,3 +46,4 @@
 	t_log_level log_level_from_string(char *level);
 
 #endif /* LOG_H_ */
+
