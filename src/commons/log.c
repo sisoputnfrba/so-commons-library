@@ -203,7 +203,7 @@ static void log_write_in_level(t_log* logger, t_log_level level, const char* mes
 
 		buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
 		sprintf(buffer, "[%s] %s %s/(%d:%d): %s\n",
-				log_level_as_string(logger->detail), time,
+				log_level_as_string(level), time,
 				logger->program_name, logger->pid, thread_id,
 				message);
 
