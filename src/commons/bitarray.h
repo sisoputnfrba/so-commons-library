@@ -25,7 +25,7 @@
 	#define BIT_CHAR(bit)         ((bit) / CHAR_BIT)
 
 	/* array index for character containing bit */
-	#define BIT_IN_CHAR(bit)      (1 << (CHAR_BIT - 1 - ((bit)  % CHAR_BIT)))
+	#define BIT_IN_CHAR(bit)      (0x80 >> (CHAR_BIT - 1 - ((bit)  % CHAR_BIT)))
 
 
 	typedef struct {

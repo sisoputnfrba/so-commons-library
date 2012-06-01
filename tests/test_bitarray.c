@@ -34,9 +34,9 @@ void test_get_bit_value_bitarray() {
 	t_bitarray *bitarray = bitarray_create(data, sizeof(data));
 
 
-	CU_ASSERT_TRUE( bitarray_test_bit(bitarray, 0) );
+	CU_ASSERT_TRUE( bitarray_test_bit(bitarray, 7) );
 	CU_ASSERT_FALSE( bitarray_test_bit(bitarray, 1) );
-	CU_ASSERT_TRUE( bitarray_test_bit(bitarray, 8 + 8 + 7) );
+	CU_ASSERT_TRUE( bitarray_test_bit(bitarray, 8 + 8 + 0) );
 
 	bitarray_destroy(bitarray);
 }
@@ -46,7 +46,7 @@ void test_clean_bitarray() {
 	char data[] = { 0, 0, 0b00000001 };
 	t_bitarray *bitarray = bitarray_create(data, sizeof(data));
 
-	bitarray_clean_bit(bitarray, 8 + 8 + 7);
+	bitarray_clean_bit(bitarray, 8 + 8 + 0);
 
 	CU_ASSERT_EQUAL( memcmp(BASE_ARRAY, data, sizeof(data)), 0);
 
@@ -58,7 +58,7 @@ void test_set_bitarray() {
 	char data[] = { 0, 0, 0 };
 	t_bitarray *bitarray = bitarray_create(data, sizeof(data));
 
-	bitarray_set_bit(bitarray, 0);
+	bitarray_set_bit(bitarray, 7);
 
 	CU_ASSERT_EQUAL( memcmp(BASE_ARRAY, data, sizeof(data)), 0);
 
