@@ -31,7 +31,8 @@ static void dictionary_resize(t_dictionary *, int new_max_size);
 static t_hash_element *dictionary_create_element(char *key, unsigned int key_hash, void *data);
 static t_hash_element *dictionary_get_element(t_dictionary *self, char *key);
 static void *dictionary_remove_element(t_dictionary *self, char *key);
-static void dictionary_destroy_element(t_dictionary *self, t_hash_element *element);
+static void dictionary_destroy_element(t_dictionary *self, t_hash_element *element, void(*data_destroyer)(void*));
+static void internal_dictionary_clean_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*));
 
 /*
  * @NAME: dictionary_create
@@ -40,9 +41,8 @@ static void dictionary_destroy_element(t_dictionary *self, t_hash_element *eleme
  * 		data_destroyer - Recibe el puntero a la funcion que sabe como liberar la memoria de cada elemento
  * 						 almacenado. Si recibe NULL nunca se eliminan los elemntos del diccionario.
  */
-t_dictionary *dictionary_create(void(*data_destroyer)(void*)) {
+t_dictionary *dictionary_create() {
 	t_dictionary *self = malloc(sizeof(t_dictionary));
-	self->data_destroyer = data_destroyer;
 	self->table_max_size = DEFAULT_DICTIONARY_INITIAL_SIZE;
 	self->elements = calloc(self->table_max_size, sizeof(t_hash_element*));
 	self->table_current_size = 0;
@@ -74,7 +74,7 @@ static unsigned int dictionary_hash(char *key, int key_len) {
 void dictionary_put(t_dictionary *self, char *key, void *data) {
 	unsigned int key_hash = dictionary_hash(key, strlen(key));
 	int index = key_hash % self->table_max_size;
-	t_hash_element * new_element = dictionary_create_element(key, key_hash, data);
+	t_hash_element * new_element = dictionary_create_element(strdup(key), key_hash, data);
 
 	t_hash_element *element = self->elements[index];
 
@@ -123,12 +123,12 @@ void *dictionary_remove(t_dictionary *self, char *key) {
  * @DESC: Remueve un elemento del diccionario y lo destruye.
 */
 
-void dictionary_remove_and_destroy(t_dictionary *self, char *key) {
+void dictionary_remove_and_destroy(t_dictionary *self, char *key, void(*data_destroyer)(void*)) {
 	void *data = dictionary_remove_element(self, key);
 
 	if( data != NULL){
 		self->elements_amount--;
-		self->data_destroyer(data);
+		data_destroyer(data);
 	}
 }
 
@@ -140,51 +140,29 @@ void dictionary_iterator(t_dictionary *self, void(*closure)(char*,void*)) {
 	int table_index;
 	for (table_index = 0; table_index < self->table_max_size; table_index++) {
 		t_hash_element *element = self->elements[table_index];
-		t_hash_element *next_element = NULL;
 
-		if (element == NULL) {
-			continue;
+		while (element != NULL) {
+			closure(element->key, element->data);
+			element = element->next;
+
 		}
-
-		do {
-
-			next_element = element->next;
-
-			closure(element->key, element);
-
-		} while (next_element != NULL);
 	}
 }
 
 /*
  * @NAME: dictionary_clean
- * @DESC: Destruye todos los elementos del diccionario
+ * @DESC: Quita todos los elementos del diccionario
 */
 void dictionary_clean(t_dictionary *self) {
-	int table_index;
+	internal_dictionary_clean_and_destroy_elements(self, NULL);
+}
 
-	for (table_index = 0; table_index < self->table_max_size; table_index++) {
-		t_hash_element *element = self->elements[table_index];
-		t_hash_element *next_element = NULL;
-
-		if (element == NULL) {
-			continue;
-		}
-
-		while (element != NULL) {
-
-			next_element = element->next;
-
-			dictionary_destroy_element(self, element);
-
-			element = next_element;
-		}
-
-		self->elements[table_index] = NULL;
-	}
-
-	self->table_current_size = 0;
-	self->elements_amount = 0;
+/*
+ * @NAME: dictionary_clean
+ * @DESC: Quita todos los elementos del diccionario y los destruye
+*/
+void dictionary_clean_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*)) {
+	internal_dictionary_clean_and_destroy_elements(self, data_destroyer);
 }
 
 /*
@@ -213,7 +191,7 @@ int dictionary_size(t_dictionary *self) {
 
 /*
  * @NAME: dictionary_size
- * @DESC: Destruye el diccionario y sus elementos
+ * @DESC: Destruye el diccionario
 */
 void dictionary_destroy(t_dictionary *self) {
 	dictionary_clean(self);
@@ -221,7 +199,15 @@ void dictionary_destroy(t_dictionary *self) {
 	free(self);
 }
 
-
+/*
+ * @NAME: dictionary_destroy_and_destroy_elements
+ * @DESC: Destruye el diccionario y destruye sus elementos
+*/
+void dictionary_destroy_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*)) {
+	dictionary_clean_and_destroy_elements(self, data_destroyer);
+	free(self->elements);
+	free(self);
+}
 
 static void dictionary_resize(t_dictionary *self, int new_max_size) {
 	t_hash_element **new_table = calloc(new_max_size, sizeof(t_hash_element*));
@@ -250,7 +236,7 @@ static void dictionary_resize(t_dictionary *self, int new_max_size) {
 
 				new_element->next = old_element;
 			}
-;
+
 			next_element = old_element->next;
 			old_element->next = NULL;
 			old_element = next_element;
@@ -262,6 +248,32 @@ static void dictionary_resize(t_dictionary *self, int new_max_size) {
 	free(old_table);
 }
 
+/*
+ * @NAME: dictionary_clean
+ * @DESC: Destruye todos los elementos del diccionario
+*/
+static void internal_dictionary_clean_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*)) {
+	int table_index;
+
+	for (table_index = 0; table_index < self->table_max_size; table_index++) {
+		t_hash_element *element = self->elements[table_index];
+		t_hash_element *next_element = NULL;
+
+		while (element != NULL) {
+
+			next_element = element->next;
+
+			dictionary_destroy_element(self, element, data_destroyer);
+
+			element = next_element;
+		}
+
+		self->elements[table_index] = NULL;
+	}
+
+	self->table_current_size = 0;
+	self->elements_amount = 0;
+}
 
 static t_hash_element *dictionary_create_element(char *key, unsigned int key_hash, void *data) {
 	t_hash_element *element = malloc(sizeof(t_hash_element));
@@ -333,9 +345,9 @@ static void *dictionary_remove_element(t_dictionary *self, char *key) {
 	return NULL;
 }
 
-static void dictionary_destroy_element(t_dictionary *self, t_hash_element *element) {
-	if (self->data_destroyer != NULL) {
-		self->data_destroyer(element->data);
+static void dictionary_destroy_element(t_dictionary *self, t_hash_element *element, void(*data_destroyer)(void*)) {
+	if (data_destroyer != NULL) {
+		data_destroyer(element->data);
 	}
 	free(element->key);
 	free(element);

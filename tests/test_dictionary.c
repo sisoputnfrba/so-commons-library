@@ -54,13 +54,13 @@ static int clean_suite() {
 
 static void test_dictionary_put_and_get() {
 	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_dictionary *dictionary = dictionary_create((void*) persona_destroy);
+	t_dictionary *dictionary = dictionary_create();
 
 	t_person *p1 = persona_create("Matias", 24);
-	dictionary_put(dictionary, strdup(p1->name), p1);
+	dictionary_put(dictionary, p1->name, p1);
 
 	t_person *p2 = persona_create("Gaston", 25);
-	dictionary_put(dictionary, strdup(p2->name), p2);
+	dictionary_put(dictionary, p2->name, p2);
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 2);
 	CU_ASSERT_FALSE(dictionary_is_empty(dictionary));
@@ -77,18 +77,18 @@ static void test_dictionary_put_and_get() {
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 2);
 
-	dictionary_destroy(dictionary);
+	dictionary_destroy_and_destroy_elements(dictionary, (void*) persona_destroy);
 }
 
 static void test_dictionary_remove() {
 	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_dictionary *dictionary = dictionary_create((void*) persona_destroy);
+	t_dictionary *dictionary = dictionary_create();
 
 	t_person *p1 = persona_create("Matias", 24);
-	dictionary_put(dictionary, strdup(p1->name), p1);
+	dictionary_put(dictionary, p1->name, p1);
 
 	t_person *p2 = persona_create("Gaston", 25);
-	dictionary_put(dictionary, strdup(p2->name), p2);
+	dictionary_put(dictionary, p2->name, p2);
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 2);
 	CU_ASSERT_FALSE(dictionary_is_empty(dictionary));
@@ -109,31 +109,31 @@ static void test_dictionary_remove() {
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 0);
 
-	dictionary_destroy(dictionary);
+	dictionary_destroy_and_destroy_elements(dictionary, (void*) persona_destroy);
 }
 
 static void test_dictionary_remove_and_destroy() {
 	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_dictionary *dictionary = dictionary_create((void*) persona_destroy);
+	t_dictionary *dictionary = dictionary_create();
 
 	t_person *p1 = persona_create("Matias", 24);
-	dictionary_put(dictionary, strdup(p1->name), p1);
+	dictionary_put(dictionary, p1->name, p1);
 
 	t_person *p2 = persona_create("Gaston", 25);
-	dictionary_put(dictionary, strdup(p2->name), p2);
+	dictionary_put(dictionary, p2->name, p2);
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 2);
 	CU_ASSERT_FALSE(dictionary_is_empty(dictionary));
 
-	dictionary_remove_and_destroy(dictionary, "Matias");
+	dictionary_remove_and_destroy(dictionary, "Matias", (void*) persona_destroy);
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 1);
 
 	CU_ASSERT_PTR_NULL( dictionary_get(dictionary, "Matias"));
 
-	dictionary_remove_and_destroy(dictionary, "Gaston");
+	dictionary_remove_and_destroy(dictionary, "Gaston", (void*) persona_destroy);
 
-	CU_ASSERT_PTR_NULL( dictionary_get(dictionary, "Gaston"));
+	CU_ASSERT_PTR_NULL(dictionary_get(dictionary, "Gaston"));
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 0);
 
@@ -141,8 +141,7 @@ static void test_dictionary_remove_and_destroy() {
 }
 
 static void test_dictionary_clean() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_dictionary *dictionary = dictionary_create(free);
+	t_dictionary *dictionary = dictionary_create();
 
 	int cont;
 	for (cont = 0; cont < 100; cont++) {
@@ -153,13 +152,13 @@ static void test_dictionary_clean() {
 		sprintf(value, "%d%d%d", cont, cont, cont);
 
 		dictionary_put(dictionary, key, value);
-
+		free(key);
 	}
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 100);
 	CU_ASSERT_FALSE(dictionary_is_empty(dictionary));
 
-	dictionary_clean(dictionary);
+	dictionary_clean_and_destroy_elements(dictionary, free);
 
 	CU_ASSERT_EQUAL(dictionary_size(dictionary), 0);
 	CU_ASSERT_TRUE(dictionary_is_empty(dictionary));
@@ -167,6 +166,33 @@ static void test_dictionary_clean() {
 	dictionary_destroy(dictionary);
 }
 
+static void test_dictionary_iterate() {
+	// El (void*) delante del persona_destroy es para evitar errores de casteo
+	t_dictionary *dictionary = dictionary_create();
+	t_person* persons[4] = {
+			persona_create("Matias", 24),
+			persona_create("Gaston", 25),
+			persona_create("Dani", 20),
+			persona_create("Marco", 21)
+	};
+
+	dictionary_put(dictionary, persons[0]->name, persons[0]);
+	dictionary_put(dictionary, persons[1]->name, persons[1]);
+	dictionary_put(dictionary, persons[2]->name, persons[2]);
+	dictionary_put(dictionary, persons[3]->name, persons[3]);
+
+	CU_ASSERT_EQUAL(dictionary_size(dictionary), 4);
+
+	printf("\n");
+	void _assertion(char* key, t_person* person) {
+		printf("Key: %s, Nombre: %s, Edad: %d\n", key, person->name, person->age);
+	}
+
+	dictionary_iterator(dictionary, (void*) _assertion);
+
+	dictionary_destroy_and_destroy_elements(dictionary, (void*) persona_destroy);
+
+}
 
 /**********************************************************************************************
  *  							Building the test for CUnit
@@ -176,6 +202,7 @@ static CU_TestInfo tests[] = {
 		{ "Test Put And Get Dictionary Element", test_dictionary_put_and_get },
 		{ "Test Clean Dictionary Elements", test_dictionary_clean },
 		{ "Test Remove Dictionary Elements", test_dictionary_remove },
+		{ "Test Iterate Dictionary Elements", test_dictionary_iterate },
 		{ "Test Remove And Destroy Dictionary Elements", test_dictionary_remove_and_destroy },
 		CU_TEST_INFO_NULL, };
 

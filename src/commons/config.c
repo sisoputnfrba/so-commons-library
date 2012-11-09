@@ -33,7 +33,7 @@ t_config *config_create(char *path) {
 	t_config *config = malloc(sizeof(t_config));
 
 	config->path = strdup(path);
-	config->properties = dictionary_create(free);
+	config->properties = dictionary_create();
 
 	struct stat stat_file;
 	stat(path, &stat_file);
@@ -51,6 +51,7 @@ t_config *config_create(char *path) {
 			if (!string_starts_with(line, "#")) {
 				char** keyAndValue = string_split(line, "=");
 				dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
+				free(keyAndValue[0]);
 				free(keyAndValue);
 			}
 		}
@@ -122,7 +123,7 @@ int config_keys_amount(t_config *self) {
  * @DESC: Destruye la estructura config.
 */
 void config_destroy(t_config *config) {
-	dictionary_destroy(config->properties);
+	dictionary_destroy_and_destroy_elements(config->properties, free);
 	free(config->path);
 	free(config);
 }
