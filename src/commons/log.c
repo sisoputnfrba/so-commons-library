@@ -27,7 +27,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <sys/types.h>
+#include <syscall.h>
 
 
 #ifndef LOG_MAX_LENGTH_MESSAGE
@@ -200,7 +200,7 @@ static void log_write_in_level(t_log* logger, t_log_level level, const char* mes
 		message = malloc(LOG_MAX_LENGTH_MESSAGE + 1);
 		vsnprintf(message, LOG_MAX_LENGTH_MESSAGE, message_template, list_arguments);
 		time = temporal_get_string_time();
-		thread_id = gettid();
+		thread_id = syscall(SYS_gettid);
 
 		buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
 		snprintf(buffer, LOG_MAX_LENGTH_BUFFER, "[%s] %s %s/(%d:%d): %s\n",
