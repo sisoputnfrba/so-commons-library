@@ -24,23 +24,24 @@
 
 	typedef struct {
 		t_hash_element **elements;
-		void (*data_destroyer)(void*);
 		int table_max_size;
 		int table_current_size;
 		int elements_amount;
 	} t_dictionary;
 
-	t_dictionary *dictionary_create(void(*data_destroyer)(void*));
+	t_dictionary *dictionary_create();
 	void 		  dictionary_put(t_dictionary *, char *key, void *data);
 	void 		 *dictionary_get(t_dictionary *, char *key);
 	void 		 *dictionary_remove(t_dictionary *, char *key);
-	void 		  dictionary_remove_and_destroy(t_dictionary *, char *key);
+	void 		  dictionary_remove_and_destroy(t_dictionary *, char *, void(*data_destroyer)(void*));
 	void 		  dictionary_iterator(t_dictionary *, void(*closure)(char*,void*));
 	void 		  dictionary_clean(t_dictionary *);
+	void 		  dictionary_clean_and_destroy_elements(t_dictionary *, void(*data_destroyer)(void*));
 	bool 		  dictionary_has_key(t_dictionary *, char* key);
 	bool 		  dictionary_is_empty(t_dictionary *);
 	int 		  dictionary_size(t_dictionary *);
 	void 		  dictionary_destroy(t_dictionary *);
+	void 		  dictionary_destroy_and_destroy_elements(t_dictionary *, void(*data_destroyer)(void*));
 
 #endif /* DICTIONARY_H_ */
 
