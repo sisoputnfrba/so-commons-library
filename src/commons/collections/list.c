@@ -82,7 +82,7 @@ void list_add_in_index(t_list *self, int index, void *data) {
 	t_link_element* new_element = NULL;
 	t_link_element* previous = NULL;
 
-	if ((self->elements_count > index) && (index >= 0)) {
+	if ((self->elements_count >= index) && (index >= 0)) {
 		new_element = list_create_element(data);
 
 		if (index == 0) {
