@@ -18,9 +18,11 @@
 #define STRING_H_
 
 	#include <stdbool.h>
+	#include <stdarg.h>
 
 	char 	*string_repeat(char ch, int count);
 	void 	string_append(char ** original, char * string_to_add);
+	void    string_concat(char **original, const char *format, ...);
 	char*	string_duplicate(char* original);
 
 	void 	string_to_upper(char * text);
