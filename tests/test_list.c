@@ -112,7 +112,15 @@ static void test_list_add_in_index() {
 	CU_ASSERT_STRING_EQUAL( aux->name, "Gaston");
 	CU_ASSERT_EQUAL( aux->age, 25);
 
-	CU_ASSERT_EQUAL(list_size(list), 4);
+	int index_last_element = list_size(list);
+	list_add_in_index(list, index_last_element, persona_create("Dani", 21));
+
+	aux = list_get(list, index_last_element);
+	CU_ASSERT_PTR_NOT_NULL( aux);
+	CU_ASSERT_STRING_EQUAL( aux->name, "Dani");
+	CU_ASSERT_EQUAL( aux->age, 21);
+
+	CU_ASSERT_EQUAL(list_size(list), 5);
 
 	list_destroy_and_destroy_elements(list, (void*) persona_destroy);
 }
