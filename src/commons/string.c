@@ -83,19 +83,16 @@ void string_append(char** original, char* string_to_add) {
  * => saludo = "HOLA PEPE!"
  */
 void string_concat(char **original, const char *format, ...) {
-    size_t buffer_size = strlen(format) + 1;
-    char *temporal = malloc(buffer_size);
-    size_t message_length = 0;
-    va_list arguments;
-    va_start(arguments, format);
-    while((message_length = vsnprintf(temporal, buffer_size, format, arguments)) > buffer_size - 1) {
-        buffer_size *= 2;
-        temporal = (char *) realloc(temporal, buffer_size);
-    }
-    va_end(arguments);
-    temporal = (char *) realloc(temporal, message_length + 1);
-    
-    string_append(original, temporal);
+	va_list arguments;
+	va_start(arguments, format);
+	size_t buffer_size = vsnprintf(NULL, 0, format, arguments) + 1;
+	va_end(arguments);
+	char *temporal = malloc(buffer_size);
+	va_start(arguments, format);
+	vsnprintf(temporal, buffer_size, format, arguments);
+	va_end(arguments);
+	string_append(original, temporal);
+	free(temporal);
 }
 
 /**
