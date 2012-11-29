@@ -197,15 +197,14 @@ static void log_write_in_level(t_log* logger, t_log_level level, const char* mes
 		unsigned int thread_id;
 
 		message = malloc(LOG_MAX_LENGTH_MESSAGE + 1);
-		vsprintf(message, message_template, list_arguments);
+		vsnprintf(message, LOG_MAX_LENGTH_MESSAGE, message_template, list_arguments);
 		time = temporal_get_string_time();
 		thread_id = pthread_self();
 
 		buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
-		sprintf(buffer, "[%s] %s %s/(%d:%d): %s\n",
-				log_level_as_string(level), time,
-				logger->program_name, logger->pid, thread_id,
-				message);
+		snprintf(buffer, LOG_MAX_LENGTH_BUFFER, "[%s] %s %s/(%d:%d): %s\n",
+				log_level_as_string(level), time, logger->program_name,
+				logger->pid, thread_id,	message);
 
 		if (logger->file != NULL) {
 			fprintf(logger->file, "%s", buffer);
