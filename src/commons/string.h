@@ -22,7 +22,7 @@
 
 	char 	*string_repeat(char ch, int count);
 	void 	string_append(char ** original, char * string_to_add);
-	void    string_concat(char **original, const char *format, ...);
+	void    string_append_with_format(char **original, const char *format, ...);
 	char*	string_duplicate(char* original);
 
 	void 	string_to_upper(char * text);

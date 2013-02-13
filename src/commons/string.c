@@ -70,7 +70,7 @@ void string_append(char** original, char* string_to_add) {
 }
 
 /**
- * @NAME: string_concat
+ * @NAME: string_append_with_format
  * @DESC: Concatena al primer string el resultado de aplicar los parametros al
  * formato especificado
  *
@@ -78,11 +78,11 @@ void string_append(char** original, char* string_to_add) {
  * char *saludo = "HOLA ";
  * char *nombre = "PEPE";
  *
- * string_concat(&saludo, "%s!", nombre);
+ * string_append_with_format(&saludo, "%s!", nombre);
  *
  * => saludo = "HOLA PEPE!"
  */
-void string_concat(char **original, const char *format, ...) {
+void string_append_with_format(char **original, const char *format, ...) {
     size_t buffer_size = strlen(format) + 1;
     char *temporal = malloc(buffer_size);
     size_t message_length = 0;
