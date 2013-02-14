@@ -71,6 +71,32 @@ void string_append(char** original, char* string_to_add) {
 }
 
 /**
+ * @NAME: string_new
+ * @DESC: Crea un string vacio
+ */
+char* string_new() {
+	return string_duplicate("");
+}
+
+/**
+ * @NAME: string_from_format
+ * @DESC: Crea un nuevo string a partir de un formato especificado
+ *
+ * Ejemplo:
+ * char* saludo = string_from_format("Hola %s", "mundo");
+ *
+ * => saludo = "Hola mundo"
+ */
+char* string_from_format(const char* format, ...) {
+	char* nuevo = string_new();
+	va_list arguments;
+	va_start(arguments, format);
+	_string_append_with_format_list(format, &nuevo, arguments);
+	va_end(arguments);
+	return nuevo;
+}
+
+/**
  * @NAME: string_append_with_format
  * @DESC: Concatena al primer string el resultado de aplicar los parametros al
  * formato especificado

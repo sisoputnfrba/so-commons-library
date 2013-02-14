@@ -31,6 +31,12 @@ static int clean_suite(){
 	return 0;
 }
 
+static void test_string_from_format(){
+	char* newString = string_from_format("%s %s %d", "Hello", "world", 23);
+	CU_ASSERT_STRING_EQUAL(newString, "Hello world 23");
+	free(newString);
+}
+
 static void test_string_append() {
 	char *string = strdup("");
 	string_append(&string, "Hello");
@@ -206,6 +212,7 @@ static void test_string_ends_with() {
  *********************************************************************************************/
 
 static CU_TestInfo tests[] = {
+		{ "Test create string from a format", test_string_from_format},
 		{ "Test append string to other string", test_string_append},
 		{ "Test append string to other string with a format specified", test_string_append_with_format},
 		{ "Test a create string with repetitions", test_string_repeat},

@@ -20,6 +20,7 @@
 	#include <stdbool.h>
 	#include <stdarg.h>
 
+	char*   string_from_format(const char* format, ...);
 	char 	*string_repeat(char ch, int count);
 	void 	string_append(char ** original, char * string_to_add);
 	void    string_append_with_format(char **original, const char *format, ...);
