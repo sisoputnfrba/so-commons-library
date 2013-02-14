@@ -22,9 +22,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-static void string_do(char *text, void (*closure)(char*));
-static void string_lower_element(char* ch);
-static void string_upper_element(char* ch);
+static void _string_do(char *text, void (*closure)(char*));
+static void _string_lower_element(char* ch);
+static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
 
 /**
@@ -121,7 +121,7 @@ void string_append_with_format(char **original, const char *format, ...) {
  * @DESC: Pone en mayuscula todos los caracteres de un string
  */
 void string_to_upper(char *text) {
-	string_do(text, &string_upper_element);
+	_string_do(text, &_string_upper_element);
 }
 
 /**
@@ -129,7 +129,7 @@ void string_to_upper(char *text) {
  * @DESC: Pone en minuscula todos los caracteres de un string
  */
 void string_to_lower(char *text) {
-	string_do(text, &string_lower_element);
+	_string_do(text, &_string_lower_element);
 }
 
 /**
@@ -138,7 +138,7 @@ void string_to_lower(char *text) {
  */
 void string_capitalized(char *text) {
 	if (!string_is_empty(text)) {
-		string_upper_element(text);
+		_string_upper_element(text);
 		if (strlen(text) >= 2){
 			string_to_lower(&text[1]);
 		}
@@ -273,15 +273,15 @@ void string_iterate_lines(char** strings, void (*closure)(char*)) {
 
 /** PRIVATE FUNCTIONS **/
 
-static void string_upper_element(char* ch) {
+static void _string_upper_element(char* ch) {
 	*ch = toupper(*ch);
 }
 
-static void string_lower_element(char* ch) {
+static void _string_lower_element(char* ch) {
 	*ch = tolower(*ch);
 }
 
-static void string_do(char *text, void (*closure)(char* c)){
+static void _string_do(char *text, void (*closure)(char* c)){
 	int i = 0;
 	while (text[i] != '\0') {
 		closure(&text[i]);
