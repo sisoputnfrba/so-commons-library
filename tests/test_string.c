@@ -38,7 +38,7 @@ static void test_string_from_format(){
 }
 
 static void test_string_append() {
-	char *string = strdup("");
+	char *string = string_new();
 	string_append(&string, "Hello");
 	string_append(&string, " ");
 	string_append(&string, "world");
@@ -49,7 +49,7 @@ static void test_string_append() {
 }
 
 static void test_string_append_with_format() {
-	char *string = strdup("");
+	char *string = string_new();
 
 	string_append_with_format(&string, "%s %s %d", "Hello", "world", 23);
 	CU_ASSERT_STRING_EQUAL(string, "Hello world 23");
@@ -170,7 +170,7 @@ static void test_string_trim() {
 }
 
 static void test_string_is_empty() {
-	char *string = strdup("");
+	char *string = string_new();
 	CU_ASSERT_TRUE(string_is_empty(string));
 	free(string);
 }

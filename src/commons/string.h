@@ -20,8 +20,9 @@
 	#include <stdbool.h>
 	#include <stdarg.h>
 
+	char*   string_new();
 	char*   string_from_format(const char* format, ...);
-	char 	*string_repeat(char ch, int count);
+	char*   string_repeat(char ch, int count);
 	void 	string_append(char ** original, char * string_to_add);
 	void    string_append_with_format(char **original, const char *format, ...);
 	char*	string_duplicate(char* original);
@@ -38,7 +39,7 @@
 	bool 	string_starts_with(char * text, char * begin);
 	bool	string_ends_with(char* text, char* end);
 	bool 	string_equals_ignore_case(char * actual, char * expected);
-	char 	**string_split(char * text, char * separator);
+	char**  string_split(char * text, char * separator);
 
 	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
 
