@@ -42,14 +42,14 @@ static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "
 /**
  * Private Functions
  */
-static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list arguments);
-static bool isEnableLevelInLogger(t_log* logger, t_log_level level);
+static void _log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list arguments);
+static bool _isEnableLevelInLogger(t_log* logger, t_log_level level);
 
 #define log_impl_template(log_function, level_enum) 									\
 		void log_function(t_log* logger, const char* message_template, ...) { 			\
 			va_list arguments;															\
 			va_start(arguments, message_template);										\
-			log_write_in_level(logger, level_enum, message_template, arguments);		\
+			_log_write_in_level(logger, level_enum, message_template, arguments);		\
 			va_end(arguments);															\
 		}																				\
 
@@ -177,9 +177,9 @@ t_log_level log_level_from_string(char *level) {
 
 /** PRIVATE FUNCTIONS **/
 
-static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
+static void _log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
 
-	if (isEnableLevelInLogger(logger, level)) {
+	if (_isEnableLevelInLogger(logger, level)) {
 		char *message, *time, *buffer;
 		unsigned int thread_id;
 
@@ -209,6 +209,6 @@ static void log_write_in_level(t_log* logger, t_log_level level, const char* mes
 	}
 }
 
-static bool isEnableLevelInLogger(t_log* logger, t_log_level level) {
+static bool _isEnableLevelInLogger(t_log* logger, t_log_level level) {
 	return level >= logger->detail;
 }
