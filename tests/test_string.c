@@ -58,7 +58,7 @@ static void test_string_append_with_format() {
 }
 
 static void test_string_equals_ignore_case() {
-	char *string = strdup("Hello WorLd");
+	char *string = string_duplicate("Hello WorLd");
 
 	CU_ASSERT_TRUE(string_equals_ignore_case(string, "hello world"));
 
@@ -75,7 +75,7 @@ static void test_string_repeat() {
 }
 
 static void test_string_to_upper() {
-	char *string = strdup("Hello World");
+	char *string = string_duplicate("Hello World");
 	string_to_upper(string);
 
 	CU_ASSERT_STRING_EQUAL(string, "HELLO WORLD");
@@ -84,7 +84,7 @@ static void test_string_to_upper() {
 }
 
 static void test_string_to_lower() {
-	char *string = strdup("Hello World");
+	char *string = string_duplicate("Hello World");
 	string_to_lower(string);
 
 	CU_ASSERT_STRING_EQUAL(string, "hello world");
@@ -95,22 +95,22 @@ static void test_string_to_lower() {
 static void test_string_capitalized() {
 	char *string;
 
-	string = strdup("hello world");
+	string = string_duplicate("hello world");
 	string_capitalized(string);
 	CU_ASSERT_STRING_EQUAL(string, "Hello world");
 	free(string);
 
-	string = strdup("HELLO WORLD");
+	string = string_duplicate("HELLO WORLD");
 	string_capitalized(string);
 	CU_ASSERT_STRING_EQUAL(string, "Hello world");
 	free(string);
 
-	string = strdup("hi");
+	string = string_duplicate("hi");
 	string_capitalized(string);
 	CU_ASSERT_STRING_EQUAL(string, "Hi");
 	free(string);
 
-	string = strdup("h");
+	string = string_duplicate("h");
 	string_capitalized(string);
 	CU_ASSERT_STRING_EQUAL(string, "H");
 	free(string);
@@ -120,12 +120,12 @@ static void test_string_capitalized() {
 static void test_string_trim_left() {
 	char *string;
 
-	string = strdup("Hola");
+	string = string_duplicate("Hola");
 	string_trim_left(&string);
 	CU_ASSERT_STRING_EQUAL(string, "Hola");
 	free(string);
 
-	string = strdup("   Hola");
+	string = string_duplicate("   Hola");
 	string_trim_left(&string);
 	CU_ASSERT_STRING_EQUAL(string, "Hola");
 	free(string);
@@ -134,12 +134,12 @@ static void test_string_trim_left() {
 static void test_string_trim_right() {
 	char *string;
 
-	string = strdup("Hola");
+	string = string_duplicate("Hola");
 	string_trim_right(&string);
 	CU_ASSERT_STRING_EQUAL(string, "Hola");
 	free(string);
 
-	string = strdup("Hola    ");
+	string = string_duplicate("Hola    ");
 	string_trim_right(&string);
 	CU_ASSERT_STRING_EQUAL(string, "Hola");
 	free(string);
@@ -148,22 +148,22 @@ static void test_string_trim_right() {
 static void test_string_trim() {
 	char *string;
 
-	string = strdup("Hola");
+	string = string_duplicate("Hola");
 	string_trim(&string);
 	CU_ASSERT_STRING_EQUAL(string, "Hola");
 	free(string);
 
-	string = strdup("    Hola");
+	string = string_duplicate("    Hola");
 	string_trim(&string);
 	CU_ASSERT_STRING_EQUAL(string, "Hola");
 	free(string);
 
-	string = strdup("Hola    ");
+	string = string_duplicate("Hola    ");
 	string_trim(&string);
 	CU_ASSERT_STRING_EQUAL(string, "Hola");
 	free(string);
 
-	string = strdup("    Hola    ");
+	string = string_duplicate("    Hola    ");
 	string_trim(&string);
 	CU_ASSERT_STRING_EQUAL(string, "Hola");
 	free(string);
