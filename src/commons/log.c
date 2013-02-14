@@ -45,6 +45,14 @@ static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "
 static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list arguments);
 static bool isEnableLevelInLogger(t_log* logger, t_log_level level);
 
+#define log_impl_template(log_function, level_enum) 									\
+		void log_function(t_log* logger, const char* message_template, ...) { 			\
+			va_list arguments;															\
+			va_start(arguments, message_template);										\
+			log_write_in_level(logger, level_enum, message_template, arguments);		\
+			va_end(arguments);															\
+		}																				\
+
 /**
  * Public Functions
  */
@@ -102,12 +110,8 @@ void log_destroy(t_log* logger) {
  * [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_trace(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_TRACE, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_trace, LOG_LEVEL_TRACE);
+
 
 /**
  * @NAME: log_debug
@@ -116,12 +120,7 @@ void log_trace(t_log* logger, const char* message_template, ...) {
  * [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_debug(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_DEBUG, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_debug, LOG_LEVEL_DEBUG);
 
 /**
  * @NAME: log_info
@@ -130,12 +129,7 @@ void log_debug(t_log* logger, const char* message_template, ...) {
  * [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_info(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_INFO, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_info, LOG_LEVEL_INFO);
 
 /**
  * @NAME: log_warning
@@ -144,12 +138,8 @@ void log_info(t_log* logger, const char* message_template, ...) {
  * [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_warning(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_WARNING, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_warning, LOG_LEVEL_WARNING);
+
 
 /**
  * @NAME: log_error
@@ -158,12 +148,8 @@ void log_warning(t_log* logger, const char* message_template, ...) {
  * [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_error(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_ERROR, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_error, LOG_LEVEL_ERROR);
+
 
 /**
  * @NAME: log_level_as_string
