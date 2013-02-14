@@ -42,6 +42,15 @@ static void test_string_append() {
 	free(string);
 }
 
+static void test_string_append_with_format() {
+	char *string = strdup("");
+
+	string_append_with_format(&string, "%s %s %d", "Hello", "world", 23);
+	CU_ASSERT_STRING_EQUAL(string, "Hello world 23");
+
+	free(string);
+}
+
 static void test_string_equals_ignore_case() {
 	char *string = strdup("Hello WorLd");
 
@@ -198,6 +207,7 @@ static void test_string_ends_with() {
 
 static CU_TestInfo tests[] = {
 		{ "Test append string to other string", test_string_append},
+		{ "Test append string to other string with a format specified", test_string_append_with_format},
 		{ "Test a create string with repetitions", test_string_repeat},
 		{ "Test equals ignore case", test_string_equals_ignore_case},
 		{ "Test to upper", test_string_to_upper},
