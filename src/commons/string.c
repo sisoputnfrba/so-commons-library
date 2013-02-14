@@ -25,6 +25,7 @@
 static void string_do(char *text, void (*closure)(char*));
 static void string_lower_element(char* ch);
 static void string_upper_element(char* ch);
+void _string_append_with_format_list(const char* format, char** original, va_list arguments);
 
 /**
  * @NAME: string_repeat
@@ -85,14 +86,8 @@ void string_append(char** original, char* string_to_add) {
 void string_append_with_format(char **original, const char *format, ...) {
 	va_list arguments;
 	va_start(arguments, format);
-	size_t buffer_size = vsnprintf(NULL, 0, format, arguments) + 1;
+	_string_append_with_format_list(format, original, arguments);
 	va_end(arguments);
-	char *temporal = malloc(buffer_size);
-	va_start(arguments, format);
-	vsnprintf(temporal, buffer_size, format, arguments);
-	va_end(arguments);
-	string_append(original, temporal);
-	free(temporal);
 }
 
 /**
@@ -266,4 +261,19 @@ static void string_do(char *text, void (*closure)(char* c)){
 		closure(&text[i]);
 		i++;
 	}
+}
+
+
+void _string_append_with_format_list(const char* format, char** original, va_list arguments) {
+	va_list copy_arguments;
+	va_copy(copy_arguments, arguments);
+	size_t buffer_size = vsnprintf(NULL, 0, format, copy_arguments) + 1;
+	va_end(copy_arguments);
+
+	char* temporal = malloc(buffer_size);
+	va_copy(copy_arguments, arguments);
+	vsnprintf(temporal, buffer_size, format, arguments);
+	va_end(copy_arguments);
+	string_append(original, temporal);
+	free(temporal);
 }
