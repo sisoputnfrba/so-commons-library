@@ -21,18 +21,7 @@
 
 /*------------------- INTERNAL FUNCTIONS -------------------------*/
 
-/*
- * @NAME: set_element_in
- * @DESC: Setea un elemento en una determinada posición dentro del array
- */
-static void set_element_in(t_array* self, void* element, unsigned int index) {
-	if(self->first_element && index < self->element_count)
-		memcpy(pointer_for_index(self, index), element, self->element_size);
-}
 
-unsigned int following_last_index(t_array* self) {
-	return (self->element_count - 1) + 1; //Sirve para visualizar
-}
 /*------------------- INTERNAL FUNCTIONS -------------------------*/
 
 /*
@@ -65,6 +54,15 @@ static bool add_space(t_array* self, unsigned int index) {
 		return true;
 	}
 	return false;
+}
+
+/*
+ * @NAME: set_element_in
+ * @DESC: Setea un elemento en una determinada posición dentro del array
+ */
+static void set_element_in(t_array* self, void* element, unsigned int index) {
+	if(self->first_element && index < self->element_count)
+		memcpy(pointer_for_index(self, index), element, self->element_size);
 }
 
 /*
@@ -159,6 +157,15 @@ t_array *array_map(t_array* self, void *(*transformer)(void*)){
 		add_element_in(array_transformed, transformer( pointer_for_index(self, position) ), position);
 
 	return array_transformed;
+}
+
+/*
+ * @NAME: array_destroy
+ * @DESC: Destruye los elementos y libera los recursos utilizados por la instancia
+ */
+void array_destroy_and_destroy_elements(t_array* self, void(*element_destroyer)(void*)){
+	array_iterate(self, element_destroyer);
+	array_destroy(self);
 }
 
 /*
