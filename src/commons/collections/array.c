@@ -20,11 +20,6 @@
 #include "array.h"
 
 /*------------------- INTERNAL FUNCTIONS -------------------------*/
-static void init_array(t_array* array, size_t element_size) {
-	array->first_element = NULL;
-	array->element_size = element_size;
-	array->element_count = 0;
-}
 
 /*
  * @NAME: array_get_for_index
@@ -43,23 +38,20 @@ static void set_element_in(t_array* self, void* element, unsigned int index) {
 		memcpy(pointer_for_index(self, index), element, self->element_size);
 }
 
-/*
- * @NAME: add_element_in
- * @DESC: Setea un elemento en una determinada posición dentro del array
- */
-void add_element_in(t_array* self, void* element, unsigned int index) {
-	self->first_element = realloc(self->first_element, self->element_size * (index + 1) );
-	if( self->first_element ){
-		set_element_in(self, element, index);
-		self->element_count++;
-	}
-}
-
 unsigned int following_last_index(t_array* self) {
 	return (self->element_count - 1) + 1; //Sirve para visualizar
 }
 /*------------------- INTERNAL FUNCTIONS -------------------------*/
 
+/*
+ * @NAME: init_array
+ * @DESC: Inicializa la estructura T_ARRAY
+ */
+static void init_array(t_array* array, size_t element_size) {
+	array->first_element = NULL;
+	array->element_count = 0;
+	array->element_size = element_size;
+}
 
 /*
  * @NAME: array_create
@@ -72,12 +64,29 @@ t_array *array_create(size_t element_size){
 }
 
 /*
- * @NAME: array_destroy
- * @DESC: Libera los recursos utilizados por la instancia
+ * @NAME: add_space
+ * @DESC: Agrega espacio en el array
  */
-void array_destroy(t_array *self){
-	if( self->first_element ) free(self->first_element);
-	free(self);
+static bool add_space(t_array* self, unsigned int index) {
+	if( (realloc(self->first_element, self->element_size * (index + 1))) ){
+		self->element_count = index + 1;
+		return true;
+	}
+	return false;
+}
+
+/*
+ * @NAME: add_element_in
+ * @DESC: Setea un elemento en una determinada posición dentro del array
+ */
+static void add_element_in(t_array* self, void* element, unsigned int index) {
+	bool have_space = true; //Por si no se puede asignar espacio
+
+	if( index > self->element_count )
+		have_space = add_space(self, index);
+
+	if( self->first_element && have_space )
+		set_element_in(self, element, index);
 }
 
 /*
@@ -85,7 +94,25 @@ void array_destroy(t_array *self){
  * @DESC: Agrega un elemento al final del array
  */
 void array_add(t_array *self, void *element){
-	add_element_in(self, element, following_last_index(self));
+	add_element_in(self, element, array_size(self) );
+}
+
+/*
+ * @NAME: array_add
+ * @DESC: Agrega un elemento al final del array
+ */
+void list_add_in_index(t_array *self, unsigned int index, void *element){
+	add_element_in(self, element, index);
+}
+
+
+/*
+ * @NAME: array_destroy
+ * @DESC: Libera los recursos utilizados por la instancia
+ */
+void array_destroy(t_array *self){
+	if( self->first_element ) free(self->first_element);
+	free(self);
 }
 
 /*
