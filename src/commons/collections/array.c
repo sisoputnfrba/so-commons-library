@@ -132,6 +132,36 @@ void *array_remove(t_array *self, unsigned int index){
 }
 
 /*
+ * @NAME: array_size
+ * @DESC: Retorna la cantidad de elementos que tiene el array
+ */
+size_t array_size(t_array *self){
+	return self->element_count;
+}
+
+/*
+ * @NAME: array_iterate
+ * @DESC: Itera sobre cada elemento aplicando una clausura
+ */
+void array_iterate(t_array *self, void(*closure)(void*)){
+		for(unsigned int position = 0; position < self->element_count; position++)
+			closure( pointer_for_index(self, position) );
+}
+
+/*
+ * @NAME: array_map
+ * @DESC: Retorna un nuevo array con los elementos transformados
+ */
+t_array *array_map(t_array* self, void *(*transformer)(void*)){
+	t_array *array_transformed = array_create( array_size(self) );
+
+	for(unsigned int position = 0; position < self->element_count; position++)
+		add_element_in(array_transformed, transformer( pointer_for_index(self, position) ), position);
+
+	return array_transformed;
+}
+
+/*
  * @NAME: array_destroy
  * @DESC: Libera los recursos utilizados por la instancia
  */
