@@ -26,7 +26,7 @@
  * @DESC: Setea un elemento en una determinada posición dentro del array
  */
 static void set_element_in(t_array* self, void* element, unsigned int index) {
-	if(self->first_element)
+	if(self->first_element && index < self->element_count)
 		memcpy(pointer_for_index(self, index), element, self->element_size);
 }
 
@@ -113,6 +113,22 @@ void *array_get(t_array *self, unsigned int index){
 	if(index < self->element_count)
 		return pointer_for_index(self, index);
 	return NULL;
+}
+
+/*
+ * @NAME: array_remove_in
+ * @DESC: Elimina el elemento del array
+ */
+static void *remove_element_in(t_array *self, unsigned int index){
+	return NULL;
+}
+
+/*
+ * @NAME: array_remove
+ * @DESC: Elimina el elemento del array
+ */
+void *array_remove(t_array *self, unsigned int index){
+	return remove_element_in(self, index);
 }
 
 /*
