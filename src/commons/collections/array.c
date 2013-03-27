@@ -19,10 +19,7 @@
 
 #include "array.h"
 
-/*------------------- INTERNAL FUNCTIONS -------------------------*/
-
-
-/*------------------- INTERNAL FUNCTIONS -------------------------*/
+static void *pointer_for_index(t_array* self, unsigned int index);
 
 /*
  * @NAME: init_array
@@ -91,7 +88,7 @@ void array_add(t_array *self, void *element){
  * @NAME: array_add
  * @DESC: Agrega un elemento al final del array
  */
-void list_add_in_index(t_array *self, unsigned int index, void *element){
+void array_add_in_index(t_array *self, unsigned int index, void *element){
 	add_element_in(self, element, index);
 }
 
@@ -142,7 +139,8 @@ size_t array_size(t_array *self){
  * @DESC: Itera sobre cada elemento aplicando una clausura
  */
 void array_iterate(t_array *self, void(*closure)(void*)){
-		for(unsigned int position = 0; position < self->element_count; position++)
+		unsigned int position;
+		for( position = 0; position < self->element_count; position++)
 			closure( pointer_for_index(self, position) );
 }
 
@@ -152,8 +150,8 @@ void array_iterate(t_array *self, void(*closure)(void*)){
  */
 t_array *array_map(t_array* self, void *(*transformer)(void*)){
 	t_array *array_transformed = array_create( array_size(self) );
-
-	for(unsigned int position = 0; position < self->element_count; position++)
+	unsigned int position;
+	for(position = 0; position < self->element_count; position++)
 		add_element_in(array_transformed, transformer( pointer_for_index(self, position) ), position);
 
 	return array_transformed;

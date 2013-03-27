@@ -31,7 +31,7 @@
 
 	void array_add(t_array *self, void *element);
 
-	void list_add_in_index(t_array *self, unsigned int index, void *element);
+	void array_add_in_index(t_array *self, unsigned int index, void *element);
 
 	void array_insert(t_array *self, void *element, unsigned int index);
 
