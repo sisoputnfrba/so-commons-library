@@ -27,13 +27,23 @@
 		size_t element_size;
 	}t_array;
 
-	t_array *array_create(size_t element_size);
+	t_array *array_create(size_t size_element);
 
 	void array_add(t_array *self, void *element);
 
+	void list_add_in_index(t_array *self, unsigned int index, void *element);
+
 	void array_insert(t_array *self, void *element, unsigned int index);
 
+	void array_iterate(t_array *self, void(*closure)(void*));
+
+	t_array *array_map(t_array* self, void *(*transformer)(void*));
+
 	void *array_get(t_array *self, unsigned int index);
+
+	size_t array_size(t_array *self);
+
+	void array_destroy_and_destroy_elements(t_array* self, void(*element_destroyer)(void*));
 
 	void array_destroy(t_array * self);
 
