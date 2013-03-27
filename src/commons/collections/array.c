@@ -22,14 +22,6 @@
 /*------------------- INTERNAL FUNCTIONS -------------------------*/
 
 /*
- * @NAME: array_get_for_index
- * @DESC: Devuelve un puntero al elemento en una determinada posición
- */
-static void *pointer_for_index(t_array* self, unsigned int index) {
-	return (self->first_element) + (self->element_size * index);
-}
-
-/*
  * @NAME: set_element_in
  * @DESC: Setea un elemento en una determinada posición dentro del array
  */
@@ -105,14 +97,12 @@ void list_add_in_index(t_array *self, unsigned int index, void *element){
 	add_element_in(self, element, index);
 }
 
-
 /*
- * @NAME: array_destroy
- * @DESC: Libera los recursos utilizados por la instancia
+ * @NAME: array_get_for_index
+ * @DESC: Devuelve un puntero al elemento en una determinada posición
  */
-void array_destroy(t_array *self){
-	if( self->first_element ) free(self->first_element);
-	free(self);
+static void *pointer_for_index(t_array* self, unsigned int index) {
+	return (self->first_element +  (self->element_size * index));
 }
 
 /*
@@ -123,4 +113,13 @@ void *array_get(t_array *self, unsigned int index){
 	if(index < self->element_count)
 		return pointer_for_index(self, index);
 	return NULL;
+}
+
+/*
+ * @NAME: array_destroy
+ * @DESC: Libera los recursos utilizados por la instancia
+ */
+void array_destroy(t_array *self){
+	if( self->first_element ) free(self->first_element);
+	free(self);
 }
