@@ -29,7 +29,7 @@ static int clean_suite() {
 }
 
 void test_read_config() {
-	t_config* config = config_create("tests/resources/config.cfg");
+	t_config* config = config_create("/home/gaston/commons-library/tests/resources/config.cfg");
 
 	CU_ASSERT_EQUAL(config_keys_amount(config), 4);
 
