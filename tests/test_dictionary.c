@@ -194,6 +194,23 @@ static void test_dictionary_iterate() {
 
 }
 
+static void test_dictionary_overload_entry() {
+	t_dictionary *dictionary = dictionary_create(free);
+	
+	char *key = "aKey";
+	
+	dictionary_put(dictionary, key, persona_create("Matias", 24));
+	dictionary_put(dictionary, key, persona_create("Gaston", 25));
+
+	void _persona_iterating_destroy(char *key, t_person *person) {
+		persona_destroy(person);
+	}
+	
+	dictionary_iterator(dictionary, _persona_iterating_destroy);
+
+	dictionary_destroy(dictionary);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -204,6 +221,7 @@ static CU_TestInfo tests[] = {
 		{ "Test Remove Dictionary Elements", test_dictionary_remove },
 		{ "Test Iterate Dictionary Elements", test_dictionary_iterate },
 		{ "Test Remove And Destroy Dictionary Elements", test_dictionary_remove_and_destroy },
+		{ "Test Iterate Overloaded Entry Finishes", test_dictionary_overload_entry },
 		CU_TEST_INFO_NULL, };
 
 CUNIT_MAKE_SUITE(dictionary, "Test Dictionary TAD", init_suite, clean_suite, tests)
