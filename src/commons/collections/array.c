@@ -46,7 +46,7 @@ t_array *array_create(size_t element_size){
  * @DESC: Agrega espacio en el array
  */
 static bool add_space(t_array* self, unsigned int index) {
-	if( (realloc(self->first_element, self->element_size * (index + 1))) ){
+	if( (self->first_element = realloc(self->first_element, self->element_size * (index + 1))) ){
 		self->element_count = index + 1;
 		return true;
 	}
@@ -69,7 +69,7 @@ static void set_element_in(t_array* self, void* element, unsigned int index) {
 static void add_element_in(t_array* self, void* element, unsigned int index) {
 	bool have_space = true; //Por si no se puede asignar espacio
 
-	if( index > self->element_count )
+	if( index >= self->element_count )
 		have_space = add_space(self, index);
 
 	if( self->first_element && have_space )
