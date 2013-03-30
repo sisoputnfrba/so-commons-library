@@ -438,6 +438,8 @@ static void test_list_sort_empty() {
 	list_sort(list, NULL);
 
 	CU_ASSERT(list_is_empty(list));
+
+	list_destroy(list);
 }
 
 static void test_list_sort_unique() {
@@ -458,6 +460,8 @@ static void test_list_sort_unique() {
 	CU_ASSERT_PTR_EQUAL(list_get(list, 1), ayudantes[2]);
 	CU_ASSERT_PTR_EQUAL(list_get(list, 2), ayudantes[0]);
 	CU_ASSERT_PTR_EQUAL(list_get(list, 3), ayudantes[1]);
+
+	list_destroy(list);
 }
 
 static void test_list_sort_duplicates() {
@@ -480,6 +484,8 @@ static void test_list_sort_duplicates() {
 	CU_ASSERT_PTR_EQUAL(list_get(list, 2), ayudantes[2]);
 	CU_ASSERT_PTR_EQUAL(list_get(list, 3), ayudantes[0]);
 	CU_ASSERT_PTR_EQUAL(list_get(list, 4), ayudantes[1]);
+
+	list_destroy(list);
 }
 
 /**********************************************************************************************
