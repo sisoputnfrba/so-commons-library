@@ -432,6 +432,56 @@ static void test_list_add_all() {
 	list_destroy(other);
 }
 
+static void test_list_sort_empty() {
+	t_list *list = list_create();
+
+	list_sort(list, NULL);
+
+	CU_ASSERT(list_is_empty(list));
+}
+
+static void test_list_sort_unique() {
+	t_list *list = list_create();
+
+	list_add(list, ayudantes[0]);
+	list_add(list, ayudantes[1]);
+	list_add(list, ayudantes[2]);
+	list_add(list, ayudantes[3]);
+
+	bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
+		return joven->age < menos_joven->age;
+	}
+
+	list_sort(list, _ayudantes_menor);
+
+	CU_ASSERT_PTR_EQUAL(list_get(list, 0), ayudantes[3]);
+	CU_ASSERT_PTR_EQUAL(list_get(list, 1), ayudantes[2]);
+	CU_ASSERT_PTR_EQUAL(list_get(list, 2), ayudantes[0]);
+	CU_ASSERT_PTR_EQUAL(list_get(list, 3), ayudantes[1]);
+}
+
+static void test_list_sort_duplicates() {
+	t_list *list = list_create();
+
+	list_add(list, ayudantes[0]);
+	list_add(list, ayudantes[1]);
+	list_add(list, ayudantes[2]);
+	list_add(list, ayudantes[3]);
+	list_add(list, ayudantes[2]);
+
+	bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
+		return joven->age < menos_joven->age;
+	}
+
+	list_sort(list, _ayudantes_menor);
+
+	CU_ASSERT_PTR_EQUAL(list_get(list, 0), ayudantes[3]);
+	CU_ASSERT_PTR_EQUAL(list_get(list, 1), ayudantes[2]);
+	CU_ASSERT_PTR_EQUAL(list_get(list, 2), ayudantes[2]);
+	CU_ASSERT_PTR_EQUAL(list_get(list, 3), ayudantes[0]);
+	CU_ASSERT_PTR_EQUAL(list_get(list, 4), ayudantes[1]);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -451,6 +501,9 @@ static CU_TestInfo tests[] = {
 		{ "Test filter list", test_list_filter},
 		{ "Test map list", test_list_map},
 		{ "Test add all", test_list_add_all},
+		{ "Test sorting empty list", test_list_sort_empty},
+		{ "Test sorting unique elements", test_list_sort_unique},
+		{ "Test sorting duplicated elements", test_list_sort_duplicates},
 		CU_TEST_INFO_NULL, };
 
 CUNIT_MAKE_SUITE(list, "Test List TAD", init_suite, clean_suite, tests)

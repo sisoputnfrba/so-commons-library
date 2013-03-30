@@ -322,6 +322,40 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 	return mapped;
 }
 
+/*
+ * @NAME: list_sort
+ * @DESC: Ordena la lista segun el comparador
+ */
+
+void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
+	// TODO: optimizar (usar un algoritmo mas copado)
+	int unsorted_elements = self->elements_count;
+	if(unsorted_elements < 2) {
+		return;
+	}
+	t_link_element *auxiliar = NULL;
+	bool sorted = true;
+	do {
+		t_link_element *previous_element = self->head, *cursor = previous_element->next;
+		sorted = true;
+		int index = 0, last_changed = unsorted_elements;
+		while(index < unsorted_elements && cursor != NULL) {
+			if(!comparator(previous_element->data, cursor->data)) {
+			   auxiliar = cursor->data;
+			   cursor->data = previous_element->data;
+			   previous_element->data = auxiliar;
+			   last_changed = index;
+			   sorted = false;
+			}
+			previous_element = cursor;
+			cursor = cursor->next;
+			index++;
+		}
+		unsorted_elements = last_changed;
+	} while(!sorted);
+
+}
+
 /********* PRIVATE FUNCTIONS **************/
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {
