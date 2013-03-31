@@ -22,9 +22,8 @@
 	#include <stdbool.h>
 
 	typedef struct{
-		void *first_element; //Inicio del array
+		void **first_element; //Inicio del array
 		unsigned int element_count;
-		size_t element_size;
 	}t_array;
 
 	t_array *array_create(size_t size_element);

@@ -28,7 +28,7 @@ static void *pointer_for_index(t_array* self, unsigned int index);
 static void init_array(t_array* array, size_t element_size) {
 	array->first_element = NULL;
 	array->element_count = 0;
-	array->element_size = element_size;
+//	array->element_size = element_size;
 }
 
 /*
@@ -46,7 +46,7 @@ t_array *array_create(size_t element_size){
  * @DESC: Agrega espacio en el array
  */
 static bool add_space(t_array* self, unsigned int index) {
-	if( (self->first_element = realloc(self->first_element, self->element_size * (index + 1))) ){
+	if( (self->first_element = realloc(self->first_element, sizeof(void**) * (index + 1))) ){
 		self->element_count = index + 1;
 		return true;
 	}
@@ -58,10 +58,8 @@ static bool add_space(t_array* self, unsigned int index) {
  * @DESC: Setea un elemento en una determinada posición dentro del array
  */
 static void set_element_in(t_array* self, void* element, unsigned int index) {
-	if( index < self->element_count)
-		memset(pointer_for_index(self, index), '0', self->element_size);
-	if( element )
-		memcpy(pointer_for_index(self, index), element, self->element_size);
+	if(index < self->element_count)
+		*(self->first_element + index ) = element;
 }
 
 /*
@@ -99,7 +97,7 @@ void array_add_in_index(t_array *self, unsigned int index, void *element){
  * @DESC: Devuelve un puntero al elemento en una determinada posición
  */
 static void *pointer_for_index(t_array* self, unsigned int index) {
-	return (self->first_element +  (self->element_size * index));
+	return *(self->first_element + index);
 }
 
 /*
