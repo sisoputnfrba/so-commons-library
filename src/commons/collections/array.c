@@ -58,7 +58,9 @@ static bool add_space(t_array* self, unsigned int index) {
  * @DESC: Setea un elemento en una determinada posición dentro del array
  */
 static void set_element_in(t_array* self, void* element, unsigned int index) {
-	if(self->first_element && index < self->element_count)
+	if( index < self->element_count)
+		memset(pointer_for_index(self, index), '0', self->element_size);
+	if( element )
 		memcpy(pointer_for_index(self, index), element, self->element_size);
 }
 
