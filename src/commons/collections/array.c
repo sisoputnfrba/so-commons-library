@@ -97,17 +97,27 @@ void array_add_in_index(t_array *self, unsigned int index, void *element){
  * @DESC: Devuelve un puntero al elemento en una determinada posición
  */
 static void *pointer_for_index(t_array* self, unsigned int index) {
-	return *(self->first_element + index);
+	return (self->first_element + index);
 }
 
 /*
  * @NAME: array_get_element
- * @DESC: Devuelve un puntero a la posición del elemento, caso de no existir, retorna NULO
+ * @DESC: Devuelve un puntero al elemento, caso de no existir, retorna NULO
  */
 void *array_get(t_array *self, unsigned int index){
-	if(index < self->element_count)
-		return pointer_for_index(self, index);
-	return NULL;
+	void **element = NULL;
+	if(index < self->element_count){
+		element = pointer_for_index(self, index);
+	}
+	return *element;
+}
+
+/*
+ * @NAME: move_elements
+ * @DESC: Mueve un subarray dentro del array
+ */
+void move_elements(t_array *self,unsigned int index, size_t element_count){
+	memmove(pointer_for_index(self, index), pointer_for_index(self, index + 1), element_count * sizeof(void**));
 }
 
 /*
@@ -115,7 +125,29 @@ void *array_get(t_array *self, unsigned int index){
  * @DESC: Elimina el elemento del array
  */
 static void *remove_element_in(t_array *self, unsigned int index){
-	return NULL;
+	void **index_element = NULL, *element = NULL;
+
+	if(index >= self->element_count) return NULL;
+
+	index_element = pointer_for_index(self, index);
+	element = *index_element;
+
+	move_elements(self, index, self->element_count - (index + 1));
+
+	//Parte critica, ya que se hace una copia sobre un buffer, se eliminan los datos antiguos
+	//y se asigna la copia
+	void **buffer = NULL;
+	if( (buffer = malloc( sizeof(void**) * (self->element_count - 1) )) ){
+		if( memcpy(buffer, self->first_element, (self->element_count - 1) * sizeof(void**)) == buffer){
+
+			free(self->first_element);
+			self->first_element = buffer;
+			self->element_count--;
+			return element;
+
+		}
+	}
+	return element;
 }
 
 /*

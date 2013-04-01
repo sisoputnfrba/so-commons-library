@@ -36,6 +36,8 @@
 
 	void array_iterate(t_array *self, void(*closure)(void*));
 
+	void *array_remove(t_array *self, unsigned int index);
+
 	t_array *array_map(t_array* self, void *(*transformer)(void*));
 
 	void *array_get(t_array *self, unsigned int index);
