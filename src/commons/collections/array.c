@@ -174,6 +174,18 @@ void *array_remove(t_array *self, unsigned int index){
 	return element;
 }
 
+void array_insert(t_array *self, void *element, unsigned int index){
+
+	if(index > self->element_count){
+		array_add(self, element);
+	}else{
+		t_array *head = array_generate(self, 0, index);
+		t_array *tail = array_generate(self, index, array_size(self));
+		array_add(head, element);
+		array_union(self, head, tail);
+	}
+}
+
 /*
  * @NAME: array_size
  * @DESC: Retorna la cantidad de elementos que tiene el array
