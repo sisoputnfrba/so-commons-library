@@ -19,7 +19,10 @@
 
 #include "array.h"
 
+#define ELEMENT_SIZE sizeof(void**)
+
 static void *pointer_for_index(t_array* self, unsigned int index);
+static void *pointer_for_element(t_array* self, unsigned int index);
 
 /*
  * @NAME: init_array
@@ -46,7 +49,7 @@ t_array *array_create(size_t element_size){
  * @DESC: Agrega espacio en el array
  */
 static bool add_space(t_array* self, unsigned int index) {
-	if( (self->first_element = realloc(self->first_element, sizeof(void**) * (index + 1))) ){
+	if( (self->first_element = realloc(self->first_element, ELEMENT_SIZE * (index + 1))) ){
 		self->element_count = index + 1;
 		return true;
 	}
@@ -93,61 +96,62 @@ void array_add_in_index(t_array *self, unsigned int index, void *element){
 }
 
 /*
- * @NAME: array_get_for_index
- * @DESC: Devuelve un puntero al elemento en una determinada posición
+ * @NAME: pointer_for_index
+ * @DESC: Devuelve un puntero al indice en una determinada posición
  */
 static void *pointer_for_index(t_array* self, unsigned int index) {
 	return (self->first_element + index);
 }
 
 /*
- * @NAME: array_get_element
+ * @NAME: element_for_index
+ * @DESC: Devuelve un puntero al elemento en una determinada posición
+ */
+static void *pointer_for_element(t_array* self, unsigned int index){
+	void **pointer_for =  pointer_for_index(self, index);
+	return *pointer_for;
+}
+
+/*
+ * @NAME: array_get
  * @DESC: Devuelve un puntero al elemento, caso de no existir, retorna NULO
  */
 void *array_get(t_array *self, unsigned int index){
-	void **element = NULL;
+	void *element = NULL;
 	if(index < self->element_count){
-		element = pointer_for_index(self, index);
-	}
-	return *element;
-}
-
-/*
- * @NAME: move_elements
- * @DESC: Mueve un subarray dentro del array
- */
-void move_elements(t_array *self,unsigned int index, size_t element_count){
-	memmove(pointer_for_index(self, index), pointer_for_index(self, index + 1), element_count * sizeof(void**));
-}
-
-/*
- * @NAME: array_remove_in
- * @DESC: Elimina el elemento del array
- */
-static void *remove_element_in(t_array *self, unsigned int index){
-	void **index_element = NULL, *element = NULL;
-
-	if(index >= self->element_count) return NULL;
-
-	index_element = pointer_for_index(self, index);
-	element = *index_element;
-
-	move_elements(self, index, self->element_count - (index + 1));
-
-	//Parte critica, ya que se hace una copia sobre un buffer, se eliminan los datos antiguos
-	//y se asigna la copia
-	void **buffer = NULL;
-	if( (buffer = malloc( sizeof(void**) * (self->element_count - 1) )) ){
-		if( memcpy(buffer, self->first_element, (self->element_count - 1) * sizeof(void**)) == buffer){
-
-			free(self->first_element);
-			self->first_element = buffer;
-			self->element_count--;
-			return element;
-
-		}
+		element = pointer_for_element(self, index);
 	}
 	return element;
+}
+
+/*
+ * @NAME: array_generate
+ * @DESC: Crea una nueva instancia de TAD Array, a partir de una existente, basandose en algunos elementos
+ */
+t_array *array_generate(t_array *origin, unsigned int index_origin, unsigned int element_count){
+	t_array * array = array_create(0);
+	unsigned int position, index = index_origin;
+	for( position = 0 ;  index < element_count; position++, index++)
+		add_element_in(array, array_get(origin, index), position);
+	return array;
+}
+
+/*
+ * @NAME: array_union
+ * @DESC: Une dos instancia de TAD Array sobre una instancia exitente
+ */
+t_array *array_union(t_array *dest, t_array *head, t_array *tail){
+	unsigned int element_count = array_size(head) + array_size(tail);
+	void **buffer = malloc( element_count * ELEMENT_SIZE);
+	if(buffer){
+		memcpy(buffer, head->first_element, array_size(head) * ELEMENT_SIZE);
+		memcpy(buffer + array_size(head), tail->first_element, array_size(tail)  * ELEMENT_SIZE);
+
+		free(dest->first_element);
+		dest->first_element = buffer;
+		dest->element_count = element_count;
+	}
+	return dest;
 }
 
 /*
@@ -155,7 +159,19 @@ static void *remove_element_in(t_array *self, unsigned int index){
  * @DESC: Elimina el elemento del array
  */
 void *array_remove(t_array *self, unsigned int index){
-	return remove_element_in(self, index);
+	void *element = NULL;
+
+	if(index < array_size(self)){
+
+		element = pointer_for_element(self, index);
+
+		t_array *head = array_generate(self, 0, index );
+		t_array *tail = array_generate(self, index + 1, array_size(self));
+
+		array_union(self, head, tail);
+	}
+
+	return element;
 }
 
 /*
@@ -165,6 +181,7 @@ void *array_remove(t_array *self, unsigned int index){
 size_t array_size(t_array *self){
 	return self->element_count;
 }
+
 
 /*
  * @NAME: array_iterate
