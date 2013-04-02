@@ -206,7 +206,7 @@ static void test_dictionary_overload_entry() {
 		persona_destroy(person);
 	}
 	
-	dictionary_iterator(dictionary, _persona_iterating_destroy);
+	dictionary_iterator(dictionary, (void*) _persona_iterating_destroy);
 
 	dictionary_destroy(dictionary);
 }

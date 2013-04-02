@@ -18,7 +18,7 @@
 #define LIST_H_
 
 	#include "node.h"
-	#include "stdbool.h"
+	#include <stdbool.h>
 
 	typedef struct {
 		t_link_element *head;

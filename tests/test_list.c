@@ -454,7 +454,7 @@ static void test_list_sort_unique() {
 		return joven->age < menos_joven->age;
 	}
 
-	list_sort(list, _ayudantes_menor);
+	list_sort(list, (void*) _ayudantes_menor);
 
 	CU_ASSERT_PTR_EQUAL(list_get(list, 0), ayudantes[3]);
 	CU_ASSERT_PTR_EQUAL(list_get(list, 1), ayudantes[2]);
@@ -477,7 +477,7 @@ static void test_list_sort_duplicates() {
 		return joven->age < menos_joven->age;
 	}
 
-	list_sort(list, _ayudantes_menor);
+	list_sort(list, (void*) _ayudantes_menor);
 
 	CU_ASSERT_PTR_EQUAL(list_get(list, 0), ayudantes[3]);
 	CU_ASSERT_PTR_EQUAL(list_get(list, 1), ayudantes[2]);
