@@ -104,10 +104,33 @@ long config_get_long_value(t_config *self, char *key) {
  * @NAME: config_get_double_value
  * @DESC:Retorna un double con el valor asociado a key.
 */
-
 double config_get_double_value(t_config *self, char *key) {
 	char *value = config_get_string_value(self, key);
 	return atof(value);
+}
+
+/*
+ * @NAME: config_get_array_value
+ * @DESC: Retorna un array con los valores asociados a la key especificada.
+ * En el archivo de configuracion un valor de este tipo debería ser representado
+ * de la siguiente forma [lista_valores_separados_por_coma]
+ * Ejemplo:
+ * VALORES=[1,2,3,4,5]
+*/
+char** config_get_array_value(t_config* self, char* key) {
+	char* value_in_dictionary = config_get_string_value(self, key);
+	int length_value = strlen(value_in_dictionary);
+	char* value_without_brackets = string_substring(value_in_dictionary + 1, length_value - 2);
+	char **array_values = string_split(value_without_brackets, ",");
+
+	int i = 0;
+	while (array_values[i] != NULL) {
+		string_trim(array_values + i);
+		i++;
+	}
+
+	free(value_without_brackets);
+	return array_values;
 }
 
 /*
