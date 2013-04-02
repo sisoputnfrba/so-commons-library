@@ -118,6 +118,33 @@ void test_array_remove_element(){
 		CU_ASSERT_EQUAL(*element, elements[position]);
 	}
 
+	//Elimina el ultimo elemento
+	element = array_remove(array, 3);
+	CU_ASSERT_EQUAL(*element, 11);
+	CU_ASSERT_EQUAL(array_size(array), 3);
+
+	for(int position = 0 ; position < 3; position++){
+		element = array_get(array, position);
+		CU_ASSERT_EQUAL(*element, elements[position]);
+	}
+
+	//Elimina el primer elemento
+	element = array_remove(array, 0);
+	CU_ASSERT_EQUAL(*element, 1);
+	CU_ASSERT_EQUAL(array_size(array), 2);
+
+	for(int position = 0 ; position < 2; position++){
+		element = array_get(array, position);
+		CU_ASSERT_EQUAL(*element, elements[position + 1]);
+	}
+
+	element = array_remove(array, 0);
+	element = array_remove(array, 0);
+
+	//Intento eliminar un elemento que no existe
+	element = array_remove(array, 0);
+	CU_ASSERT_PTR_NULL(element);
+
 	array_destroy(array);
 }
 
