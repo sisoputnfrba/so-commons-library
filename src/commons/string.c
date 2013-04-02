@@ -259,6 +259,16 @@ char **string_split(char *text, char *separator) {
 }
 
 /**
+ * @NAME: string_substring
+ * @DESC: Retorna un string nuevo a partir de la longitud dada
+ */
+char*   string_substring(char* text, int length) {
+	char* new_string = calloc(1, length + 1);
+	strncpy(new_string, text, length);
+	return new_string;
+}
+
+/**
  * @NAME: string_iterate_lines
  * @DESC: Itera un array de strings aplicando
  * el closure a cada string

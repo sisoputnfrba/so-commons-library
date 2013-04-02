@@ -207,6 +207,38 @@ static void test_string_ends_with() {
 	CU_ASSERT_FALSE(string_ends_with("", "txt"));
 }
 
+static void test_string_substring_empty() {
+	char* original_word = "";
+	char* substring = string_substring(original_word, 3);
+	CU_ASSERT_STRING_EQUAL(substring, original_word);
+	CU_ASSERT_PTR_NOT_EQUAL(substring, original_word);
+	free(substring);
+}
+
+static void test_string_substring_with_short_string() {
+	char* original_word = "hola";
+	char* substring = string_substring(original_word, 14);
+	CU_ASSERT_STRING_EQUAL(substring, original_word);
+	CU_ASSERT_PTR_NOT_EQUAL(substring, original_word);
+	free(substring);
+}
+
+static void test_string_substring_with_large_string() {
+	char* original_word = "hola mundo c!";
+	char* substring = string_substring(original_word, 4);
+	CU_ASSERT_STRING_EQUAL(substring, "hola");
+	CU_ASSERT_PTR_NOT_EQUAL(substring, original_word);
+	free(substring);
+}
+
+static void test_string_substring_with_equal_large() {
+	char* original_word = "hola";
+	char* substring = string_substring(original_word, 4);
+	CU_ASSERT_STRING_EQUAL(substring, original_word);
+	CU_ASSERT_PTR_NOT_EQUAL(substring, original_word);
+	free(substring);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -227,6 +259,10 @@ static CU_TestInfo tests[] = {
 		{ "Test split a string", test_string_split},
 		{ "Test string begin with", test_string_starts_with},
 		{ "Test string ends with", test_string_ends_with},
+		{ "Test string substring with a empty string", test_string_substring_empty},
+		{ "Test string substring with a short string", test_string_substring_with_short_string},
+		{ "Test string substring with a large string", test_string_substring_with_large_string},
+		{ "Test string substring with a equal size", test_string_substring_with_equal_large},
 		CU_TEST_INFO_NULL,
 };
 
