@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STRING_H_
-#define STRING_H_
+#ifndef STRING_UTILS_H_
+#define STRING_UTILS_H_
 
 	#include <stdbool.h>
 	#include <stdarg.h>
@@ -40,7 +40,8 @@
 	bool	string_ends_with(char* text, char* end);
 	bool 	string_equals_ignore_case(char * actual, char * expected);
 	char**  string_split(char * text, char * separator);
+	char*   string_substring(char* text, int length);
 
 	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
 
-#endif /* STRING_H_ */
+#endif /* STRING_UTILS_H_ */
