@@ -15,6 +15,7 @@
  */
 #include "temporal.h"
 #include "error.h"
+#include "string.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -32,7 +33,7 @@ char *temporal_get_string_time() {
 	time_t log_time;
 	struct tm *log_tm;
 	struct timeb tmili;
-	char *str_time = strdup("hh:mm:ss:mmmm");
+	char *str_time = string_duplicate("hh:mm:ss:mmmm");
 
 	if ((log_time = time(NULL)) == -1) {
 		error_show("Error getting date!");
@@ -46,7 +47,7 @@ char *temporal_get_string_time() {
 		return 0;
 	}
 
-	char *partial_time = strdup("hh:mm:ss");
+	char *partial_time = string_duplicate("hh:mm:ss");
 	strftime(partial_time, 127, "%H:%M:%S", log_tm);
 	sprintf(str_time, "%s:%hu", partial_time, tmili.millitm);
 	free(partial_time);

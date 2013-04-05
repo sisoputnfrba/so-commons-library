@@ -19,16 +19,15 @@
 #include "temporal.h"
 #include "error.h"
 #include "string.h"
+#include "txt.h"
+#include "process.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
-#include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <syscall.h>
-
 
 #ifndef LOG_MAX_LENGTH_MESSAGE
 #define LOG_MAX_LENGTH_MESSAGE 1024
@@ -75,7 +74,7 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
 	FILE *file_opened = NULL;
 
 	if (file != NULL) {
-		file_opened = fopen(file, "a");
+		file_opened = txt_open_for_append(file);
 
 		if (file_opened == NULL) {
 			perror("Cannot create/open log file");
@@ -87,8 +86,8 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
 	logger->file = file_opened;
 	logger->is_active_console = is_active_console;
 	logger->detail = detail;
-	logger->pid = getpid();
-	logger->program_name = strdup(program_name);
+	logger->pid = process_getpid();
+	logger->program_name = string_duplicate(program_name);
 	return logger;
 }
 
@@ -99,7 +98,7 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
  */
 void log_destroy(t_log* logger) {
 	free(logger->program_name);
-	fclose(logger->file);
+	txt_close_file(logger->file);
 	free(logger);
 }
 
@@ -186,7 +185,7 @@ static void _log_write_in_level(t_log* logger, t_log_level level, const char* me
 		message = malloc(LOG_MAX_LENGTH_MESSAGE + 1);
 		vsnprintf(message, LOG_MAX_LENGTH_MESSAGE, message_template, list_arguments);
 		time = temporal_get_string_time();
-		thread_id = syscall(SYS_gettid);
+		thread_id = process_get_thread_id();
 
 		buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
 		snprintf(buffer, LOG_MAX_LENGTH_BUFFER, "[%s] %s %s/(%d:%d): %s\n",
@@ -194,13 +193,11 @@ static void _log_write_in_level(t_log* logger, t_log_level level, const char* me
 				logger->pid, thread_id,	message);
 
 		if (logger->file != NULL) {
-			fprintf(logger->file, "%s", buffer);
-			fflush(logger->file);
+			txt_write_in_file(logger->file, buffer);
 		}
 
 		if (logger->is_active_console) {
-			printf("%s", buffer);
-			fflush(stdout);
+			txt_write_in_stdout(buffer);
 		}
 
 		free(time);
