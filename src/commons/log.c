@@ -25,15 +25,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <syscall.h>
 
-#ifndef LOG_MAX_LENGTH_MESSAGE
-#define LOG_MAX_LENGTH_MESSAGE 1024
-#endif
-
-#define LOG_MAX_LENGTH_BUFFER LOG_MAX_LENGTH_MESSAGE + 100
 #define LOG_ENUM_SIZE 5
 
 static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "ERROR"};
@@ -182,15 +174,17 @@ static void _log_write_in_level(t_log* logger, t_log_level level, const char* me
 		char *message, *time, *buffer;
 		unsigned int thread_id;
 
-		message = malloc(LOG_MAX_LENGTH_MESSAGE + 1);
-		vsnprintf(message, LOG_MAX_LENGTH_MESSAGE, message_template, list_arguments);
+                message = string_from_vformat(message_template, list_arguments);
 		time = temporal_get_string_time();
 		thread_id = process_get_thread_id();
 
-		buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
-		snprintf(buffer, LOG_MAX_LENGTH_BUFFER, "[%s] %s %s/(%d:%d): %s\n",
-				log_level_as_string(level), time, logger->program_name,
-				logger->pid, thread_id,	message);
+		buffer = string_from_format("[%s] %s %s/(%d:%d): %s\n", 
+                                log_level_as_string(level), 
+                                time, 
+                                logger->program_name,
+				logger->pid, 
+                                thread_id,
+                                message);
 
 		if (logger->file != NULL) {
 			txt_write_in_file(logger->file, buffer);

@@ -88,11 +88,22 @@ char* string_new() {
  * => saludo = "Hola mundo"
  */
 char* string_from_format(const char* format, ...) {
-	char* nuevo = string_new();
+	char* nuevo;
 	va_list arguments;
 	va_start(arguments, format);
-	_string_append_with_format_list(format, &nuevo, arguments);
+	nuevo = string_from_vformat(format, arguments);
 	va_end(arguments);
+	return nuevo;
+}
+
+/**
+ * @NAME: string_from_vformat
+ * @DESC: Crea un nuevo string a partir de un formato especificado
+ * pasando un va_list con los argumentos
+ */
+char* string_from_vformat(const char* format, va_list arguments) {
+	char* nuevo = string_new();
+	_string_append_with_format_list(format, &nuevo, arguments);
 	return nuevo;
 }
 
