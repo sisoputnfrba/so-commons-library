@@ -262,9 +262,9 @@ char **string_split(char *text, char *separator) {
  * @NAME: string_substring
  * @DESC: Retorna un string nuevo a partir de la longitud dada
  */
-char*   string_substring(char* text, int length) {
+char*   string_substring(char* text, int start, int length) {
 	char* new_string = calloc(1, length + 1);
-	strncpy(new_string, text, length);
+	strncpy(new_string, text + start, length);
 	return new_string;
 }
 
