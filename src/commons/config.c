@@ -119,18 +119,7 @@ double config_get_double_value(t_config *self, char *key) {
 */
 char** config_get_array_value(t_config* self, char* key) {
 	char* value_in_dictionary = config_get_string_value(self, key);
-	int length_value = strlen(value_in_dictionary) - 2;
-	char* value_without_brackets = string_substring(value_in_dictionary, 1, length_value);
-	char **array_values = string_split(value_without_brackets, ",");
-
-	int i = 0;
-	while (array_values[i] != NULL) {
-		string_trim(array_values + i);
-		i++;
-	}
-
-	free(value_without_brackets);
-	return array_values;
+	return string_get_string_as_array(value_in_dictionary);
 }
 
 /*
