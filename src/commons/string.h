@@ -41,6 +41,9 @@
 	bool 	string_equals_ignore_case(char * actual, char * expected);
 	char**  string_split(char * text, char * separator);
 	char*   string_substring(char* text, int start, int length);
+	char*   string_substring_from(char *text, int start);
+	char*   string_substring_until(char *text, int length);
+
 
 	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
 

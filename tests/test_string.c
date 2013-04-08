@@ -255,6 +255,38 @@ static void test_string_substring_with_equal_large() {
 	free(substring);
 }
 
+static void test_string_substring_from_middle() {
+	char *original = "hola mundo!";
+	char *substring = string_substring_from(original, 5);
+	CU_ASSERT_STRING_EQUAL(substring, "mundo!");
+	CU_ASSERT_PTR_NOT_EQUAL(substring, &(original[5]));
+	free(substring);
+}
+
+static void test_string_substring_from_start() {
+	char *original = "hola mundo!";
+	char *substring = string_substring_from(original, 0);
+	CU_ASSERT_STRING_EQUAL(substring, original);
+	CU_ASSERT_PTR_NOT_EQUAL(substring, original);
+	free(substring);
+}
+
+static void test_string_substring_until_middle() {
+	char *original = "hola mundo!";
+	char *substring = string_substring_until(original, 5);
+	CU_ASSERT_STRING_EQUAL(substring, "hola ");
+	CU_ASSERT_PTR_NOT_EQUAL(substring, original);
+	free(substring);
+}
+
+static void test_string_substring_until_end() {
+	char *original = "hola mundo!";
+	char *substring = string_substring_until(original, strlen(original));
+	CU_ASSERT_STRING_EQUAL(substring, original);
+	CU_ASSERT_PTR_NOT_EQUAL(substring, original);
+	free(substring);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -281,6 +313,10 @@ static CU_TestInfo tests[] = {
 		{ "Test substring with an equal size", test_string_substring_with_equal_large},
 		{ "Test substring with an other start", test_string_substring_from_other_start},
 		{ "Test substring extracting an internal text", test_string_substring_extract_internal_text},
+		{ "Test substring starting from middle", test_string_substring_from_middle},
+		{ "Test substring starting from begin", test_string_substring_from_start},
+		{ "Test substring until middle", test_string_substring_until_middle},
+		{ "Test substring until end", test_string_substring_until_end},
 		CU_TEST_INFO_NULL,
 };
 
