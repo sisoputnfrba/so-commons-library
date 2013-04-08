@@ -260,12 +260,31 @@ char **string_split(char *text, char *separator) {
 
 /**
  * @NAME: string_substring
- * @DESC: Retorna un string nuevo a partir de la longitud dada
+ * @DESC: Retorna los length caracteres de text empezando en start
+ * en un nuevo string
  */
-char*   string_substring(char* text, int length) {
+char*   string_substring(char* text, int start, int length) {
 	char* new_string = calloc(1, length + 1);
-	strncpy(new_string, text, length);
+	strncpy(new_string, text + start, length);
 	return new_string;
+}
+
+/**
+ * @NAME: string_substring_from
+ * @DESC: Retorna el substring de text desde el caracter start hasta
+ * el ultimo
+ */
+char *string_substring_from(char *text, int start) {
+	return string_substring(text, start, strlen(text) - start);
+}
+
+/**
+ * @NAME: string_substring_until
+ * @DESC: Retorna los primeros length caracteres de text como un nuevo
+ * string
+ */
+char *string_substring_until(char *text, int length) {
+	return string_substring(text, 0, length);
 }
 
 /**
