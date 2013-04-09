@@ -14,30 +14,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "error.h"
+#include "txt.h"
 
-#include <stdlib.h>
-#include <stdarg.h>
 #include <stdio.h>
-#include <string.h>
 
-#include "string.h"
 
-/*
- * @NAME: error_show
- * @DESC: imprime un mensaje con el siguiente formato
- *
- * 	[[ERROR]] MESSAGE
-*/
-void error_show(char *message, ...) {
-	va_list arguments;
-	va_start(arguments, message);
+FILE* txt_open_for_append(char* path) {
+	return fopen(path, "a");
+}
 
-	char *error_message = string_duplicate("[[ERROR]]");
-	string_append(&error_message, message);
+void txt_write_in_file(FILE* file, char* bytes) {
+	fprintf(file, "%s", bytes);
+	fflush(file);
+}
 
-	vprintf(error_message, arguments);
-	
-	free(error_message);
-	va_end(arguments);
+void txt_write_in_stdout(char* string) {
+	printf("%s", string);
+	fflush(stdout);
+}
+
+void txt_close_file(FILE* file) {
+	fclose(file);
 }

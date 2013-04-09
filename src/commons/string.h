@@ -22,6 +22,7 @@
 
 	char*   string_new();
 	char*   string_from_format(const char* format, ...);
+        char*   string_from_vformat(const char* format, va_list arguments);
 	char*   string_repeat(char ch, int count);
 	void 	string_append(char ** original, char * string_to_add);
 	void    string_append_with_format(char **original, const char *format, ...);

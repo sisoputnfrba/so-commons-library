@@ -19,22 +19,13 @@
 #include "temporal.h"
 #include "error.h"
 #include "string.h"
+#include "txt.h"
+#include "process.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
-#include <stdio.h>
 #include <stdarg.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <syscall.h>
 
-
-#ifndef LOG_MAX_LENGTH_MESSAGE
-#define LOG_MAX_LENGTH_MESSAGE 1024
-#endif
-
-#define LOG_MAX_LENGTH_BUFFER LOG_MAX_LENGTH_MESSAGE + 100
 #define LOG_ENUM_SIZE 5
 
 static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "ERROR"};
@@ -42,8 +33,16 @@ static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "
 /**
  * Private Functions
  */
-static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list arguments);
-static bool isEnableLevelInLogger(t_log* logger, t_log_level level);
+static void _log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list arguments);
+static bool _isEnableLevelInLogger(t_log* logger, t_log_level level);
+
+#define log_impl_template(log_function, level_enum) 									\
+		void log_function(t_log* logger, const char* message_template, ...) { 			\
+			va_list arguments;															\
+			va_start(arguments, message_template);										\
+			_log_write_in_level(logger, level_enum, message_template, arguments);		\
+			va_end(arguments);															\
+		}																				\
 
 /**
  * Public Functions
@@ -67,7 +66,7 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
 	FILE *file_opened = NULL;
 
 	if (file != NULL) {
-		file_opened = fopen(file, "a");
+		file_opened = txt_open_for_append(file);
 
 		if (file_opened == NULL) {
 			perror("Cannot create/open log file");
@@ -79,8 +78,8 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
 	logger->file = file_opened;
 	logger->is_active_console = is_active_console;
 	logger->detail = detail;
-	logger->pid = getpid();
-	logger->program_name = strdup(program_name);
+	logger->pid = process_getpid();
+	logger->program_name = string_duplicate(program_name);
 	return logger;
 }
 
@@ -91,7 +90,7 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
  */
 void log_destroy(t_log* logger) {
 	free(logger->program_name);
-	fclose(logger->file);
+	txt_close_file(logger->file);
 	free(logger);
 }
 
@@ -102,12 +101,8 @@ void log_destroy(t_log* logger) {
  * [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_trace(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_TRACE, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_trace, LOG_LEVEL_TRACE);
+
 
 /**
  * @NAME: log_debug
@@ -116,12 +111,7 @@ void log_trace(t_log* logger, const char* message_template, ...) {
  * [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_debug(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_DEBUG, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_debug, LOG_LEVEL_DEBUG);
 
 /**
  * @NAME: log_info
@@ -130,12 +120,7 @@ void log_debug(t_log* logger, const char* message_template, ...) {
  * [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_info(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_INFO, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_info, LOG_LEVEL_INFO);
 
 /**
  * @NAME: log_warning
@@ -144,12 +129,8 @@ void log_info(t_log* logger, const char* message_template, ...) {
  * [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_warning(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_WARNING, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_warning, LOG_LEVEL_WARNING);
+
 
 /**
  * @NAME: log_error
@@ -158,12 +139,8 @@ void log_warning(t_log* logger, const char* message_template, ...) {
  * [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
  *
  */
-void log_error(t_log* logger, const char* message_template, ...) {
-	va_list arguments;
-	va_start(arguments, message_template);
-	log_write_in_level(logger, LOG_LEVEL_ERROR, message_template, arguments);
-	va_end(arguments);
-}
+log_impl_template(log_error, LOG_LEVEL_ERROR);
+
 
 /**
  * @NAME: log_level_as_string
@@ -191,30 +168,30 @@ t_log_level log_level_from_string(char *level) {
 
 /** PRIVATE FUNCTIONS **/
 
-static void log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
+static void _log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
 
-	if (isEnableLevelInLogger(logger, level)) {
+	if (_isEnableLevelInLogger(logger, level)) {
 		char *message, *time, *buffer;
 		unsigned int thread_id;
 
-		message = malloc(LOG_MAX_LENGTH_MESSAGE + 1);
-		vsnprintf(message, LOG_MAX_LENGTH_MESSAGE, message_template, list_arguments);
+                message = string_from_vformat(message_template, list_arguments);
 		time = temporal_get_string_time();
-		thread_id = syscall(SYS_gettid);
+		thread_id = process_get_thread_id();
 
-		buffer = malloc(LOG_MAX_LENGTH_BUFFER + 1);
-		snprintf(buffer, LOG_MAX_LENGTH_BUFFER, "[%s] %s %s/(%d:%d): %s\n",
-				log_level_as_string(level), time, logger->program_name,
-				logger->pid, thread_id,	message);
+		buffer = string_from_format("[%s] %s %s/(%d:%d): %s\n", 
+                                log_level_as_string(level), 
+                                time, 
+                                logger->program_name,
+				logger->pid, 
+                                thread_id,
+                                message);
 
 		if (logger->file != NULL) {
-			fprintf(logger->file, "%s", buffer);
-			fflush(logger->file);
+			txt_write_in_file(logger->file, buffer);
 		}
 
 		if (logger->is_active_console) {
-			printf("%s", buffer);
-			fflush(stdout);
+			txt_write_in_stdout(buffer);
 		}
 
 		free(time);
@@ -223,6 +200,6 @@ static void log_write_in_level(t_log* logger, t_log_level level, const char* mes
 	}
 }
 
-static bool isEnableLevelInLogger(t_log* logger, t_log_level level) {
+static bool _isEnableLevelInLogger(t_log* logger, t_log_level level) {
 	return level >= logger->detail;
 }
