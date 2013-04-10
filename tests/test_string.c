@@ -287,6 +287,32 @@ static void test_string_substring_until_end() {
 	free(substring);
 }
 
+static void test_string_get_string_as_array_empty() {
+	char* string_empty_array = "[]";
+	char** empty_array = string_get_string_as_array(string_empty_array);
+	CU_ASSERT_PTR_NOT_NULL(empty_array);
+	CU_ASSERT_PTR_EQUAL(empty_array[0], NULL);
+	free(empty_array);
+}
+
+static void test_string_get_string_full_array() {
+	char* numbers = "[1, 2, 3, 4, 5]";
+	char** numbers_array = string_get_string_as_array(numbers);
+	CU_ASSERT_PTR_NOT_NULL(numbers_array);
+	CU_ASSERT_PTR_EQUAL(numbers_array[5], NULL);
+	
+	int i;
+	for (i = 1; i <= 5; ++i) {
+		char* value = string_from_format("%d", i);
+		CU_ASSERT_STRING_EQUAL(numbers_array[i - 1], value);
+		free(value);
+	}
+	
+	string_iterate_lines(numbers_array, (void*) free);
+	free(numbers_array);
+
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -317,6 +343,8 @@ static CU_TestInfo tests[] = {
 		{ "Test substring starting from begin", test_string_substring_from_start},
 		{ "Test substring until middle", test_string_substring_until_middle},
 		{ "Test substring until end", test_string_substring_until_end},
+		{ "Test get as array with an empty array", test_string_get_string_as_array_empty},
+		{ "Test get as array with a full array", test_string_get_string_full_array},
 		CU_TEST_INFO_NULL,
 };
 

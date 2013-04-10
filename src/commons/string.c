@@ -270,6 +270,30 @@ char **string_split(char *text, char *separator) {
 }
 
 /**
+ * @NAME: string_get_string_as_array
+ * @DESC: Retorna una array separando los elementos 
+ * de un string con formato de array
+ * 
+ * Ejemplo:
+ * char* array_string = "[1,2,3,4]"
+ * string_get_value_as_array(array_string) => ["1","2","3","4"]
+ */
+char**  string_get_string_as_array(char* text) {
+    int length_value = strlen(text) - 2;
+    char* value_without_brackets = string_substring(text, 1, length_value);
+    char **array_values = string_split(value_without_brackets, ",");
+
+    int i = 0;
+    while (array_values[i] != NULL) {
+	    string_trim(&(array_values[i]));
+	    i++;
+    }
+
+    free(value_without_brackets);
+    return array_values;
+}
+
+/**
  * @NAME: string_substring
  * @DESC: Retorna los length caracteres de text empezando en start
  * en un nuevo string
