@@ -33,7 +33,15 @@ static int clean_suite() {
 	return 0;
 }
 
-void test_read_config() {
+static void _assert_equals_array(char** expected, char** actual, int size) {
+	int i;
+	for (i = 0; i < size; i++) {
+		CU_ASSERT_STRING_EQUAL(actual[i], expected[i]);
+	}
+	CU_ASSERT_PTR_NULL(actual[i]);
+}
+
+static void test_read_config() {
 	t_config* config = config_create(PATH_CONFIG);
 
 	CU_ASSERT_EQUAL(config_keys_amount(config), KEYS_AMOUNT);
@@ -46,11 +54,12 @@ void test_read_config() {
 
 	CU_ASSERT_TRUE(config_has_property(config, "LOAD"));
 	CU_ASSERT_EQUAL(config_get_double_value(config, "LOAD"), 0.5);
-
+	
 	config_destroy(config);
 }
 
 void test_read_empty_array() {
+	char* empty_array_expected[] = {NULL};
 	t_config* config = config_create(PATH_CONFIG);
 
 	CU_ASSERT_EQUAL(config_keys_amount(config), KEYS_AMOUNT);
@@ -59,15 +68,14 @@ void test_read_empty_array() {
 	CU_ASSERT_STRING_EQUAL(config_get_string_value(config, "EMPTY_ARRAY"), "[]");
 
 	char** empty_array  = config_get_array_value(config, "EMPTY_ARRAY");
-	CU_ASSERT_PTR_NOT_NULL(empty_array);
-	CU_ASSERT_PTR_EQUAL(empty_array[0], NULL);
+	_assert_equals_array(empty_array_expected, empty_array, 0);
 
-	string_iterate_lines(empty_array, (void*) free);
 	free(empty_array);
 	config_destroy(config);
 }
 
 void test_read_full_array() {
+	char* numbers_expected[] = {"1", "2", "3", "4", "5", NULL};
 	t_config* config = config_create(PATH_CONFIG);
 
 	CU_ASSERT_EQUAL(config_keys_amount(config), KEYS_AMOUNT);
@@ -75,19 +83,11 @@ void test_read_full_array() {
 	CU_ASSERT_TRUE(config_has_property(config, "NUMBERS"));
 	CU_ASSERT_STRING_EQUAL(config_get_string_value(config, "NUMBERS"), "[1, 2, 3, 4, 5]");
 
-	char** numeros = config_get_array_value(config, "NUMBERS");
-	CU_ASSERT_PTR_NOT_NULL(numeros);
-	CU_ASSERT_PTR_EQUAL(numeros[5], NULL);
+	char** numbers = config_get_array_value(config, "NUMBERS");
+	_assert_equals_array(numbers_expected, numbers, 5);
 
-	int i;
-	for (i = 1; i <= 5; ++i) {
-		char* value = string_from_format("%d", i);
-		CU_ASSERT_STRING_EQUAL(numeros[i - 1], value);
-		free(value);
-	}
-
-	string_iterate_lines(numeros, (void*) free);
-	free(numeros);
+	string_iterate_lines(numbers, (void*) free);
+	free(numbers);
 	config_destroy(config);
 }
 
