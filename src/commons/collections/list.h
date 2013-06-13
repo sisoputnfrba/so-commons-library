@@ -49,7 +49,7 @@
 	void list_remove_and_destroy_element(t_list *, int index, void(*element_destroyer)(void*));
 
 	void *list_remove_by_condition(t_list *, bool(*condition)(void*));
-	void list_remove_and_destroy_element_by_condition(t_list *, bool(*condition)(void*), void(*element_destroyer)(void*));
+	void list_remove_and_destroy_by_condition(t_list *, bool(*condition)(void*), void(*element_destroyer)(void*));
 
 	void list_clean(t_list *);
 	void list_clean_and_destroy_elements(t_list *self, void(*element_destroyer)(void*));
