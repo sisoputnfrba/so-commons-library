@@ -61,6 +61,8 @@
 	int list_is_empty(t_list *);
 
 	void list_sort(t_list *, bool (*comparator)(void *, void *));
+	
+	int list_count_satisfying(t_list* self, bool(*condition)(void*));
 
 #endif /*LIST_H_*/
 

@@ -356,6 +356,17 @@ void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
 
 }
 
+/*
+ * @NAME: list_count_satisfying
+ * @DESC: Cuenta la cantidad de elementos de la lista que cumplen una condición
+ */
+int list_count_satisfying(t_list* self, bool(*condition)(void*)){
+	t_list *satisfying = list_filter(self, condition);
+	int result = satisfying->elements_count;
+	list_destroy(satisfying);
+	return result;
+}
+
 /********* PRIVATE FUNCTIONS **************/
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {

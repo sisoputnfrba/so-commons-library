@@ -488,6 +488,43 @@ static void test_list_sort_duplicates() {
 	list_destroy(list);
 }
 
+static void test_list_count_satisfying() {
+	t_list *list = list_create();
+
+	bool _ayudante_menor_a_20(void *ayudante) {
+		return ((t_person *)ayudante)->age < 20;
+	}
+	
+	CU_ASSERT_EQUAL(list_count_satisfying(list, _ayudante_menor_a_20), 0);
+	
+	list_add(list, ayudantes[0]);
+	
+	CU_ASSERT_EQUAL(list_count_satisfying(list, _ayudante_menor_a_20), 0);
+	
+	list_add(list, ayudantes[1]);
+	list_add(list, ayudantes[2]);
+	
+	CU_ASSERT_EQUAL(list_count_satisfying(list, _ayudante_menor_a_20), 0);
+	
+	list_add(list, ayudantes[3]);
+	
+	CU_ASSERT_EQUAL(list_count_satisfying(list, _ayudante_menor_a_20), 1);
+	
+	list_add(list, ayudantes[2]);
+	
+	CU_ASSERT_EQUAL(list_count_satisfying(list, _ayudante_menor_a_20), 1);
+	
+	list_add(list, ayudantes[3]);
+	
+	CU_ASSERT_EQUAL(list_count_satisfying(list, _ayudante_menor_a_20), 2);
+	
+	list_clean(list);
+	
+	CU_ASSERT_EQUAL(list_count_satisfying(list, _ayudante_menor_a_20), 0);
+
+	list_destroy(list);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -510,6 +547,7 @@ static CU_TestInfo tests[] = {
 		{ "Test sorting empty list", test_list_sort_empty},
 		{ "Test sorting unique elements", test_list_sort_unique},
 		{ "Test sorting duplicated elements", test_list_sort_duplicates},
+		{ "Test count satisfying", test_list_count_satisfying},
 		CU_TEST_INFO_NULL, };
 
 CUNIT_MAKE_SUITE(list, "Test List TAD", init_suite, clean_suite, tests)
