@@ -367,6 +367,14 @@ int list_count_satisfying(t_list* self, bool(*condition)(void*)){
 	return result;
 }
 
+/*
+ * @NAME: list_any_satisfy
+ * @DESC: Determina si algún elemento de la lista cumple una condición
+ */
+bool list_any_satisfy(t_list* self, bool(*condition)(void*)){
+	return list_count_satisfying(self, condition) > 0;
+}
+
 /********* PRIVATE FUNCTIONS **************/
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {
