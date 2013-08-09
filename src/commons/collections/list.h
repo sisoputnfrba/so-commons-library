@@ -64,6 +64,7 @@
 	
 	int list_count_satisfying(t_list* self, bool(*condition)(void*));
 	bool list_any_satisfy(t_list* self, bool(*condition)(void*));
+	bool list_all_satisfy(t_list* self, bool(*condition)(void*));
 
 #endif /*LIST_H_*/
 

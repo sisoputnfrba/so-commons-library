@@ -569,6 +569,50 @@ static void test_list_any_satisfy_not_satisfying() {
 	list_destroy(list);
 }
 
+static void test_list_all_satisfy_empty() {
+	t_list *list = list_create();
+	
+	CU_ASSERT_TRUE(list_all_satisfy(list, NULL));
+
+	list_destroy(list);
+}
+
+static void test_list_all_satisfy_satisfying() {
+	t_list *list = list_create();
+	
+	list_add(list, ayudantes[0]);
+	list_add(list, ayudantes[1]);
+	list_add(list, ayudantes[2]);
+	list_add(list, ayudantes[3]);
+	list_add(list, ayudantes[2]);
+
+	bool _ayudante_menor_a_30(t_person *ayudante) {
+		return ayudante->age < 30;
+	}
+	
+	CU_ASSERT_TRUE(list_all_satisfy(list, (void*)_ayudante_menor_a_30));
+
+	list_destroy(list);
+}
+
+static void test_list_all_satisfy_not_satisfying() {
+	t_list *list = list_create();
+	
+	list_add(list, ayudantes[0]);
+	list_add(list, ayudantes[1]);
+	list_add(list, ayudantes[2]);
+	list_add(list, ayudantes[3]);
+	list_add(list, ayudantes[2]);
+
+	bool _ayudante_menor_a_20(t_person *ayudante) {
+		return ayudante->age < 20;
+	}
+	
+	CU_ASSERT_FALSE(list_all_satisfy(list, (void*)_ayudante_menor_a_20));
+
+	list_destroy(list);
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -595,6 +639,9 @@ static CU_TestInfo tests[] = {
 		{ "Test any satisfy empty list", test_list_any_satisfy_empty},
 		{ "Test any satisfy satisfying", test_list_any_satisfy_satisfying},
 		{ "Test any satisfy not satisfying", test_list_any_satisfy_not_satisfying},
+		{ "Test all satisfy empty list", test_list_all_satisfy_empty},
+		{ "Test all satisfy satisfying", test_list_all_satisfy_satisfying},
+		{ "Test all satisfy not satisfying", test_list_all_satisfy_not_satisfying},
 		CU_TEST_INFO_NULL, };
 
 CUNIT_MAKE_SUITE(list, "Test List TAD", init_suite, clean_suite, tests)
