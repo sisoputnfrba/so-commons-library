@@ -37,9 +37,6 @@ static void internal_dictionary_clean_and_destroy_elements(t_dictionary *self, v
 /*
  * @NAME: dictionary_create
  * @DESC: Crea el diccionario
- * @PARAM:
- * 		data_destroyer - Recibe el puntero a la funcion que sabe como liberar la memoria de cada elemento
- * 						 almacenado. Si recibe NULL nunca se eliminan los elemntos del diccionario.
  */
 t_dictionary *dictionary_create() {
 	t_dictionary *self = malloc(sizeof(t_dictionary));
