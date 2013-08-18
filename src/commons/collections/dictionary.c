@@ -103,6 +103,28 @@ void *dictionary_get(t_dictionary *self, char *key) {
 	return element != NULL ? element->data : NULL;
 }
 
+
+/*
+ * @NAME: dictionary_get_keys
+ * @DESC: Obtiene un array de keys
+*/
+char ** dictionary_get_keys(t_dictionary *self){
+		int table_index;
+		char * keys[];
+		int j=0;
+		for (table_index = 0; table_index < self->table_max_size; table_index++) {
+		t_hash_element *element = self->elements[table_index];
+
+		while (element != NULL) {
+			strcpy(keys[j++],element->key)
+			j++
+			element = element->next;
+
+		}
+	}
+	return keys;
+	
+}
 /*
  * @NAME: dictionary_remove
  * @DESC: Remueve un elemento del diccionario y lo retorna.
