@@ -8,11 +8,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <commons/log.h>
+#include <commons/string.h>
 #include <pthread.h>
 
 static void log_in_disk() {
     t_log* logger;
-    logger = log_create("$HOME/Desktop/trace.log", "TEST",true, LOG_LEVEL_INFO);
+    char* path_log = string_from_format("%s/Desktop/trace.log", getenv("HOME"));
+    logger = log_create(path_log, "TEST", true, LOG_LEVEL_INFO);
     
     log_trace(logger, "LOG A NIVEL %s", "TRACE");
     log_debug(logger, "LOG A NIVEL %s", "DEBUG");
