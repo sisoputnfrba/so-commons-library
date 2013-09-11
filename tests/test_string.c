@@ -31,6 +31,12 @@ static int clean_suite(){
 	return 0;
 }
 
+static void test_string_itoa(){
+    char* newString = string_itoa(15);
+    CU_ASSERT_STRING_EQUAL(newString, "15");
+    free(newString);
+}
+
 static void test_string_from_format(){
 	char* newString = string_from_format("%s %s %d", "Hello", "world", 23);
 	CU_ASSERT_STRING_EQUAL(newString, "Hello world 23");
@@ -318,6 +324,7 @@ static void test_string_get_string_full_array() {
  *********************************************************************************************/
 
 static CU_TestInfo tests[] = {
+                { "Test create a string from a number", test_string_itoa}, 
 		{ "Test create string from a format", test_string_from_format},
 		{ "Test append string to other string", test_string_append},
 		{ "Test append string to other string with a format specified", test_string_append_with_format},
