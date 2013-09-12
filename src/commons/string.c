@@ -241,6 +241,21 @@ bool string_equals_ignore_case(char *actual, char *expected) {
 	return strcasecmp(actual, expected) == 0;
 }
 
+/**
+ * @NAME: string_equals
+ * @DESC: Retorna si dos strings son iguales
+ */
+bool string_equals(char* actual, char* expected) {
+        return strcmp(actual, expected) == 0;
+}
+
+/**
+ * @NAME: string_n_equals
+ * @DESC: Retorna si los primeros n caracteres son iguales
+ */
+bool string_n_equals(char* actual, char* expected, int length) {
+        return strncmp(actual, expected, length) == 0;
+}
 
 /**
  * @NAME: string_split
