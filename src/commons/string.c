@@ -108,6 +108,14 @@ char* string_from_vformat(const char* format, va_list arguments) {
 }
 
 /**
+ * @NAME: string_itoa
+ * @DESC: Crea un string a partir de un numero
+ */
+char* string_itoa(int number) {
+    return string_from_format("%d", number);
+}
+
+/**
  * @NAME: string_append_with_format
  * @DESC: Concatena al primer string el resultado de aplicar los parametros al
  * formato especificado
@@ -315,8 +323,7 @@ char *string_substring_from(char *text, int start) {
 
 /**
  * @NAME: string_substring_until
- * @DESC: Retorna los primeros length caracteres de text como un nuevo
- * string
+ * @DESC: Retorna los primeros length caracteres de text como un nuevo string
  */
 char *string_substring_until(char *text, int length) {
 	return string_substring(text, 0, length);

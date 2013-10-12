@@ -21,6 +21,7 @@
 	#include <stdarg.h>
 
 	char*   string_new();
+        char*   string_itoa(int number);
 	char*   string_from_format(const char* format, ...);
         char*   string_from_vformat(const char* format, va_list arguments);
 	char*   string_repeat(char ch, int count);
