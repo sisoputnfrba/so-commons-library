@@ -1,7 +1,6 @@
 .project
 .cproject
 .settings
-makefile
 *.o
 *.so
 *.d
