@@ -23,7 +23,7 @@
 
 
 #define KEYS_AMOUNT 6
-#define PATH_CONFIG "tests/resources/config.cfg"
+#define PATH_CONFIG "resources/config.cfg"
 
 static int init_suite() {
 	return 0;
