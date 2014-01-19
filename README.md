@@ -1,5 +1,7 @@
 ## Commons Library For C ##
 
+[![Build Status](https://travis-ci.org/sisoputnfrba/so-commons-library.png?branch=master)](https://travis-ci.org/sisoputnfrba/so-commons-library)
+
 Biblioteca con TADs útiles para el desarrollo de una aplicación en C
 
 Provee los siguientes TADs:

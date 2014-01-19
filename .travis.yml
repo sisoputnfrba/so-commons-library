@@ -1,0 +1,4 @@
+language: c
+compiler: gcc
+install: sudo apt-get install libcunit1 libcunit1-dev
+script: make all
