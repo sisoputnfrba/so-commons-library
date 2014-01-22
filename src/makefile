@@ -2,6 +2,7 @@ RM=rm -rf
 CC=gcc
 
 C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
+H_SRCS=$(shell find . -iname "*.h" | tr '\n' ' ')
 OBJS=$(C_SRCS:./%.c=build/%.o)
 
 # Clean and compile .so
@@ -27,4 +28,12 @@ debug: all
 clean:
 	$(RM) build
 
-.PHONY: all create-dirs clean
+install: all
+	cp -u build/libcommons.so /usr/lib
+	cp --parents -u $(H_SRCS) /usr/include
+
+uninstall:
+	rm -f /usr/lib/libcommons.so
+	rm -rf /usr/include/commons
+
+.PHONY: all create-dirs clean install uninstall

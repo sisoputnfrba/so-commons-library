@@ -1,5 +1,3 @@
-RM=rm -rf
-
 all: 
 	-cd src && $(MAKE) all
 	-cd tests/unit-tests && $(MAKE) all
@@ -15,5 +13,8 @@ debug:
 test: all
 	-cd tests/unit-tests && $(MAKE) test
 
-install:
-	all
+install: test
+	-cd src && $(MAKE) install
+
+uninstall:
+	-cd src && $(MAKE) uninstall
