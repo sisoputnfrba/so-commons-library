@@ -1,5 +1,7 @@
 ## Commons Library For C ##
 
+[![Build Status](https://drone.io/github.com/sisoputnfrba/so-commons-library/status.png)](https://drone.io/github.com/sisoputnfrba/so-commons-library/latest)
+
 Biblioteca con TADs útiles para el desarrollo de aplicaciones hechas con el lenguaje C
 
 Provee los siguientes TADs:
