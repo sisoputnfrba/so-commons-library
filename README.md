@@ -30,6 +30,8 @@ Algunas de las consideraciones a tener a la hora de su uso:
 
 Estas Bibliotecas utilizan CUnit para testear todas las funcionalidades, por lo que es necesario tenerlo instalado en el sistema si se quieren correr los test.
 
+Instrucciones de instalación: https://asciinema.org/a/8680
+
 `sudo apt-get install libcunit1-dev` -> Instala cunit en el sistema
 
 `sudo make install` -> instala la biblioteca en el sistema
