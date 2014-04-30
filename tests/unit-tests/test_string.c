@@ -319,6 +319,10 @@ static void test_string_get_string_full_array() {
 
 }
 
+static void test_string_length() {
+	CU_ASSERT_EQUAL(4, string_length("hola"));
+}
+
 /**********************************************************************************************
  *  							Building the test for CUnit
  *********************************************************************************************/
@@ -352,6 +356,7 @@ static CU_TestInfo tests[] = {
 		{ "Test substring until end", test_string_substring_until_end},
 		{ "Test get as array with an empty array", test_string_get_string_as_array_empty},
 		{ "Test get as array with a full array", test_string_get_string_full_array},
+		{ "Test length of string", test_string_length},
 		CU_TEST_INFO_NULL,
 };
 

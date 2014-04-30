@@ -341,6 +341,10 @@ void string_iterate_lines(char** strings, void (*closure)(char*)) {
 	}
 }
 
+int string_length(char* text) {
+	return strlen(text);
+}
+
 
 /** PRIVATE FUNCTIONS **/
 
