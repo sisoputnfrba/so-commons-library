@@ -16,6 +16,11 @@
 #ifndef TEMPORAL_H_
 #define TEMPORAL_H_
 
+	/**
+	* @NAME: temporal_get_string_time
+	* @DESC: Retorna un string con la hora actual,
+	* con el siguiente formato: hh:mm:ss:mmmm
+	*/
 	char *temporal_get_string_time();
 
 #endif /* TEMPORAL_H_ */

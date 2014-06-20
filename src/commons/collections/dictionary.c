@@ -34,10 +34,6 @@ static void *dictionary_remove_element(t_dictionary *self, char *key);
 static void dictionary_destroy_element(t_dictionary *self, t_hash_element *element, void(*data_destroyer)(void*));
 static void internal_dictionary_clean_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*));
 
-/*
- * @NAME: dictionary_create
- * @DESC: Crea el diccionario
- */
 t_dictionary *dictionary_create() {
 	t_dictionary *self = malloc(sizeof(t_dictionary));
 	self->table_max_size = DEFAULT_DICTIONARY_INITIAL_SIZE;
@@ -64,10 +60,6 @@ static unsigned int dictionary_hash(char *key, int key_len) {
 	return hash;
 }
 
-/*
- * @NAME: dictionary_put
- * @DESC: Inserta un nuevo par key data al diccionario.
-*/
 void dictionary_put(t_dictionary *self, char *key, void *data) {
 	unsigned int key_hash = dictionary_hash(key, strlen(key));
 	int index = key_hash % self->table_max_size;
@@ -94,19 +86,12 @@ void dictionary_put(t_dictionary *self, char *key, void *data) {
 
 	self->elements_amount++;
 }
-/*
- * @NAME: dictionary_get
- * @DESC: Obtiene la data asociada a key.
-*/
+
 void *dictionary_get(t_dictionary *self, char *key) {
 	t_hash_element *element = dictionary_get_element(self, key);
 	return element != NULL ? element->data : NULL;
 }
 
-/*
- * @NAME: dictionary_remove
- * @DESC: Remueve un elemento del diccionario y lo retorna.
-*/
 void *dictionary_remove(t_dictionary *self, char *key) {
 	void *data = dictionary_remove_element(self, key);
 	if( data != NULL){
@@ -114,11 +99,6 @@ void *dictionary_remove(t_dictionary *self, char *key) {
 	}
 	return data;
 }
-
-/*
- * @NAME: dictionary_remove_and_destroy
- * @DESC: Remueve un elemento del diccionario y lo destruye.
-*/
 
 void dictionary_remove_and_destroy(t_dictionary *self, char *key, void(*data_destroyer)(void*)) {
 	void *data = dictionary_remove_element(self, key);
@@ -129,10 +109,6 @@ void dictionary_remove_and_destroy(t_dictionary *self, char *key, void(*data_des
 	}
 }
 
-/*
- * @NAME: dictionary_iterator
- * @DESC: Aplica closure a todos los elementos del diccionario.
-*/
 void dictionary_iterator(t_dictionary *self, void(*closure)(char*,void*)) {
 	int table_index;
 	for (table_index = 0; table_index < self->table_max_size; table_index++) {
@@ -146,60 +122,32 @@ void dictionary_iterator(t_dictionary *self, void(*closure)(char*,void*)) {
 	}
 }
 
-/*
- * @NAME: dictionary_clean
- * @DESC: Quita todos los elementos del diccionario
-*/
 void dictionary_clean(t_dictionary *self) {
 	internal_dictionary_clean_and_destroy_elements(self, NULL);
 }
 
-/*
- * @NAME: dictionary_clean
- * @DESC: Quita todos los elementos del diccionario y los destruye
-*/
 void dictionary_clean_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*)) {
 	internal_dictionary_clean_and_destroy_elements(self, data_destroyer);
 }
 
-/*
- * @NAME: dictionary_has_key
- * @DESC: Retorna true si key se encuentra en el diccionario
-*/
 bool dictionary_has_key(t_dictionary *self, char* key) {
 	return dictionary_get_element(self, key) != NULL;
 }
 
-/*
- * @NAME: dictionary_is_empty
- * @DESC: Retorna true si el diccionario está vacío
-*/
 bool dictionary_is_empty(t_dictionary *self) {
 	return self->elements_amount == 0;
 }
 
-/*
- * @NAME: dictionary_size
- * @DESC: Retorna la cantidad de elementos del diccionario
-*/
 int dictionary_size(t_dictionary *self) {
 	return self->elements_amount;
 }
 
-/*
- * @NAME: dictionary_size
- * @DESC: Destruye el diccionario
-*/
 void dictionary_destroy(t_dictionary *self) {
 	dictionary_clean(self);
 	free(self->elements);
 	free(self);
 }
 
-/*
- * @NAME: dictionary_destroy_and_destroy_elements
- * @DESC: Destruye el diccionario y destruye sus elementos
-*/
 void dictionary_destroy_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*)) {
 	dictionary_clean_and_destroy_elements(self, data_destroyer);
 	free(self->elements);

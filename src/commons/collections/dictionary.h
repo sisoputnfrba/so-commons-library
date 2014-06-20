@@ -29,19 +29,82 @@
 		int elements_amount;
 	} t_dictionary;
 
+	/**
+	* @NAME: dictionary_create
+	* @DESC: Crea el diccionario
+	*/
 	t_dictionary *dictionary_create();
+
+	/**
+	* @NAME: dictionary_put
+	* @DESC: Inserta un nuevo par key data al diccionario.
+	*/
 	void 		  dictionary_put(t_dictionary *, char *key, void *data);
+
+	/**
+	* @NAME: dictionary_get
+	* @DESC: Obtiene la data asociada a key.
+	*/
 	void 		 *dictionary_get(t_dictionary *, char *key);
+
+	/**
+	* @NAME: dictionary_remove
+	* @DESC: Remueve un elemento del diccionario y lo retorna.
+	*/
 	void 		 *dictionary_remove(t_dictionary *, char *key);
+
+	/**
+	* @NAME: dictionary_remove_and_destroy
+	* @DESC: Remueve un elemento del diccionario y lo destruye.
+	*/
 	void 		  dictionary_remove_and_destroy(t_dictionary *, char *, void(*data_destroyer)(void*));
+
+	/**
+	* @NAME: dictionary_iterator
+	* @DESC: Aplica closure a todos los elementos del diccionario.
+	*/
 	void 		  dictionary_iterator(t_dictionary *, void(*closure)(char*,void*));
+
+	/**
+	* @NAME: dictionary_clean
+	* @DESC: Quita todos los elementos del diccionario
+	*/
 	void 		  dictionary_clean(t_dictionary *);
+
+	/**
+	* @NAME: dictionary_clean_and_destroy_elements
+	* @DESC: Quita todos los elementos del diccionario y los destruye
+	*/
 	void 		  dictionary_clean_and_destroy_elements(t_dictionary *, void(*data_destroyer)(void*));
+
+	/**
+	* @NAME: dictionary_has_key
+	* @DESC: Retorna true si key se encuentra en el diccionario
+	*/
 	bool 		  dictionary_has_key(t_dictionary *, char* key);
+
+	/**
+	* @NAME: dictionary_is_empty
+	* @DESC: Retorna true si el diccionario está vacío
+	*/
 	bool 		  dictionary_is_empty(t_dictionary *);
+
+	/**
+	* @NAME: dictionary_size
+	* @DESC: Retorna la cantidad de elementos del diccionario
+	*/
 	int 		  dictionary_size(t_dictionary *);
+
+	/**
+	* @NAME: dictionary_destroy
+	* @DESC: Destruye el diccionario
+	*/
 	void 		  dictionary_destroy(t_dictionary *);
+
+	/**
+	* @NAME: dictionary_destroy_and_destroy_elements
+	* @DESC: Destruye el diccionario y destruye sus elementos
+	*/
 	void 		  dictionary_destroy_and_destroy_elements(t_dictionary *, void(*data_destroyer)(void*));
 
 #endif /* DICTIONARY_H_ */
-

@@ -49,12 +49,6 @@ static bool _isEnableLevelInLogger(t_log* logger, t_log_level level);
  */
 
 
-/**
- * @NAME: log_create
- * @DESC: Crea una instancia de logger, tomando por parametro
- * el nombre del programa, el nombre del archivo donde se van a generar los logs,
- * el nivel de detalle minimo a loguear y si además se muestra por pantalla lo que se loguea.
- */
 t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_level detail) {
 	t_log* logger = malloc(sizeof(t_log));
 
@@ -83,77 +77,26 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
 	return logger;
 }
 
-
-/**
- * @NAME: log_destroy
- * @DESC: Destruye una instancia de logger
- */
 void log_destroy(t_log* logger) {
 	free(logger->program_name);
 	txt_close_file(logger->file);
 	free(logger);
 }
 
-/**
- * @NAME: log_trace
- * @DESC: Loguea un mensaje con el siguiente formato
- *
- * [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
- *
- */
 log_impl_template(log_trace, LOG_LEVEL_TRACE);
 
-
-/**
- * @NAME: log_debug
- * @DESC: Loguea un mensaje con el siguiente formato
- *
- * [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
- *
- */
 log_impl_template(log_debug, LOG_LEVEL_DEBUG);
 
-/**
- * @NAME: log_info
- * @DESC: Loguea un mensaje con el siguiente formato
- *
- * [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
- *
- */
 log_impl_template(log_info, LOG_LEVEL_INFO);
 
-/**
- * @NAME: log_warning
- * @DESC: Loguea un mensaje con el siguiente formato
- *
- * [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
- *
- */
 log_impl_template(log_warning, LOG_LEVEL_WARNING);
 
-
-/**
- * @NAME: log_error
- * @DESC: Loguea un mensaje con el siguiente formato
- *
- * [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
- *
- */
 log_impl_template(log_error, LOG_LEVEL_ERROR);
 
-
-/**
- * @NAME: log_level_as_string
- * @DESC: Convierte un t_log_level a su representacion en string
- */
 char *log_level_as_string(t_log_level level) {
 	return enum_names[level];
 }
 
-/**
- * @NAME: log_level_from_string
- * @DESC: Convierte un string a su representacion en t_log_level
- */
 t_log_level log_level_from_string(char *level) {
 	int i;
 
@@ -178,11 +121,11 @@ static void _log_write_in_level(t_log* logger, t_log_level level, const char* me
 		time = temporal_get_string_time();
 		thread_id = process_get_thread_id();
 
-		buffer = string_from_format("[%s] %s %s/(%d:%d): %s\n", 
-                                log_level_as_string(level), 
-                                time, 
+		buffer = string_from_format("[%s] %s %s/(%d:%d): %s\n",
+                                log_level_as_string(level),
+                                time,
                                 logger->program_name,
-				logger->pid, 
+				logger->pid,
                                 thread_id,
                                 message);
 
