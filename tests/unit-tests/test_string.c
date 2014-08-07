@@ -197,6 +197,80 @@ static void test_string_split() {
 	free(substrings);
 }
 
+static void test_string_split_is_empty() {
+	char* line = "";
+	char** substrings = string_split(line, ";");
+
+	CU_ASSERT_PTR_NOT_NULL(substrings);
+	CU_ASSERT_PTR_NULL(substrings[0]);
+
+	free(substrings);
+
+}
+
+static void test_string_n_split_when_n_is_less_than_splitted_elements() {
+	char *line = "Hola planeta tierra";
+	char** substrings = string_n_split(line, 2, " ");
+
+	CU_ASSERT_PTR_NOT_NULL(substrings);
+	CU_ASSERT_STRING_EQUAL(substrings[0], "Hola");
+	CU_ASSERT_STRING_EQUAL(substrings[1], "planeta tierra");
+	CU_ASSERT_PTR_NULL(substrings[2]);
+
+	string_iterate_lines(substrings, (void*) free);
+	free(substrings);
+}
+
+static void test_string_n_split_when_n_is_equals_than_splitted_elements() {
+	char *line = "Hola planeta tierra";
+	char** substrings = string_n_split(line, 3, " ");
+
+	CU_ASSERT_PTR_NOT_NULL(substrings);
+	CU_ASSERT_STRING_EQUAL(substrings[0], "Hola");
+	CU_ASSERT_STRING_EQUAL(substrings[1], "planeta");
+	CU_ASSERT_STRING_EQUAL(substrings[2], "tierra");
+	CU_ASSERT_PTR_NULL(substrings[3]);
+
+	string_iterate_lines(substrings, (void*) free);
+	free(substrings);
+}
+
+static void test_string_n_split_when_separator_isnt_included() {
+	char *line = "Hola planeta tierra";
+	char ** substrings = string_n_split(line, 5, ";");
+
+	CU_ASSERT_PTR_NOT_NULL(substrings);
+	CU_ASSERT_STRING_EQUAL(substrings[0], line);
+	CU_ASSERT_PTR_NULL(substrings[1]);
+
+	string_iterate_lines(substrings, (void *) free);
+	free(substrings);
+}
+
+static void test_string_n_split_when_n_is_greather_than_splitted_elements() {
+	char *line = "Hola planeta tierra";
+	char** substrings = string_n_split(line, 10, " ");
+
+	CU_ASSERT_PTR_NOT_NULL(substrings);
+	CU_ASSERT_STRING_EQUAL(substrings[0], "Hola");
+	CU_ASSERT_STRING_EQUAL(substrings[1], "planeta");
+	CU_ASSERT_STRING_EQUAL(substrings[2], "tierra");
+	CU_ASSERT_PTR_NULL(substrings[3]);
+
+	string_iterate_lines(substrings, (void*) free);
+	free(substrings);
+}
+
+static void test_string_n_split_is_empty() {
+	char* line = "";
+	char** substrings = string_n_split(line, 10, ";");
+
+	CU_ASSERT_PTR_NOT_NULL(substrings);
+	CU_ASSERT_PTR_NULL(substrings[0]);
+
+	free(substrings);
+}
+
 static void test_string_starts_with() {
 	CU_ASSERT_TRUE(string_starts_with("#Comentario", "#"));
 	CU_ASSERT_TRUE(string_starts_with("Comentario", "Comen"));
@@ -341,8 +415,14 @@ static CU_TestInfo tests[] = {
 		{ "Test trim right", test_string_trim_right},
 		{ "Test trim", test_string_trim},
 		{ "Test isEmpty a string", test_string_is_empty},
-		{ "Test split a string", test_string_split},
 		{ "Test string begin with", test_string_starts_with},
+		{ "Test split a string", test_string_split},
+		{ "Test split when string is empty", test_string_split_is_empty},
+		{ "Test n split when n is less than length splitted elements", test_string_n_split_when_n_is_less_than_splitted_elements},
+		{ "Test n split when n is equals than length splitted elements", test_string_n_split_when_n_is_equals_than_splitted_elements},
+		{ "Test n split when n is greather than length splitted elements", test_string_n_split_when_n_is_greather_than_splitted_elements},
+		{ "Test n split when separator isn't included", test_string_n_split_when_separator_isnt_included},
+		{ "Test n split when string is empty", test_string_n_split_is_empty},
 		{ "Test string ends with", test_string_ends_with},
 		{ "Test substring with an empty string", test_string_substring_empty},
 		{ "Test substring with a short string", test_string_substring_with_short_string},

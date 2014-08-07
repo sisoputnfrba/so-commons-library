@@ -26,6 +26,8 @@ static void _string_do(char *text, void (*closure)(char*));
 static void _string_lower_element(char* ch);
 static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
+char** _string_split(char* text, char* separator, bool(*condition)(char*, int));
+
 
 char *string_repeat(char character, int count) {
 	char *text = calloc(count + 1, 1);
@@ -142,26 +144,17 @@ bool string_equals_ignore_case(char *actual, char *expected) {
 }
 
 char **string_split(char *text, char *separator) {
-	char **substrings = NULL;
-	int size = 0;
-
-	char *text_to_iterate = string_duplicate(text);
-	char *token = NULL, *next = NULL;
-	token = strtok_r(text_to_iterate, separator, &next);
-
-	while (token != NULL) {
-		size++;
-		substrings = realloc(substrings, sizeof(char*) * size);
-		substrings[size - 1] = string_duplicate(token);
-		token = strtok_r(NULL, separator, &next);
+	bool _is_last_token(char* next, int _) {
+		return next[0] != '\0';
 	}
+	return _string_split(text, separator, _is_last_token);
+}
 
-	size++;
-	substrings = realloc(substrings, sizeof(char*) * size);
-	substrings[size - 1] = NULL;
-
-	free(text_to_iterate);
-	return substrings;
+char** string_n_split(char *text, int n, char* separator) {
+	bool _is_last_token(char* next, int index) {
+		return next[0] != '\0' && index < (n - 1);
+	}
+	return _string_split(text, separator, _is_last_token);
 }
 
 char**  string_get_string_as_array(char* text) {
@@ -236,4 +229,35 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 	va_end(copy_arguments);
 	string_append(original, temporal);
 	free(temporal);
+}
+
+char** _string_split(char* text, char* separator, bool(*condition)(char*, int)) {
+	char **substrings = NULL;
+	int size = 0;
+
+	char *text_to_iterate = string_duplicate(text);
+
+	char *next = text_to_iterate;
+	char *str = text_to_iterate;
+
+	while(condition(next, size)) {
+		char* token = strtok_r(str, separator, &next);
+		str = NULL;
+		size++;
+		substrings = realloc(substrings, sizeof(char*) * size);
+		substrings[size - 1] = string_duplicate(token);
+	};
+
+	if (next[0] != '\0') {
+		size++;
+		substrings = realloc(substrings, sizeof(char*) * size);
+		substrings[size - 1] = string_duplicate(next);
+	}
+
+	size++;
+	substrings = realloc(substrings, sizeof(char*) * size);
+	substrings[size - 1] = NULL;
+
+	free(text_to_iterate);
+	return substrings;
 }
