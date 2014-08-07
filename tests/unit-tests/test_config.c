@@ -20,9 +20,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define KEYS_AMOUNT 6
-#define PATH_CONFIG "resources/config.cfg"
-
 context (test_config) {
 
     void _assert_equals_array(char** expected, char** actual, int size) {
@@ -38,55 +35,59 @@ context (test_config) {
         t_config* config;
 
         before {
-            config = config_create(PATH_CONFIG);
+            config = config_create("resources/config.cfg");
         } end
 
         after {
             config_destroy(config);
         } end
 
-        it("read") {
-
-            should_int(config_keys_amount(config)) be equal to(KEYS_AMOUNT);
-
-            should_bool(config_has_property(config, "IP")) be truthy;
-            should_string(config_get_string_value(config, "IP")) be equal to("127.0.0.1");
-
-            should_bool(config_has_property(config, "PORT")) be truthy;
-            should_int(config_get_int_value(config, "PORT")) be equal to(8080);
-
-            should_bool(config_has_property(config, "LOAD")) be truthy;
-            should_double(config_get_double_value(config, "LOAD")) be equal to (0.5);
-
-        } end
-
-        it("read with empty array") {
-            char* empty_array_expected[] = {NULL};
-
-            should_int(config_keys_amount(config)) be equal to(KEYS_AMOUNT);
-
-            should_bool(config_has_property(config, "EMPTY_ARRAY")) be truthy;
-            should_string(config_get_string_value(config, "EMPTY_ARRAY")) be equal to("[]");
-
-            char** empty_array  = config_get_array_value(config, "EMPTY_ARRAY");
-            _assert_equals_array(empty_array_expected, empty_array, 0);
-
-            free(empty_array);
-        } end
-
-        it("read array with values") {
-            char* numbers_expected[] = {"1", "2", "3", "4", "5", NULL};
-
-            should_int(config_keys_amount(config)) be equal to(KEYS_AMOUNT);
-
+        it("should return true if has property") {
             should_bool(config_has_property(config, "NUMBERS")) be truthy;
-            should_string(config_get_string_value(config, "NUMBERS")) be equal to("[1, 2, 3, 4, 5]");
+        } end
 
-            char** numbers = config_get_array_value(config, "NUMBERS");
-            _assert_equals_array(numbers_expected, numbers, 5);
+        it("should return false if has not got property") {
+            should_bool(config_has_property(config, "PROPERY_MISSING")) be falsey;
+        } end
 
-            string_iterate_lines(numbers, (void*) free);
-            free(numbers);
+        it("should return the keys count") {
+            should_int(config_keys_amount(config)) be equal to(6);
+        } end
+
+        describe("Get") {
+
+            it ("should get int value") {
+                should_int(config_get_int_value(config, "PORT")) be equal to(8080);
+            } end
+
+            it ("should get string value") {
+                should_string(config_get_string_value(config, "IP")) be equal to("127.0.0.1");
+            } end
+
+            it ("should get double value") {
+                should_double(config_get_double_value(config, "LOAD")) be equal to (0.5);
+            } end
+
+            it ("should get an empty array value") {
+                should_string(config_get_string_value(config, "EMPTY_ARRAY")) be equal to("[]");
+                char** empty_array  = config_get_array_value(config, "EMPTY_ARRAY");
+
+                char* empty_array_expected[] = {NULL};
+                _assert_equals_array(empty_array_expected, empty_array, 0);
+                free(empty_array);
+            } end
+
+            it ("should get an array with values") {
+                char* numbers_expected[] = {"1", "2", "3", "4", "5", NULL};
+                should_string(config_get_string_value(config, "NUMBERS")) be equal to("[1, 2, 3, 4, 5]");
+
+                char** numbers = config_get_array_value(config, "NUMBERS");
+                _assert_equals_array(numbers_expected, numbers, 5);
+
+                string_iterate_lines(numbers, (void*) free);
+                free(numbers);
+            } end
+
         } end
 
     } end
