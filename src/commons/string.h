@@ -173,6 +173,11 @@
 	/**
 	* @NAME: string_split
 	* @DESC: Separa un string dado un separador
+	*
+	* @Return: Retorna un array con cada palabra y en la última posición un NULL
+	*
+	* Ejemplo:
+	* string_split("hola, mundo", ",") => ["hola", " mundo", NULL]
 	*/
 	char**  string_split(char * text, char * separator);
 
@@ -185,8 +190,8 @@
 
 	/**
 	* @NAME: string_substring_from
-	* @DESC: Retorna el substring de text desde el caracter start hasta
-	* el ultimo
+	* @DESC: Retorna el substring de text desde el indice start hasta
+	* el último de la palabra
 	*/
 	char*   string_substring_from(char *text, int start);
 
@@ -199,7 +204,7 @@
 	/**
 	* @NAME: string_iterate_lines
 	* @DESC: Itera un array de strings aplicando
-	* el closure a cada string
+	* el closure a cada string, hasta que encuentre un NULL
 	*/
 	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
 

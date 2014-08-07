@@ -37,7 +37,7 @@
 
 	/**
 	* @NAME: dictionary_put
-	* @DESC: Inserta un nuevo par key data al diccionario.
+	* @DESC: Inserta un nuevo par (key->data) al diccionario.
 	*/
 	void 		  dictionary_put(t_dictionary *, char *key, void *data);
 
@@ -62,6 +62,8 @@
 	/**
 	* @NAME: dictionary_iterator
 	* @DESC: Aplica closure a todos los elementos del diccionario.
+	*
+	* La función que se pasa por paremtro recibe (char* key, void* value)
 	*/
 	void 		  dictionary_iterator(t_dictionary *, void(*closure)(char*,void*));
 

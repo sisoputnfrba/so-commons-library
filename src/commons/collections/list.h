@@ -33,7 +33,8 @@
 
 	/**
 	* @NAME: list_destroy
-	* @DESC: Destruye una lista
+	* @DESC: Destruye una lista sin liberar
+	* los elementos contenidos en los nodos
 	*/
 	void list_destroy(t_list *);
 
@@ -99,49 +100,55 @@
 
 	/**
 	* @NAME: list_replace
-	* @DESC: Coloca un valor en una de la posiciones de la lista retornando el valor anterior
+	* @DESC: Coloca un elemento en una de la posiciones
+	* de la lista retornando el valor anterior
 	*/
 	void *list_replace(t_list*, int index, void* element);
 
 	/**
-	* @vNAME: list_replace_and_destroy_element
-	* @DESC: Coloca un valor en una de la posiciones de la lista liberando el valor anterior
+	* @NAME: list_replace_and_destroy_element
+	* @DESC: Coloca un valor en una de la posiciones
+	* de la lista liberando el valor anterior
 	*/
 	void list_replace_and_destroy_element(t_list*, int index, void* element, void(*element_destroyer)(void*));
 
 	/**
 	* @NAME: list_remove
-	* @DESC: Remueve un elemento de la lista de una determinada posicion y lo retorna.
+	* @DESC: Remueve un elemento de la lista de
+	* una determinada posicion y lo retorna.
 	*/
 	void *list_remove(t_list *, int index);
 
 	/**
 	* @NAME: list_remove_and_destroy_element
-	* @DESC: Remueve un elemento de la lista de una determinada posicion y libera la memoria.
+	* @DESC: Remueve un elemento de la lista de una
+	* determinada posicion y libera la memoria.
 	*/
 	void list_remove_and_destroy_element(t_list *, int index, void(*element_destroyer)(void*));
 
 	/**
 	* @NAME: list_remove_by_condition
-	* @DESC: Remueve el primer elemento de la lista que haga que condition devuelva != 0.
+	* @DESC: Remueve el primer elemento de la lista
+	* que haga que condition devuelva != 0.
 	*/
 	void *list_remove_by_condition(t_list *, bool(*condition)(void*));
 
 	/**
 	* @NAME: list_remove_and_destroy_by_condition
-	* @DESC: Remueve y destruye los elementos de la lista que hagan que condition devuelva != 0.
+	* @DESC: Remueve y destruye los elementos de la
+	* lista que hagan que condition devuelva != 0.
 	*/
 	void list_remove_and_destroy_by_condition(t_list *, bool(*condition)(void*), void(*element_destroyer)(void*));
 
 	/**
 	* @NAME: list_clean
-	* @DESC: Elimina todos los elementos de la lista.
+	* @DESC: Quita todos los elementos de la lista.
 	*/
 	void list_clean(t_list *);
 
 	/**
 	* @NAME: list_clean
-	* @DESC: Elimina y destruye todos los elementos de la lista
+	* @DESC: Quita y destruye todos los elementos de la lista
 	*/
 	void list_clean_and_destroy_elements(t_list *self, void(*element_destroyer)(void*));
 
@@ -177,19 +184,22 @@
 
 	/**
 	* @NAME: list_count_satisfying
-	* @DESC: Cuenta la cantidad de elementos de la lista que cumplen una condición
+	* @DESC: Cuenta la cantidad de elementos de
+	* la lista que cumplen una condición
 	*/
 	int list_count_satisfying(t_list* self, bool(*condition)(void*));
 
 	/**
 	* @NAME: list_any_satisfy
-	* @DESC: Determina si algún elemento de la lista cumple una condición
+	* @DESC: Determina si algún elemento
+	* de la lista cumple una condición
 	*/
 	bool list_any_satisfy(t_list* self, bool(*condition)(void*));
 
 	/**
 	* @NAME: list_any_satisfy
-	* @DESC: Determina si todos los elementos de la lista cumplen una condición
+	* @DESC: Determina si todos los elementos
+	* de la lista cumplen una condición
 	*/
 	bool list_all_satisfy(t_list* self, bool(*condition)(void*));
 
