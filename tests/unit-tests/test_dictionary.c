@@ -16,12 +16,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 #include <string.h>
 #include <commons/collections/dictionary.h>
 #include <cspecs/cspec.h>
-
-// ------------------ HELP FUNCTION'S ---------------------
 
 typedef struct {
 	char *name;
@@ -40,13 +37,13 @@ static void persona_destroy(t_person *self){
 	free(self);
 }
 
-static void assert_person(t_person *person, char* name, int age) {
-    should_ptr(person) not be null;
-    should_string(person->name) be equal to(name);
-    should_int(person->age) be equal to(age);
-}
-
 context (test_dictionary) {
+
+    void assert_person(t_person *person, char* name, int age) {
+        should_ptr(person) not be null;
+        should_string(person->name) be equal to(name);
+        should_int(person->age) be equal to(age);
+    }
 
     describe ("Dictionary") {
 
@@ -60,126 +57,100 @@ context (test_dictionary) {
             dictionary_destroy_and_destroy_elements(dictionary, (void*) persona_destroy);
         } end
 
-        it("put and get") {
-            t_person *p1 = persona_create("Matias", 24);
-            dictionary_put(dictionary, p1->name, p1);
+        describe ("Put and get") {
 
-            t_person *p2 = persona_create("Gaston", 25);
-            dictionary_put(dictionary, p2->name, p2);
+            it("should put a value at a key") {
+                should_bool(dictionary_is_empty(dictionary)) be truthy;
+                dictionary_put(dictionary, "Matias", persona_create("Matias", 24));
+                should_int(dictionary_size(dictionary)) be equal to(1);
+                dictionary_put(dictionary, "Gaston", persona_create("Gaston", 25));
+                should_int(dictionary_size(dictionary)) be equal to(2);
+            } end
 
-            should_int(dictionary_size(dictionary)) be equal to(2);
-            should_bool(dictionary_is_empty(dictionary)) be falsey;
+            it("should get a value from a key") {
+                dictionary_put(dictionary, "Matias", persona_create("Matias", 24));
+                dictionary_put(dictionary, "Gaston", persona_create("Gaston", 25));
+                should_int(dictionary_size(dictionary)) be equal to(2);
+                assert_person(dictionary_get(dictionary, "Matias"), "Matias", 24);
+                assert_person(dictionary_get(dictionary, "Gaston"), "Gaston", 25);
+                should_int(dictionary_size(dictionary)) be equal to(2);
+            } end
 
-            t_person *aux = dictionary_get(dictionary, "Matias");
-            assert_person(aux, "Matias", 24);
-
-            aux = dictionary_get(dictionary, "Gaston");
-            assert_person(aux, "Gaston", 25);
-
-            should_int(dictionary_size(dictionary)) be equal to(2);
         } end
 
-        it("remove") {
-            t_person *p1 = persona_create("Matias", 24);
-            dictionary_put(dictionary, p1->name, p1);
+        describe ("Remove, destroy and clean") {
 
-            t_person *p2 = persona_create("Gaston", 25);
-            dictionary_put(dictionary, p2->name, p2);
+            before {
+                dictionary_put(dictionary, "Matias", persona_create("Matias", 24));
+                dictionary_put(dictionary, "Gaston", persona_create("Gaston", 25));
+            } end
 
-            should_int(dictionary_size(dictionary)) be equal to(2);
-            should_bool(dictionary_is_empty(dictionary)) be falsey;
+            it("should remove a value from a key") {
+                should_int(dictionary_size(dictionary)) be equal to(2);
 
-            t_person *aux = dictionary_remove(dictionary, "Matias");
-            assert_person(aux, "Matias", 24);
-            persona_destroy(aux);
+                t_person *aux = dictionary_remove(dictionary, "Matias");
+                assert_person(aux, "Matias", 24);
+                persona_destroy(aux);
 
-            should_int(dictionary_size(dictionary)) be equal to(1);
+                should_int(dictionary_size(dictionary)) be equal to(1);
 
-            aux = dictionary_remove(dictionary, "Gaston");
-            assert_person(aux, "Gaston", 25);
-            persona_destroy(aux);
+                aux = dictionary_remove(dictionary, "Gaston");
+                assert_person(aux, "Gaston", 25);
+                persona_destroy(aux);
 
-            should_int(dictionary_size(dictionary)) be equal to(0);
-            should_bool(dictionary_is_empty(dictionary)) be truthy;
+                should_bool(dictionary_is_empty(dictionary)) be truthy;
+            } end
+
+            it("should remove and destroy a value from a key") {
+                should_int(dictionary_size(dictionary)) be equal to(2);
+
+                dictionary_remove_and_destroy(dictionary, "Matias", (void*) persona_destroy);
+                should_int(dictionary_size(dictionary)) be equal to(1);
+
+                dictionary_remove_and_destroy(dictionary, "Gaston", (void*) persona_destroy);
+                should_bool(dictionary_is_empty(dictionary)) be truthy;
+
+                should_ptr(dictionary_get(dictionary, "Matias")) be null;
+                should_ptr(dictionary_get(dictionary, "Gaston")) be null;
+            } end
+
+            it("should clean the dictionary") {
+                should_int(dictionary_size(dictionary)) be equal to(2);
+                dictionary_clean_and_destroy_elements(dictionary, (void*)persona_destroy);
+                should_bool(dictionary_is_empty(dictionary)) be truthy;
+            } end
+
         } end
 
-        it("remove and destroy") {
-            t_person *p1 = persona_create("Matias", 24);
-            dictionary_put(dictionary, p1->name, p1);
+        describe ("Iterate") {
 
-            t_person *p2 = persona_create("Gaston", 25);
-            dictionary_put(dictionary, p2->name, p2);
-
-            should_int(dictionary_size(dictionary)) be equal to(2);
-            should_bool(dictionary_is_empty(dictionary)) be falsey;
-
-            dictionary_remove_and_destroy(dictionary, "Matias", (void*) persona_destroy);
-
-            should_int(dictionary_size(dictionary)) be equal to(1);
-
-            should_ptr( dictionary_get(dictionary, "Matias")) be null;
-
-            dictionary_remove_and_destroy(dictionary, "Gaston", (void*) persona_destroy);
-
-            should_ptr(dictionary_get(dictionary, "Gaston")) be null;
-
-            should_int(dictionary_size(dictionary)) be equal to(0);
-        } end
-
-        it("clean") {
-            int cont;
-            for (cont = 0; cont < 100; cont++) {
-                char *key = malloc(5); sprintf(key, "%d", cont);
-                dictionary_put(dictionary, "Key", malloc(20));
-                free(key);
+            int iterator_count;
+            void _assertion(char* ___, t_person* __) {
+                iterator_count++;
             }
 
-            should_int(dictionary_size(dictionary)) be equal to(100);
-            should_bool(dictionary_is_empty(dictionary)) be falsey;
+            before {
+                iterator_count = 0;
+            } end
 
-            dictionary_clean_and_destroy_elements(dictionary, free);
+            it("should iterate all entries") {
+                dictionary_put(dictionary, "Matias" , persona_create("Matias" , 24));
+                dictionary_put(dictionary, "Gaston" , persona_create("Gaston" , 25));
+                dictionary_put(dictionary, "Daniela", persona_create("Daniela", 20));
+                dictionary_put(dictionary, "Marco"  , persona_create("Marco"  , 21));
 
-            should_int(dictionary_size(dictionary)) be equal to(0);
-            should_bool(dictionary_is_empty(dictionary)) be truthy;
-        } end
+                dictionary_iterator(dictionary, (void*) _assertion);
+                should_int(iterator_count) be equal to(4);
+            } end
 
-        it("iterate") {
-            t_person* persons[4] = {
-                persona_create("Matias", 24),
-                persona_create("Gaston", 25),
-                persona_create("Dani", 20),
-                persona_create("Marco", 21)
-            };
+            it("should iterate all overloaded entries") {
+                dictionary_put(dictionary, "key", persona_create("Matias", 24));
+                dictionary_put(dictionary, "key", persona_create("Gaston", 25));
 
-            dictionary_put(dictionary, persons[0]->name, persons[0]);
-            dictionary_put(dictionary, persons[1]->name, persons[1]);
-            dictionary_put(dictionary, persons[2]->name, persons[2]);
-            dictionary_put(dictionary, persons[3]->name, persons[3]);
+                dictionary_iterator(dictionary, (void*) _assertion);
+                should_int(iterator_count) be equal to(2);
+            } end
 
-            should_int(dictionary_size(dictionary)) be equal to(4);
-
-            void _assertion(char* key, t_person* person) {
-                should_string(key) be equal to(person->name);
-            }
-
-            dictionary_iterator(dictionary, (void*) _assertion);
-        } end
-
-        it("overload entry") {
-            t_dictionary *dictionary = dictionary_create(free);
-
-            char *key = "aKey";
-
-            dictionary_put(dictionary, key, persona_create("Matias", 24));
-            dictionary_put(dictionary, key, persona_create("Gaston", 25));
-
-            void _persona_iterating_destroy(char *key, t_person *person) {
-                persona_destroy(person);
-            }
-
-            dictionary_iterator(dictionary, (void*) _persona_iterating_destroy);
-
-            dictionary_destroy(dictionary);
         } end
 
     } end
