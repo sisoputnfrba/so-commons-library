@@ -21,7 +21,7 @@
 
 #include "cunit_def.h"
 
-int main(int argc, char **argv) {
+__attribute__((constructor)) int main_cunit(int argc, char **argv) {
 
 	/* initialize the CUnit test registry */
 	if (CUE_SUCCESS != CU_initialize_registry())

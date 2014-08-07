@@ -10,7 +10,7 @@ create-dirs:
 	mkdir -p build
 
 build/commons-unit-test: dependents create-dirs $(OBJS)
-	$(CC) -L"../../src/build" -o "build/commons-unit-test" $(OBJS) -lcommons -lcunit
+	$(CC) -L"../../src/build" -o "build/commons-unit-test" $(OBJS) -lcommons -lcunit -lcspecs
 
 build/%.o: ./%.c
 	$(CC) -I"../../src" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
