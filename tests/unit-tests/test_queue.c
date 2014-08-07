@@ -19,9 +19,7 @@
 #include <assert.h>
 #include <string.h>
 #include <commons/collections/queue.h>
-#include <CUnit/CUnit.h>
-
-#include "cunit_tools.h"
+#include <cspecs/cspec.h>
 
 // ------------------ HELP FUNCTION'S ---------------------
 
@@ -42,103 +40,83 @@ static void persona_destroy(t_person *self){
 	free(self);
 }
 
-// --------------------------------------------------------
-
-static int init_suite() {
-	return 0;
+static void assert_person(t_person *person, char* name, int age) {
+    should_ptr(person) not be null;
+    should_string(person->name) be equal to(name);
+    should_int(person->age) be equal to(age);
 }
 
-static int clean_suite() {
-	return 0;
+context (test_queue) {
+
+    describe ("Queue") {
+
+        t_queue * queue;
+
+        before {
+            queue = queue_create();
+        } end
+
+        after {
+            queue_destroy_and_destroy_elements(queue, (void*) persona_destroy);
+        } end
+
+        it("push and pop") {
+            queue_push(queue, persona_create("Matias", 24));
+            queue_push(queue, persona_create("Gaston", 25));
+
+            should_int(queue_size(queue)) be equal to(2);
+            should_bool(queue_is_empty(queue)) be falsey;
+
+            t_person *aux = queue_pop(queue);
+            assert_person(aux, "Matias", 24);
+            persona_destroy(aux);
+
+            should_int(queue_size(queue)) be equal to(1);
+            should_bool(queue_is_empty(queue)) be falsey;
+
+            aux = queue_pop(queue);
+            assert_person(aux, "Gaston", 25);
+            persona_destroy(aux);
+
+            should_int(queue_size(queue)) be equal to(0);
+            should_bool(queue_is_empty(queue)) be truthy;
+
+            aux = queue_pop(queue);
+            should_ptr(aux) be null;
+        } end
+
+        it("peek") {
+            queue_push(queue, persona_create("Matias", 24));
+            queue_push(queue, persona_create("Gaston", 25));
+
+            should_int(queue_size(queue)) be equal to(2);
+            should_bool(queue_is_empty(queue)) be falsey;
+
+            t_person *aux = queue_peek(queue);
+            assert_person(aux, "Matias", 24);
+
+            should_int(queue_size(queue)) be equal to(2);
+
+            aux = queue_peek(queue);
+            assert_person(aux, "Matias", 24);
+
+            should_int(queue_size(queue)) be equal to(2);
+        } end
+
+        it("clean") {
+            queue_push(queue, persona_create("Matias", 24));
+            queue_push(queue, persona_create("Gaston", 25));
+
+            should_int(queue_size(queue)) be equal to(2);
+            should_bool(queue_is_empty(queue)) be falsey;
+
+            queue_clean_and_destroy_elements(queue, (void*) persona_destroy);
+
+            should_int(queue_size(queue)) be equal to(0);
+            should_bool(queue_is_empty(queue)) be truthy;
+        } end
+
+    } end
+
 }
 
-static void test_queue_push_and_pop() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_queue * queue = queue_create();
-
-	t_person *p1 = persona_create("Matias", 24);
-
-	queue_push(queue, p1);
-	queue_push(queue, persona_create("Gaston", 25));
-
-	CU_ASSERT_EQUAL(queue_size(queue), 2);
-	CU_ASSERT_FALSE(queue_is_empty(queue));
-
-	t_person *aux = queue_pop(queue);
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Matias");
-	CU_ASSERT_EQUAL( aux->age, 24);
-	persona_destroy(aux);
-
-	CU_ASSERT_EQUAL(queue_size(queue), 1);
-	CU_ASSERT_FALSE(queue_is_empty(queue));
-
-	aux = queue_pop(queue);
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Gaston");
-	CU_ASSERT_EQUAL( aux->age, 25);
-	persona_destroy(aux);
-
-	CU_ASSERT_EQUAL(queue_size(queue), 0);
-	CU_ASSERT_TRUE(queue_is_empty(queue));
-
-	aux = queue_pop(queue);
-	CU_ASSERT_PTR_NULL( aux);
-
-	queue_destroy(queue);
-}
-
-static void test_queue_peek() {
-	t_queue * queue = queue_create();
-
-	queue_push(queue, persona_create("Matias", 24));
-	queue_push(queue, persona_create("Gaston", 25));
-
-	CU_ASSERT_EQUAL(queue_size(queue), 2);
-	CU_ASSERT_FALSE(queue_is_empty(queue));
-
-	t_person *aux = queue_peek(queue);
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Matias");
-	CU_ASSERT_EQUAL( aux->age, 24);
-	CU_ASSERT_EQUAL(queue_size(queue), 2);
-
-	aux = queue_peek(queue);
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Matias");
-	CU_ASSERT_EQUAL( aux->age, 24);
-
-	CU_ASSERT_EQUAL(queue_size(queue), 2);
-
-	queue_destroy_and_destroy_elements(queue, (void*) persona_destroy);
-}
-
-static void test_queue_clean() {
-	t_queue * queue = queue_create();
-
-	queue_push(queue, persona_create("Matias", 24));
-	queue_push(queue, persona_create("Gaston", 25));
-
-	CU_ASSERT_EQUAL(queue_size(queue), 2);
-	CU_ASSERT_FALSE(queue_is_empty(queue));
-
-	queue_clean_and_destroy_elements(queue, (void*) persona_destroy);
-
-	CU_ASSERT_EQUAL(queue_size(queue), 0);
-	CU_ASSERT_TRUE(queue_is_empty(queue));
-
-	queue_destroy(queue);
-}
-
-
-/**********************************************************************************************
- *  							Building the test for CUnit
- *********************************************************************************************/
-
-static CU_TestInfo tests[] = {
-		{ "Test Push And Pop Queue Element", test_queue_push_and_pop },
-		{ "Test Peek Queue Element", test_queue_peek },
-		{ "Test Clean Queue Elements", test_queue_clean },
-		CU_TEST_INFO_NULL};
-
-CUNIT_MAKE_SUITE(queue, "Test Queue TAD", init_suite, clean_suite, tests)
