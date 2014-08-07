@@ -21,8 +21,6 @@
 #include <commons/string.h>
 #include <cspecs/cspec.h>
 
-#include "cunit_tools.h"
-
 // ------------------ HELP FUNCTION'S ---------------------
 
 typedef struct {

@@ -21,8 +21,6 @@
 #include <commons/collections/dictionary.h>
 #include <cspecs/cspec.h>
 
-#include "cunit_tools.h"
-
 // ------------------ HELP FUNCTION'S ---------------------
 
 typedef struct {
