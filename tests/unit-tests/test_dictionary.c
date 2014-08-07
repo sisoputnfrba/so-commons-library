@@ -19,7 +19,7 @@
 #include <assert.h>
 #include <string.h>
 #include <commons/collections/dictionary.h>
-#include <CUnit/CUnit.h>
+#include <cspecs/cspec.h>
 
 #include "cunit_tools.h"
 
@@ -42,186 +42,148 @@ static void persona_destroy(t_person *self){
 	free(self);
 }
 
-// --------------------------------------------------------
-
-static int init_suite() {
-	return 0;
+static void assert_person(t_person *person, char* name, int age) {
+    should_ptr(person) not be null;
+    should_string(person->name) be equal to(name);
+    should_int(person->age) be equal to(age);
 }
 
-static int clean_suite() {
-	return 0;
-}
+context (test_dictionary) {
 
-static void test_dictionary_put_and_get() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_dictionary *dictionary = dictionary_create();
+    describe ("Dictionary") {
 
-	t_person *p1 = persona_create("Matias", 24);
-	dictionary_put(dictionary, p1->name, p1);
+        t_dictionary *dictionary;
 
-	t_person *p2 = persona_create("Gaston", 25);
-	dictionary_put(dictionary, p2->name, p2);
+        before {
+            dictionary = dictionary_create();
+        } end
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 2);
-	CU_ASSERT_FALSE(dictionary_is_empty(dictionary));
+        after {
+            dictionary_destroy_and_destroy_elements(dictionary, (void*) persona_destroy);
+        } end
 
-	t_person *aux = dictionary_get(dictionary, "Matias");
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Matias");
-	CU_ASSERT_EQUAL( aux->age, 24);
+        it("put and get") {
+            t_person *p1 = persona_create("Matias", 24);
+            dictionary_put(dictionary, p1->name, p1);
 
-	aux = dictionary_get(dictionary, "Gaston");
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Gaston");
-	CU_ASSERT_EQUAL( aux->age, 25);
+            t_person *p2 = persona_create("Gaston", 25);
+            dictionary_put(dictionary, p2->name, p2);
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 2);
+            should_int(dictionary_size(dictionary)) be equal to(2);
+            should_bool(dictionary_is_empty(dictionary)) be falsey;
 
-	dictionary_destroy_and_destroy_elements(dictionary, (void*) persona_destroy);
-}
+            t_person *aux = dictionary_get(dictionary, "Matias");
+            assert_person(aux, "Matias", 24);
 
-static void test_dictionary_remove() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_dictionary *dictionary = dictionary_create();
+            aux = dictionary_get(dictionary, "Gaston");
+            assert_person(aux, "Gaston", 25);
 
-	t_person *p1 = persona_create("Matias", 24);
-	dictionary_put(dictionary, p1->name, p1);
+            should_int(dictionary_size(dictionary)) be equal to(2);
+        } end
 
-	t_person *p2 = persona_create("Gaston", 25);
-	dictionary_put(dictionary, p2->name, p2);
+        it("remove") {
+            t_person *p1 = persona_create("Matias", 24);
+            dictionary_put(dictionary, p1->name, p1);
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 2);
-	CU_ASSERT_FALSE(dictionary_is_empty(dictionary));
+            t_person *p2 = persona_create("Gaston", 25);
+            dictionary_put(dictionary, p2->name, p2);
 
-	t_person *aux = dictionary_remove(dictionary, "Matias");
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Matias");
-	CU_ASSERT_EQUAL( aux->age, 24);
-	persona_destroy(aux);
+            should_int(dictionary_size(dictionary)) be equal to(2);
+            should_bool(dictionary_is_empty(dictionary)) be falsey;
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 1);
+            t_person *aux = dictionary_remove(dictionary, "Matias");
+            assert_person(aux, "Matias", 24);
+            persona_destroy(aux);
 
-	aux = dictionary_remove(dictionary, "Gaston");
-	CU_ASSERT_PTR_NOT_NULL( aux);
-	CU_ASSERT_STRING_EQUAL( aux->name, "Gaston");
-	CU_ASSERT_EQUAL( aux->age, 25);
-	persona_destroy(aux);
+            should_int(dictionary_size(dictionary)) be equal to(1);
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 0);
+            aux = dictionary_remove(dictionary, "Gaston");
+            assert_person(aux, "Gaston", 25);
+            persona_destroy(aux);
 
-	dictionary_destroy_and_destroy_elements(dictionary, (void*) persona_destroy);
-}
+            should_int(dictionary_size(dictionary)) be equal to(0);
+            should_bool(dictionary_is_empty(dictionary)) be truthy;
+        } end
 
-static void test_dictionary_remove_and_destroy() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_dictionary *dictionary = dictionary_create();
+        it("remove and destroy") {
+            t_person *p1 = persona_create("Matias", 24);
+            dictionary_put(dictionary, p1->name, p1);
 
-	t_person *p1 = persona_create("Matias", 24);
-	dictionary_put(dictionary, p1->name, p1);
+            t_person *p2 = persona_create("Gaston", 25);
+            dictionary_put(dictionary, p2->name, p2);
 
-	t_person *p2 = persona_create("Gaston", 25);
-	dictionary_put(dictionary, p2->name, p2);
+            should_int(dictionary_size(dictionary)) be equal to(2);
+            should_bool(dictionary_is_empty(dictionary)) be falsey;
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 2);
-	CU_ASSERT_FALSE(dictionary_is_empty(dictionary));
+            dictionary_remove_and_destroy(dictionary, "Matias", (void*) persona_destroy);
 
-	dictionary_remove_and_destroy(dictionary, "Matias", (void*) persona_destroy);
+            should_int(dictionary_size(dictionary)) be equal to(1);
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 1);
+            should_ptr( dictionary_get(dictionary, "Matias")) be null;
 
-	CU_ASSERT_PTR_NULL( dictionary_get(dictionary, "Matias"));
+            dictionary_remove_and_destroy(dictionary, "Gaston", (void*) persona_destroy);
 
-	dictionary_remove_and_destroy(dictionary, "Gaston", (void*) persona_destroy);
+            should_ptr(dictionary_get(dictionary, "Gaston")) be null;
 
-	CU_ASSERT_PTR_NULL(dictionary_get(dictionary, "Gaston"));
+            should_int(dictionary_size(dictionary)) be equal to(0);
+        } end
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 0);
+        it("clean") {
+            int cont;
+            for (cont = 0; cont < 100; cont++) {
+                char *key = malloc(5); sprintf(key, "%d", cont);
+                dictionary_put(dictionary, "Key", malloc(20));
+                free(key);
+            }
 
-	dictionary_destroy(dictionary);
-}
+            should_int(dictionary_size(dictionary)) be equal to(100);
+            should_bool(dictionary_is_empty(dictionary)) be falsey;
 
-static void test_dictionary_clean() {
-	t_dictionary *dictionary = dictionary_create();
+            dictionary_clean_and_destroy_elements(dictionary, free);
 
-	int cont;
-	for (cont = 0; cont < 100; cont++) {
-		char *key = malloc(5);
-		char *value = malloc(20);
+            should_int(dictionary_size(dictionary)) be equal to(0);
+            should_bool(dictionary_is_empty(dictionary)) be truthy;
+        } end
 
-		sprintf(key, "%d", cont);
-		sprintf(value, "%d%d%d", cont, cont, cont);
+        it("iterate") {
+            t_person* persons[4] = {
+                persona_create("Matias", 24),
+                persona_create("Gaston", 25),
+                persona_create("Dani", 20),
+                persona_create("Marco", 21)
+            };
 
-		dictionary_put(dictionary, key, value);
-		free(key);
-	}
+            dictionary_put(dictionary, persons[0]->name, persons[0]);
+            dictionary_put(dictionary, persons[1]->name, persons[1]);
+            dictionary_put(dictionary, persons[2]->name, persons[2]);
+            dictionary_put(dictionary, persons[3]->name, persons[3]);
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 100);
-	CU_ASSERT_FALSE(dictionary_is_empty(dictionary));
+            should_int(dictionary_size(dictionary)) be equal to(4);
 
-	dictionary_clean_and_destroy_elements(dictionary, free);
+            void _assertion(char* key, t_person* person) {
+                should_string(key) be equal to(person->name);
+            }
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 0);
-	CU_ASSERT_TRUE(dictionary_is_empty(dictionary));
+            dictionary_iterator(dictionary, (void*) _assertion);
+        } end
 
-	dictionary_destroy(dictionary);
-}
+        it("overload entry") {
+            t_dictionary *dictionary = dictionary_create(free);
 
-static void test_dictionary_iterate() {
-	// El (void*) delante del persona_destroy es para evitar errores de casteo
-	t_dictionary *dictionary = dictionary_create();
-	t_person* persons[4] = {
-			persona_create("Matias", 24),
-			persona_create("Gaston", 25),
-			persona_create("Dani", 20),
-			persona_create("Marco", 21)
-	};
+            char *key = "aKey";
 
-	dictionary_put(dictionary, persons[0]->name, persons[0]);
-	dictionary_put(dictionary, persons[1]->name, persons[1]);
-	dictionary_put(dictionary, persons[2]->name, persons[2]);
-	dictionary_put(dictionary, persons[3]->name, persons[3]);
+            dictionary_put(dictionary, key, persona_create("Matias", 24));
+            dictionary_put(dictionary, key, persona_create("Gaston", 25));
 
-	CU_ASSERT_EQUAL(dictionary_size(dictionary), 4);
+            void _persona_iterating_destroy(char *key, t_person *person) {
+                persona_destroy(person);
+            }
 
-	printf("\n");
-	void _assertion(char* key, t_person* person) {
-		printf("Key: %s, Nombre: %s, Edad: %d\n", key, person->name, person->age);
-	}
+            dictionary_iterator(dictionary, (void*) _persona_iterating_destroy);
 
-	dictionary_iterator(dictionary, (void*) _assertion);
+            dictionary_destroy(dictionary);
+        } end
 
-	dictionary_destroy_and_destroy_elements(dictionary, (void*) persona_destroy);
+    } end
 
 }
-
-static void test_dictionary_overload_entry() {
-	t_dictionary *dictionary = dictionary_create(free);
-	
-	char *key = "aKey";
-	
-	dictionary_put(dictionary, key, persona_create("Matias", 24));
-	dictionary_put(dictionary, key, persona_create("Gaston", 25));
-
-	void _persona_iterating_destroy(char *key, t_person *person) {
-		persona_destroy(person);
-	}
-	
-	dictionary_iterator(dictionary, (void*) _persona_iterating_destroy);
-
-	dictionary_destroy(dictionary);
-}
-
-/**********************************************************************************************
- *  							Building the test for CUnit
- *********************************************************************************************/
-
-static CU_TestInfo tests[] = {
-		{ "Test Put And Get Dictionary Element", test_dictionary_put_and_get },
-		{ "Test Clean Dictionary Elements", test_dictionary_clean },
-		{ "Test Remove Dictionary Elements", test_dictionary_remove },
-		{ "Test Iterate Dictionary Elements", test_dictionary_iterate },
-		{ "Test Remove And Destroy Dictionary Elements", test_dictionary_remove_and_destroy },
-		{ "Test Iterate Overloaded Entry Finishes", test_dictionary_overload_entry },
-		CU_TEST_INFO_NULL, };
-
-CUNIT_MAKE_SUITE(dictionary, "Test Dictionary TAD", init_suite, clean_suite, tests)
