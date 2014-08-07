@@ -23,11 +23,6 @@ static t_link_element* list_create_element(void* data);
 static t_link_element* list_get_element(t_list* self, int index);
 static t_link_element* list_find_element(t_list *self, bool(*condition)(void*), int* index);
 
-/*
- * @NAME: list_create
- * @DESC: Crea una lista
- */
-
 t_list *list_create() {
 	t_list *list = malloc(sizeof(t_list));
 	list->head = NULL;
@@ -35,10 +30,6 @@ t_list *list_create() {
 	return list;
 }
 
-/*
- * @NAME: list_add
- * @DESC: Agrega un elemento al final de la lista
- */
 int list_add(t_list *self, void *data) {
 	t_link_element *new_element = list_create_element(data);
 
@@ -51,11 +42,6 @@ int list_add(t_list *self, void *data) {
 	return self->elements_count - 1;
 }
 
-/**
- * @NAME: list_add_all
- * @DESC: Agrega todos los elementos de
- * la segunda lista en la primera
- */
 void list_add_all(t_list* self, t_list* other) {
 	void _add_in_list(void* element){
 		list_add(self, element);
@@ -64,19 +50,11 @@ void list_add_all(t_list* self, t_list* other) {
 	list_iterate(other, _add_in_list);
 }
 
-/*
- * @NAME: list_get
- * @DESC: Retorna el contenido de una posicion determianda de la lista
- */
 void* list_get(t_list *self, int index) {
 	t_link_element* element_in_index = list_get_element(self, index);
 	return element_in_index != NULL ? element_in_index->data : NULL;
 }
 
-/*
- * @NAME: list_add_in_index
- * @DESC: Agrega un elemento en una posicion determinada de la lista
- */
 void list_add_in_index(t_list *self, int index, void *data) {
 	t_link_element* next = NULL;
 	t_link_element* new_element = NULL;
@@ -99,10 +77,6 @@ void list_add_in_index(t_list *self, int index, void *data) {
 	}
 }
 
-/*
- * @NAME: list_replace
- * @DESC: Coloca un valor en una de la posiciones de la lista retornando el valor anterior
- */
 void *list_replace(t_list *self, int index, void *data) {
 	void *old_data = NULL;
 
@@ -115,28 +89,16 @@ void *list_replace(t_list *self, int index, void *data) {
 	return old_data;
 }
 
-/*
- * @NAME: list_replace_and_destroy_element
- * @DESC: Coloca un valor en una de la posiciones de la lista liberando el valor anterior
- */
 void list_replace_and_destroy_element(t_list *self, int num, void *data, void(*element_destroyer)(void*)) {
 	void *old_data = list_replace(self, num, data);
 	element_destroyer(old_data);
 }
 
-/*
- * @NAME: list_find
- * @DESC: Retorna el primer valor encontrado, el cual haga que condition devuelva != 0
- */
 void* list_find(t_list *self, bool(*condition)(void*)) {
 	t_link_element *element = list_find_element(self, condition, NULL);
 	return element != NULL ? element->data : NULL;
 }
 
-/*
- * @NAME: list_iterate
- * @DESC: Itera la lista llamando al closure por cada elemento
- */
 void list_iterate(t_list* self, void(*closure)(void*)) {
 	t_link_element *element = self->head;
 	while (element != NULL) {
@@ -145,10 +107,6 @@ void list_iterate(t_list* self, void(*closure)(void*)) {
 	}
 }
 
-/*
- * @NAME: list_remove
- * @DESC: Remueve un elemento de la lista de una determinada posicion y lo retorna.
- */
 void *list_remove(t_list *self, int index) {
 	void *data = NULL;
 	t_link_element *aux_element = NULL;
@@ -170,10 +128,6 @@ void *list_remove(t_list *self, int index) {
 	return data;
 }
 
-/*
- * @NAME: list_remove_by_condition
- * @DESC: Remueve el primer elemento de la lista que haga que condition devuelva != 0.
- */
 void* list_remove_by_condition(t_list *self, bool(*condition)(void*)) {
 	int index = 0;
 
@@ -185,44 +139,24 @@ void* list_remove_by_condition(t_list *self, bool(*condition)(void*)) {
 	return NULL;
 }
 
-/*
- * @NAME: list_remove_and_destroy_element
- * @DESC: Remueve un elemento de la lista de una determinada posicion y libera la memoria.
- */
 void list_remove_and_destroy_element(t_list *self, int index, void(*element_destroyer)(void*)) {
 	void* data = list_remove(self, index);
 	element_destroyer(data);
 }
 
-/*
- * @NAME: list_remove_and_destroy_by_condition
- * @DESC: Remueve y destruye los elementos de la lista que hagan que condition devuelva != 0.
- */
 void list_remove_and_destroy_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*)) {
 	void* data = list_remove_by_condition(self, condition);
 	element_destroyer(data);
 }
 
-/*
- * @NAME: list_size
- * @DESC: Retorna el tamaño de la lista
- */
 int list_size(t_list *list) {
 	return list->elements_count;
 }
 
-/*
- * @NAME: list_is_empty
- * @DESC: Verifica si la lista esta vacia
- */
 int list_is_empty(t_list *list) {
 	return list_size(list) == 0;
 }
 
-/*
- * @NAME: list_clean
- * @DESC: Elimina todos los elementos de la lista.
- */
 void list_clean(t_list *self) {
 	t_link_element* element;
 	while (self->head != NULL) {
@@ -238,29 +172,16 @@ void list_clean_and_destroy_elements(t_list *self, void(*element_destroyer)(void
 	list_clean(self);
 }
 
-/*
- * @NAME: list_destroy
- * @DESC: Destruye una lista
- */
 void list_destroy(t_list *self) {
 	list_clean(self);
 	free(self);
 }
 
-/*
- * @NAME: list_destroy_and_destroy_elements
- * @DESC: Destruye una lista y sus elementos
- */
 void list_destroy_and_destroy_elements(t_list *self, void(*element_destroyer)(void*)) {
 	list_clean_and_destroy_elements(self, element_destroyer);
 	free(self);
 }
 
-/*
- * @NAME: list_take
- * @DESC: Retorna una nueva lista con
- * los primeros n elementos
- */
 t_list* list_take(t_list* self, int count) {
 	t_list* sublist = list_create();
 	int i = 0;
@@ -271,12 +192,6 @@ t_list* list_take(t_list* self, int count) {
 	return sublist;
 }
 
-/*
- * @NAME: list_take_and_remove
- * @DESC: Retorna una nueva lista con
- * los primeros n elementos, eliminando
- * del origen estos elementos
- */
 t_list* list_take_and_remove(t_list* self, int count) {
 	t_list* sublist = list_create();
 	int i = 0;
@@ -287,11 +202,6 @@ t_list* list_take_and_remove(t_list* self, int count) {
 	return sublist;
 }
 
-/*
- * @NAME: list_filter
- * @DESC: Retorna una nueva lista con los
- * elementos que cumplen la condicion
- */
 t_list* list_filter(t_list* self, bool(*condition)(void*)){
 	t_list* filtered = list_create();
 
@@ -305,11 +215,6 @@ t_list* list_filter(t_list* self, bool(*condition)(void*)){
 	return filtered;
 }
 
-/*
- * @NAME: list_map
- * @DESC: Retorna una nueva lista con los
- * con los elementos transformados
- */
 t_list* list_map(t_list* self, void*(*transformer)(void*)){
 	t_list* mapped = list_create();
 
@@ -321,11 +226,6 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 	list_iterate(self, _add_after_transform);
 	return mapped;
 }
-
-/*
- * @NAME: list_sort
- * @DESC: Ordena la lista segun el comparador
- */
 
 void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
 	// TODO: optimizar (usar un algoritmo mas copado)
@@ -356,10 +256,6 @@ void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
 
 }
 
-/*
- * @NAME: list_count_satisfying
- * @DESC: Cuenta la cantidad de elementos de la lista que cumplen una condición
- */
 int list_count_satisfying(t_list* self, bool(*condition)(void*)){
 	t_list *satisfying = list_filter(self, condition);
 	int result = satisfying->elements_count;
@@ -367,18 +263,10 @@ int list_count_satisfying(t_list* self, bool(*condition)(void*)){
 	return result;
 }
 
-/*
- * @NAME: list_any_satisfy
- * @DESC: Determina si algún elemento de la lista cumple una condición
- */
 bool list_any_satisfy(t_list* self, bool(*condition)(void*)){
 	return list_count_satisfying(self, condition) > 0;
 }
 
-/*
- * @NAME: list_any_satisfy
- * @DESC: Determina si todos los elementos de la lista cumplen una condición
- */
 bool list_all_satisfy(t_list* self, bool(*condition)(void*)){
 	return list_count_satisfying(self, condition) == self->elements_count;
 }

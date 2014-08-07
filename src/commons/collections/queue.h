@@ -23,17 +23,65 @@
 		t_list* elements;
 	} t_queue;
 
+	/**
+	* @NAME: queue_create
+	* @DESC: Crea y devuelve un puntero a una cola
+	*/
 	t_queue *queue_create();
+
+	/**
+	* @NAME: queue_destroy
+	* @DESC: Destruye una cola.
+	*/
 	void queue_destroy(t_queue *);
+
+	/**
+	* @NAME: queue_destroy_and_destroy_elements
+	* @DESC: Destruye una cola, recibiendo como argumento el metodo encargado de liberar cada
+	* 		elemento de la cola.
+	*/
 	void queue_destroy_and_destroy_elements(t_queue*, void(*element_destroyer)(void*));
 
+	/**
+	* @NAME: queue_push
+	* @DESC: Agrega un elemento al final de la cola
+	*/
 	void queue_push(t_queue *, void *element);
+
+	/**
+	* @NAME: queue_pop
+	* @DESC: quita el primer elemento de la cola
+	*/
 	void *queue_pop(t_queue *);
+
+	/**
+	* @NAME: queue_peek
+	* @DESC: Devuelve el primer elemento de la cola sin extraerlo
+	*/
 	void *queue_peek(t_queue *);
+
+	/**
+	* @NAME: queue_clean
+	* @DESC: Elimina todos los elementos de la cola.
+	*/
 	void queue_clean(t_queue *);
+
+	/**
+	* @NAME: queue_clean_and_destroy_elements
+	* @DESC: Elimina y destruye todos los elementos de la cola.
+	*/
 	void queue_clean_and_destroy_elements(t_queue *, void(*element_destroyer)(void*));
 
+	/**
+	* @NAME: queue_size
+	* @DESC: Devuelve la cantidad de elementos de la cola
+	*/
 	int queue_size(t_queue *);
+
+	/**
+	* @NAME: queue_is_empty
+	* @DESC: Verifica si la cola esta vacía
+	*/
 	int queue_is_empty(t_queue *);
 
 #endif /*QUEUE_H_*/
