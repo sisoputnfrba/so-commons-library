@@ -40,13 +40,13 @@ static void persona_destroy(t_person *self){
 	free(self);
 }
 
-static void assert_person(t_person *person, char* name, int age) {
-    should_ptr(person) not be null;
-    should_string(person->name) be equal to(name);
-    should_int(person->age) be equal to(age);
-}
-
 context (test_queue) {
+
+    void assert_person(t_person *person, char* name, int age) {
+        should_ptr(person) not be null;
+        should_string(person->name) be equal to(name);
+        should_int(person->age) be equal to(age);
+    }
 
     describe ("Queue") {
 
@@ -60,60 +60,57 @@ context (test_queue) {
             queue_destroy_and_destroy_elements(queue, (void*) persona_destroy);
         } end
 
-        it("push and pop") {
+        it("should return the value at top of queue without change the queue") {
             queue_push(queue, persona_create("Matias", 24));
             queue_push(queue, persona_create("Gaston", 25));
-
-            should_int(queue_size(queue)) be equal to(2);
-            should_bool(queue_is_empty(queue)) be falsey;
-
-            t_person *aux = queue_pop(queue);
-            assert_person(aux, "Matias", 24);
-            persona_destroy(aux);
-
-            should_int(queue_size(queue)) be equal to(1);
-            should_bool(queue_is_empty(queue)) be falsey;
-
-            aux = queue_pop(queue);
-            assert_person(aux, "Gaston", 25);
-            persona_destroy(aux);
-
-            should_int(queue_size(queue)) be equal to(0);
-            should_bool(queue_is_empty(queue)) be truthy;
-
-            aux = queue_pop(queue);
-            should_ptr(aux) be null;
-        } end
-
-        it("peek") {
-            queue_push(queue, persona_create("Matias", 24));
-            queue_push(queue, persona_create("Gaston", 25));
-
-            should_int(queue_size(queue)) be equal to(2);
-            should_bool(queue_is_empty(queue)) be falsey;
-
-            t_person *aux = queue_peek(queue);
-            assert_person(aux, "Matias", 24);
-
             should_int(queue_size(queue)) be equal to(2);
 
-            aux = queue_peek(queue);
-            assert_person(aux, "Matias", 24);
+            assert_person(queue_peek(queue), "Matias", 24);
+            should_int(queue_size(queue)) be equal to(2);
 
+            assert_person(queue_peek(queue), "Matias", 24);
             should_int(queue_size(queue)) be equal to(2);
         } end
 
-        it("clean") {
+        it("should clean the queue and leave it empty") {
             queue_push(queue, persona_create("Matias", 24));
             queue_push(queue, persona_create("Gaston", 25));
 
             should_int(queue_size(queue)) be equal to(2);
-            should_bool(queue_is_empty(queue)) be falsey;
 
             queue_clean_and_destroy_elements(queue, (void*) persona_destroy);
-
-            should_int(queue_size(queue)) be equal to(0);
             should_bool(queue_is_empty(queue)) be truthy;
+        } end
+
+        describe ("Push and pop") {
+
+            it("should push some values") {
+                should_int(queue_size(queue)) be equal to(0);
+                queue_push(queue, persona_create("Matias", 24));
+                should_int(queue_size(queue)) be equal to(1);
+                queue_push(queue, persona_create("Gaston", 25));
+                should_int(queue_size(queue)) be equal to(2);
+            } end
+
+            it ("should pop some values") {
+                queue_push(queue, persona_create("Matias", 24));
+                queue_push(queue, persona_create("Gaston", 25));
+
+                void pop_assert_and_destroy(t_queue *queue, char* name, int age) {
+                    t_person *aux = queue_pop(queue);
+                    assert_person(aux, name, age);
+                    persona_destroy(aux);
+                }
+
+                should_int(queue_size(queue)) be equal to(2);
+
+                pop_assert_and_destroy(queue, "Matias", 24);
+                should_int(queue_size(queue)) be equal to(1);
+
+                pop_assert_and_destroy(queue, "Gaston", 25);
+                should_int(queue_size(queue)) be equal to(0);
+            } end
+
         } end
 
     } end
