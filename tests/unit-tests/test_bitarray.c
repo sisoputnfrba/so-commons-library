@@ -29,7 +29,7 @@ context (test_bitarray) {
             bitarray_destroy(bitarray);
         } end
 
-        it ("get bit value") {
+        it ("should get the bit value at position") {
             char data[] = { 0b10000000, 0, 0b00000001 };
             bitarray = bitarray_create(data, sizeof(data));
 
@@ -38,7 +38,7 @@ context (test_bitarray) {
             should_bool( bitarray_test_bit(bitarray, 8 + 8 + 0) ) be truthy;
         } end
 
-        it ("clean") {
+        it ("should clean the bit value at position") {
             char BASE_ARRAY[] = { 0, 0, 0 };
             char data[] = { 0, 0, 0b00000001 };
             bitarray = bitarray_create(data, sizeof(data));
@@ -48,7 +48,7 @@ context (test_bitarray) {
             should_int( memcmp(BASE_ARRAY, data, sizeof(data)) ) be equal to(0);
         } end
 
-        it ("set") {
+        it ("should set the bit value at position") {
             char BASE_ARRAY[] = { 0b10000000, 0, 0 };
             char data[] = { 0, 0, 0 };
             bitarray = bitarray_create(data, sizeof(data));
@@ -58,7 +58,7 @@ context (test_bitarray) {
             should_int( memcmp(BASE_ARRAY, data, sizeof(data))) be equal to(0);
         } end
 
-        it ("get max bits") {
+        it ("should get the bits count") {
             char data[] = { 0, 0, 0 };
             bitarray = bitarray_create(data, sizeof(data));
 
