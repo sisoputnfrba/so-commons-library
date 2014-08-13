@@ -181,6 +181,19 @@
 	*/
 	char**  string_split(char * text, char * separator);
 
+
+	/**
+	 * @NAME: string_n_split
+	 * @DESC: Separa un string tantas veces por su separador como n lo permita
+	 *
+	 * Ejemplo:
+	 * string_n_split("hola, mundo, bueno", 2, ",") => ["hola", " mundo, bueno", NULL]
+	 * string_n_split("hola, mundo, bueno", 3, ",") => ["hola", " mundo", " bueno", NULL]
+	 * string_n_split("hola, mundo, bueno", 10, ",") => ["hola", " mundo", " bueno", NULL]
+	 *
+	 */
+	char**  string_n_split(char* text, int n, char* separator);
+
 	/**
 	* @NAME: string_substring
 	* @DESC: Retorna los length caracteres de text empezando en start
