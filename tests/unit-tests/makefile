@@ -25,6 +25,9 @@ test: all
 	LD_LIBRARY_PATH=../../src/build/ build/commons-unit-test
 
 dependents:
+	-cd ../../ && git submodule init && git submodule update
+	-cd ../../cspec && git checkout cspecs.v0.1
+	-cd ../../cspec && sudo make uninstall && make clean && make debug && sudo make install
 	-cd ../../src/ && $(MAKE) all
 
 .PHONY: all create-dirs clean
