@@ -28,11 +28,9 @@ Algunas de las consideraciones a tener a la hora de su uso:
 
 ## Guía de Instalación: ##
 
-Estas Bibliotecas utilizan CUnit para testear todas las funcionalidades, por lo que es necesario tenerlo instalado en el sistema si se quieren correr los test.
+Estas Bibliotecas utilizan CSpec para testear todas las funcionalidades, mas informacion en: https://github.com/pepita-remembrance/cspec
 
-Instrucciones de instalación: https://asciinema.org/a/8680
-
-`sudo apt-get install libcunit1-dev` -> Instala cunit en el sistema
+Instrucciones de instalación:
 
 `sudo make install` -> instala la biblioteca en el sistema
 
