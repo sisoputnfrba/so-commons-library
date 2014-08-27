@@ -17,73 +17,54 @@
 #include <commons/bitarray.h>
 #include <stdlib.h>
 #include <string.h>
-#include <CUnit/CUnit.h>
+#include <cspecs/cspec.h>
 
-#include "cunit_tools.h"
+context (test_bitarray) {
 
-static int init_suite() {
-	return 0;
+    describe ("Bitarray") {
+
+        t_bitarray *bitarray;
+
+        after {
+            bitarray_destroy(bitarray);
+        } end
+
+        it ("should get the bit value at position") {
+            char data[] = { 0b10000000, 0, 0b00000001 };
+            bitarray = bitarray_create(data, sizeof(data));
+
+            should_bool( bitarray_test_bit(bitarray, 7) ) be truthy;
+            should_bool( bitarray_test_bit(bitarray, 1) ) be falsey;
+            should_bool( bitarray_test_bit(bitarray, 8 + 8 + 0) ) be truthy;
+        } end
+
+        it ("should clean the bit value at position") {
+            char BASE_ARRAY[] = { 0, 0, 0 };
+            char data[] = { 0, 0, 0b00000001 };
+            bitarray = bitarray_create(data, sizeof(data));
+
+            bitarray_clean_bit(bitarray, 8 + 8 + 0);
+
+            should_int( memcmp(BASE_ARRAY, data, sizeof(data)) ) be equal to(0);
+        } end
+
+        it ("should set the bit value at position") {
+            char BASE_ARRAY[] = { 0b10000000, 0, 0 };
+            char data[] = { 0, 0, 0 };
+            bitarray = bitarray_create(data, sizeof(data));
+
+            bitarray_set_bit(bitarray, 7);
+
+            should_int( memcmp(BASE_ARRAY, data, sizeof(data))) be equal to(0);
+        } end
+
+        it ("should get the bits count") {
+            char data[] = { 0, 0, 0 };
+            bitarray = bitarray_create(data, sizeof(data));
+
+            should_int( bitarray_get_max_bit(bitarray)) be equal to(8 * 3);
+        } end
+
+    } end
+
 }
-
-static int clean_suite() {
-	return 0;
-}
-
-void test_get_bit_value_bitarray() {
-	char data[] = { 0b10000000, 0, 0b00000001 };
-	t_bitarray *bitarray = bitarray_create(data, sizeof(data));
-
-
-	CU_ASSERT_TRUE( bitarray_test_bit(bitarray, 7) );
-	CU_ASSERT_FALSE( bitarray_test_bit(bitarray, 1) );
-	CU_ASSERT_TRUE( bitarray_test_bit(bitarray, 8 + 8 + 0) );
-
-	bitarray_destroy(bitarray);
-}
-
-void test_clean_bitarray() {
-	char BASE_ARRAY[] = { 0, 0, 0 };
-	char data[] = { 0, 0, 0b00000001 };
-	t_bitarray *bitarray = bitarray_create(data, sizeof(data));
-
-	bitarray_clean_bit(bitarray, 8 + 8 + 0);
-
-	CU_ASSERT_EQUAL( memcmp(BASE_ARRAY, data, sizeof(data)), 0);
-
-	bitarray_destroy(bitarray);
-}
-
-void test_set_bitarray() {
-	char BASE_ARRAY[] = { 0b10000000, 0, 0 };
-	char data[] = { 0, 0, 0 };
-	t_bitarray *bitarray = bitarray_create(data, sizeof(data));
-
-	bitarray_set_bit(bitarray, 7);
-
-	CU_ASSERT_EQUAL( memcmp(BASE_ARRAY, data, sizeof(data)), 0);
-
-	bitarray_destroy(bitarray);
-}
-
-void test_get_max_bits_bitarray() {
-	char data[] = { 0, 0, 0 };
-	t_bitarray *bitarray = bitarray_create(data, sizeof(data));
-
-	CU_ASSERT_EQUAL( bitarray_get_max_bit(bitarray), 8 * 3);
-
-	bitarray_destroy(bitarray);
-}
-
-/**********************************************************************************************
- *  							Building the test for CUnit
- *********************************************************************************************/
-
-static CU_TestInfo tests[] = {
-		{ "Test get bit value in bitarray", test_get_bit_value_bitarray },
-		{ "Test clean bitarray", test_clean_bitarray },
-		{ "Test set bitarray", test_set_bitarray },
-		{ "Test get max bits in bitarray", test_get_max_bits_bitarray },
-		CU_TEST_INFO_NULL };
-
-CUNIT_MAKE_SUITE(bitarray, "Test BitArray TAD", init_suite, clean_suite, tests)
-

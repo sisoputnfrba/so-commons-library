@@ -1,0 +1,3 @@
+[submodule "cspec"]
+	path = cspec
+	url = https://github.com/pepita-remembrance/cspec.git
