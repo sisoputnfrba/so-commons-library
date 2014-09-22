@@ -32,9 +32,11 @@ Estas Bibliotecas utilizan CSpec para testear todas las funcionalidades, mas inf
 
 Instrucciones de instalación:
 
-`sudo make install` -> instala la biblioteca en el sistema
+- Clonar el repositorio desde git (no usar el link de **Download ZIP** que provee GitHub).
 
-`sudo make uninstall` -> desinstala la biblioteca
+- `sudo make install` -> instala la biblioteca en el sistema
+
+- `sudo make uninstall` -> desinstala la biblioteca
 
 ## Guía para el uso: ##
 
