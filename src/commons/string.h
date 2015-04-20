@@ -65,10 +65,9 @@
 	* @DESC: Agrega al primer string el segundo
 	*
 	* Ejemplo:
-	* char *unaPalabra = "HOLA ";
-	* char *otraPalabra = "PEPE";
-	*
-	* string_append(&unaPalabra, otraPalabra);
+	* char *unaPalabra = string_new();
+	* string_append(&unaPalabra, "HOLA ");
+	* string_append(&unaPalabra, "PEPE");
 	*
 	* => unaPalabra = "HOLA PEPE"
 	*/
