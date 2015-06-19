@@ -231,4 +231,15 @@
 	*/
 	char**  string_get_string_as_array(char* text);
 
+	/**
+	 * @NAME: string_reverse
+	 * @DESC: Retorna el texto invertido. No se maneja el caso de NULL,
+	 * si se pasa NULL su comportamiento no esta determinado.
+	 *
+	 * Ejemplo:
+	 * char* original = "boo";
+	 * string_reverse(original) => "oob"
+	 */
+	char*	string_reverse(char* text);
+
 #endif /* STRING_UTILS_H_ */
