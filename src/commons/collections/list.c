@@ -146,7 +146,8 @@ void list_remove_and_destroy_element(t_list *self, int index, void(*element_dest
 
 void list_remove_and_destroy_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*)) {
 	void* data = list_remove_by_condition(self, condition);
-	element_destroyer(data);
+	if (data)
+		element_destroyer(data);
 }
 
 int list_size(t_list *list) {
