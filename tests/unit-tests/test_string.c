@@ -393,6 +393,30 @@ context (test_string) {
             should_int(string_length("hola")) be equal to(4);
         } end
 
+        describe("reverse") {
+
+            it ("reverse with length of a string is even") {
+                char* word = "CASA";
+                char* reverse_word = string_reverse(word);
+                should_string(reverse_word) be equal to("ASAC");
+                free(reverse_word);
+            } end
+
+            it ("reverse with length of a string is odd") {
+                char* word = "FRUTA";
+                char* reverse_word = string_reverse(word);
+                should_string(reverse_word) be equal to("ATURF");
+                free(reverse_word);
+            } end
+
+            it ("reverse with empty string") {
+                char* word = "";
+                char* reverse_word = string_reverse(word);
+                should_string(reverse_word) be equal to("");
+                free(reverse_word);
+            } end
+        } end
+
     } end
 
 }
