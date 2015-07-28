@@ -27,9 +27,11 @@ clean:
 test: all
 	LD_LIBRARY_PATH="../../src/build/:$(C_SPEC_BIN)" build/commons-unit-test
 
-dependents:
-	-cd ../../ && git submodule init && git submodule update
-	-cd ../../cspec && $(MAKE) all
+dependents: install-cspec
 	-cd ../../src/ && $(MAKE) all
 
-.PHONY: all create-dirs clean
+install-cspec:
+	-cd ../../ && git submodule init && git submodule update
+	-cd ../../cspec && $(MAKE) all
+
+.PHONY: all create-dirs clean install-cspec
