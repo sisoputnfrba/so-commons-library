@@ -1,0 +1,16 @@
+language: c
+compiler: gcc
+
+before_install: cd tests/unit-tests/
+install: make install-cspec
+
+script: make test
+
+branches:
+  only: master
+
+notifications:
+  email:
+    - gastonprietoutn@gmail.com
+    - mngi0410@gmail.com
+    - J@florius.com.ar
