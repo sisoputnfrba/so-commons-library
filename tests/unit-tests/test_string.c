@@ -118,57 +118,60 @@ context (test_string) {
             free(string);
         } end
 
+        describe("Trim") {
 
-        it("trim_left") {
-            char *string;
+                it("trim_left") {
+                    char *string;
 
-            string = string_duplicate("Hola");
-            string_trim_left(&string);
-            should_string(string) be equal to("Hola");
-            free(string);
+                    string = string_duplicate("Hola");
+                    string_trim_left(&string);
+                    should_string(string) be equal to("Hola");
+                    free(string);
 
-            string = string_duplicate("   Hola");
-            string_trim_left(&string);
-            should_string(string) be equal to("Hola");
-            free(string);
-        } end
+                    string = string_duplicate("   Hola");
+                    string_trim_left(&string);
+                    should_string(string) be equal to("Hola");
+                    free(string);
+                } end
 
-        it("trim_right") {
-            char *string;
+                it("trim_right") {
+                    char *string;
 
-            string = string_duplicate("Hola");
-            string_trim_right(&string);
-            should_string(string) be equal to("Hola");
-            free(string);
+                    string = string_duplicate("Hola");
+                    string_trim_right(&string);
+                    should_string(string) be equal to("Hola");
+                    free(string);
 
-            string = string_duplicate("Hola    ");
-            string_trim_right(&string);
-            should_string(string) be equal to("Hola");
-            free(string);
-        } end
+                    string = string_duplicate("Hola    ");
+                    string_trim_right(&string);
+                    should_string(string) be equal to("Hola");
+                    free(string);
+                } end
 
-        it("trim") {
-            char *string;
+                it("trim") {
+                    char *string;
 
-            string = string_duplicate("Hola");
-            string_trim(&string);
-            should_string(string) be equal to("Hola");
-            free(string);
+                    string = string_duplicate("Hola");
+                    string_trim(&string);
+                    should_string(string) be equal to("Hola");
+                    free(string);
 
-            string = string_duplicate("    Hola");
-            string_trim(&string);
-            should_string(string) be equal to("Hola");
-            free(string);
+                    string = string_duplicate("    Hola");
+                    string_trim(&string);
+                    should_string(string) be equal to("Hola");
+                    free(string);
 
-            string = string_duplicate("Hola    ");
-            string_trim(&string);
-            should_string(string) be equal to("Hola");
-            free(string);
+                    string = string_duplicate("Hola    ");
+                    string_trim(&string);
+                    should_string(string) be equal to("Hola");
+                    free(string);
 
-            string = string_duplicate("    Hola    ");
-            string_trim(&string);
-            should_string(string) be equal to("Hola");
-            free(string);
+                    string = string_duplicate("    Hola    ");
+                    string_trim(&string);
+                    should_string(string) be equal to("Hola");
+                    free(string);
+                } end
+
         } end
 
         it("is_empty") {
@@ -177,94 +180,98 @@ context (test_string) {
             free(string);
         } end
 
-        it("split") {
-            char *line = "Hola planeta tierra";
-            char** substrings = string_split(line, " ");
+        describe("Split") {
 
-            should_ptr(substrings) not be null;
-            should_string(substrings[0]) be equal to("Hola");
-            should_string(substrings[1]) be equal to("planeta");
-            should_string(substrings[2]) be equal to("tierra");
-            should_ptr(substrings[3]) be null;
+                it("split_with_delimitators") {
+                    char *line = "Hola planeta tierra";
+                    char** substrings = string_split(line, " ");
 
-            free(substrings[0]);
-            free(substrings[1]);
-            free(substrings[2]);
-            free(substrings);
-        } end
+                    should_ptr(substrings) not be null;
+                    should_string(substrings[0]) be equal to("Hola");
+                    should_string(substrings[1]) be equal to("planeta");
+                    should_string(substrings[2]) be equal to("tierra");
+                    should_ptr(substrings[3]) be null;
 
-        it("split_is_empty") {
-            char* line = "";
-            char** substrings = string_split(line, ";");
+                    free(substrings[0]);
+                    free(substrings[1]);
+                    free(substrings[2]);
+                    free(substrings);
+                } end
 
-            should_ptr(substrings) not be null;
-            should_ptr(substrings[0]) be null;
+                it("split_is_empty") {
+                    char* line = "";
+                    char** substrings = string_split(line, ";");
 
-            free(substrings);
+                    should_ptr(substrings) not be null;
+                    should_ptr(substrings[0]) be null;
 
-        } end
+                    free(substrings);
 
-        it("n_split_when_n_is_less_than_splitted_elements") {
-            char *line = "Hola planeta tierra";
-            char** substrings = string_n_split(line, 2, " ");
+                } end
 
-            should_ptr(substrings) not be null;
-            should_string(substrings[0]) be equal to("Hola");
-            should_string(substrings[1]) be equal to("planeta tierra");
-            should_ptr(substrings[2]) be null;
+                it("n_split_when_n_is_less_than_splitted_elements") {
+                    char *line = "Hola planeta tierra";
+                    char** substrings = string_n_split(line, 2, " ");
 
-            string_iterate_lines(substrings, (void*) free);
-            free(substrings);
-        } end
+                    should_ptr(substrings) not be null;
+                    should_string(substrings[0]) be equal to("Hola");
+                    should_string(substrings[1]) be equal to("planeta tierra");
+                    should_ptr(substrings[2]) be null;
 
-        it("n_split_when_n_is_equals_than_splitted_elements") {
-            char *line = "Hola planeta tierra";
-            char** substrings = string_n_split(line, 3, " ");
+                    string_iterate_lines(substrings, (void*) free);
+                    free(substrings);
+                } end
 
-            should_ptr(substrings) not be null;
-            should_string(substrings[0]) be equal to("Hola");
-            should_string(substrings[1]) be equal to("planeta");
-            should_string(substrings[2]) be equal to("tierra");
-            should_ptr(substrings[3]) be null;
+                it("n_split_when_n_is_equals_than_splitted_elements") {
+                    char *line = "Hola planeta tierra";
+                    char** substrings = string_n_split(line, 3, " ");
 
-            string_iterate_lines(substrings, (void*) free);
-            free(substrings);
-        } end
+                    should_ptr(substrings) not be null;
+                    should_string(substrings[0]) be equal to("Hola");
+                    should_string(substrings[1]) be equal to("planeta");
+                    should_string(substrings[2]) be equal to("tierra");
+                    should_ptr(substrings[3]) be null;
 
-        it("n_split_when_separator_isnt_included") {
-            char *line = "Hola planeta tierra";
-            char ** substrings = string_n_split(line, 5, ";");
+                    string_iterate_lines(substrings, (void*) free);
+                    free(substrings);
+                } end
 
-            should_ptr(substrings) not be null;
-            should_string(substrings[0]) be equal to(line);
-            should_ptr(substrings[1]) be null;
+                it("n_split_when_separator_isnt_included") {
+                    char *line = "Hola planeta tierra";
+                    char ** substrings = string_n_split(line, 5, ";");
 
-            string_iterate_lines(substrings, (void *) free);
-            free(substrings);
-        } end
+                    should_ptr(substrings) not be null;
+                    should_string(substrings[0]) be equal to(line);
+                    should_ptr(substrings[1]) be null;
 
-        it("n_split_when_n_is_greather_than_splitted_elements") {
-            char *line = "Hola planeta tierra";
-            char** substrings = string_n_split(line, 10, " ");
+                    string_iterate_lines(substrings, (void *) free);
+                    free(substrings);
+                } end
 
-            should_ptr(substrings) not be null;
-            should_string(substrings[0]) be equal to("Hola");
-            should_string(substrings[1]) be equal to("planeta");
-            should_string(substrings[2]) be equal to("tierra");
-            should_ptr(substrings[3]) be null;
+                it("n_split_when_n_is_greather_than_splitted_elements") {
+                    char *line = "Hola planeta tierra";
+                    char** substrings = string_n_split(line, 10, " ");
 
-            string_iterate_lines(substrings, (void*) free);
-            free(substrings);
-        } end
+                    should_ptr(substrings) not be null;
+                    should_string(substrings[0]) be equal to("Hola");
+                    should_string(substrings[1]) be equal to("planeta");
+                    should_string(substrings[2]) be equal to("tierra");
+                    should_ptr(substrings[3]) be null;
 
-        it("n_split_is_empty") {
-            char* line = "";
-            char** substrings = string_n_split(line, 10, ";");
+                    string_iterate_lines(substrings, (void*) free);
+                    free(substrings);
+                } end
 
-            should_ptr(substrings) not be null;
-            should_ptr(substrings[0]) be null;
+                it("n_split_is_empty") {
+                    char* line = "";
+                    char** substrings = string_n_split(line, 10, ";");
 
-            free(substrings);
+                    should_ptr(substrings) not be null;
+                    should_ptr(substrings[0]) be null;
+
+                    free(substrings);
+                } end
+
         } end
 
         it("starts_with") {
@@ -283,109 +290,117 @@ context (test_string) {
             should_bool(string_ends_with("", "txt")) be falsey;
         } end
 
-        it("substring_empty") {
-            char* original_word = "";
-            char* substring = string_substring(original_word, 0, 3);
-            should_string(substring) be equal to(original_word);
-            should_ptr(substring) not be equal to(original_word);
-            free(substring);
+        describe("Substring") {
+
+                it("substring_empty") {
+                    char* original_word = "";
+                    char* substring = string_substring(original_word, 0, 3);
+                    should_string(substring) be equal to(original_word);
+                    should_ptr(substring) not be equal to(original_word);
+                    free(substring);
+                } end
+
+                it("substring_with_short_string") {
+                    char* original_word = "hola";
+                    char* substring = string_substring(original_word, 0, 14);
+                    should_string(substring) be equal to(original_word);
+                    should_ptr(substring) not be equal to(original_word);
+                    free(substring);
+                } end
+
+                it("substring_with_large_string") {
+                    char* original_word = "hola mundo c!";
+                    char* substring = string_substring(original_word, 0, 4);
+                    should_string(substring) be equal to("hola");
+                    should_ptr(substring) not be equal to(original_word);
+                    free(substring);
+                } end
+
+                it("substring_from_other_start") {
+                    char* original_word = "hola mundo!";
+                    char* substring = string_substring(original_word, 5, strlen(original_word) - 5);
+                    should_string(substring) be equal to("mundo!");
+                    should_ptr(substring) not be equal to(original_word);
+                    free(substring);
+                } end
+
+                it("substring_extract_internal_text") {
+                    char* original_word = "hola mundo";
+                    char* substring = string_substring(original_word, 2, 5);
+                    should_string(substring) be equal to("la mu");
+                    should_ptr(substring) not be equal to(original_word);
+                    free(substring);
+                } end
+
+                it("substring_with_equal_large") {
+                    char* original_word = "hola";
+                    char* substring = string_substring(original_word, 0, 4);
+                    should_string(substring) be equal to(original_word);
+                    should_ptr(substring) not be equal to(original_word);
+                    free(substring);
+                } end
+
+                it("substring_from_middle") {
+                    char *original = "hola mundo!";
+                    char *substring = string_substring_from(original, 5);
+                    should_string(substring) be equal to("mundo!");
+                    should_ptr(substring) not be equal to(original);
+                    free(substring);
+                } end
+
+                it("substring_from_start") {
+                    char *original = "hola mundo!";
+                    char *substring = string_substring_from(original, 0);
+                    should_string(substring) be equal to(original);
+                    should_ptr(substring) not be equal to(original);
+                    free(substring);
+                } end
+
+                it("substring_until_middle") {
+                    char *original = "hola mundo!";
+                    char *substring = string_substring_until(original, 5);
+                    should_string(substring) be equal to("hola ");
+                    should_ptr(substring) not be equal to(original);
+                    free(substring);
+                } end
+
+                it("substring_until_end") {
+                    char *original = "hola mundo!";
+                    char *substring = string_substring_until(original, strlen(original));
+                    should_string(substring) be equal to(original);
+                    should_ptr(substring) not be equal to(original);
+                    free(substring);
+                } end
+
         } end
 
-        it("substring_with_short_string") {
-            char* original_word = "hola";
-            char* substring = string_substring(original_word, 0, 14);
-            should_string(substring) be equal to(original_word);
-            should_ptr(substring) not be equal to(original_word);
-            free(substring);
-        } end
+        describe("String as array") {
 
-        it("substring_with_large_string") {
-            char* original_word = "hola mundo c!";
-            char* substring = string_substring(original_word, 0, 4);
-            should_string(substring) be equal to("hola");
-            should_ptr(substring) not be equal to(original_word);
-            free(substring);
-        } end
+                it("get_string_as_array_empty") {
+                    char* string_empty_array = "[]";
+                    char** empty_array = string_get_string_as_array(string_empty_array);
+                    should_ptr(empty_array) not be null;
+                    should_ptr(empty_array[0]) be null;
+                    free(empty_array);
+                } end
 
-        it("substring_from_other_start") {
-            char* original_word = "hola mundo!";
-            char* substring = string_substring(original_word, 5, strlen(original_word) - 5);
-            should_string(substring) be equal to("mundo!");
-            should_ptr(substring) not be equal to(original_word);
-            free(substring);
-        } end
+                it("get_string_full_array") {
+                    char* numbers = "[1, 2, 3, 4, 5]";
+                    char** numbers_array = string_get_string_as_array(numbers);
+                    should_ptr(numbers_array) not be null;
+                    should_ptr(numbers_array[5]) be null;
 
-        it("substring_extract_internal_text") {
-            char* original_word = "hola mundo";
-            char* substring = string_substring(original_word, 2, 5);
-            should_string(substring) be equal to("la mu");
-            should_ptr(substring) not be equal to(original_word);
-            free(substring);
-        } end
+                    int i;
+                    for (i = 1; i <= 5; ++i) {
+                        char* value = string_from_format("%d", i);
+                        should_string(numbers_array[i - 1]) be equal to(value);
+                        free(value);
+                    }
 
-        it("substring_with_equal_large") {
-            char* original_word = "hola";
-            char* substring = string_substring(original_word, 0, 4);
-            should_string(substring) be equal to(original_word);
-            should_ptr(substring) not be equal to(original_word);
-            free(substring);
-        } end
+                    string_iterate_lines(numbers_array, (void*) free);
+                    free(numbers_array);
 
-        it("substring_from_middle") {
-            char *original = "hola mundo!";
-            char *substring = string_substring_from(original, 5);
-            should_string(substring) be equal to("mundo!");
-            should_ptr(substring) not be equal to(original);
-            free(substring);
-        } end
-
-        it("substring_from_start") {
-            char *original = "hola mundo!";
-            char *substring = string_substring_from(original, 0);
-            should_string(substring) be equal to(original);
-            should_ptr(substring) not be equal to(original);
-            free(substring);
-        } end
-
-        it("substring_until_middle") {
-            char *original = "hola mundo!";
-            char *substring = string_substring_until(original, 5);
-            should_string(substring) be equal to("hola ");
-            should_ptr(substring) not be equal to(original);
-            free(substring);
-        } end
-
-        it("substring_until_end") {
-            char *original = "hola mundo!";
-            char *substring = string_substring_until(original, strlen(original));
-            should_string(substring) be equal to(original);
-            should_ptr(substring) not be equal to(original);
-            free(substring);
-        } end
-
-        it("get_string_as_array_empty") {
-            char* string_empty_array = "[]";
-            char** empty_array = string_get_string_as_array(string_empty_array);
-            should_ptr(empty_array) not be null;
-            should_ptr(empty_array[0]) be null;
-            free(empty_array);
-        } end
-
-        it("get_string_full_array") {
-            char* numbers = "[1, 2, 3, 4, 5]";
-            char** numbers_array = string_get_string_as_array(numbers);
-            should_ptr(numbers_array) not be null;
-            should_ptr(numbers_array[5]) be null;
-
-            int i;
-            for (i = 1; i <= 5; ++i) {
-                char* value = string_from_format("%d", i);
-                should_string(numbers_array[i - 1]) be equal to(value);
-                free(value);
-            }
-
-            string_iterate_lines(numbers_array, (void*) free);
-            free(numbers_array);
+                } end
 
         } end
 
@@ -393,7 +408,7 @@ context (test_string) {
             should_int(string_length("hola")) be equal to(4);
         } end
 
-        describe("reverse") {
+        describe("Reverse") {
 
             it ("reverse with length of a string is even") {
                 char* word = "CASA";
