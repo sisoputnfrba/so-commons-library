@@ -38,6 +38,8 @@ Instrucciones de instalación:
 
 - `sudo make uninstall` -> desinstala la biblioteca
 
+[![asciicast](https://asciinema.org/a/17x56e36koqybtq1jx8p3kfnp.png)](https://asciinema.org/a/17x56e36koqybtq1jx8p3kfnp)
+
 ## Guía para el uso: ##
 
 Linkear con `-lcommons`
