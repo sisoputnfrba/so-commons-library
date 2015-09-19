@@ -179,6 +179,8 @@
 	/**
 	* @NAME: list_sort
 	* @DESC: Ordena la lista segun el comparador
+	* El comparador devuelve si el primer parametro debe aparecer antes que el
+	* segundo en la lista
 	*/
 	void list_sort(t_list *, bool (*comparator)(void *, void *));
 
