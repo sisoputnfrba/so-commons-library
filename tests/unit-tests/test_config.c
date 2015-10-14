@@ -105,4 +105,12 @@ context (test_config) {
 
     } end
 
+    describe("Double newline") {
+
+        it ("should not fail when the config file ends with two newlines") {
+            t_config *config = config_create("resources/config-double-newline.cfg");
+            config_destroy(config);
+        } end
+    } end
+
 }
