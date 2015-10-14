@@ -62,7 +62,7 @@ context (test_config) {
             } end
 
             it("should return the keys count") {
-                should_int(config_keys_amount(config)) be equal to(6);
+                should_int(config_keys_amount(config)) be equal to(7);
             } end
 
             describe("Get") {
@@ -73,6 +73,10 @@ context (test_config) {
 
                 it ("should get string value") {
                     should_string(config_get_string_value(config, "IP")) be equal to("127.0.0.1");
+                } end
+
+                it ("should get string value with equals sign in value") {
+                    should_string(config_get_string_value(config, "WITH_EQUALS")) be equal to("this=value");
                 } end
 
                 it ("should get double value") {
