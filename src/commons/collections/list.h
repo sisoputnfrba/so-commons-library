@@ -135,8 +135,8 @@
 
 	/**
 	* @NAME: list_remove_and_destroy_by_condition
-	* @DESC: Remueve y destruye los elementos de la
-	* lista que hagan que condition devuelva != 0.
+	* @DESC: Remueve y destruye el primer elemento de
+	* la lista que hagan que condition devuelva != 0.
 	*/
 	void list_remove_and_destroy_by_condition(t_list *, bool(*condition)(void*), void(*element_destroyer)(void*));
 
