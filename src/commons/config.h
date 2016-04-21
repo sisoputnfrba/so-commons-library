@@ -69,6 +69,7 @@
 	* de la siguiente forma [lista_valores_separados_por_coma]
 	* Ejemplo:
 	* VALORES=[1,2,3,4,5]
+	* El array que devuelve termina en NULL
 	*/
 	char**    config_get_array_value(t_config*, char* key);
 
