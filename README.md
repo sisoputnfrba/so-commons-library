@@ -28,7 +28,7 @@ Algunas de las consideraciones a tener a la hora de su uso:
 
 ## Guía de Instalación: ##
 
-Estas Bibliotecas utilizan CSpec para testear todas las funcionalidades, mas informacion en: https://github.com/pepita-remembrance/cspec
+Estas Bibliotecas utilizan CSpec para testear todas las funcionalidades, mas informacion en: https://github.com/mumuki/cspec
 
 Instrucciones de instalación:
 
