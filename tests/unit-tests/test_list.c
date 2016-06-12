@@ -184,17 +184,17 @@ context (test_list) {
             } end
 
             it(" should find the first value that satisfies a condition") {
-                int _is_ezequiel(t_person *p) {
-                    return string_equals_ignore_case(p->name, "Ezequiel");
-                }
+            	t_person *find_someone_by_name(char *name) {
+            		int _is_the_one(t_person *p) {
+            			return string_equals_ignore_case(p->name, name);
+            		}
 
-                assert_person(list_find(list, (void*) _is_ezequiel), "Ezequiel", 25);
+            		return list_find(list, (void*) _is_the_one);
+            	}
 
-                int _is_chuck_norris(t_person *p) {
-                    return string_equals_ignore_case(p->name, "Chuck Norris");
-                }
-
-                should_ptr(list_find(list, (void*) _is_chuck_norris)) be null;
+                assert_person(find_someone_by_name("Ezequiel"), "Ezequiel", 25);
+                assert_person(find_someone_by_name("Sebastian"), "Sebastian", 21);
+                should_ptr(find_someone_by_name("Chuck Norris")) be null;
                 should_int(list_size(list)) be equal to(5);
             } end
 
