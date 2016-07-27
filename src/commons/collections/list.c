@@ -101,9 +101,11 @@ void* list_find(t_list *self, bool(*condition)(void*)) {
 
 void list_iterate(t_list* self, void(*closure)(void*)) {
 	t_link_element *element = self->head;
+	t_link_element *aux = NULL;
 	while (element != NULL) {
+		aux = element->next;
 		closure(element->data);
-		element = element->next;
+		element = aux;
 	}
 }
 
