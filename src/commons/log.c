@@ -29,7 +29,8 @@
 #define LOG_ENUM_SIZE 5
 
 static char *enum_names[LOG_ENUM_SIZE] = {"TRACE", "DEBUG", "INFO", "WARNING", "ERROR"};
-
+static char *log_colors[LOG_ENUM_SIZE] = {"\x1b[36m", "\x1b[32m", "", "\x1b[33m", "\x1b[31m" };
+static char *reset_color = "\x1b[0m";
 /**
  * Private Functions
  */
@@ -97,6 +98,10 @@ char *log_level_as_string(t_log_level level) {
 	return enum_names[level];
 }
 
+char *log_level_color(t_log_level level) {
+	return log_colors[level];
+}
+
 t_log_level log_level_from_string(char *level) {
 	int i;
 
@@ -114,7 +119,7 @@ t_log_level log_level_from_string(char *level) {
 static void _log_write_in_level(t_log* logger, t_log_level level, const char* message_template, va_list list_arguments) {
 
 	if (_isEnableLevelInLogger(logger, level)) {
-		char *message, *time, *buffer;
+		char *message, *time, *buffer, *console_buffer;
 		unsigned int thread_id;
 
                 message = string_from_vformat(message_template, list_arguments);
@@ -134,7 +139,12 @@ static void _log_write_in_level(t_log* logger, t_log_level level, const char* me
 		}
 
 		if (logger->is_active_console) {
-			txt_write_in_stdout(buffer);
+			console_buffer = string_from_format("%s%s%s",
+				log_level_color(level),
+				buffer,
+				reset_color);
+			txt_write_in_stdout(console_buffer);
+			free(console_buffer);
 		}
 
 		free(time);
