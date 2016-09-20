@@ -24,14 +24,39 @@
 	/* position of bit within character */
 	#define BIT_CHAR(bit)         ((bit) / CHAR_BIT)
 
-	/* array index for character containing bit */
-	#define BIT_IN_CHAR(bit)      (0x80 >> (CHAR_BIT - 1 - ((bit)  % CHAR_BIT)))
-
+	/**
+	 * Define el orden bajo el cual se guardarán los bits a la hora de llenar los bytes.
+	 * La mayoría de las implementaciones de bitmap usan LSB_FIRST. Si no estás seguro
+	 * de cuál usar, probablemente quieras usar esta.
+	 */
+	typedef enum {
+		/* Completa los bits en un byte priorizando el bit menos significativo:
+		 * 00000001 00000000
+		 */
+		LSB_FIRST,
+		/* Completa los bits en un byte priorizando el bit más significativo:
+		 * 10000000 00000000
+		 */
+		MSB_FIRST
+	} bit_numbering_t;
 
 	typedef struct {
 		char *bitarray;
 		size_t size;
+		bit_numbering_t mode;
 	} t_bitarray;
+
+	/**
+	* @DEPRECATED: La firma de esta función se encuentra en revisión y probablemente cambie
+	* 			   en próximas versiones. Usar bitarray_create_with_mode.
+	*
+	* @NAME: bitarray_create
+	* @DESC: Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
+	* @PARAMS:
+	* 		bitarray
+	*		size - Tamaño en bytes del bit array
+	*/
+	t_bitarray 	*bitarray_create(char *bitarray, size_t size);
 
 	/**
 	* @NAME: bitarray_create
@@ -40,7 +65,7 @@
 	* 		bitarray
 	*		size - Tamaño en bytes del bit array
 	*/
-	t_bitarray 	*bitarray_create(char *bitarray, size_t size);
+	t_bitarray	*bitarray_create_with_mode(char *bitarray, size_t size, bit_numbering_t mode);
 
 	/**
 	* @NAME: bitarray_test_bit

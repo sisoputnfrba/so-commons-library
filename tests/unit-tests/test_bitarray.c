@@ -19,9 +19,13 @@
 #include <string.h>
 #include <cspecs/cspec.h>
 
+/**
+ * TODO: This tests are 8-BIT dependant. We should think of a way to abstract them.
+ * TODO: Can we abstract the LSB and MSB tests so they get unified?
+ */
 context (test_bitarray) {
 
-    describe ("Bitarray") {
+    describe ("LSB Bitarray") {
 
         t_bitarray *bitarray;
 
@@ -31,7 +35,7 @@ context (test_bitarray) {
 
         it ("should get the bit value at position") {
             char data[] = { 0b10000000, 0, 0b00000001 };
-            bitarray = bitarray_create(data, sizeof(data));
+            bitarray = bitarray_create_with_mode(data, sizeof(data), LSB_FIRST);
 
             should_bool( bitarray_test_bit(bitarray, 7) ) be truthy;
             should_bool( bitarray_test_bit(bitarray, 1) ) be falsey;
@@ -41,7 +45,7 @@ context (test_bitarray) {
         it ("should clean the bit value at position") {
             char BASE_ARRAY[] = { 0, 0, 0 };
             char data[] = { 0, 0, 0b00000001 };
-            bitarray = bitarray_create(data, sizeof(data));
+            bitarray = bitarray_create_with_mode(data, sizeof(data), LSB_FIRST);
 
             bitarray_clean_bit(bitarray, 8 + 8 + 0);
 
@@ -51,7 +55,7 @@ context (test_bitarray) {
         it ("should set the bit value at position") {
             char BASE_ARRAY[] = { 0b10000000, 0, 0 };
             char data[] = { 0, 0, 0 };
-            bitarray = bitarray_create(data, sizeof(data));
+            bitarray = bitarray_create_with_mode(data, sizeof(data), LSB_FIRST);
 
             bitarray_set_bit(bitarray, 7);
 
@@ -60,7 +64,53 @@ context (test_bitarray) {
 
         it ("should get the bits count") {
             char data[] = { 0, 0, 0 };
-            bitarray = bitarray_create(data, sizeof(data));
+            bitarray = bitarray_create_with_mode(data, sizeof(data), LSB_FIRST);
+
+            should_int( bitarray_get_max_bit(bitarray)) be equal to(8 * 3);
+        } end
+
+    } end
+
+    describe ("MSB Bitarray") {
+
+        t_bitarray *bitarray;
+
+        after {
+            bitarray_destroy(bitarray);
+        } end
+
+        it ("should get the bit value at position") {
+            char data[] = { 0b10000000, 0, 0b10000000 };
+            bitarray = bitarray_create_with_mode(data, sizeof(data), MSB_FIRST);
+
+            should_bool( bitarray_test_bit(bitarray, 0) ) be truthy;
+            should_bool( bitarray_test_bit(bitarray, 7) ) be falsey;
+            should_bool( bitarray_test_bit(bitarray, 8 + 8 + 0) ) be truthy;
+        } end
+
+        it ("should clean the bit value at position") {
+            char BASE_ARRAY[] = { 0, 0, 0 };
+            char data[] = { 0, 0, 0b10000000 };
+            bitarray = bitarray_create_with_mode(data, sizeof(data), MSB_FIRST);
+
+            bitarray_clean_bit(bitarray, 8 + 8 + 0);
+
+            should_int( memcmp(BASE_ARRAY, data, sizeof(data)) ) be equal to(0);
+        } end
+
+        it ("should set the bit value at position") {
+            char BASE_ARRAY[] = { 0b10000000, 0, 0 };
+            char data[] = { 0, 0, 0 };
+            bitarray = bitarray_create_with_mode(data, sizeof(data), MSB_FIRST);
+
+            bitarray_set_bit(bitarray, 0);
+
+            should_int( memcmp(BASE_ARRAY, data, sizeof(data))) be equal to(0);
+        } end
+
+        it ("should get the bits count") {
+            char data[] = { 0, 0, 0 };
+            bitarray = bitarray_create_with_mode(data, sizeof(data), MSB_FIRST);
 
             should_int( bitarray_get_max_bit(bitarray)) be equal to(8 * 3);
         } end

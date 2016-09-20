@@ -17,28 +17,45 @@
 #include <stdlib.h>
 #include "bitarray.h"
 
+/* array index for character containing bit */
+char _bit_in_char(int bit, bit_numbering_t mode){
+	switch(mode){
+		case LSB_FIRST:
+			return (0x80 >> (CHAR_BIT - 1 - (bit  % CHAR_BIT)));
+		case MSB_FIRST:
+			return (0x80 >> (bit  % CHAR_BIT));
+		default:
+			return _bit_in_char(bit, LSB_FIRST);
+	}
+}
+
 t_bitarray *bitarray_create(char *bitarray, size_t size) {
+	return bitarray_create_with_mode(bitarray, size, LSB_FIRST);
+}
+
+t_bitarray *bitarray_create_with_mode(char *bitarray, size_t size, bit_numbering_t mode){
 	t_bitarray *self = malloc(sizeof(t_bitarray));
 
 	self->bitarray = bitarray;
 	self->size = size;
+	self->mode = mode;
 
 	return self;
 }
 
 bool bitarray_test_bit(t_bitarray *self, off_t bit_index) {
-	return((self->bitarray[BIT_CHAR(bit_index)] & BIT_IN_CHAR(bit_index)) != 0);
+	return((self->bitarray[BIT_CHAR(bit_index)] & _bit_in_char(bit_index, self->mode)) != 0);
 }
 
 void bitarray_set_bit(t_bitarray *self, off_t bit_index) {
-	self->bitarray[BIT_CHAR(bit_index)] |= BIT_IN_CHAR(bit_index);
+	self->bitarray[BIT_CHAR(bit_index)] |= _bit_in_char(bit_index, self->mode);
 }
 
 void bitarray_clean_bit(t_bitarray *self, off_t bit_index){
     unsigned char mask;
 
     /* create a mask to zero out desired bit */
-    mask =  BIT_IN_CHAR(bit_index);
+    mask =  _bit_in_char(bit_index, self->mode);
     mask = ~mask;
 
     self->bitarray[BIT_CHAR(bit_index)] &= mask;
