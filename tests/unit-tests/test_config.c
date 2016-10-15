@@ -62,7 +62,7 @@ context (test_config) {
             } end
 
             it("should return the keys count") {
-                should_int(config_keys_amount(config)) be equal to(7);
+                should_int(config_keys_amount(config)) be equal to(8);
             } end
 
             describe("Get") {
@@ -101,6 +101,17 @@ context (test_config) {
 
                     string_iterate_lines(numbers, (void*) free);
                     free(numbers);
+                } end
+
+                it ("should get an array with values without spaces between entries") {
+                  char *strings_expected[] = {"One", "String", "Next", "to", "another", NULL};
+                  should_string(config_get_string_value(config, "NO_SPACES")) be equal to("[One,String,Next,to,another]");
+
+                  char** strings = config_get_array_value(config, "NO_SPACES");
+                  _assert_equals_array(strings_expected, strings, 5);
+
+                  string_iterate_lines(strings, (void*) free);
+                  free(strings);
                 } end
 
             } end
