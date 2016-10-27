@@ -432,6 +432,15 @@ context (test_string) {
             } end
         } end
 
+        it("Contains") {
+          should_bool(string_contains("Pablito clavo un clavito", "Pablito")) be truthy;
+          should_bool(string_contains("Pablito clavo un clavito", "pablito")) be falsey;
+          should_bool(string_contains("Pablito clavo un clavito", "lito")) be truthy;
+          should_bool(string_contains("Pablito clavo un clavito", "")) be truthy;
+          should_bool(string_contains("", "Pablito clavo un clavito")) be falsey;
+          should_bool(string_contains("", "")) be truthy;
+        } end
+
     } end
 
 }
