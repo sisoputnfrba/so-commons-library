@@ -41,6 +41,13 @@ t_config *config_create(char *path) {
 	char* buffer = calloc(1, stat_file.st_size + 1);
 	fread(buffer, stat_file.st_size, 1, file);
 
+	if (strstr(buffer, "\r\n")) {
+		printf("\n\nconfig_create - WARNING: the file %s contains a \\r\\n sequence "
+		 "- the Windows new line sequence. The \\r characters will remain as part "
+		 "of the value, as Unix newlines consist of a single \\n. You can install "
+		 "and use `dos2unix` program to convert your files to Unix style.\n\n", path);
+	}
+
 	char** lines = string_split(buffer, "\n");
 
 	void add_cofiguration(char *line) {
