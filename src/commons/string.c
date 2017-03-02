@@ -258,6 +258,9 @@ char** _string_split(char* text, char* separator, bool(*condition)(char*, int)) 
 
 	while(condition(next, size)) {
 		char* token = strtok_r(str, separator, &next);
+		if(token == NULL) {
+			break;
+		}
 		str = NULL;
 		size++;
 		substrings = realloc(substrings, sizeof(char*) * size);
