@@ -131,50 +131,59 @@ context (test_config) {
     } end
 
     describe("Set value") {
-	char* file_path = "resources/config.cfg";
-	it ("should override the value given an existing key") {
-		t_config* config = config_create(file_path);
-		char* key = "PORT";
-		char* expected = "3000";
-		config_set_value(config, key, expected);
-		should_string(config_get_string_value(config, key)) be equal to (expected);
-	} end
+        t_config* config;
+        
+        before {
+            config = config_create("resources/config.cfg");
+        } end
 
-	it ("should add an non existing value to the config") {
-		t_config *config = config_create(file_path);
-		char* key = "ANEWKEY";
-		char* expected = "lorem ipsum";
-		config_set_value(config, key, expected);
-		should_string(config_get_string_value(config, key)) be equal to (expected);
-	} end
+        after {
+            config_destroy(config);
+        } end
+
+        it ("should override the value given an existing key") {
+            char* key = strdup("PORT");
+            char* expected = strdup("3000");
+            config_set_value(config, key, expected);
+            should_string(config_get_string_value(config, key)) be equal to (expected);
+    	} end
+
+    	it ("should add an non existing value to the config") {
+            char* key = strdup("ANEWKEY");
+            char* expected = strdup("lorem ipsum");
+            config_set_value(config, key, expected);
+            should_string(config_get_string_value(config, key)) be equal to (expected);
+    	} end
     } end
 
     describe("Write config file") {
-	t_config *config;
-	char* test_file = "resources/config.cfg";
-	char* new_file_path = "resources/test_save_config.cfg";
+        t_config *config;
+        char* new_file_path = "resources/test_save_config.cfg";
 
-	after {
-	    remove(new_file_path);
-	} end
+        before {
+            config = config_create("resources/config.cfg");
+        } end
+
+    	after {
+            remove(new_file_path);
+            config_destroy(config);
+    	} end
 
         it ("should create a file with the specified config") {
-            config = config_create(test_file);
             int result = config_save_in_file(config, new_file_path);
             should_int(result) be equal to(1);
             should_int(access(new_file_path, F_OK)) be equal to (0);
         } end
 
-	it ("should override a config") {
-	    char* key = "PORT";
-	    char* expected = "3000";
-	    config = config_create(test_file);
-	    config_set_value(config, key, expected);
-	    int result = config_save_in_file(config, new_file_path);
-	    t_config *new_config = config_create(new_file_path);
-	    should_string(config_get_string_value(new_config, key)) be equal to (expected);
-	    config_destroy(config);
-	} end
+    	it ("should override a config") {
+            char* key = strdup("PORT");
+            char* expected = strdup("3000");
+            config_set_value(config, key, expected);
+            int result = config_save_in_file(config, new_file_path);
+            t_config *new_config = config_create(new_file_path);
+            should_string(config_get_string_value(new_config, key)) be equal to (expected);
+            config_destroy(new_config);    	    
+    	} end
     } end
 
 }
