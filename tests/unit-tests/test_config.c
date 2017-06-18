@@ -162,7 +162,7 @@ context (test_config) {
             config = config_create(test_file);
             int result = config_save_in_file(config, new_file_path);
             should_int(result) be equal to(1);
-	     should_int(access(new_file_path, F_OK)) be equal to (0);
+            should_int(access(new_file_path, F_OK)) be equal to (0);
         } end
 
 	it ("should override a config") {
@@ -173,7 +173,7 @@ context (test_config) {
 	    int result = config_save_in_file(config, new_file_path);
 	    t_config *new_config = config_create(new_file_path);
 	    should_string(config_get_string_value(new_config, key)) be equal to (expected);
-	    config_destroy(new_config);
+	    config_destroy(config);
 	} end
     } end
 
