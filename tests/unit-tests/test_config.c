@@ -142,15 +142,15 @@ context (test_config) {
         } end
 
         it ("should override the value given an existing key") {
-            char* key = strdup("PORT");
-            char* expected = strdup("3000");
+            char* key = "PORT";
+            char* expected = "3000";
             config_set_value(config, key, expected);
             should_string(config_get_string_value(config, key)) be equal to (expected);
     	} end
 
     	it ("should add an non existing value to the config") {
-            char* key = strdup("ANEWKEY");
-            char* expected = strdup("lorem ipsum");
+            char* key = "ANEWKEY";
+            char* expected = "lorem ipsum";
             config_set_value(config, key, expected);
             should_string(config_get_string_value(config, key)) be equal to (expected);
     	} end
@@ -176,8 +176,8 @@ context (test_config) {
         } end
 
     	it ("should override a config") {
-            char* key = strdup("PORT");
-            char* expected = strdup("3000");
+            char* key = "PORT";
+            char* expected = "3000";
             config_set_value(config, key, expected);
             int result = config_save_in_file(config, new_file_path);
             t_config *new_config = config_create(new_file_path);
