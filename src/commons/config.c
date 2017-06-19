@@ -133,10 +133,7 @@ int config_save_in_file(t_config *self, char* path) {
 
 	char* lines = string_new();
 	void add_line(char* key, void* value) {
-		string_append(&lines, key);
-		string_append(&lines, "=");
-		string_append(&lines, (char*) value);
-		string_append(&lines, "\n");
+		string_append_with_format(&lines, "%s=%s\n", key, value);
 	}
 
 	dictionary_iterator(self->properties, add_line);
