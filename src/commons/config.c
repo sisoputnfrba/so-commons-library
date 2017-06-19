@@ -142,5 +142,6 @@ int config_save_in_file(t_config *self, char* path) {
 	dictionary_iterator(self->properties, add_line);
 	int result = fwrite(lines, strlen(lines), 1, file);
 	fclose(file);
+	free(lines);
 	return result;
 }
