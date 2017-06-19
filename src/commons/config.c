@@ -115,8 +115,7 @@ void config_set_value(t_config *self, char *key, char *value) {
 	duplicate_value=string_duplicate(value);
 
 	if(dictionary_has_key(dictionary, key)) {
-		void* element = dictionary_remove(dictionary, key);
-		free(element);
+		dictionary_remove_and_destroy(dictionary, key, free);
 	}
 	dictionary_put(self->properties,duplicate_key,(void*)duplicate_value);
 }
