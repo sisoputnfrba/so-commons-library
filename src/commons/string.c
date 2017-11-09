@@ -210,7 +210,7 @@ char* string_reverse(char* palabra) {
     return resultado;
 }
 
-char*	string_contains(char* text, char *substring) {
+bool	string_contains(char* text, char *substring) {
 	return strstr(text, substring) != NULL;
 }
 
