@@ -76,6 +76,16 @@ context (test_dictionary) {
                 should_int(dictionary_size(dictionary)) be equal to(2);
             } end
 
+            it("should update a value from a key") {
+                dictionary_put(dictionary, "Gaston", persona_create("Gaston", 23));
+                dictionary_put(dictionary, "Fernando", persona_create("Fernando", 24));
+                dictionary_put(dictionary, "Fernando", persona_create("Velcic", 25));
+                dictionary_put(dictionary, "Matias", persona_create("Matias", 26));
+                should_int(dictionary_size(dictionary)) be equal to(3);
+                assert_person(dictionary_get(dictionary, "Fernando"), "Velcic", 25);
+                should_int(dictionary_size(dictionary)) be equal to(3);
+            } end
+
         } end
 
         describe ("Remove, destroy and clean") {
@@ -141,14 +151,6 @@ context (test_dictionary) {
 
                 dictionary_iterator(dictionary, (void*) _assertion);
                 should_int(iterator_count) be equal to(4);
-            } end
-
-            it("should iterate all overloaded entries") {
-                dictionary_put(dictionary, "key", persona_create("Matias", 24));
-                dictionary_put(dictionary, "key", persona_create("Gaston", 25));
-
-                dictionary_iterator(dictionary, (void*) _assertion);
-                should_int(iterator_count) be equal to(2);
             } end
 
         } end
