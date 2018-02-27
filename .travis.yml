@@ -4,7 +4,7 @@ compiler: gcc
 before_install: cd tests/unit-tests/
 install: make install-cspec
 
-script: make test
+script: make valgrind
 
 branches:
   only: master

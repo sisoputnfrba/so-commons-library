@@ -34,4 +34,7 @@ install-cspec:
 	-cd ../../ && git submodule init && git submodule update
 	-cd ../../cspec && $(MAKE) all
 
-.PHONY: all create-dirs clean install-cspec
+valgrind: all
+	LD_LIBRARY_PATH="../../src/build/:$(C_SPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./build/commons-unit-test
+
+.PHONY: all create-dirs clean install-cspec valgrind
