@@ -1,7 +1,9 @@
 language: c
 compiler: gcc
 
-before_install: cd tests/unit-tests/
+before_install:
+        - sudo apt-get install -y valgrind
+        - cd tests/unit-tests/
 install: make install-cspec
 
 script: make valgrind
