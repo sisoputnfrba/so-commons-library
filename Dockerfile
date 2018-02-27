@@ -4,6 +4,4 @@ COPY . /usr/src/so-commons-library
 WORKDIR /usr/src/so-commons-library/cspec
 RUN make clean && make
 WORKDIR /usr/src/so-commons-library
-RUN make clean
-RUN make all
-RUN make test
+RUN make clean all test

@@ -108,39 +108,34 @@ void config_destroy(t_config *config) {
 
 void config_set_value(t_config *self, char *key, char *value) {
 	t_dictionary* dictionary = self->properties;
-	char* duplicate_key;
-	char* duplicate_value;
-
-	duplicate_key=string_duplicate(key);
-	duplicate_value=string_duplicate(value);
+	char* duplicate_value = string_duplicate(value);
 
 	if(dictionary_has_key(dictionary, key)) {
-		void* element = dictionary_remove(dictionary, key);
-		free(element);
+		dictionary_remove_and_destroy(dictionary, key, free);
 	}
-	dictionary_put(self->properties,duplicate_key,(void*)duplicate_value);
+
+	dictionary_put(self->properties, key, (void*)duplicate_value);
 }
 
 int config_save(t_config *self) {
-        return config_save_in_file(self, self->path);
+	return config_save_in_file(self, self->path);
 }
 
 int config_save_in_file(t_config *self, char* path) {
-        FILE* file = fopen(path, "wb+");
+	FILE* file = fopen(path, "wb+");
 
-        if (file == NULL) {
-            return -1;
-        }
+	if (file == NULL) {
+			return -1;
+	}
 
-        char* lines = string_new();
-        void add_line(char* key, void* value) {
-            string_append(&lines, key);
-        	string_append(&lines, "=");
-        	string_append(&lines, (char*) value);
-        	string_append(&lines, "\n");
-        }
-        dictionary_iterator(self->properties, add_line);
-        int result = fwrite(lines, strlen(lines), 1, file);
-	 fclose(file);
-	 return result;
+	char* lines = string_new();
+	void add_line(char* key, void* value) {
+		string_append_with_format(&lines, "%s=%s\n", key, value);
+	}
+
+	dictionary_iterator(self->properties, add_line);
+	int result = fwrite(lines, strlen(lines), 1, file);
+	fclose(file);
+	free(lines);
+	return result;
 }

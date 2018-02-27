@@ -247,6 +247,6 @@
 	 * @DESC: Retorna un boolean que indica si text contiene o no
 	 * a substring.
 	 */
-	char*	string_contains(char* text, char *substring);
+	bool	string_contains(char* text, char *substring);
 
 #endif /* STRING_UTILS_H_ */

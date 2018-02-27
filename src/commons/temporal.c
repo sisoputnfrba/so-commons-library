@@ -25,17 +25,17 @@
 #include <string.h>
 
 char *temporal_get_string_time() {
-	time_t log_time;
-	struct tm *log_tm;
-	struct timeb tmili;
+	struct tm *log_tm = malloc(sizeof(struct tm));
 	char *str_time = string_duplicate("hh:mm:ss:mmmm");
+	struct timeb tmili;
+	time_t log_time;
 
 	if ((log_time = time(NULL)) == -1) {
 		error_show("Error getting date!");
 		return 0;
 	}
 
-	log_tm = localtime(&log_time);
+	localtime_r(&log_time, log_tm);
 
 	if (ftime(&tmili)) {
 		error_show("Error getting time!");
@@ -46,6 +46,7 @@ char *temporal_get_string_time() {
 	strftime(partial_time, 127, "%H:%M:%S", log_tm);
 	sprintf(str_time, "%s:%hu", partial_time, tmili.millitm);
 	free(partial_time);
+	free(log_tm);
 
 	//Adjust memory allocation
 	str_time = realloc(str_time, strlen(str_time) + 1);
