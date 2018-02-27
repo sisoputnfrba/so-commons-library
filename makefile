@@ -18,3 +18,6 @@ install: test
 
 uninstall:
 	-cd src && $(MAKE) uninstall
+
+valgrind: all
+	-cd tests/unit-tests && $(MAKE) valgrind
