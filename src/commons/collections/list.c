@@ -274,6 +274,12 @@ bool list_all_satisfy(t_list* self, bool(*condition)(void*)){
 	return list_count_satisfying(self, condition) == self->elements_count;
 }
 
+t_list* list_duplicate(t_list* self) {
+	t_list* duplicated = list_create();
+	list_add_all(duplicated, self);
+	return duplicated;
+}
+
 /********* PRIVATE FUNCTIONS **************/
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {
