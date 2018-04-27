@@ -285,24 +285,24 @@ context (test_list) {
                 return joven->age < menos_joven->age;
             }
 
-            void _verify_a_sort_without_duplicates() {
-                list_sort(list, (void*) _ayudantes_menor);
+            void _verify_a_sort_without_duplicates(t_list* (*sorted_list_generator)()) {
+                t_list* a_sorted_list = sorted_list_generator();
 
-                assert_person_in_list(list, 0, "Daniela"  , 19);
-                assert_person_in_list(list, 1, "Sebastian", 21);
-                assert_person_in_list(list, 2, "Matias"   , 24);
-                assert_person_in_list(list, 3, "Gaston"   , 25);
+                assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
+                assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
+                assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
+                assert_person_in_list(a_sorted_list, 3, "Gaston"   , 25);
             }
 
-            void _verify_a_sort_with_duplicates() {
+            void _verify_a_sort_with_duplicates(t_list* (*sorted_list_generator)()) {
                 list_add(list, persona_create("Ezequiel", 25));
 
-                list_sort(list, (void*) _ayudantes_menor);
-                assert_person_in_list(list, 0, "Daniela"  , 19);
-                assert_person_in_list(list, 1, "Sebastian", 21);
-                assert_person_in_list(list, 2, "Matias"   , 24);
-                assert_person_in_list(list, 3, "Ezequiel" , 25);
-                assert_person_in_list(list, 4, "Gaston"   , 25);
+                t_list* a_sorted_list = sorted_list_generator();
+                assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
+                assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
+                assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
+                assert_person_in_list(a_sorted_list, 3, "Ezequiel" , 25);
+                assert_person_in_list(a_sorted_list, 4, "Gaston"   , 25);
             }
 
             before {
@@ -324,23 +324,47 @@ context (test_list) {
                 } end
 
                 it("should sort a list without duplicated values") {
-                    _verify_a_sort_without_duplicates();
+                    t_list* __sorted_list() {
+                        list_sort(list, (void*) _ayudantes_menor);
+                        return list;
+                    }
+
+                    _verify_a_sort_without_duplicates(__sorted_list);
                 } end
 
                 it("sort duplicates a list with duplicated values") {
-                    _verify_a_sort_with_duplicates();
+                    t_list* __sorted_list() {
+                        list_sort(list, (void*) _ayudantes_menor);
+                        return list;
+                    }
+                    _verify_a_sort_with_duplicates(__sorted_list);
                 } end
 
             } end
 
             describe ("Sorted") {
 
-                skip("should sort a list without duplicated values") {
-                    _verify_a_sort_with_duplicates();
+                it("should sort a list without duplicated values") {
+                    t_list* new_list = NULL;
+                    t_list* __sorted_list() {
+                        new_list = list_sorted(list, (void*) _ayudantes_menor);
+                        return new_list;
+                    };
+
+                    _verify_a_sort_without_duplicates(__sorted_list);
+                    list_destroy(new_list);
                 } end
 
-                skip("should sort a list with duplicated values") {
-                    _verify_a_sort_without_duplicates();
+                it("should sort a list with duplicated values") {
+                    t_list* new_list = NULL;
+                    t_list* __sorted_list() {
+                        new_list = list_sorted(list, (void*) _ayudantes_menor);
+                        return new_list;
+                    };
+
+                    _verify_a_sort_with_duplicates(__sorted_list);
+
+                    list_destroy(new_list);
                 } end
 
             } end

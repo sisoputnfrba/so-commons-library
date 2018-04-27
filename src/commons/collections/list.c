@@ -259,6 +259,12 @@ void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
 
 }
 
+t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
+	t_list* duplicated = list_duplicate(self);
+	list_sort(duplicated, comparator);
+	return duplicated;
+}
+
 int list_count_satisfying(t_list* self, bool(*condition)(void*)){
 	t_list *satisfying = list_filter(self, condition);
 	int result = satisfying->elements_count;

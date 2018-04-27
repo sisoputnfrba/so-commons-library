@@ -185,6 +185,14 @@
 	void list_sort(t_list *, bool (*comparator)(void *, void *));
 
 	/**
+	* @NAME: list_sorted
+	* @DESC: Retorna una lista nueva ordenada segun el comparador
+	* El comparador devuelve si el primer parametro debe aparecer antes que el
+	* segundo en la lista
+	*/
+	t_list* list_sorted(t_list *, bool (*comparator)(void *, void *));
+
+	/**
 	* @NAME: list_count_satisfying
 	* @DESC: Cuenta la cantidad de elementos de
 	* la lista que cumplen una condición
@@ -209,6 +217,6 @@
 	* @NAME: list_duplicate
 	* @DESC: Crea una lista nueva con los mismos elementos que la original.
 	**/
-	t_list* list_duplicate(t_list* original);
+	t_list* list_duplicate(t_list* self);
 
 #endif /*LIST_H_*/
