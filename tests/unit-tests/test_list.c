@@ -279,10 +279,30 @@ context (test_list) {
         } end
 
 
-        describe ("Sort") {
+        describe ("Sort a list") {
 
             bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
                 return joven->age < menos_joven->age;
+            }
+
+            void _verify_a_sort_without_duplicates() {
+                list_sort(list, (void*) _ayudantes_menor);
+
+                assert_person_in_list(list, 0, "Daniela"  , 19);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                assert_person_in_list(list, 2, "Matias"   , 24);
+                assert_person_in_list(list, 3, "Gaston"   , 25);
+            }
+
+            void _verify_a_sort_with_duplicates() {
+                list_add(list, persona_create("Ezequiel", 25));
+
+                list_sort(list, (void*) _ayudantes_menor);
+                assert_person_in_list(list, 0, "Daniela"  , 19);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                assert_person_in_list(list, 2, "Matias"   , 24);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Gaston"   , 25);
             }
 
             before {
@@ -292,35 +312,37 @@ context (test_list) {
                 list_add(list, persona_create("Daniela"  , 19));
             } end
 
-            it("should sort and empty list") {
-                t_list *list = list_create();
+            describe ("Sort") {
+                it("should sort and empty list") {
+                    t_list *list = list_create();
 
-                list_sort(list, NULL);
+                    list_sort(list, NULL);
 
-                should_bool(list_is_empty(list)) be truthy;
+                    should_bool(list_is_empty(list)) be truthy;
 
-                list_destroy(list);
+                    list_destroy(list);
+                } end
+
+                it("should sort a list without duplicated values") {
+                    _verify_a_sort_without_duplicates();
+                } end
+
+                it("sort duplicates a list with duplicated values") {
+                    _verify_a_sort_with_duplicates();
+                } end
+
             } end
 
-            it("should sort a list without duplicated values") {
-                list_sort(list, (void*) _ayudantes_menor);
+            describe ("Sorted") {
 
-                assert_person_in_list(list, 0, "Daniela"  , 19);
-                assert_person_in_list(list, 1, "Sebastian", 21);
-                assert_person_in_list(list, 2, "Matias"   , 24);
-                assert_person_in_list(list, 3, "Gaston"   , 25);
-            } end
+                skip("should sort a list without duplicated values") {
+                    _verify_a_sort_with_duplicates();
+                } end
 
-            it("sort duplicates a list with duplicated values") {
-                list_add(list, persona_create("Ezequiel", 25));
+                skip("should sort a list with duplicated values") {
+                    _verify_a_sort_without_duplicates();
+                } end
 
-                list_sort(list, (void*) _ayudantes_menor);
-
-                assert_person_in_list(list, 0, "Daniela"  , 19);
-                assert_person_in_list(list, 1, "Sebastian", 21);
-                assert_person_in_list(list, 2, "Matias"   , 24);
-                assert_person_in_list(list, 3, "Ezequiel" , 25);
-                assert_person_in_list(list, 4, "Gaston"   , 25);
             } end
 
         } end
