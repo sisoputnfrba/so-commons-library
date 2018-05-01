@@ -110,6 +110,24 @@ context (test_list) {
 
         } end
 
+        describe ("Duplicate") {
+
+            it("should add all elements in a new list") {
+                list_add(list, persona_create("Juan", 22));
+                list_add(list, persona_create("Diana", 22));
+
+                t_list* duplicated = list_duplicate(list);
+                should_int(list_size(duplicated)) be equal to(2);
+
+                should_ptr(duplicated) not be equal to(list);
+                assert_person_in_list(duplicated, 0, "Juan", 22);
+                assert_person_in_list(duplicated, 1, "Diana", 22);
+
+                list_destroy(duplicated);
+            } end
+
+        } end
+
         describe ("Replace, remove and destroy") {
 
             before {

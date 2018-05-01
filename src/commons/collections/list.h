@@ -205,4 +205,10 @@
 	*/
 	bool list_all_satisfy(t_list* self, bool(*condition)(void*));
 
+	/**
+	* @NAME: list_duplicate
+	* @DESC: Crea una lista nueva con los mismos elementos que la original.
+	**/
+	t_list* list_duplicate(t_list* original);
+
 #endif /*LIST_H_*/
