@@ -278,7 +278,6 @@ context (test_list) {
 
         } end
 
-
         describe ("Sort") {
 
             bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
@@ -323,6 +322,34 @@ context (test_list) {
                 assert_person_in_list(list, 4, "Gaston"   , 25);
             } end
 
+        } end
+
+        describe ("Sorted") {
+
+            bool _ayudantes_menor(t_person * joven, t_person *menos_joven){
+                return joven->age < menos_joven->age;
+            }
+
+            before {
+                list_add(list, persona_create("Matias", 24));
+                list_add(list, persona_create("Gaston", 25));
+                list_add(list, persona_create("Sebastian", 21));
+                list_add(list, persona_create("Daniela", 19));
+            } end
+
+            it("should the sort be immutable") {
+                t_list *sorted_list = list_sorted(list, (void *)_ayudantes_menor);
+
+                assert_person_in_list(sorted_list, 0, "Daniela", 19);
+                assert_person_in_list(sorted_list, 1, "Sebastian", 21);
+                assert_person_in_list(sorted_list, 2, "Matias", 24);
+                assert_person_in_list(sorted_list, 3, "Gaston", 25);
+
+                assert_person_in_list(list, 0, "Matias", 24);
+                assert_person_in_list(list, 1, "Gaston", 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Daniela", 19);
+            } end
         } end
 
         describe ("Satisfying") {

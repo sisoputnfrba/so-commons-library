@@ -185,6 +185,14 @@
 	void list_sort(t_list *, bool (*comparator)(void *, void *));
 
 	/**
+	* @NAME: list_sorted
+	* @DESC: Devuelve una lista ordenada segun el comparador sin modificar la original
+	* El comparador devuelve si el primer parametro debe aparecer antes que el
+	* segundo en la lista
+	*/
+	t_list *list_sorted(t_list *, bool (*comparator)(void *, void *));
+
+	/**
 	* @NAME: list_count_satisfying
 	* @DESC: Cuenta la cantidad de elementos de
 	* la lista que cumplen una condición
