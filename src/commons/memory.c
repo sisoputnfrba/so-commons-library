@@ -19,12 +19,12 @@
 char *mem_hexstring(void *source, size_t length) {
   char *dump = string_new();
   // The dump_length should be the closes multiple of HEXDUMP_COLS after length
-  unsigned int dump_length = length;
+  unsigned int dump_length = length, mem_index = 0;
   if(length % HEXDUMP_COLS) {
     dump_length += HEXDUMP_COLS - length % HEXDUMP_COLS;
   }
 
-  for (unsigned int mem_index = 0; mem_index < dump_length; mem_index++)  {
+  while(mem_index < dump_length)  {
     // Adds initial offset (0x00000: )
     if (mem_index % HEXDUMP_COLS == 0) {
       string_append_with_format(&dump, "\n0x%08x: ", mem_index);
@@ -56,6 +56,7 @@ char *mem_hexstring(void *source, size_t length) {
       }
       string_append(&dump, "|");
     }
+    mem_index++;
   }
   return dump;
 }
