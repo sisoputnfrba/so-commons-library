@@ -349,6 +349,7 @@ context (test_list) {
                 assert_person_in_list(list, 1, "Gaston", 25);
                 assert_person_in_list(list, 2, "Sebastian", 21);
                 assert_person_in_list(list, 3, "Daniela", 19);
+                list_destroy(sorted_list);
             } end
         } end
 
