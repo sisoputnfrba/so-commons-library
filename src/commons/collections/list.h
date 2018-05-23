@@ -211,4 +211,16 @@
 	**/
 	t_list* list_duplicate(t_list* original);
 
+	/**
+	 * @NAME: list_fold
+	 * @DESC: Devuelve un valor que resulta de aplicar la 
+	 * operacion entre todos los elementos de la lista, partiendo desde el primero.
+	 * 
+	 * El valor devuelto es del mismo tipo de dato que los datos que se encuentran en la lista.
+	 * 
+	 * La funcion 'operation' debe recibir 2 datos del mismo tipo que el que se 
+	 * encuentra en la lista, y devolver un dato de dicho tipo.
+	 */
+	void* list_fold(t_list* self, void*(*operation)(void*, void*));
+
 #endif /*LIST_H_*/

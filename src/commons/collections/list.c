@@ -280,6 +280,27 @@ t_list* list_duplicate(t_list* self) {
 	return duplicated;
 }
 
+void* list_fold(t_list* self, void*(*operation)(void*, void*))
+{
+	t_link_element *element = self->head;
+	t_link_element *aux = element;
+
+	if(element == NULL)
+		return NULL;
+
+	void *result = element->data;
+	element = aux->next;
+
+	while(element != NULL)
+	{
+		aux = element;
+		result = operation(result, element->data);
+		element = aux->next;
+	}
+
+	return result;
+}
+
 /********* PRIVATE FUNCTIONS **************/
 
 static void list_link_element(t_link_element* previous, t_link_element* next) {
