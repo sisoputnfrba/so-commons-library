@@ -462,23 +462,23 @@ context (test_list) {
                 should_int(index) be equal to(4);
             } end
 
-        } end
+        } end        
 
-        describe ("Fold") {
+    } end
 
-            it("should fold all list values into a single one") {
-                list_add(list, 20);
-                list_add(list, 5);
-                list_add(list, 3);
-                list_add(list, 4);
+describe ("Fold") {
 
-                int _add_elements(int data1, int data2) {
-                    return data1 + data2;
-                }
+    it("should fold all list values into a single one") {
+            list_add(list, 20);
+            list_add(list, 5);
+            list_add(list, 3);
+            list_add(list, 4);
 
-                should_int(list_fold(list, _add_elements)) be equal to(32);                
-            } end
+            int _add_elements(int data1, int data2) {
+                return data1 + data2;
+            }
 
+            should_int(list_fold(list, _add_elements)) be equal to(32);                
         } end
 
     } end
