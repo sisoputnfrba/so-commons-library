@@ -464,6 +464,23 @@ context (test_list) {
 
         } end
 
+        describe ("Fold") {
+
+            it("should fold all list values into a single one") {
+                list_add(list, 20);
+                list_add(list, 5);
+                list_add(list, 3);
+                list_add(list, 4);
+
+                int _add_elements(int data1, int data2) {
+                    return data1 + data2;
+                }
+
+                should_int(list_fold(list, _add_elements)) be equal to(32);                
+            } end
+
+        } end
+
     } end
 
 }
