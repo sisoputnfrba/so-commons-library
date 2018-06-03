@@ -418,24 +418,27 @@ context (test_list) {
 
         } end        
 
-    } end
+        describe ("Fold") {
 
-describe ("Fold") {
+            it("should fold all list values into a single one, depending on what the given function does") {
+                list_add(list, persona_create("Jorge", 24));
+                list_add(list, persona_create("Matias", 70));
+                list_add(list, persona_create("Juan", 124));
+                list_add(list, persona_create("Nicolas", 6));
+                list_add(list, persona_create("Juan Manuel", 1));
+                list_add(list, persona_create("Sebastian", 8));
+                list_add(list, persona_create("Rodrigo", 40));
 
-    it("should fold all list values into a single one") {
-            list_add(list, 20);
-            list_add(list, 5);
-            list_add(list, 3);
-            list_add(list, 4);
+                t_person* get_oldest_person(t_person* person1, t_person* person2) {
+                    return person1->age >= person2->age ? person1 : person2;
+                }
 
-            int _add_elements(int data1, int data2) {
-                return data1 + data2;
-            }
+                t_person* oldestPerson = list_fold(list, get_oldest_person);
 
-            should_int(list_fold(list, _add_elements)) be equal to(32);                
+                should_int(oldestPerson->age) be equal to(124);
+            } end
         } end
 
     } end
 
 }
-
