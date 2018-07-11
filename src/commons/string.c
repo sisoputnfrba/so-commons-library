@@ -241,7 +241,7 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 
 	char* temporal = malloc(buffer_size);
 	va_copy(copy_arguments, arguments);
-	vsnprintf(temporal, buffer_size, format, arguments);
+	vsnprintf(temporal, buffer_size, format, copy_arguments);
 	va_end(copy_arguments);
 	string_append(original, temporal);
 	free(temporal);
