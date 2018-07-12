@@ -286,22 +286,15 @@ t_list* list_duplicate(t_list* self) {
 	return duplicated;
 }
 
-void* list_fold(t_list* self, void*(*operation)(void*, void*))
+void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*))
 {
-	t_link_element *element = self->head;
-	t_link_element *aux = element;
-
-	if(element == NULL)
-		return NULL;
-
-	void *result = element->data;
-	element = aux->next;
+	t_link_element* element = self->head;
+	void* result = seed;
 
 	while(element != NULL)
 	{
-		aux = element;
 		result = operation(result, element->data);
-		element = aux->next;
+		element = element->next;
 	}
 
 	return result;
