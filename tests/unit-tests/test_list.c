@@ -475,13 +475,11 @@ context (test_list) {
                 list_add(list, persona_create("Sebastian", 8));
                 list_add(list, persona_create("Rodrigo", 40));
 
-                t_person* seedPerson = persona_create("Maximiliano", 150);
-
                 t_person* get_oldest_person(t_person* person1, t_person* person2) {
                     return person1->age >= person2->age ? person1 : person2;
                 }
 
-                t_person* oldestPerson = list_fold(list, seedPerson, get_oldest_person);
+                t_person* oldestPerson = (t_person*) list_fold(list, persona_create("Maximiliano", 150), (void*) get_oldest_person);
 
                 should_int(oldestPerson->age) be equal to(150);
             } end
