@@ -229,6 +229,6 @@
 	 * La funcion 'operation' debe recibir 2 datos del mismo tipo que el que se 
 	 * encuentra en la lista, y devolver un dato de dicho tipo.
 	 */
-	void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*));
+	void* list_fold(t_list*, void*(*operation)(void*, void*));
 
 #endif /*LIST_H_*/
