@@ -211,4 +211,19 @@
 	**/
 	t_list* list_duplicate(t_list* original);
 
+	/**
+	* @NAME: list_get_index
+	* @DESC: Determina la posicion del elemento de la lista segun la condicion.
+	* la funcion comparator debe recibir 2 elementos de la lista, el primero es el
+	* elemento a buscar su index y el otro compara contra todos los elementos de la lista.
+	* en caso de no encontrar el elemento, retorna -1.
+	**/
+	int list_get_index(t_list* self,void* element,bool (*comparator)(void *,void *));
+
+	/**
+	* @NAME: list_duplicate
+	* @DESC: Verifica si dentro de la lista hay elementos repetidos segun el criterio deseado.
+	**/
+	bool list_element_repeats(t_list* self, bool (*comparator)(void *,void *));
+
 #endif /*LIST_H_*/
