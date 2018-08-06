@@ -429,7 +429,7 @@ context (test_list) {
 
         } end
 
-        describe ("Element Repeats") {
+		describe ("Element Repeats") {
 
             it("Should find the duplicated element") {
             	t_person* p1 = persona_create("Juan", 22);
@@ -442,14 +442,14 @@ context (test_list) {
                     return string_equals_ignore_case(((t_person *)ayudante)->name,((t_person *)_ayudante)->name);
                 }
 
-                bool repeats = list_element_repeats(list,comparator);
-                should_bool(repeats) be truthy;
+                should_bool(list_element_repeats(list,comparator)) be truthy;
+
+                list_remove(list,0);
             } end
 
             it("Should handle not element repeats") {
             	t_person* p1 = persona_create("Juan", 22);
             	t_person* p2 =  persona_create("Diana", 22);
-            	t_person* p3 =  persona_create("Julian", 22);
                 list_add(list, p1);
                 list_add(list, p2);
 
@@ -457,26 +457,7 @@ context (test_list) {
                     return string_equals_ignore_case(((t_person *)ayudante)->name,((t_person *)_ayudante)->name);
                 }
 
-                bool repeats = list_element_repeats(list,comparator);
-                should_int(index) be falsey;
-            } end
-
-        } end
-
-        describe ("list_element_repeats") {
-
-            it("should search for the element in the list") {
-            	t_person* p1 = persona_create("Juan", 22);
-            	t_person* p2 =  persona_create("Diana", 22);
-                list_add(list, p1);
-                list_add(list, p2);
-
-                bool comparator(void* ayudante, void* _ayudante) {
-                    return string_equals_ignore_case(((t_person *)ayudante)->name,((t_person *)_ayudante)->name);
-                }
-
-                int index = list_get_index(list,p2,comparator);
-                should_int(index) be equal to(1);
+                should_bool(list_element_repeats(list,comparator)) be falsey;
             } end
 
         } end
