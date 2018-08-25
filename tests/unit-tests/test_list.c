@@ -424,6 +424,7 @@ context (test_list) {
                 }
 
                 int index = list_get_index(list,p3,comparator);
+		persona_destroy(p3);
                 should_int(index) be equal to(-1);
             } end
 
