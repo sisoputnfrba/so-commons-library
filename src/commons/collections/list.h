@@ -224,10 +224,8 @@
 	 * @DESC: Devuelve un valor que resulta de aplicar la 
 	 * operacion entre todos los elementos de la lista, partiendo desde el primero.
 	 * 
-	 * El valor devuelto es del mismo tipo de dato que los datos que se encuentran en la lista.
-	 * 
-	 * La funcion 'operation' debe recibir 2 datos del mismo tipo que el que se 
-	 * encuentra en la lista, y devolver un dato de dicho tipo.
+	 * La funcion 'operation' debe recibir 2 dos valores, uno del tipo del valor initial (seed)
+	 * y otro del tipo de los elementos de la lista.
 	 */
 	void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*));
 

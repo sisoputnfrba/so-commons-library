@@ -491,6 +491,16 @@ context (test_list) {
                 persona_destroy(seedPerson);
             } end
 
+
+            it("should fold all values using a intial value with different type") {
+                int add_age(int accum, t_person* person) {
+                    return accum + person->age;
+                }
+
+                int sum = list_fold(list, 0, (void*) add_age);
+                should_int(sum) be equal to(273);
+            } end
+
         } end
 
     } end
