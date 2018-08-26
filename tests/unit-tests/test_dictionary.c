@@ -79,11 +79,14 @@ context (test_dictionary) {
             it("should update a value from a key") {
                 dictionary_put(dictionary, "Gaston", persona_create("Gaston", 23));
                 dictionary_put(dictionary, "Fernando", persona_create("Fernando", 24));
-                dictionary_put(dictionary, "Fernando", persona_create("Velcic", 25));
                 dictionary_put(dictionary, "Matias", persona_create("Matias", 26));
+                
+                t_person* old_fernando = dictionary_get(dictionary, "Fernando");
+                dictionary_put(dictionary, "Fernando", persona_create("Velcic", 25));
                 should_int(dictionary_size(dictionary)) be equal to(3);
                 assert_person(dictionary_get(dictionary, "Fernando"), "Velcic", 25);
-                should_int(dictionary_size(dictionary)) be equal to(3);
+                
+                persona_destroy(old_fernando);
             } end
 
         } end
