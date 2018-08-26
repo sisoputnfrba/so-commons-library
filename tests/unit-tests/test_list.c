@@ -466,7 +466,7 @@ context (test_list) {
 
         describe ("Fold") {
 
-            it("should fold all list values into a single one, depending on what the given function does") {
+            before {
                 list_add(list, persona_create("Jorge", 24));
                 list_add(list, persona_create("Matias", 70));
                 list_add(list, persona_create("Juan", 124));
@@ -474,6 +474,9 @@ context (test_list) {
                 list_add(list, persona_create("Juan Manuel", 1));
                 list_add(list, persona_create("Sebastian", 8));
                 list_add(list, persona_create("Rodrigo", 40));
+            } end
+
+            it("should fold all list values into a single one, depending on what the given function does") {
 
                 t_person* seedPerson = persona_create("Maximiliano", 150);
 
@@ -485,9 +488,9 @@ context (test_list) {
 
                 should_int(oldestPerson->age) be equal to(150);
 
-		free(seedPerson->name);
-		free(seedPerson);
+                persona_destroy(seedPerson);
             } end
+
         } end
 
     } end
