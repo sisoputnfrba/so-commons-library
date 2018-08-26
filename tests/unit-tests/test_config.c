@@ -184,6 +184,20 @@ context (test_config) {
             should_string(config_get_string_value(new_config, key)) be equal to (expected);
             config_destroy(new_config);    	    
     	} end
+
+        it ("should create a config file without the specified key") {
+            char* key = "PORT";
+
+            config_remove_key(config, key);
+            int result = config_save_in_file(config, new_file_path);
+            t_config *new_config = config_create(new_file_path);
+
+            should_bool(config_has_property(new_config, key)) be falsey;
+            should_bool(config_has_property(new_config, "WITH_EQUALS")) be truthy;
+            should_bool(config_has_property(new_config, "NUMBERS")) be truthy;
+            
+            config_destroy(new_config);         
+        } end
     } end
 
 }

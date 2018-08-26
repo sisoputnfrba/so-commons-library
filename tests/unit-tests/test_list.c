@@ -39,6 +39,10 @@ static void persona_destroy(t_person *self) {
     free(self);
 }
 
+static bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
+    return joven->age < menos_joven->age;
+}
+
 context (test_list) {
 
     void assert_person(t_person *person, char* name, int age) {
@@ -279,51 +283,93 @@ context (test_list) {
         } end
 
 
-        describe ("Sort") {
+        describe ("Sort a list") {
 
-            bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
-                return joven->age < menos_joven->age;
-            }
+            describe ("Sorting a empty list") {
 
-            before {
-                list_add(list, persona_create("Matias"   , 24));
-                list_add(list, persona_create("Gaston"   , 25));
-                list_add(list, persona_create("Sebastian", 21));
-                list_add(list, persona_create("Daniela"  , 19));
+                it("should sort and empty list") {
+                    list_sort(list, (void*) _ayudantes_menor);
+
+                    should_bool(list_is_empty(list)) be truthy;
+
+                } end
+
             } end
 
-            it("should sort and empty list") {
-                t_list *list = list_create();
+            describe ("Sorting a list with elements") {
 
-                list_sort(list, NULL);
+                void _verify_a_sort_without_duplicates(t_list* (*sorted_list_generator)()) {
+                    t_list* a_sorted_list = sorted_list_generator();
 
-                should_bool(list_is_empty(list)) be truthy;
+                    assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
+                    assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
+                    assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
+                    assert_person_in_list(a_sorted_list, 3, "Gaston"   , 25);
+                }
 
-                list_destroy(list);
-            } end
+                void _verify_a_sort_with_duplicates(t_list* (*sorted_list_generator)()) {
+                    list_add(list, persona_create("Ezequiel", 25));
 
-            it("should sort a list without duplicated values") {
-                list_sort(list, (void*) _ayudantes_menor);
+                    t_list* a_sorted_list = sorted_list_generator();
+                    assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
+                    assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
+                    assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
+                    assert_person_in_list(a_sorted_list, 3, "Ezequiel" , 25);
+                    assert_person_in_list(a_sorted_list, 4, "Gaston"   , 25);
+                }
 
-                assert_person_in_list(list, 0, "Daniela"  , 19);
-                assert_person_in_list(list, 1, "Sebastian", 21);
-                assert_person_in_list(list, 2, "Matias"   , 24);
-                assert_person_in_list(list, 3, "Gaston"   , 25);
-            } end
+                before {
+                    list_add(list, persona_create("Matias"   , 24));
+                    list_add(list, persona_create("Gaston"   , 25));
+                    list_add(list, persona_create("Sebastian", 21));
+                    list_add(list, persona_create("Daniela"  , 19));
+                } end
 
-            it("sort duplicates a list with duplicated values") {
-                list_add(list, persona_create("Ezequiel", 25));
+                describe ("Sort - with side effect") {
 
-                list_sort(list, (void*) _ayudantes_menor);
+                    t_list* __sorted_list() {
+                        list_sort(list, (void*) _ayudantes_menor);
+                        return list;
+                    }
 
-                assert_person_in_list(list, 0, "Daniela"  , 19);
-                assert_person_in_list(list, 1, "Sebastian", 21);
-                assert_person_in_list(list, 2, "Matias"   , 24);
-                assert_person_in_list(list, 3, "Ezequiel" , 25);
-                assert_person_in_list(list, 4, "Gaston"   , 25);
+
+                    it("should sort a list without duplicated values") {
+                        _verify_a_sort_without_duplicates(__sorted_list);
+                    } end
+
+                    it("should sort a list with duplicated values") {
+                        _verify_a_sort_with_duplicates(__sorted_list);
+                    } end
+
+                } end
+
+                describe ("Sorted - without side effect") {
+
+                    t_list* new_list = NULL;
+
+                    t_list* __sorted_list() {
+                        new_list = list_sorted(list, (void*) _ayudantes_menor);
+                        return new_list;
+                    }
+
+                    after {
+                        list_destroy(new_list);
+                    } end
+
+                    it("should sort a list without duplicated values") {
+                        _verify_a_sort_without_duplicates(__sorted_list);
+                    } end
+
+                    it("should sort a list with duplicated values") {
+                        _verify_a_sort_with_duplicates(__sorted_list);
+                    } end
+
+                } end
+
             } end
 
         } end
+
 
         describe ("Satisfying") {
 
@@ -483,9 +529,47 @@ context (test_list) {
                 should_int(index) be equal to(4);
             } end
 
+        } end        
+
+        describe ("Fold") {
+
+            before {
+                list_add(list, persona_create("Jorge", 24));
+                list_add(list, persona_create("Matias", 70));
+                list_add(list, persona_create("Juan", 124));
+                list_add(list, persona_create("Nicolas", 6));
+                list_add(list, persona_create("Juan Manuel", 1));
+                list_add(list, persona_create("Sebastian", 8));
+                list_add(list, persona_create("Rodrigo", 40));
+            } end
+
+            it("should fold all list values into a single one, depending on what the given function does") {
+
+                t_person* seedPerson = persona_create("Maximiliano", 150);
+
+                t_person* get_oldest_person(t_person* person1, t_person* person2) {
+                    return person1->age >= person2->age ? person1 : person2;
+                }
+
+                t_person* oldestPerson = (t_person*) list_fold(list, seedPerson, (void*) get_oldest_person);
+
+                should_int(oldestPerson->age) be equal to(150);
+
+                persona_destroy(seedPerson);
+            } end
+
+
+            it("should fold all values using a intial value with different type") {
+                int add_age(int accum, t_person* person) {
+                    return accum + person->age;
+                }
+
+                int sum = list_fold(list, 0, (void*) add_age);
+                should_int(sum) be equal to(273);
+            } end
+
         } end
 
     } end
 
 }
-
