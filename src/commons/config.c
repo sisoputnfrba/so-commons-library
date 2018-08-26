@@ -107,14 +107,19 @@ void config_destroy(t_config *config) {
 }
 
 void config_set_value(t_config *self, char *key, char *value) {
-	t_dictionary* dictionary = self->properties;
+	config_remove_key(self, key);
+
 	char* duplicate_value = string_duplicate(value);
+
+	dictionary_put(self->properties, key, (void*)duplicate_value);
+}
+
+void config_remove_key(t_config *self, char *key) {
+	t_dictionary* dictionary = self->properties;
 
 	if(dictionary_has_key(dictionary, key)) {
 		dictionary_remove_and_destroy(dictionary, key, free);
 	}
-
-	dictionary_put(self->properties, key, (void*)duplicate_value);
 }
 
 int config_save(t_config *self) {

@@ -85,22 +85,28 @@
 	*/
 	void 	  config_destroy(t_config *config);
 
-        /**
-    	* @NAME: config_set_value
-    	* @DESC: Setea el valor en el archivo de config, a la key asociada.
-    	*/
-        void      config_set_value(t_config*, char *key, char *value);
+	/**
+	* @NAME: config_set_value
+	* @DESC: Setea el valor en el archivo de config, a la key asociada.
+	*/
+	void      config_set_value(t_config*, char *key, char *value);
 
-        /**
-    	* @NAME: config_save
-    	* @DESC: Reescribe el archivo de configuracion con los valores del config.
-    	*/
-        int       config_save(t_config*);
+	/**
+	* @NAME: config_remove_key
+	* @DESC: Remueve la clave y su valor asociado del archivo de config.
+	*/
+	void      config_remove_key(t_config*, char *key);
 
-        /**
-    	* @NAME: config_save_in_file
-    	* @DESC: Escribe un archivo de configuracion en el path indicado con los valores del config.
-    	*/
-        int       config_save_in_file(t_config*, char *path);
+	/**
+	* @NAME: config_save
+	* @DESC: Reescribe el archivo de configuracion con los valores del config.
+	*/
+	int       config_save(t_config*);
+
+	/**
+	* @NAME: config_save_in_file
+	* @DESC: Escribe un archivo de configuracion en el path indicado con los valores del config.
+	*/
+	int       config_save_in_file(t_config*, char *path);
 
 #endif /* CONFIG_H_ */
