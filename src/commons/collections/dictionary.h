@@ -37,7 +37,7 @@
 
 	/**
 	* @NAME: dictionary_put
-	* @DESC: Inserta un nuevo par (key->data) al diccionario.
+	* @DESC: Inserta un nuevo par (key->data) al diccionario, en caso de ya existir la key actualiza la data.
 	*/
 	void 		  dictionary_put(t_dictionary *, char *key, void *data);
 

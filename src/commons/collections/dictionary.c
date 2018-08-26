@@ -61,6 +61,13 @@ static unsigned int dictionary_hash(char *key, int key_len) {
 }
 
 void dictionary_put(t_dictionary *self, char *key, void *data) {
+	t_hash_element *existing_element = dictionary_get_element(self, key);
+
+	if(existing_element != NULL) {
+		existing_element->data = data;
+		return;
+	}
+
 	unsigned int key_hash = dictionary_hash(key, strlen(key));
 	int index = key_hash % self->table_max_size;
 	t_hash_element * new_element = dictionary_create_element(strdup(key), key_hash, data);
