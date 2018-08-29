@@ -27,7 +27,7 @@ context (test_memory) {
     describe ("Memory Hexstring") {
 
         char *memory = "Hexdump";
-        char *dumped_format = "0x00000000 48 65 78 64 75 6d 70 00  00 00 00 00 00 00 00 00 00  |Hexdump.........|"
+        char *dumped_format = "0x00000000 48 65 78 64 75 6d 70 00  00 00 00 00 00 00 00 00 00  |Hexdump.........|";
 
         it ("return a string with hexdump format") {
             should_string( mem_hexstring(memory, strlen(memory)) ) be equal to(dumpled_format);
