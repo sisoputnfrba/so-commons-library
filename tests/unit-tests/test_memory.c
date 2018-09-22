@@ -15,6 +15,7 @@
  */
 
 #include <commons/memory.h>
+#include <commins/string.h>
 #include <string.h>
 #include <cspecs/cspec.h>
 
@@ -30,7 +31,11 @@ context (test_memory) {
         char *dumped_format = "\n0x00000000: 48 65 78 64 75 6d 70 00  00 00 00 00 00 00 00 00  |Hexdump.........|";
 
         it ("return a string with hexdump format") {
-            should_string( mem_hexstring(memory, strlen(memory)) ) be equal to(dumped_format);
+            char *result = mem_hexstring(memory, strlen(memory));
+
+            should_string( result ) be equal to(dumped_format);
+
+            free(result);
         } end
 
     } end
