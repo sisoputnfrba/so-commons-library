@@ -53,7 +53,7 @@
 	* @NAME: bitarray_create
 	* @DESC: Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
 	* @PARAMS:
-	* 		bitarray - el pedazo de memoria que contiene los bits a leer/escribir, expresado en bytes
+	* 		bitarray - el bloque de memoria que contiene los bits a leer/escribir
 	*		size - la cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
 	*
 	*		ejemplo: bitarray de 8 posiciones (bits), 
@@ -66,7 +66,7 @@
 	* @NAME: bitarray_create_with_mode
 	* @DESC: Crea y devuelve un puntero a una estructura t_bitarray
 	* @PARAMS:
-	* 		bitarray - el pedazo de memoria que contiene los bits a leer/escribir, expresado en bytes
+	* 		bitarray - el bloque de memoria que contiene los bits a leer/escribir
 	*		size - la cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
 	*		mode - LSB_FIRST ó MSB_FIRST
 	*
