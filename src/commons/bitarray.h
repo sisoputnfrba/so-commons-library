@@ -53,17 +53,26 @@
 	* @NAME: bitarray_create
 	* @DESC: Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
 	* @PARAMS:
-	* 		bitarray
-	*		size - Tamaño en bytes del bit array
+	* 		bitarray - el bloque de memoria que contiene los bits a leer/escribir
+	*		size - la cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
+	*
+	*		ejemplo: bitarray de 8 posiciones (bits), 
+	*			void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
+	*			bitarray_create(puntero_a_bits, 1)
 	*/
 	t_bitarray 	*bitarray_create(char *bitarray, size_t size);
 
 	/**
-	* @NAME: bitarray_create
+	* @NAME: bitarray_create_with_mode
 	* @DESC: Crea y devuelve un puntero a una estructura t_bitarray
 	* @PARAMS:
-	* 		bitarray
-	*		size - Tamaño en bytes del bit array
+	* 		bitarray - el bloque de memoria que contiene los bits a leer/escribir
+	*		size - la cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
+	*		mode - LSB_FIRST ó MSB_FIRST
+	*
+	*		ejemplo: bitarray de 8 posiciones (bits) con LSB_FIRST, 
+	*			void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
+	*			bitarray_create_with_mode(puntero_a_bits, 1, LSB_FIRST)
 	*/
 	t_bitarray	*bitarray_create_with_mode(char *bitarray, size_t size, bit_numbering_t mode);
 
