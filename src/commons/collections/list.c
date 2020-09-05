@@ -77,6 +77,19 @@ void list_add_in_index(t_list *self, int index, void *data) {
 	}
 }
 
+void list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
+	int index = 0;
+
+	void _find_place_to_add(void* element) {
+		if(comparator(element,data)) {
+			index++;
+		}
+	}
+	list_iterate(self,_find_place_to_add);
+
+	list_add_in_index(self, index, data);
+}
+
 void *list_replace(t_list *self, int index, void *data) {
 	void *old_data = NULL;
 
@@ -231,32 +244,17 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 }
 
 void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
-	// TODO: optimizar (usar un algoritmo mas copado)
-	int unsorted_elements = self->elements_count;
-	if(unsorted_elements < 2) {
-		return;
-	}
-	t_link_element *auxiliar = NULL;
-	bool sorted = true;
-	do {
-		t_link_element *previous_element = self->head, *cursor = previous_element->next;
-		sorted = true;
-		int index = 0, last_changed = unsorted_elements;
-		while(index < unsorted_elements && cursor != NULL) {
-			if(!comparator(previous_element->data, cursor->data)) {
-			   auxiliar = cursor->data;
-			   cursor->data = previous_element->data;
-			   previous_element->data = auxiliar;
-			   last_changed = index;
-			   sorted = false;
-			}
-			previous_element = cursor;
-			cursor = cursor->next;
-			index++;
-		}
-		unsorted_elements = last_changed;
-	} while(!sorted);
+	t_list* sorted = list_create();
 
+	void _add_sorted(void* element) {
+		list_add_sorted(sorted, element, comparator);
+	}
+	list_iterate(self, _add_sorted);
+	list_clean(self);
+
+	self->head = sorted->head;
+	self->elements_count = sorted->elements_count;
+	free(sorted);
 }
 
 t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
