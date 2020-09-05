@@ -192,9 +192,7 @@ context (test_string) {
                     should_string(substrings[2]) be equal to("tierra");
                     should_ptr(substrings[3]) be null;
 
-                    free(substrings[0]);
-                    free(substrings[1]);
-                    free(substrings[2]);
+				    string_iterate_lines(substrings, (void*) free);
                     free(substrings);
                 } end
 
@@ -203,13 +201,56 @@ context (test_string) {
                     char** substrings = string_split(line, ";");
 
                     should_ptr(substrings) not be null;
-                    should_ptr(substrings[0]) be null;
+                    should_string(substrings[0]) be equal to("");
 
+				    string_iterate_lines(substrings, (void*) free);
                     free(substrings);
 
                 } end
 
-                it("n_split_when_n_is_less_than_splitted_elements") {
+				 it("split_when_starts_with_delimitator") {
+                	char* line = ",Hola,planeta,tierra";
+				    char** substrings = string_split(line, ",");
+
+				    should_ptr(substrings) not be null;
+				    should_string(substrings[0]) be equal to ("");
+				    should_string(substrings[1]) be equal to ("Hola");
+				    should_string(substrings[2]) be equal to ("planeta");
+				    should_string(substrings[3]) be equal to ("tierra");
+
+				    string_iterate_lines(substrings, (void*) free);
+				    free(substrings);
+                } end
+
+				it("split_when_ends_with_delimitator") {
+				  	char* line = "Hola,planeta,tierra,";
+				   	char** substrings = string_split(line, ",");
+
+				   	should_ptr(substrings) not be null;
+                	should_string(substrings[0]) be equal to ("Hola");
+                	should_string(substrings[1]) be equal to ("planeta");
+                	should_string(substrings[2]) be equal to ("tierra");
+                	should_string(substrings[3]) be equal to ("");
+
+                	string_iterate_lines(substrings, (void*) free);
+					free(substrings);
+                } end
+
+				it("split_when_has_delimitators_in_between") {
+                	char* line = "Hola,planeta,,tierra";
+                	char** substrings = string_split(line, ",");
+
+                	should_ptr(substrings) not be null;
+                	should_string(substrings[0]) be equal to ("Hola");
+                	should_string(substrings[1]) be equal to ("planeta");
+                	should_string(substrings[2]) be equal to ("");
+                	should_string(substrings[3]) be equal to ("tierra");
+
+                	string_iterate_lines(substrings, (void*) free);
+					free(substrings);
+                } end
+
+				it("n_split_when_n_is_less_than_splitted_elements") {
                     char *line = "Hola planeta tierra";
                     char** substrings = string_n_split(line, 2, " ");
 
@@ -267,8 +308,9 @@ context (test_string) {
                     char** substrings = string_n_split(line, 10, ";");
 
                     should_ptr(substrings) not be null;
-                    should_ptr(substrings[0]) be null;
+                    should_string(substrings[0]) be equal to("");
 
+				    string_iterate_lines(substrings, (void*) free);
                     free(substrings);
                 } end
 
@@ -380,7 +422,9 @@ context (test_string) {
                     char* string_empty_array = "[]";
                     char** empty_array = string_get_string_as_array(string_empty_array);
                     should_ptr(empty_array) not be null;
-                    should_ptr(empty_array[0]) be null;
+                    should_string(empty_array[0]) be equal to("");
+
+				    string_iterate_lines(empty_array, (void*) free);
                     free(empty_array);
                 } end
 

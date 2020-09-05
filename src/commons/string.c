@@ -145,14 +145,14 @@ bool string_equals_ignore_case(char *actual, char *expected) {
 
 char **string_split(char *text, char *separator) {
 	bool _is_last_token(char* next, int _) {
-		return next[0] != '\0';
+		return next != NULL;
 	}
 	return _string_split(text, separator, _is_last_token);
 }
 
 char** string_n_split(char *text, int n, char* separator) {
 	bool _is_last_token(char* next, int index) {
-		return next[0] != '\0' && index < (n - 1);
+		return next != NULL && index < (n - 1);
 	}
 	return _string_split(text, separator, _is_last_token);
 }
@@ -252,22 +252,19 @@ char** _string_split(char* text, char* separator, bool(*condition)(char*, int)) 
 	int size = 0;
 
 	char *text_to_iterate = string_duplicate(text);
-
 	char *next = text_to_iterate;
-	char *str = text_to_iterate;
 
 	while(condition(next, size)) {
-		char* token = strtok_r(str, separator, &next);
+		char* token = strsep(&next, separator);
 		if(token == NULL) {
 			break;
 		}
-		str = NULL;
 		size++;
 		substrings = realloc(substrings, sizeof(char*) * size);
 		substrings[size - 1] = string_duplicate(token);
 	};
 
-	if (next[0] != '\0') {
+	if (next != NULL) {
 		size++;
 		substrings = realloc(substrings, sizeof(char*) * size);
 		substrings[size - 1] = string_duplicate(next);
