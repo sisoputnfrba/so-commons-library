@@ -58,8 +58,8 @@
 
 	/**
 	* @NAME: list_add_in_index
-	* @DESC: Agrega un elemento en una lista ya ordenada por el comparador,
-	* manteniendo el orden de la misma
+	* @DESC: Agrega un elemento a una lista ordenada, manteniendo el
+	* orden definido por el comparador
 	* El comparador devuelve si el primer parametro debe aparecer antes que el
 	* segundo en la lista
 	*/
