@@ -599,6 +599,18 @@ context (test_list) {
                 should_ptr(oldestPerson) be null;
             } end
 
+			it("should get minimum") {
+            	t_person* youngestPerson = (t_person*) list_get_min_by(list, (void*)_ayudantes_menor);
+
+                assert_person(youngestPerson, "Juan Manuel", 1);
+            } end
+
+            it("should get maximum") {
+            	t_person* lastAlphabetical = (t_person*) list_get_max_by(list, (void*)_ayudantes_alfabetico);
+
+                assert_person(lastAlphabetical, "Sebastian", 8);
+            } end
+
         } end
 
     } end

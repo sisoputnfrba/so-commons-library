@@ -81,6 +81,26 @@
 	void *list_get(t_list *, int index);
 
 	/**
+	* @NAME: list_get_min_by
+	* @DESC: Retorna el minimo de la lista según el comparador
+	* El comparador devuelve:
+	* comparator(arg1, arg2) < 0 <=> arg1 < arg2
+	* comparator(arg1, arg2) = 0 <=> arg1 = arg2
+	* comparator(arg1, arg2) > 0 <=> arg1 > arg2
+	*/
+	void *list_get_min_by(t_list* self, int (*comparator)(void*, void*));
+
+	/**
+	* @NAME: list_get_max_by
+	* @DESC: Retorna el maximo de la lista según el comparador
+	* El comparador devuelve:
+	* comparator(arg1, arg2) < 0 <=> arg1 < arg2
+	* comparator(arg1, arg2) = 0 <=> arg1 = arg2
+	* comparator(arg1, arg2) > 0 <=> arg1 > arg2
+	*/
+	void *list_get_max_by(t_list* self, int (*comparator)(void*, void*));
+
+	/**
 	* @NAME: list_take
 	* @DESC: Retorna una nueva lista con
 	* los primeros n elementos
