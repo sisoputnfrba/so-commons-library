@@ -25,6 +25,7 @@ static t_link_element* list_find_element(t_list *self, bool(*condition)(void*, i
 static int list_add_element(t_list* self, t_link_element* element, bool(*condition)(void*, int));
 static t_link_element* list_remove_element(t_list *self, bool(*condition)(void*, int));
 static void list_add_to_sublist(t_list* sublist, t_list *self, bool(*condition)(void*, int), void* (*transformer)(void*));
+static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*));
 
 t_list *list_create() {
 	t_list *list = malloc(sizeof(t_list));
@@ -333,18 +334,12 @@ t_list* list_duplicate(t_list* self) {
 	return duplicated;
 }
 
-void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*))
-{
-	t_link_element* element = self->head;
-	void* result = seed;
+void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*)) {
+	return list_fold_elements(self->head, seed, operation);
+}
 
-	while(element != NULL)
-	{
-		result = operation(result, element->data);
-		element = element->next;
-	}
-
-	return result;
+void* list_fold1(t_list* self, void* (*operation)(void*, void*)) {
+	return self->elements_count > 0 ? list_fold_elements(self->head->next, self->head->data, operation) : NULL;
 }
 
 /********* PRIVATE FUNCTIONS **************/
@@ -443,4 +438,14 @@ static void list_add_to_sublist(t_list* sublist, t_list *self, bool(*condition)(
 		index++;
 		aux = aux->next;
 	}
+}
+
+static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*)) {
+	void* result = seed;
+	while(element != NULL) {
+		result = operation(result, element->data);
+		element = element->next;
+	}
+
+	return result;
 }

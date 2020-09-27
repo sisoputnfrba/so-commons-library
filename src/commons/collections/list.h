@@ -251,4 +251,15 @@
 	 */
 	void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*));
 
+	/**
+	 * @NAME: list_fold1
+	 * @DESC: Devuelve un valor que resulta de aplicar la
+	 * operacion entre todos los elementos de la lista, tomando al primero como
+	 * semilla y partiendo desde el segundo (si existe).
+	 *
+	 * La funcion 'operation' debe recibir 2 dos valores, uno del tipo del valor inicial (el
+	 * primer elemento de la lista) y otro del tipo de los elementos restantes de la lista.
+	 */
+	void* list_fold1(t_list* self, void* (*operation)(void*, void*));
+
 #endif /*LIST_H_*/

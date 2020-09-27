@@ -556,13 +556,47 @@ context (test_list) {
             } end
 
 
-            it("should fold all values using a intial value with different type") {
+            it("should fold all values using an initial value with different type") {
                 int add_age(int accum, t_person* person) {
                     return accum + person->age;
                 }
 
-                int sum = list_fold(list, 0, (void*) add_age);
+                int sum = (int)list_fold(list, 0, (void*) add_age);
                 should_int(sum) be equal to(273);
+            } end
+
+        } end
+
+		describe("Fold1") {
+            before {
+                list_add(list, persona_create("Nicolas", 6));
+                list_add(list, persona_create("Matias", 70));
+                list_add(list, persona_create("Juan", 124));
+                list_add(list, persona_create("Juan Manuel", 1));
+                list_add(list, persona_create("Sebastian", 8));
+                list_add(list, persona_create("Rodrigo", 40));
+            } end
+
+			it("should fold all values into a single one, starting with first element") {
+            	t_person* get_oldest_person(t_person* person1, t_person* person2) {
+                    return person1->age >= person2->age ? person1 : person2;
+                }
+
+                t_person* oldestPerson = (t_person*) list_fold1(list, (void*) get_oldest_person);
+
+                assert_person(oldestPerson, "Juan", 124);
+            } end
+
+			it("should fold an empty list") {
+            	list_clean_and_destroy_elements(list, (void*) persona_destroy);
+
+                t_person* get_oldest_person(t_person* person1, t_person* person2) {
+                    return person1->age >= person2->age ? person1 : person2;
+                }
+
+                t_person* oldestPerson = (t_person*) list_fold1(list, (void*) get_oldest_person);
+
+                should_ptr(oldestPerson) be null;
             } end
 
         } end
