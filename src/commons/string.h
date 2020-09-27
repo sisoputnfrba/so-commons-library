@@ -27,6 +27,12 @@
 	char*   string_new();
 
 	/**
+	* @NAME: string_new
+	* @DESC: Crea un array de strings vacio
+	*/
+	char** string_array_new();
+
+	/**
 	* @NAME: string_itoa
 	* @DESC: Crea un string a partir de un numero
 	*/
@@ -59,6 +65,17 @@
 	*
 	*/
 	char*   string_repeat(char ch, int count);
+
+	/**
+	 * @NAME: string_reverse
+	 * @DESC: Retorna el texto invertido. No se maneja el caso de NULL,
+	 * si se pasa NULL su comportamiento no esta determinado.
+	 *
+	 * Ejemplo:
+	 * char* original = "boo";
+	 * string_reverse(original) => "oob"
+	 */
+	char*	string_reverse(char* text);
 
 	/**
 	* @NAME: string_append
@@ -163,35 +180,18 @@
 	bool	string_ends_with(char* text, char* end);
 
 	/**
+	 * @NAME: string_contains
+	 * @DESC: Retorna un boolean que indica si text contiene o no
+	 * a substring.
+	 */
+	bool	string_contains(char* text, char *substring);
+
+	/**
 	* @NAME: string_equals_ignore_case
 	* @DESC: Retorna si dos strings son iguales
 	* ignorando las mayusculas y minusculas
 	*/
 	bool 	string_equals_ignore_case(char * actual, char * expected);
-
-	/**
-	* @NAME: string_split
-	* @DESC: Separa un string dado un separador
-	*
-	* @Return: Retorna un array con cada palabra y en la última posición un NULL
-	*
-	* Ejemplo:
-	* string_split("hola, mundo", ",") => ["hola", " mundo", NULL]
-	*/
-	char**  string_split(char * text, char * separator);
-
-
-	/**
-	 * @NAME: string_n_split
-	 * @DESC: Separa un string tantas veces por su separador como n lo permita
-	 *
-	 * Ejemplo:
-	 * string_n_split("hola, mundo, bueno", 2, ",") => ["hola", " mundo, bueno", NULL]
-	 * string_n_split("hola, mundo, bueno", 3, ",") => ["hola", " mundo", " bueno", NULL]
-	 * string_n_split("hola, mundo, bueno", 10, ",") => ["hola", " mundo", " bueno", NULL]
-	 *
-	 */
-	char**  string_n_split(char* text, int n, char* separator);
 
 	/**
 	* @NAME: string_substring
@@ -214,11 +214,27 @@
 	char*   string_substring_until(char *text, int length);
 
 	/**
-	* @NAME: string_iterate_lines
-	* @DESC: Itera un array de strings aplicando
-	* el closure a cada string, hasta que encuentre un NULL
+	* @NAME: string_split
+	* @DESC: Separa un string dado un separador
+	*
+	* @Return: Retorna un array con cada palabra y en la última posición un NULL
+	*
+	* Ejemplo:
+	* string_split("hola, mundo", ",") => ["hola", " mundo", NULL]
 	*/
-	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
+	char**  string_split(char * text, char * separator);
+
+	/**
+	 * @NAME: string_n_split
+	 * @DESC: Separa un string tantas veces por su separador como n lo permita
+	 *
+	 * Ejemplo:
+	 * string_n_split("hola, mundo, bueno", 2, ",") => ["hola", " mundo, bueno", NULL]
+	 * string_n_split("hola, mundo, bueno", 3, ",") => ["hola", " mundo", " bueno", NULL]
+	 * string_n_split("hola, mundo, bueno", 10, ",") => ["hola", " mundo", " bueno", NULL]
+	 *
+	 */
+	char**  string_n_split(char* text, int n, char* separator);
 
 	/**
 	* @NAME: string_get_string_as_array
@@ -232,21 +248,42 @@
 	char**  string_get_string_as_array(char* text);
 
 	/**
-	 * @NAME: string_reverse
-	 * @DESC: Retorna el texto invertido. No se maneja el caso de NULL,
-	 * si se pasa NULL su comportamiento no esta determinado.
-	 *
-	 * Ejemplo:
-	 * char* original = "boo";
-	 * string_reverse(original) => "oob"
-	 */
-	char*	string_reverse(char* text);
+	* @NAME: string_iterate_lines
+	* @DESC: Itera un array de strings aplicando
+	* el closure a cada string, hasta que encuentre un NULL
+	*/
+	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
 
 	/**
-	 * @NAME: string_contains
-	 * @DESC: Retorna un boolean que indica si text contiene o no
-	 * a substring.
-	 */
-	bool	string_contains(char* text, char *substring);
+	* @NAME: string_array_size
+	* @DESC: Retorna la cantidad de líneas del
+	* array de strings
+	*/
+	int 	string_array_size(char** array);
+
+	/**
+	* @NAME: string_array_is_empty
+	* @DESC: Verifica si el array de strings está vacío
+	*/
+	bool 	string_array_is_empty(char** array);
+
+	/**
+	* @NAME: string_array_push
+	* @DESC: Agrega un string al final del array
+	*/
+	void 	string_array_push(char*** array, char* text);
+
+	/**
+	* @NAME: string_array_replace
+	* @DESC: Reemplaza un string en un array por otro, retornando
+	* el anterior
+	*/
+	char*	string_array_replace(char** array, int pos, char* text);
+
+	/**
+	* @NAME: string_array_push
+	* @DESC: Quita el último string del array y lo retorna
+	*/
+	char*	string_array_pop(char** array);
 
 #endif /* STRING_UTILS_H_ */

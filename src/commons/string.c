@@ -27,6 +27,8 @@ static void _string_lower_element(char* ch);
 static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
 char** _string_split(char* text, char* separator, bool(*condition)(char*, int));
+static void _string_array_push(char*** array, char* text, int size);
+static char* _string_array_replace(char** array, int pos, char* text);
 
 
 char *string_repeat(char character, int count) {
@@ -139,6 +141,10 @@ bool string_ends_with(char* text, char* end) {
 	return strcmp(&text[index], end) == 0;
 }
 
+bool string_contains(char* text, char *substring) {
+	return strstr(text, substring) != NULL;
+}
+
 bool string_equals_ignore_case(char *actual, char *expected) {
 	return strcasecmp(actual, expected) == 0;
 }
@@ -197,21 +203,50 @@ int string_length(char* text) {
 	return strlen(text);
 }
 
-char* string_reverse(char* palabra) {
-    char* resultado = calloc(1, string_length(palabra) + 1);
+char* string_reverse(char* text) {
+    char* result = calloc(1, string_length(text) + 1);
 
-    int i = string_length(palabra) - 1, j = 0;
+    int i = string_length(text) - 1, j = 0;
     while (i >= 0){
-        resultado[j] = palabra[i];
+        result[j] = text[i];
         i--;
         j++;
     }
 
-    return resultado;
+    return result;
 }
 
-bool	string_contains(char* text, char *substring) {
-	return strstr(text, substring) != NULL;
+char** string_array_new() {
+	char** array = malloc(sizeof(char*));
+	array[0] = NULL;
+
+	return array;
+}
+
+int string_array_size(char** array) {
+	int size = 0;
+	void _count_lines(char* _) {
+		size++;
+	}
+	string_iterate_lines(array, _count_lines);
+
+	return size;
+}
+
+bool string_array_is_empty(char** array) {
+	return array[0] == NULL;
+}
+
+void string_array_push(char*** array, char* text) {
+	_string_array_push(array, text, string_array_size(*array));
+}
+
+char* string_array_replace(char** array, int pos, char* text) {
+	return string_array_size(array) > pos && pos >= 0 ? _string_array_replace(array, pos, text) : NULL;
+}
+
+char* string_array_pop(char** array) {
+	return string_array_size(array) > 0 ? _string_array_replace(array, string_array_size(array) - 1, NULL) : NULL;
 }
 
 /** PRIVATE FUNCTIONS **/
@@ -248,7 +283,7 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 }
 
 char** _string_split(char* text, char* separator, bool(*condition)(char*, int)) {
-	char **substrings = NULL;
+	char **substrings = string_array_new();
 	int size = 0;
 
 	char *text_to_iterate = string_duplicate(text);
@@ -259,21 +294,28 @@ char** _string_split(char* text, char* separator, bool(*condition)(char*, int)) 
 		if(token == NULL) {
 			break;
 		}
+		_string_array_push(&substrings, string_duplicate(token), size);
 		size++;
-		substrings = realloc(substrings, sizeof(char*) * size);
-		substrings[size - 1] = string_duplicate(token);
 	};
 
 	if (next != NULL) {
+		_string_array_push(&substrings, string_duplicate(next), size);
 		size++;
-		substrings = realloc(substrings, sizeof(char*) * size);
-		substrings[size - 1] = string_duplicate(next);
 	}
-
-	size++;
-	substrings = realloc(substrings, sizeof(char*) * size);
-	substrings[size - 1] = NULL;
 
 	free(text_to_iterate);
 	return substrings;
+}
+
+static void _string_array_push(char*** array, char* text, int size) {
+	*array = realloc(*array, sizeof(char*) * (size + 2));
+	(*array)[size] = text;
+	(*array)[size + 1] = NULL;
+}
+
+static char* _string_array_replace(char** array, int pos, char* text) {
+	char* old_text = array[pos];
+	array[pos] = text;
+
+	return old_text;
 }
