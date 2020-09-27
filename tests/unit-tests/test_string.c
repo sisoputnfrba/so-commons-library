@@ -578,6 +578,55 @@ context (test_string) {
 
         } end
 
+		describe("Replace") {
+	        char* replaced;
+
+	        after {
+	        	free(replaced);
+	        } end
+
+	        it ("replace multiple occurrences") {
+	        	replaced = string_replace("hexxo worxd!", "x", "l");
+	        	should_string(replaced) be equal to ("hello world!");
+	        } end
+
+			it ("replace an occurrence with a longer one") {
+	        	replaced = string_replace("hello", "o", "o world!");
+	        	should_string(replaced) be equal to ("hello world!");
+	        } end
+
+			it ("replace an occurrence with a shorter one") {
+	        	replaced = string_replace("hello", "ello", "ola");
+	        	should_string(replaced) be equal to ("hola");
+	        } end
+
+			it ("replace every occurrence with empty string") {
+	        	replaced = string_replace("hello", "l", "");
+	        	should_string(replaced) be equal to ("heo");
+	        } end
+
+			it ("replace duplicates original when doesn't receive a substring as pattern") {
+	        	replaced = string_replace("hello", "definitely not a substring", "test failed!");
+	        	should_string(replaced) be equal to ("hello");
+	        } end
+
+			it ("replace duplicates empty string when doesn't receive empty string as pattern") {
+	        	replaced = string_replace("", "not empty", "test failed!");
+	        	should_string(replaced) be equal to ("");
+	        } end
+
+			it ("replace every character when receives empty string as pattern") {
+	        	replaced = string_replace("laugh", "", "ha");
+	        	should_string(replaced) be equal to ("hahahahaha");
+	        } end
+
+			it ("replace empty string when receives empty string as pattern") {
+	        	replaced = string_replace("", "", "a wild text appears!");
+	        	should_string(replaced) be equal to ("a wild text appears!");
+	        } end
+
+	    } end
+
     } end
 
 }

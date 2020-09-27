@@ -78,6 +78,19 @@
 	char*	string_reverse(char* text);
 
 	/**
+	* @NAME: string_replace
+	* @DESC: Retorna una copia de un string con todas las ocurrencias
+	* de 'pattern' siendo reemplazadas por 'replacement'. En caso de recibir
+	* el string vacío como patrón, reemplaza caracter a caracter.
+	*
+	* Ejemplo:
+	* char* original = "hello";
+	* string_replace(original, "o", "o world!") => "hello world!"
+	* string_replace(original, "", "a") => "aaaaa"
+	*/
+	char*	string_replace(char* text, char* pattern, char* replacement);
+
+	/**
 	* @NAME: string_append
 	* @DESC: Agrega al primer string el segundo
 	*
