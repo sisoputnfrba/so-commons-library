@@ -179,18 +179,22 @@
 	/**
 	* @NAME: list_sort
 	* @DESC: Ordena la lista segun el comparador
-	* El comparador devuelve si el primer parametro debe aparecer antes que el
-	* segundo en la lista
+	* El comparador devuelve:
+	* comparator(arg1, arg2) < 0 <=> arg1 debe aparecer antes que arg2 en la lista
+	* comparator(arg1, arg2) = 0 <=> ambos argumentos son iguales
+	* comparator(arg1, arg2) > 0 <=> arg2 debe aparecer antes que arg1 en la lista
 	*/
-	void list_sort(t_list *, bool (*comparator)(void *, void *));
+	void list_sort(t_list *, int (*comparator)(void *, void *));
 
 	/**
 	* @NAME: list_sorted
 	* @DESC: Retorna una lista nueva ordenada segun el comparador
-	* El comparador devuelve si el primer parametro debe aparecer antes que el
-	* segundo en la lista
+	* El comparador devuelve:
+	* comparator(arg1, arg2) < 0 <=> arg1 debe aparecer antes que arg2 en la lista
+	* comparator(arg1, arg2) = 0 <=> ambos argumentos son iguales
+	* comparator(arg1, arg2) > 0 <=> arg2 debe aparecer antes que arg1 en la lista
 	*/
-	t_list* list_sorted(t_list *, bool (*comparator)(void *, void *));
+	t_list* list_sorted(t_list *, int (*comparator)(void *, void *));
 
 	/**
 	* @NAME: list_count_satisfying

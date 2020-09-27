@@ -39,8 +39,12 @@ static void persona_destroy(t_person *self) {
     free(self);
 }
 
-static bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
-    return joven->age < menos_joven->age;
+static int _ayudantes_menor(t_person *joven, t_person *menos_joven) {
+    return joven->age - menos_joven->age;
+}
+
+static int _ayudantes_alfabetico(t_person *primero, t_person *segundo) {
+    return strcmp(primero->name, segundo->name);
 }
 
 context (test_list) {
@@ -314,8 +318,25 @@ context (test_list) {
                     assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
                     assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
                     assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
+                    assert_person_in_list(a_sorted_list, 3, "Gaston"   , 25);
+                    assert_person_in_list(a_sorted_list, 4, "Ezequiel" , 25);
+                }
+
+                void _verify_a_sort_with_multiple_comparators(t_list* (*sorted_list_generator)()) {
+                	list_add(list, persona_create("Ezequiel", 25));
+                    list_add(list, persona_create("Julian"  , 25));
+                    list_add(list, persona_create("Facundo" , 25));
+                    list_sort(list, (void*) _ayudantes_alfabetico);
+
+                    t_list* a_sorted_list = sorted_list_generator();
+
+                    assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
+                    assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
+                    assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
                     assert_person_in_list(a_sorted_list, 3, "Ezequiel" , 25);
-                    assert_person_in_list(a_sorted_list, 4, "Gaston"   , 25);
+                    assert_person_in_list(a_sorted_list, 4, "Facundo"  , 25);
+                    assert_person_in_list(a_sorted_list, 5, "Gaston"   , 25);
+                    assert_person_in_list(a_sorted_list, 6, "Julian"   , 25);
                 }
 
                 before {
@@ -341,6 +362,10 @@ context (test_list) {
                         _verify_a_sort_with_duplicates(__sorted_list);
                     } end
 
+                    it("should sort a list with multiple comparators") {
+                    	_verify_a_sort_with_multiple_comparators(__sorted_list);
+                    } end
+
                 } end
 
                 describe ("Sorted - without side effect") {
@@ -362,6 +387,10 @@ context (test_list) {
 
                     it("should sort a list with duplicated values") {
                         _verify_a_sort_with_duplicates(__sorted_list);
+                    } end
+
+                    it("should sort a list with multiple comparators") {
+                    	_verify_a_sort_with_multiple_comparators(__sorted_list);
                     } end
 
                 } end
