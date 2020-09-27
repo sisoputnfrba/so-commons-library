@@ -57,6 +57,17 @@
 	void list_add_in_index(t_list *, int index, void *element);
 
 	/**
+	* @NAME: list_add_sorted
+	* @DESC: Agrega un elemento a una lista ordenada, manteniendo el
+	* orden definido por el comparador
+	* El comparador devuelve:
+	* comparator(arg1, arg2) < 0 <=> arg1 debe aparecer antes que arg2 en la lista
+	* comparator(arg1, arg2) = 0 <=> ambos argumentos son iguales
+	* comparator(arg1, arg2) > 0 <=> arg2 debe aparecer antes que arg1 en la lista
+	*/
+	int list_add_sorted(t_list *self, void* data, int (*comparator)(void*,void*));
+
+	/**
 	* @NAME: list_add_all
 	* @DESC: Agrega todos los elementos de
 	* la segunda lista en la primera
