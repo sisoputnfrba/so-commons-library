@@ -81,7 +81,8 @@
 	* @NAME: string_replace
 	* @DESC: Retorna una copia de un string con todas las ocurrencias
 	* de 'pattern' siendo reemplazadas por 'replacement'. En caso de recibir
-	* el string vacío como patrón, reemplaza caracter a caracter.
+	* el string vacío como patrón, retorna una copia exacta del string 
+	* original.
 	*
 	* Ejemplo:
 	* char* original = "hello";

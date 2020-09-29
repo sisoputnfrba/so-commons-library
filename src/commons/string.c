@@ -234,36 +234,23 @@ int string_array_size(char** array) {
 }
 
 char* string_replace(char* text, char* pattern, char* replacement) {
-	if(text[0] == '\0' && pattern[0] == '\0') {
-		return string_duplicate(replacement);
+	if(pattern[0] == '\0') {
+		return strdup(text);
 	}
+	char* result = strdup("");
 
-	char* result = string_new();
-	char* non_replaced_part;
+	char* start = text;
+	char* next;
 
-	int i = 0, start = 0;
-	while(text[i] != '\0') {
-		if(string_starts_with(text + i, pattern)) {
-			if(pattern[0] == '\0') {
-				string_append(&result, replacement);
-				i++;
-			} else {
-				non_replaced_part = string_substring(text, start, i - start);
-				string_append(&result, non_replaced_part);
-				string_append(&result, replacement);
-				free(non_replaced_part);
-				i += strlen(pattern);
-			}
-			start = i;
-		} else {
-			i++;
-		}
+	while((next = strstr(start, pattern)) != NULL) {
+		result = realloc(result, strlen(result) + (size_t)(next - start) + strlen(replacement) + 1);
+		strncat(result, start, (size_t)(next - start));
+		strcat(result, replacement);
+
+		start = next + strlen(pattern);
 	}
-	if(start < i) {
-		non_replaced_part = string_substring(text, start, i - start);
-		string_append(&result, non_replaced_part);
-		free(non_replaced_part);
-	}
+	result = realloc(result, strlen(result) + strlen(start) + 1);
+	strncat(result, start, (size_t)(next - start));
 
 	return result;
 }

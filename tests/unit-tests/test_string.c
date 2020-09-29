@@ -610,19 +610,9 @@ context (test_string) {
 	        	should_string(replaced) be equal to ("hello");
 	        } end
 
-			it ("replace duplicates empty string when doesn't receive empty string as pattern") {
-	        	replaced = string_replace("", "not empty", "test failed!");
-	        	should_string(replaced) be equal to ("");
-	        } end
-
-			it ("replace every character when receives empty string as pattern") {
-	        	replaced = string_replace("laugh", "", "ha");
-	        	should_string(replaced) be equal to ("hahahahaha");
-	        } end
-
-			it ("replace empty string when receives empty string as pattern") {
-	        	replaced = string_replace("", "", "a wild text appears!");
-	        	should_string(replaced) be equal to ("a wild text appears!");
+			it ("replace duplicates original when receives empty string as pattern") {
+	        	replaced = string_replace("hello", "", "test failed!");
+	        	should_string(replaced) be equal to ("hello");
 	        } end
 
 	    } end
