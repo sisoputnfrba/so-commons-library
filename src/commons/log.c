@@ -123,7 +123,7 @@ static void _log_write_in_level(t_log* logger, t_log_level level, const char* me
 		unsigned int thread_id;
 
                 message = string_from_vformat(message_template, list_arguments);
-		time = temporal_get_string_time();
+		time = temporal_get_string_time("%H:%M:%S:%MS");
 		thread_id = process_get_thread_id();
 
 		buffer = string_from_format("[%s] %s %s/(%d:%d): %s\n",
