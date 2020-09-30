@@ -271,6 +271,18 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 	return mapped;
 }
 
+t_list* list_zip_with(t_list* self, t_list* other, void*(*transformer)(void*, void*)) {
+	t_link_element* right = other->head;
+
+	void* _transform_with_second_list(void* left_data) {
+		void* zipped_data = transformer(left_data, right->data);
+		right = right->next;
+		return zipped_data;
+	}
+
+	return list_map(self, _transform_with_second_list);
+}
+
 int list_add_sorted(t_list *self, void* data, int (*comparator)(void*,void*)) {
 	t_link_element* new_element = list_create_element(data);
 

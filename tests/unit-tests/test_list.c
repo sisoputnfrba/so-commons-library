@@ -285,6 +285,43 @@ context (test_list) {
 
         } end
 
+		describe ("Zip with") {
+
+			it("should create a new list using elements from two different lists") {
+				t_list* names = list_create();
+				t_list* ages = list_create();
+
+				list_add(names, (void*)"Matias"   );
+				list_add(names, (void*)"Gaston"   );
+				list_add(names, (void*)"Sebastian");
+				list_add(names, (void*)"Ezequiel" );
+				list_add(names, (void*)"Facundo"  );
+
+				list_add(ages, (void*)24);
+				list_add(ages, (void*)25);
+				list_add(ages, (void*)21);
+				list_add(ages, (void*)25);
+				list_add(ages, (void*)25);
+
+				list_destroy(list);
+				list = list_zip_with(names, ages, (void*)persona_create);
+
+				should_int(list_size(names)) be equal to(5);
+				should_int(list_size(ages)) be equal to(5);
+				should_int(list_size(list)) be equal to(5);
+
+				assert_person_in_list(list, 0, "Matias"   , 24);
+				assert_person_in_list(list, 1, "Gaston"   , 25);
+				assert_person_in_list(list, 2, "Sebastian", 21);
+				assert_person_in_list(list, 3, "Ezequiel" , 25);
+				assert_person_in_list(list, 4, "Facundo"  , 25);
+
+				list_destroy(names);
+				list_destroy(ages);
+			} end
+
+		} end
+
         describe ("Take") {
 
             before {

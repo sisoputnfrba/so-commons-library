@@ -130,6 +130,13 @@
 	t_list* list_map(t_list*, void*(*transformer)(void*));
 
 	/**
+	 * @NAME: list_zip_with
+	 * @DESC: Devuelve una nueva lista con los elementos
+	 * de dos listas de mismo tamaño transformados.
+	*/
+	t_list* list_zip_with(t_list* self, t_list* other, void*(*transformer)(void*, void*));
+
+	/**
 	* @NAME: list_replace
 	* @DESC: Coloca un elemento en una de la posiciones
 	* de la lista retornando el valor anterior
