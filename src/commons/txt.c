@@ -16,8 +16,12 @@
 
 #include "txt.h"
 
-#include <stdio.h>
+#include <stdlib.h>
+#include <commons/string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
+char** _get_tokens_array(char* line, int* argc);
 
 FILE* txt_open_for_append(char* path) {
 	return fopen(path, "a");
@@ -35,4 +39,49 @@ void txt_write_in_stdout(char* string) {
 
 void txt_close_file(FILE* file) {
 	fclose(file);
+}
+
+char** txt_read_line_in_stdin(const char* prompt, int* argc) {
+	char *line, **argv = NULL;
+	int args_count = 0;
+
+	line = readline(prompt);
+	if(line[0] != '\0') {
+		add_history(line);
+		argv = _get_tokens_array(line, &args_count);
+	}
+	free(line);
+
+	if(argc != NULL) {
+		*argc = args_count;
+	}
+
+	return argv;
+}
+
+char** _get_tokens_array(char* line, int* argc) {
+	char *buff, *token, **argv = NULL;
+
+	buff = line;
+	token = strtok_r(line, " ", &buff);
+
+	if(token != NULL) {
+		(*argc)++;
+		argv = realloc(argv, sizeof(char*) * (*argc));
+		argv[(*argc) - 1] = strdup(token);
+
+		while(buff[0] != '\0') {
+			token = strtok_r(NULL, " ", &buff);
+			if(token == NULL) {
+				break;
+			}
+			(*argc)++;
+			argv = realloc(argv, sizeof(char*) * (*argc));
+			argv[(*argc) - 1] = strdup(token);
+		}
+	}
+	argv = realloc(argv, sizeof(char*) * ((*argc) + 1));
+	argv[(*argc)] = NULL;
+
+	return argv;
 }

@@ -38,6 +38,15 @@ void txt_write_in_file(FILE* file, char* string);
 void txt_write_in_stdout(char* string);
 
 /**
+* @NAME: txt_read_in_stdin
+* @DESC: Lee una línea desde la salida estandar y
+* retorna cada token en un array de strings, junto 
+* con su cantidad.
+* Retorna NULL en caso de recibir un salto de línea.
+*/
+char** txt_read_line_in_stdin(const char* prompt, int* argc);
+
+/**
 * @NAME: txt_close_file
 * @DESC: Cierra el archivo
 */
