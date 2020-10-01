@@ -33,8 +33,27 @@ void txt_write_in_file(FILE* file, char* bytes) {
 }
 
 void txt_write_in_stdout(char* string) {
-	printf("%s", string);
+	char *saved_line;
+    int saved_point;
+    int need_hack = (rl_readline_state & RL_STATE_READCMD) > 0;
+    if(need_hack) {
+        saved_point = rl_point;
+        saved_line = rl_copy_text(0, rl_end);
+        rl_save_prompt();
+        rl_replace_line("", 0);
+        rl_redisplay();
+    }
+
+    printf("%s", string);
 	fflush(stdout);
+
+    if(need_hack) {
+        rl_restore_prompt();
+        rl_replace_line(saved_line, 0);
+        rl_point = saved_point;
+        rl_redisplay();
+        free(saved_line);
+    }
 }
 
 void txt_close_file(FILE* file) {
