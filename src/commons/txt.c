@@ -17,7 +17,7 @@
 #include "txt.h"
 
 #include <stdlib.h>
-#include <commons/string.h>
+#include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
