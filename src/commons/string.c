@@ -49,6 +49,14 @@ void string_append(char** original, char* string_to_add) {
 	strcat(*original, string_to_add);
 }
 
+void string_n_append(char** original, char* string_to_add, int n) {
+	if(strlen(string_to_add) < n) {
+		n = strlen(string_to_add);
+	}
+	*original = realloc(*original, strlen(*original) + n + 1);
+	strncat(*original, string_to_add, n);
+}
+
 char* string_new() {
 	return string_duplicate("");
 }
@@ -69,7 +77,7 @@ char* string_from_vformat(const char* format, va_list arguments) {
 }
 
 char* string_itoa(int number) {
-    return string_from_format("%d", number);
+	return string_from_format("%d", number);
 }
 
 void string_append_with_format(char **original, const char *format, ...) {
@@ -163,22 +171,22 @@ char** string_n_split(char *text, int n, char* separator) {
 	return _string_split(text, separator, _is_last_token);
 }
 
-char**  string_get_string_as_array(char* text) {
-    int length_value = strlen(text) - 2;
-    char* value_without_brackets = string_substring(text, 1, length_value);
-    char **array_values = string_split(value_without_brackets, ",");
+char** string_get_string_as_array(char* text) {
+	int length_value = strlen(text) - 2;
+	char* value_without_brackets = string_substring(text, 1, length_value);
+	char **array_values = string_split(value_without_brackets, ",");
 
-    int i = 0;
-    while (array_values[i] != NULL) {
-	    string_trim(&(array_values[i]));
-	    i++;
-    }
+	int i = 0;
+	while (array_values[i] != NULL) {
+		string_trim(&(array_values[i]));
+		i++;
+	}
 
-    free(value_without_brackets);
-    return array_values;
+	free(value_without_brackets);
+	return array_values;
 }
 
-char*   string_substring(char* text, int start, int length) {
+char* string_substring(char* text, int start, int length) {
 	char* new_string = calloc(1, length + 1);
 	strncpy(new_string, text + start, length);
 	return new_string;
@@ -204,21 +212,21 @@ int string_length(char* text) {
 }
 
 char* string_reverse(char* text) {
-    char* result = calloc(1, string_length(text) + 1);
+	char* result = calloc(1, string_length(text) + 1);
 
-    int i = string_length(text) - 1, j = 0;
-    while (i >= 0){
-        result[j] = text[i];
-        i--;
-        j++;
-    }
+	int i = string_length(text) - 1, j = 0;
+	while (i >= 0){
+		result[j] = text[i];
+		i--;
+		j++;
+	}
 
-    return result;
+	return result;
 }
 
 char** string_array_new() {
 	char** array = malloc(sizeof(char*));
-	array[0] = NULL;
+	*array = NULL;
 
 	return array;
 }
@@ -234,29 +242,27 @@ int string_array_size(char** array) {
 }
 
 char* string_replace(char* text, char* pattern, char* replacement) {
-	if(pattern[0] == '\0') {
-		return strdup(text);
+	if(*pattern == '\0') {
+		return string_duplicate(text);
 	}
-	char* result = strdup("");
 
+	char* result = string_new();
 	char* start = text;
 	char* next;
 
 	while((next = strstr(start, pattern)) != NULL) {
-		result = realloc(result, strlen(result) + (size_t)(next - start) + strlen(replacement) + 1);
-		strncat(result, start, (size_t)(next - start));
-		strcat(result, replacement);
+		string_n_append(&result, start, next - start);
+		string_append(&result, replacement);
 
 		start = next + strlen(pattern);
 	}
-	result = realloc(result, strlen(result) + strlen(start) + 1);
-	strncat(result, start, (size_t)(next - start));
+	string_append(&result, start);
 
 	return result;
 }
 
 bool string_array_is_empty(char** array) {
-	return array[0] == NULL;
+	return *array == NULL;
 }
 
 void string_array_push(char*** array, char* text) {

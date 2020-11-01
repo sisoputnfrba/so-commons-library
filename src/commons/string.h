@@ -27,16 +27,16 @@
 	char*   string_new();
 
 	/**
-	* @NAME: string_new
+	* @NAME: string_array_new
 	* @DESC: Crea un array de strings vacio
 	*/
-	char** string_array_new();
+	char**  string_array_new();
 
 	/**
 	* @NAME: string_itoa
 	* @DESC: Crea un string a partir de un numero
 	*/
-	char* string_itoa(int number);
+	char*   string_itoa(int number);
 
 	/**
 	* @NAME: string_from_format
@@ -75,7 +75,7 @@
 	 * char* original = "boo";
 	 * string_reverse(original) => "oob"
 	 */
-	char*	string_reverse(char* text);
+	char*   string_reverse(char* text);
 
 	/**
 	* @NAME: string_replace
@@ -87,9 +87,9 @@
 	* Ejemplo:
 	* char* original = "hello";
 	* string_replace(original, "o", "o world!") => "hello world!"
-	* string_replace(original, "", "a") => "aaaaa"
+	* string_replace(original, "", "a") => "hello"
 	*/
-	char*	string_replace(char* text, char* pattern, char* replacement);
+	char*   string_replace(char* text, char* pattern, char* replacement);
 
 	/**
 	* @NAME: string_append
@@ -102,7 +102,21 @@
 	*
 	* => unaPalabra = "HOLA PEPE"
 	*/
-	void 	string_append(char ** original, char * string_to_add);
+	void    string_append(char ** original, char * string_to_add);
+
+	/**
+	* @NAME: string_n_append
+	* @DESC: Agrega al primer string un máximo de n caracteres
+	* del segundo.
+	*
+	* Ejemplo:
+	* char *unaPalabra = string_new();
+	* string_n_append(&unaPalabra, "HOLA ", 10);
+	* string_n_append(&unaPalabra, "PEPE", 3);
+	*
+	* => unaPalabra = "HOLA PEP"
+	*/
+	void    string_n_append(char** original, char* string_to_add, int n);
 
 	/**
 	* @NAME: string_append_with_format
@@ -124,58 +138,58 @@
 	* @DESC: Retorna una copia del string pasado
 	* como argumento
 	*/
-	char*	string_duplicate(char* original);
+	char*   string_duplicate(char* original);
 
 	/**
 	* @NAME: string_to_upper
 	* @DESC: Pone en mayuscula todos los caracteres de un string
 	*/
-	void 	string_to_upper(char * text);
+	void    string_to_upper(char * text);
 
 	/**
 	* @NAME: string_to_lower
 	* @DESC: Pone en minuscula todos los caracteres de un string
 	*/
-	void 	string_to_lower(char * text);
+	void    string_to_lower(char * text);
 
 	/**
 	* @NAME: string_capitalized
 	* @DESC: Capitaliza un string
 	*/
-	void 	string_capitalized(char * text);
+	void    string_capitalized(char * text);
 
 	/**
 	* @NAME: string_trim
 	* @DESC: Remueve todos los caracteres
 	* vacios de la derecha y la izquierda
 	*/
-	void 	string_trim(char ** text);
+	void    string_trim(char ** text);
 
 	/**
 	* @NAME: string_trim_left
 	* @DESC: Remueve todos los caracteres
 	* vacios de la izquierda
 	*/
-	void 	string_trim_left(char ** text);
+	void    string_trim_left(char ** text);
 
 	/**
 	* @NAME: string_trim_right
 	* @DESC: Remueve todos los caracteres
 	* vacios de la derecha
 	*/
-	void 	string_trim_right(char ** text);
+	void    string_trim_right(char ** text);
 
 	/**
 	* @NAME: string_length
 	* @DESC: Retorna la longitud del string
 	*/
-	int 	string_length(char * text);
+	int     string_length(char * text);
 
 	/**
 	* @NAME: string_is_empty
 	* @DESC: Retorna si un string es ""
 	*/
-	bool 	string_is_empty(char * text);
+	bool    string_is_empty(char * text);
 
 	/**
 	* @NAME: string_starts_with
@@ -183,7 +197,7 @@
 	* si un string comienza con el
 	* string pasado por parametro
 	*/
-	bool 	string_starts_with(char * text, char * begin);
+	bool    string_starts_with(char * text, char * begin);
 
 	/**
 	* @NAME: string_ends_with
@@ -191,21 +205,21 @@
 	* si un string finaliza con el
 	* string pasado por parametro
 	*/
-	bool	string_ends_with(char* text, char* end);
+	bool    string_ends_with(char* text, char* end);
 
 	/**
 	 * @NAME: string_contains
 	 * @DESC: Retorna un boolean que indica si text contiene o no
 	 * a substring.
 	 */
-	bool	string_contains(char* text, char *substring);
+	bool    string_contains(char* text, char *substring);
 
 	/**
 	* @NAME: string_equals_ignore_case
 	* @DESC: Retorna si dos strings son iguales
 	* ignorando las mayusculas y minusculas
 	*/
-	bool 	string_equals_ignore_case(char * actual, char * expected);
+	bool    string_equals_ignore_case(char * actual, char * expected);
 
 	/**
 	* @NAME: string_substring
@@ -257,7 +271,7 @@
 	*
 	* Ejemplo:
 	* char* array_string = "[1,2,3,4]"
-	* string_get_value_as_array(array_string) => ["1","2","3","4"]
+	* string_get_string_as_array(array_string) => {"1","2","3","4", NULL}
 	*/
 	char**  string_get_string_as_array(char* text);
 
@@ -266,38 +280,38 @@
 	* @DESC: Itera un array de strings aplicando
 	* el closure a cada string, hasta que encuentre un NULL
 	*/
-	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
+	void    string_iterate_lines(char ** strings, void (*closure)(char *));
 
 	/**
 	* @NAME: string_array_size
 	* @DESC: Retorna la cantidad de líneas del
 	* array de strings
 	*/
-	int 	string_array_size(char** array);
+	int     string_array_size(char** array);
 
 	/**
 	* @NAME: string_array_is_empty
 	* @DESC: Verifica si el array de strings está vacío
 	*/
-	bool 	string_array_is_empty(char** array);
+	bool    string_array_is_empty(char** array);
 
 	/**
 	* @NAME: string_array_push
 	* @DESC: Agrega un string al final del array
 	*/
-	void 	string_array_push(char*** array, char* text);
+	void    string_array_push(char*** array, char* text);
 
 	/**
 	* @NAME: string_array_replace
 	* @DESC: Reemplaza un string en un array por otro, retornando
 	* el anterior
 	*/
-	char*	string_array_replace(char** array, int pos, char* text);
+	char*   string_array_replace(char** array, int pos, char* text);
 
 	/**
 	* @NAME: string_array_push
 	* @DESC: Quita el último string del array y lo retorna
 	*/
-	char*	string_array_pop(char** array);
+	char*   string_array_pop(char** array);
 
 #endif /* STRING_UTILS_H_ */

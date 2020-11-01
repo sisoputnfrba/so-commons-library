@@ -50,6 +50,17 @@ context (test_string) {
             free(string);
         } end
 
+        it("n_append") {
+            char *string = string_new();
+            string_n_append(&string, "Hello", 10);
+            string_n_append(&string, "     ", 1);
+            string_n_append(&string, "world", 5);
+
+            should_string(string) be equal to("Hello world");
+
+            free(string);
+        } end
+
         it("append_with_format") {
             char *string = string_new();
 
@@ -181,9 +192,8 @@ context (test_string) {
         } end
 
         describe("Split") {
-
-        	it("split_with_delimitators") {
-        		char *line = "path/to/file";
+            it("split_with_delimitators") {
+                char *line = "path/to/file";
                 char** substrings = string_split(line, "/");
 
                 should_ptr(substrings) not be null;
@@ -192,51 +202,51 @@ context (test_string) {
                 should_string(substrings[2]) be equal to ("file");
                 should_ptr(substrings[3]) be null;
 
-				string_iterate_lines(substrings, (void*) free);
+                string_iterate_lines(substrings, (void*) free);
                 free(substrings);
             } end
 
-			it("split_starting_with_delimitator") {
-              	char* line = "/path/to/file";
-				char** substrings = string_split(line, "/");
+            it("split_starting_with_delimitator") {
+                char* line = "/path/to/file";
+                char** substrings = string_split(line, "/");
 
-				should_ptr(substrings) not be null;
-				should_string(substrings[0]) be equal to ("");
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("");
                 should_string(substrings[1]) be equal to ("path");
                 should_string(substrings[2]) be equal to ("to");
                 should_string(substrings[3]) be equal to ("file");
 
-				string_iterate_lines(substrings, (void*) free);
-				free(substrings);
-			} end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-			it("split_ending_with_delimitator") {
-				char* line = "path/to/file/";
-				char** substrings = string_split(line, "/");
+            it("split_ending_with_delimitator") {
+                char* line = "path/to/file/";
+                char** substrings = string_split(line, "/");
 
-				should_ptr(substrings) not be null;
+                should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to ("path");
                 should_string(substrings[1]) be equal to ("to");
                 should_string(substrings[2]) be equal to ("file");
-			    should_string(substrings[3]) be equal to ("");
+                should_string(substrings[3]) be equal to ("");
 
-			    string_iterate_lines(substrings, (void*) free);
-				free(substrings);
-			} end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-			it("split_having_delimitators_in_between") {
-				char* line = "path/to//file";
-			    char** substrings = string_split(line, "/");
+            it("split_having_delimitators_in_between") {
+                char* line = "path/to//file";
+                char** substrings = string_split(line, "/");
 
-			    should_ptr(substrings) not be null;
+                should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to ("path");
                 should_string(substrings[1]) be equal to ("to");
-			    should_string(substrings[2]) be equal to ("");
+                should_string(substrings[2]) be equal to ("");
                 should_string(substrings[3]) be equal to ("file");
 
-			    string_iterate_lines(substrings, (void*) free);
-				free(substrings);
-			} end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
             it("split_is_empty") {
                 char* line = "";
@@ -477,145 +487,145 @@ context (test_string) {
         } end
 
         it("Contains") {
-        	should_bool(string_contains("Pablito clavo un clavito", "Pablito")) be truthy;
-        	should_bool(string_contains("Pablito clavo un clavito", "pablito")) be falsey;
-        	should_bool(string_contains("Pablito clavo un clavito", "lito")) be truthy;
-        	should_bool(string_contains("Pablito clavo un clavito", "")) be truthy;
-        	should_bool(string_contains("", "Pablito clavo un clavito")) be falsey;
-        	should_bool(string_contains("", "")) be truthy;
+            should_bool(string_contains("Pablito clavo un clavito", "Pablito")) be truthy;
+            should_bool(string_contains("Pablito clavo un clavito", "pablito")) be falsey;
+            should_bool(string_contains("Pablito clavo un clavito", "lito")) be truthy;
+            should_bool(string_contains("Pablito clavo un clavito", "")) be truthy;
+            should_bool(string_contains("", "Pablito clavo un clavito")) be falsey;
+            should_bool(string_contains("", "")) be truthy;
         } end
 
-		describe ("String array") {
-        	char** names;
+        describe ("String array") {
+            char** names;
 
-        	before {
-        		names = string_array_new();
+            before {
+                names = string_array_new();
 
-        		string_array_push(&names, "Gaston");
-        		string_array_push(&names, "Matias");
-        		string_array_push(&names, "Sebastian");
-        		string_array_push(&names, "Daniela");
-        	} end
+                string_array_push(&names, "Gaston");
+                string_array_push(&names, "Matias");
+                string_array_push(&names, "Sebastian");
+                string_array_push(&names, "Daniela");
+            } end
 
-			after {
-        		free(names);
-        	} end
+            after {
+                free(names);
+            } end
 
-			it ("add an element at the end") {
-        		string_array_push(&names, "Agustin");
+            it ("add an element at the end") {
+                string_array_push(&names, "Agustin");
 
-        		should_int(string_array_size(names)) be equal to (5);
-        		should_ptr(names[5]) be null;
+                should_int(string_array_size(names)) be equal to (5);
+                should_ptr(names[5]) be null;
 
-        		char* expected[] = {"Gaston", "Matias", "Sebastian", "Daniela", "Agustin"};
-        		int i = 0;
-        		void _assert_names(char* name) {
-        			should_ptr(name) not be null;
-        			should_string(name) be equal to (expected[i]);
-        			i++;
-        		}
-        		string_iterate_lines(names, _assert_names);
-        	} end
+                char* expected[] = {"Gaston", "Matias", "Sebastian", "Daniela", "Agustin"};
+                int i = 0;
+                void _assert_names(char* name) {
+                    should_ptr(name) not be null;
+                    should_string(name) be equal to (expected[i]);
+                    i++;
+                }
+                string_iterate_lines(names, _assert_names);
+            } end
 
-			it("remove the last element") {
-        		char* name = string_array_pop(names);
+            it("remove the last element") {
+                char* name = string_array_pop(names);
 
-        		should_string(name) be equal to ("Daniela");
+                should_string(name) be equal to ("Daniela");
 
-        		should_int(string_array_size(names)) be equal to (3);
-        		should_ptr(names[3]) be null;
+                should_int(string_array_size(names)) be equal to (3);
+                should_ptr(names[3]) be null;
 
-        		char* expected[] = {"Gaston", "Matias", "Sebastian"};
-        		int i = 0;
-        		void _assert_names(char* name) {
-        			should_ptr(name) not be null;
-        		    should_string(name) be equal to (expected[i]);
-        			i++;
-        		}
-        		string_iterate_lines(names, _assert_names);
-        	} end
+                char* expected[] = {"Gaston", "Matias", "Sebastian"};
+                int i = 0;
+                void _assert_names(char* name) {
+                should_ptr(name) not be null;
+                    should_string(name) be equal to (expected[i]);
+                    i++;
+                }
+                string_iterate_lines(names, _assert_names);
+            } end
 
-			it ("not to remove elements in an empty array") {
-        		for(int i = 0; i < 10; i++) {
-        			string_array_pop(names);
-        		}
+            it ("not to remove elements in an empty array") {
+                for(int i = 0; i < 10; i++) {
+                    string_array_pop(names);
+                }
 
-        		should_int(string_array_size(names)) be equal to (0);
-        		should_bool(string_array_is_empty(names)) be truthy;
-        	} end
+                should_int(string_array_size(names)) be equal to (0);
+                should_bool(string_array_is_empty(names)) be truthy;
+            } end
 
-			it("replace an element") {
-        		char* name = string_array_replace(names, 2, "Damian");
+            it("replace an element") {
+                char* name = string_array_replace(names, 2, "Damian");
 
-        		should_string(name) be equal to ("Sebastian");
+                should_string(name) be equal to ("Sebastian");
 
-        		char* expected[] = {"Gaston", "Matias", "Damian", "Daniela"};
-        		int i = 0;
-        		void _assert_names(char* name) {
-        			should_ptr(name) not be null;
-        		    should_string(name) be equal to (expected[i]);
-        			i++;
-        		}
-        		string_iterate_lines(names, _assert_names);
-        	} end
+                char* expected[] = {"Gaston", "Matias", "Damian", "Daniela"};
+                int i = 0;
+                void _assert_names(char* name) {
+                    should_ptr(name) not be null;
+                    should_string(name) be equal to (expected[i]);
+                    i++;
+                }
+                string_iterate_lines(names, _assert_names);
+            } end
 
-			it("not to replace an element outside the array") {
-        		char* name = string_array_replace(names, 4, "Damian");
+            it("not to replace an element outside the array") {
+                char* name = string_array_replace(names, 4, "Damian");
 
-        		should_ptr(name) be null;
-        		should_int(string_array_size(names)) be equal to (4);
-        		should_ptr(names[4]) be null;
+                should_ptr(name) be null;
+                should_int(string_array_size(names)) be equal to (4);
+                should_ptr(names[4]) be null;
 
-        		char* expected[] = {"Gaston", "Matias", "Sebastian", "Daniela"};
-        		int i = 0;
-        		void _assert_names(char* name) {
-        			should_ptr(name) not be null;
-        		    should_string(name) be equal to (expected[i]);
-        		    i++;
-        		}
-        		string_iterate_lines(names, _assert_names);
-        	} end
+                char* expected[] = {"Gaston", "Matias", "Sebastian", "Daniela"};
+                int i = 0;
+                void _assert_names(char* name) {
+                    should_ptr(name) not be null;
+                    should_string(name) be equal to (expected[i]);
+                    i++;
+                }
+                string_iterate_lines(names, _assert_names);
+            } end
 
         } end
 
-		describe("Replace") {
-	        char* replaced;
+        describe("Replace") {
+            char* replaced;
 
-	        after {
-	        	free(replaced);
-	        } end
+            after {
+                free(replaced);
+            } end
 
-	        it ("replace multiple occurrences") {
-	        	replaced = string_replace("hexxo worxd!", "x", "l");
-	        	should_string(replaced) be equal to ("hello world!");
-	        } end
+            it ("replace multiple occurrences") {
+                replaced = string_replace("hexxo worxd!", "x", "l");
+                should_string(replaced) be equal to ("hello world!");
+            } end
 
-			it ("replace an occurrence with a longer one") {
-	        	replaced = string_replace("hello", "o", "o world!");
-	        	should_string(replaced) be equal to ("hello world!");
-	        } end
+            it ("replace an occurrence with a longer one") {
+                replaced = string_replace("hello", "o", "o world!");
+                should_string(replaced) be equal to ("hello world!");
+            } end
 
-			it ("replace an occurrence with a shorter one") {
-	        	replaced = string_replace("hello", "ello", "ola");
-	        	should_string(replaced) be equal to ("hola");
-	        } end
+            it ("replace an occurrence with a shorter one") {
+                replaced = string_replace("hello", "ello", "ola");
+                should_string(replaced) be equal to ("hola");
+            } end
 
-			it ("replace every occurrence with empty string") {
-	        	replaced = string_replace("hello", "l", "");
-	        	should_string(replaced) be equal to ("heo");
-	        } end
+            it ("replace every occurrence with empty string") {
+                replaced = string_replace("hello", "l", "");
+                should_string(replaced) be equal to ("heo");
+            } end
 
-			it ("replace duplicates original when doesn't receive a substring as pattern") {
-	        	replaced = string_replace("hello", "definitely not a substring", "test failed!");
-	        	should_string(replaced) be equal to ("hello");
-	        } end
+            it ("replace duplicates original when doesn't receive a substring as pattern") {
+                replaced = string_replace("hello", "definitely not a substring", "test failed!");
+                should_string(replaced) be equal to ("hello");
+            } end
 
-			it ("replace duplicates original when receives empty string as pattern") {
-	        	replaced = string_replace("hello", "", "test failed!");
-	        	should_string(replaced) be equal to ("hello");
-	        } end
+            it ("replace duplicates original when receives empty string as pattern") {
+                replaced = string_replace("hello", "", "test failed!");
+                should_string(replaced) be equal to ("hello");
+            } end
 
-	    } end
+        } end
 
     } end
 
