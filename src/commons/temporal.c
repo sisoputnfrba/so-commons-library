@@ -17,45 +17,33 @@
 #include "error.h"
 #include "string.h"
 
-#include <stdlib.h>
-#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/timeb.h>
+#include <time.h>
 #include <string.h>
 
 char *temporal_get_string_time(const char* format) {
-	char* str_time = malloc(strlen(format) + 1);
-	char* strftime_format = strdup(format);
-	struct tm *log_tm = malloc(sizeof(struct tm));
+	char* str_time = strdup(format);
 
-	//time
-	time_t log_time = time(NULL);
-	if(log_time == -1) {
-		error_show("Error getting time!");
+	struct timespec* log_timespec = malloc(sizeof(struct timespec));
+	struct tm* log_tm = malloc(sizeof(struct tm));
+	char* milisec;
+
+	if(clock_gettime(CLOCK_REALTIME, log_timespec) == -1) {
 		return NULL;
 	}
+	milisec = string_from_format("%03d", log_timespec->tv_nsec / 1000000);
 
-	//miliseconds
-	struct timeb tmili;
-	if(ftime(&tmili)) {
-		error_show("Error getting miliseconds!");
-		return NULL;
+	for(char* ms = strstr(str_time, "%MS"); ms != NULL; ms = strstr(ms + 3, "%MS")) {
+		memcpy(ms, milisec, 3);
 	}
 
-	//parse
-	char* aux = strftime_format;
-	while((aux = strstr(aux, "%MS"))) {
-		sprintf(aux, "%03hu", tmili.millitm);
-		strftime_format[strlen(strftime_format)] = format[strlen(strftime_format)];
-		aux = aux + 3;
-	}
+	localtime_r(&log_timespec->tv_sec, log_tm);
+	strftime(str_time, strlen(format) + 1, str_time, log_tm);
 
-	localtime_r(&log_time, log_tm);
-	strftime(str_time, strlen(format)+1, strftime_format, log_tm);
-
+	free(milisec);
 	free(log_tm);
-	free(strftime_format);
+	free(log_timespec);
 
 	return str_time;
 }
