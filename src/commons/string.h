@@ -271,7 +271,7 @@
 	*
 	* Ejemplo:
 	* char* array_string = "[1,2,3,4]"
-	* string_get_string_as_array(array_string) => {"1","2","3","4", NULL}
+	* string_get_string_as_array(array_string) => ["1","2","3","4", NULL]
 	*/
 	char**  string_get_string_as_array(char* text);
 
@@ -309,7 +309,7 @@
 	char*   string_array_replace(char** array, int pos, char* text);
 
 	/**
-	* @NAME: string_array_push
+	* @NAME: string_array_pop
 	* @DESC: Quita el último string del array y lo retorna
 	*/
 	char*   string_array_pop(char** array);
