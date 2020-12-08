@@ -40,7 +40,11 @@ static void persona_destroy(t_person *self) {
 }
 
 static bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
-    return joven->age < menos_joven->age;
+    return joven->age <= menos_joven->age;
+}
+
+static bool _ayudantes_alfabetico(t_person *primero, t_person *segundo) {
+    return strcmp(primero->name, segundo->name) <= 0;
 }
 
 context (test_list) {
@@ -205,14 +209,14 @@ context (test_list) {
                 list_add(list, persona_create("Facundo"  , 25));
             } end
 
-            it(" should find the first value that satisfies a condition") {
-            	t_person *find_someone_by_name(char *name) {
-            		int _is_the_one(t_person *p) {
-            			return string_equals_ignore_case(p->name, name);
-            		}
+            it("should find the first value that satisfies a condition") {
+                t_person *find_someone_by_name(char *name) {
+                    int _is_the_one(t_person *p) {
+                        return string_equals_ignore_case(p->name, name);
+                    }
 
-            		return list_find(list, (void*) _is_the_one);
-            	}
+                    return list_find(list, (void*) _is_the_one);
+                }
 
                 assert_person(find_someone_by_name("Ezequiel"), "Ezequiel", 25);
                 assert_person(find_someone_by_name("Sebastian"), "Sebastian", 21);
@@ -314,8 +318,25 @@ context (test_list) {
                     assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
                     assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
                     assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
+                    assert_person_in_list(a_sorted_list, 3, "Gaston"   , 25);
+                    assert_person_in_list(a_sorted_list, 4, "Ezequiel" , 25);
+                }
+
+                void _verify_a_sort_with_multiple_comparators(t_list* (*sorted_list_generator)()) {
+                	list_add(list, persona_create("Ezequiel", 25));
+                    list_add(list, persona_create("Julian"  , 25));
+                    list_add(list, persona_create("Facundo" , 25));
+                    list_sort(list, (void*) _ayudantes_alfabetico);
+
+                    t_list* a_sorted_list = sorted_list_generator();
+
+                    assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
+                    assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
+                    assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
                     assert_person_in_list(a_sorted_list, 3, "Ezequiel" , 25);
-                    assert_person_in_list(a_sorted_list, 4, "Gaston"   , 25);
+                    assert_person_in_list(a_sorted_list, 4, "Facundo"  , 25);
+                    assert_person_in_list(a_sorted_list, 5, "Gaston"   , 25);
+                    assert_person_in_list(a_sorted_list, 6, "Julian"   , 25);
                 }
 
                 before {
@@ -341,6 +362,10 @@ context (test_list) {
                         _verify_a_sort_with_duplicates(__sorted_list);
                     } end
 
+                    it("should sort a list with multiple comparators") {
+                        _verify_a_sort_with_multiple_comparators(__sorted_list);
+                    } end
+
                 } end
 
                 describe ("Sorted - without side effect") {
@@ -362,6 +387,10 @@ context (test_list) {
 
                     it("should sort a list with duplicated values") {
                         _verify_a_sort_with_duplicates(__sorted_list);
+                    } end
+
+                    it("should sort a list with multiple comparators") {
+                        _verify_a_sort_with_multiple_comparators(__sorted_list);
                     } end
 
                 } end
@@ -462,7 +491,7 @@ context (test_list) {
                 should_int(index) be equal to(4);
             } end
 
-        } end        
+        } end
 
         describe ("Fold") {
 
