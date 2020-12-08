@@ -319,6 +319,40 @@ void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*))
 	return result;
 }
 
+t_list_iterator* list_iterator_start(t_list* list) {
+	t_list_iterator* new = malloc(sizeof(t_list_iterator));
+	new->self = list;
+	new->prev = NULL;
+	new->element = NULL;
+	new->index = -1;
+
+	return new;
+}
+
+bool list_iterator_has_next(t_list_iterator* iterator) {
+	return iterator->index < list_size(iterator->self) - 1;
+}
+
+void* list_iterator_next(t_list_iterator* iterator) {
+	iterator->prev = iterator->element;
+	iterator->element = iterator->index == -1 ? iterator->self->head : iterator->prev->next;
+	iterator->index++;
+
+	return iterator->element->data;
+}
+
+void list_iterator_remove(t_list_iterator* iterator) {
+	list_unlink_element(iterator->self, iterator->prev, iterator->element, iterator->index);
+	free(iterator->element);
+	iterator->element = iterator->prev;
+	iterator->prev = NULL;
+	iterator->index--;
+}
+
+void list_iterator_end(t_list_iterator* iterator) {
+	free(iterator);
+}
+
 /********* PRIVATE FUNCTIONS **************/
 
 static void list_link_element(t_list* self, t_link_element* previous, t_link_element* element, int index) {

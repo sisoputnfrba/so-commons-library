@@ -25,6 +25,13 @@
 		int elements_count;
 	} t_list;
 
+	typedef struct {
+		t_list *self;
+		t_link_element *prev;
+		t_link_element *element;
+		int index;
+	} t_list_iterator;
+
 	/**
 	* @NAME: list_create
 	* @DESC: Crea una lista
@@ -228,5 +235,36 @@
 	 * y otro del tipo de los elementos de la lista.
 	 */
 	void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*));
+
+	/**
+	 * @NAME: list_iterator_start
+	 * @DESC: Inicializa una iteración externa de la lista
+	 */
+	t_list_iterator* list_iterator_start(t_list* list);
+
+	/**
+	 * @NAME: list_iterator_has_next
+	 * @DESC: Devuelve true si quedan elementos de la lista por recorrer
+	 */
+	bool list_iterator_has_next(t_list_iterator* iterator);
+
+	/**
+	 * @NAME: list_iterator_next
+	 * @DESC: Obtiene el próximo elemento a iterar de la lista
+	 */
+	void* list_iterator_next(t_list_iterator* iterator);
+
+	/**
+	 * @NAME: list_iterator_remove
+	 * @DESC: Remueve de la lista al elemento actual de la iteración
+	 */
+	void list_iterator_remove(t_list_iterator* iterator);
+
+	/**
+	 * @NAME: list_iterator_end
+	 * @DESC: Finaliza la instancia de iteración externa liberando sus
+	 * recursos
+	 */
+	void list_iterator_end(t_list_iterator* iterator);
 
 #endif /*LIST_H_*/
