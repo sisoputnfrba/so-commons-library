@@ -22,6 +22,7 @@ static void list_link_element(t_link_element* previous, t_link_element* next);
 static t_link_element* list_create_element(void* data);
 static t_link_element* list_get_element(t_list* self, int index);
 static t_link_element* list_find_element(t_list *self, bool(*condition)(void*), int* index);
+static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*));
 
 t_list *list_create() {
 	t_list *list = malloc(sizeof(t_list));
@@ -286,18 +287,26 @@ t_list* list_duplicate(t_list* self) {
 	return duplicated;
 }
 
-void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*))
-{
-	t_link_element* element = self->head;
-	void* result = seed;
+void* list_fold1(t_list* self, void* (*operation)(void*, void*)) {
+	return self->elements_count > 0 ? list_fold_elements(self->head->next, self->head->data, operation) : NULL;
+}
 
-	while(element != NULL)
-	{
-		result = operation(result, element->data);
-		element = element->next;
+void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*)) {
+	return list_fold_elements(self->head, seed, operation);
+}
+
+void* list_get_minimum(t_list* self, int (*comparator)(void*, void*)) {
+	void* _return_minimum(void* seed, void* data) {
+		return comparator(seed, data) <= 0 ? seed : data;
 	}
+	return list_fold1(self, _return_minimum);
+}
 
-	return result;
+void* list_get_maximum(t_list* self, int (*comparator)(void*, void*)) {
+	void* _return_maximum(void* seed, void* data) {
+		return comparator(seed, data) >= 0 ? seed : data;
+	}
+	return list_fold1(self, _return_maximum);
 }
 
 /********* PRIVATE FUNCTIONS **************/
@@ -343,4 +352,14 @@ static t_link_element* list_find_element(t_list *self, bool(*condition)(void*), 
 	}
 
 	return element;
+}
+
+static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*)) {
+	void* result = seed;
+	while(element != NULL) {
+		result = operation(result, element->data);
+		element = element->next;
+	}
+
+	return result;
 }
