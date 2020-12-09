@@ -94,6 +94,23 @@ context (test_list) {
                 assert_person_in_list(list, 1, "Matias", 24);
             } end
 
+            it ("should add a value in sorted list") {
+                list_add(list, persona_create("Daniela" , 19));
+                list_add(list, persona_create("Matias"  , 24));
+                list_add(list, persona_create("Ezequiel", 25));
+                list_add(list, persona_create("Gaston"  , 25));
+
+                should_int(list_size(list)) be equal to(4);
+                list_add_sorted(list, persona_create("Sebastian", 21), (void*) _ayudantes_menor);
+                should_int(list_size(list)) be equal to(5);
+
+                assert_person_in_list(list, 0, "Daniela"  , 19);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                assert_person_in_list(list, 2, "Matias"   , 24);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Gaston"   , 25);
+            } end
+
             it("should add all list into other list") {
                 t_list* other = list_create();
 
