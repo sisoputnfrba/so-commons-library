@@ -191,6 +191,24 @@ context (test_list) {
                 should_int(list_size(list)) be equal to(4);
             } end
 
+            it("should remove all values which satisfy a condition") {
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Facundo"  , 25);
+                should_int(list_size(list)) be equal to (5);
+
+                bool _is_25_years_old(t_person *p) {
+                    return p->age == 25;
+                }
+                list_remove_and_destroy_all_by_condition(list, (void*) _is_25_years_old, (void*) persona_destroy);
+
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                should_int(list_size(list)) be equal to (2);
+            } end
+
             it("should clean a list and leave it empty") {
                 should_int(list_size(list)) be equal to(5);
                 list_clean_and_destroy_elements(list, (void*) persona_destroy);
