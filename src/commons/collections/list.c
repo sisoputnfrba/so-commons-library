@@ -216,27 +216,33 @@ t_list* list_slice(t_list* self, int start, int end) {
 	return sublist;
 }
 
-t_list* list_take_and_remove(t_list* self, int count) {
+t_list* list_slice_and_remove(t_list* self, int start, int count) {
+	if(start < 0) {
+		return list_slice_and_remove(self, self->elements_count + start, count);
+	}
+	t_link_element* previous = NULL;
+	t_link_element* element = self->head;
+	for(int i = 0; i < start; i++) {
+		previous = element;
+		element = element->next;
+	}
 	t_list* sublist = list_create();
-	if(count > 0) {
-		sublist->head = self->head;
-		if(count < self->elements_count) {
-			t_link_element* last = self->head;
-			for(int i = 0; i < count - 1; i++) {
-				last = last->next;
-			}
-
-			self->head = last->next;
-			last->next = NULL;
-			sublist->elements_count = count;
-			self->elements_count -= count;
+	t_list* sublist_last_element = NULL;
+	for(int j = 0; j < count && element != NULL; j++) {
+		list_unlink_element(self, previous, element, start);
+		list_link_element(sublist, sublist_last_element, element, sublist->elements_count);
+		sublist_last_element = element;
+		if(start == 0) {
+			element = self->head;
 		} else {
-			self->head = NULL;
-			sublist->elements_count = self->elements_count;
-			self->elements_count = 0;
+			element = previous->next;
 		}
 	}
 	return sublist;
+}
+
+t_list* list_take_and_remove(t_list* self, int count) {
+	return count >= 0 ? list_slice_and_remove(self, 0, count) : list_slice_and_remove(self, 0, self->elements_count + count);
 }
 
 t_list* list_filter(t_list* self, bool(*condition)(void*)){
