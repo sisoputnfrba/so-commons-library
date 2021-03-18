@@ -71,10 +71,18 @@
 
 	/**
 	* @NAME: list_take
-	* @DESC: Retorna una nueva lista con
-	* los primeros n elementos
+	* @DESC: Retorna una nueva lista con los primeros n elementos. Si 
+	* n es negativo, toma todos excepto los n últimos.
 	*/
 	t_list* list_take(t_list*, int count);
+
+	/**
+	* @NAME: list_slice
+	* @DESC: Retorna una nueva lista con una porción de los elementos 
+	* partiendo desde el primer índice indicado y deteniéndose en el 
+	* segundo (sin incluirlo).
+	*/
+	t_list* list_slice(t_list* self, int start, int end);
 
 	/**
 	* @NAME: list_take_and_remove

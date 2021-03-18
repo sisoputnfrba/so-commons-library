@@ -272,6 +272,42 @@ context (test_list) {
                 list_destroy(sublist);
             } end
 
+            it("should return a new list with all elements of a list except the last \"-N\"") {
+                t_list* sublist = list_take(list, -2);
+                should_int(list_size(list)) be equal to(5);
+                should_int(list_size(sublist)) be equal to(3);
+
+                assert_person_in_list(sublist, 0, "Matias"   , 24);
+                assert_person_in_list(sublist, 1, "Gaston"   , 25);
+                assert_person_in_list(sublist, 2, "Sebastian", 21);
+
+                list_destroy(sublist);
+            } end
+
+            it("should return a new list with the elements between two indexes of a list") {
+                t_list* sublist = list_slice(list, 1, 4);
+                should_int(list_size(list)) be equal to(5);
+                should_int(list_size(sublist)) be equal to(3);
+
+                assert_person_in_list(sublist, 0, "Gaston"   , 25);
+                assert_person_in_list(sublist, 1, "Sebastian", 21);
+                assert_person_in_list(sublist, 2, "Ezequiel" , 25);
+
+                list_destroy(sublist);
+            } end
+
+            it("should return a new list with the last \"-N\" elements of a list") {
+                t_list* sublist = list_slice(list, -3, list->elements_count);
+                should_int(list_size(list)) be equal to(5);
+                should_int(list_size(sublist)) be equal to(3);
+
+                assert_person_in_list(sublist, 0, "Sebastian", 21);
+                assert_person_in_list(sublist, 1, "Ezequiel" , 25);
+                assert_person_in_list(sublist, 2, "Facundo"  , 25);
+
+                list_destroy(sublist);
+            } end
+
             it("should return a new list with the first \"N\" elements of a list and remove them from original list") {
                 t_list* sublist = list_take_and_remove(list, 3);
                 should_int(list_size(list)) be equal to(2);

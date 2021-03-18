@@ -196,10 +196,20 @@ void list_destroy_and_destroy_elements(t_list *self, void(*element_destroyer)(vo
 }
 
 t_list* list_take(t_list* self, int count) {
+	return list_slice(self, 0, count);
+}
+
+t_list* list_slice(t_list* self, int start, int end) {
+	if(start < 0) {
+		return list_slice(self, self->elements_count + start, end);
+	}
+	if(end < 0) {
+		return list_slice(self, start, self->elements_count + end);
+	}
 	t_list* sublist = list_create();
 
 	bool _take_count_elements(void* element_data, int index) {
-		return index < count;
+		return start <= index && index < end;
 	}
 	list_add_to_sublist(sublist, self, _take_count_elements, NULL);
 
