@@ -77,12 +77,21 @@
 	t_list* list_take(t_list*, int count);
 
 	/**
-	* @NAME: list_take_and_remove
-	* @DESC: Retorna una nueva lista con
-	* los primeros n elementos, eliminando
-	* del origen estos elementos
+	* @NAME: list_drop
+	* @DESC: Retorna una nueva lista con los primeros n elementos, eliminando
+	* del origen estos elementos. Si n es negativo, retorna y elimina todos 
+	* excepto los -n últimos.
 	*/
-	t_list* list_take_and_remove(t_list*, int count);
+	t_list* list_drop(t_list*, int count);
+
+	/**
+	* @NAME: list_splice
+	* @DESC: Retorna una nueva lista con los
+	* primeros n elementos partiendo desde el 
+	* índice indicado, eliminando del origen
+	* estos elementos
+	*/
+	t_list* list_splice(t_list* self, int start, int count);
 
 	/**
 	* @NAME: list_filter
