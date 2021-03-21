@@ -74,6 +74,20 @@
 	void    string_append(char ** original, char * string_to_add);
 
 	/**
+	* @NAME: string_n_append
+	* @DESC: Agrega al primer string un máximo de n caracteres
+	* del segundo.
+	*
+	* Ejemplo:
+	* char *unaPalabra = string_new();
+	* string_n_append(&unaPalabra, "HOLA ", 10);
+	* string_n_append(&unaPalabra, "PEPE", 3);
+	*
+	* => unaPalabra = "HOLA PEP"
+	*/
+	void    string_n_append(char** original, char* string_to_add, int n);
+
+	/**
 	* @NAME: string_append_with_format
 	* @DESC: Concatena al primer string el resultado de aplicar los parametros al
 	* formato especificado
@@ -241,6 +255,20 @@
 	 * string_reverse(original) => "oob"
 	 */
 	char*   string_reverse(char* text);
+
+	/**
+	* @NAME: string_replace
+	* @DESC: Retorna una copia de un string con todas las ocurrencias
+	* de 'pattern' siendo reemplazadas por 'replacement'. En caso de
+	* recibir un string vacío como 'pattern', concatena 'replacement'
+	* al final de 'text'.
+	*
+	* Ejemplo:
+	* char* original = "hello";
+	* string_replace(original, "o", "o world!") => "hello world!"
+	* string_replace(original, "", "!") => "hello!"
+	*/
+	char*   string_replace(char* text, char* pattern, char* replacement);
 
 	/**
 	 * @NAME: string_contains
