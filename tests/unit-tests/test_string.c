@@ -50,6 +50,17 @@ context (test_string) {
             free(string);
         } end
 
+        it("n_append") {
+            char *string = string_new();
+            string_n_append(&string, "Hello", 10);
+            string_n_append(&string, "     ", 1);
+            string_n_append(&string, "world", 5);
+
+            should_string(string) be equal to("Hello world");
+
+            free(string);
+        } end
+
         it("append_with_format") {
             char *string = string_new();
 
@@ -506,6 +517,45 @@ context (test_string) {
                 should_string(reverse_word) be equal to("");
                 free(reverse_word);
             } end
+        } end
+
+        describe("Replace") {
+            char* replaced;
+
+            after {
+                free(replaced);
+            } end
+
+            it ("replace multiple occurrences") {
+                replaced = string_replace("hexxo worxd!", "x", "l");
+                should_string(replaced) be equal to ("hello world!");
+            } end
+
+            it ("replace an occurrence with a longer one") {
+                replaced = string_replace("hello", "o", "o world!");
+                should_string(replaced) be equal to ("hello world!");
+            } end
+
+            it ("replace an occurrence with a shorter one") {
+                replaced = string_replace("hello", "ello", "ola");
+                should_string(replaced) be equal to ("hola");
+            } end
+
+            it ("replace every occurrence with empty string") {
+                replaced = string_replace("hello", "l", "");
+                should_string(replaced) be equal to ("heo");
+            } end
+
+            it ("replace duplicates original when doesn't receive a substring as pattern") {
+                replaced = string_replace("hello", "definitely not a substring", "test failed!");
+                should_string(replaced) be equal to ("hello");
+            } end
+
+            it ("replace the end when empty string is the pattern") {
+                replaced = string_replace("hello", "", "!");
+                should_string(replaced) be equal to ("hello!");
+            } end
+
         } end
 
         it("Contains") {

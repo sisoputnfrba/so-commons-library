@@ -47,6 +47,14 @@ void string_append(char** original, char* string_to_add) {
 	strcat(*original, string_to_add);
 }
 
+void string_n_append(char** original, char* string_to_add, int n) {
+	if(strlen(string_to_add) < n) {
+		n = strlen(string_to_add);
+	}
+	*original = realloc(*original, strlen(*original) + n + 1);
+	strncat(*original, string_to_add, n);
+}
+
 char* string_new() {
 	return string_duplicate("");
 }
@@ -208,6 +216,26 @@ char* string_reverse(char* palabra) {
 	}
 
 	return resultado;
+}
+
+char* string_replace(char* text, char* pattern, char* replacement) {
+	char* result = string_new();
+	char* start = text;
+	char* next;
+
+	while((next = strstr(start, pattern)) != NULL && *pattern != '\0') {
+		string_n_append(&result, start, next - start);
+		string_append(&result, replacement);
+
+		start = next + strlen(pattern);
+	}
+	string_append(&result, start);
+
+	if(*pattern == '\0') {
+		string_append(&result, replacement);
+	}
+
+	return result;
 }
 
 bool string_contains(char* text, char *substring) {
