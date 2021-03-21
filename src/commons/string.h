@@ -249,4 +249,42 @@
 	 */
 	bool    string_contains(char* text, char *substring);
 
+	/**
+	* @NAME: string_array_new
+	* @DESC: Crea un array de strings vacio
+	*/
+	char**  string_array_new();
+
+	/**
+	* @NAME: string_array_size
+	* @DESC: Retorna la cantidad de líneas del
+	* array de strings
+	*/
+	int     string_array_size(char** array);
+
+	/**
+	* @NAME: string_array_is_empty
+	* @DESC: Verifica si el array de strings está vacío
+	*/
+	bool    string_array_is_empty(char** array);
+
+	/**
+	* @NAME: string_array_push
+	* @DESC: Agrega un string al final del array
+	*/
+	void    string_array_push(char*** array, char* text);
+
+	/**
+	* @NAME: string_array_replace
+	* @DESC: Reemplaza un string en un array por otro, retornando
+	* el anterior
+	*/
+	char*   string_array_replace(char** array, int pos, char* text);
+
+	/**
+	* @NAME: string_array_pop
+	* @DESC: Quita el último string del array y lo retorna
+	*/
+	char*   string_array_pop(char** array);
+
 #endif /* STRING_UTILS_H_ */
