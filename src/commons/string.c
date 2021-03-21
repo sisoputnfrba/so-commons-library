@@ -67,7 +67,7 @@ char* string_from_vformat(const char* format, va_list arguments) {
 }
 
 char* string_itoa(int number) {
-    return string_from_format("%d", number);
+	return string_from_format("%d", number);
 }
 
 void string_append_with_format(char **original, const char *format, ...) {
@@ -158,21 +158,21 @@ char** string_n_split(char *text, int n, char* separator) {
 }
 
 char**  string_get_string_as_array(char* text) {
-    int length_value = strlen(text) - 2;
-    char* value_without_brackets = string_substring(text, 1, length_value);
-    char **array_values = string_split(value_without_brackets, ",");
+	int length_value = strlen(text) - 2;
+	char* value_without_brackets = string_substring(text, 1, length_value);
+	char **array_values = string_split(value_without_brackets, ",");
 
-    int i = 0;
-    while (array_values[i] != NULL) {
-	    string_trim(&(array_values[i]));
-	    i++;
-    }
+	int i = 0;
+	while (array_values[i] != NULL) {
+		string_trim(&(array_values[i]));
+		i++;
+	}
 
-    free(value_without_brackets);
-    return array_values;
+	free(value_without_brackets);
+	return array_values;
 }
 
-char*   string_substring(char* text, int start, int length) {
+char* string_substring(char* text, int start, int length) {
 	char* new_string = calloc(1, length + 1);
 	strncpy(new_string, text + start, length);
 	return new_string;
@@ -198,19 +198,19 @@ int string_length(char* text) {
 }
 
 char* string_reverse(char* palabra) {
-    char* resultado = calloc(1, string_length(palabra) + 1);
+	char* resultado = calloc(1, string_length(palabra) + 1);
 
-    int i = string_length(palabra) - 1, j = 0;
-    while (i >= 0){
-        resultado[j] = palabra[i];
-        i--;
-        j++;
-    }
+	int i = string_length(palabra) - 1, j = 0;
+	while (i >= 0){
+	resultado[j] = palabra[i];
+		i--;
+		j++;
+	}
 
-    return resultado;
+	return resultado;
 }
 
-bool	string_contains(char* text, char *substring) {
+bool string_contains(char* text, char *substring) {
 	return strstr(text, substring) != NULL;
 }
 

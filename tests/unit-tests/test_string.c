@@ -182,8 +182,8 @@ context (test_string) {
 
         describe("Split") {
 
-        	it("split_with_delimitators") {
-        		char *line = "path/to/file";
+            it("split_with_delimitators") {
+                char *line = "path/to/file";
                 char** substrings = string_split(line, "/");
 
                 should_ptr(substrings) not be null;
@@ -192,51 +192,51 @@ context (test_string) {
                 should_string(substrings[2]) be equal to ("file");
                 should_ptr(substrings[3]) be null;
 
-				string_iterate_lines(substrings, (void*) free);
+                string_iterate_lines(substrings, (void*) free);
                 free(substrings);
             } end
 
-			it("split_starting_with_delimitator") {
-              	char* line = "/path/to/file";
-				char** substrings = string_split(line, "/");
+            it("split_starting_with_delimitator") {
+                char* line = "/path/to/file";
+                char** substrings = string_split(line, "/");
 
-				should_ptr(substrings) not be null;
-				should_string(substrings[0]) be equal to ("");
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("");
                 should_string(substrings[1]) be equal to ("path");
                 should_string(substrings[2]) be equal to ("to");
                 should_string(substrings[3]) be equal to ("file");
 
-				string_iterate_lines(substrings, (void*) free);
-				free(substrings);
-			} end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-			it("split_ending_with_delimitator") {
-				char* line = "path/to/file/";
-				char** substrings = string_split(line, "/");
+            it("split_ending_with_delimitator") {
+                char* line = "path/to/file/";
+                char** substrings = string_split(line, "/");
 
-				should_ptr(substrings) not be null;
+                should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to ("path");
                 should_string(substrings[1]) be equal to ("to");
                 should_string(substrings[2]) be equal to ("file");
-			    should_string(substrings[3]) be equal to ("");
+                should_string(substrings[3]) be equal to ("");
 
-			    string_iterate_lines(substrings, (void*) free);
-				free(substrings);
-			} end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-			it("split_having_delimitators_in_between") {
-				char* line = "path/to//file";
-			    char** substrings = string_split(line, "/");
+            it("split_having_delimitators_in_between") {
+                char* line = "path/to//file";
+                char** substrings = string_split(line, "/");
 
-			    should_ptr(substrings) not be null;
+                should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to ("path");
                 should_string(substrings[1]) be equal to ("to");
-			    should_string(substrings[2]) be equal to ("");
+                should_string(substrings[2]) be equal to ("");
                 should_string(substrings[3]) be equal to ("file");
 
-			    string_iterate_lines(substrings, (void*) free);
-				free(substrings);
-			} end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
             it("split_is_empty") {
                 char* line = "";
