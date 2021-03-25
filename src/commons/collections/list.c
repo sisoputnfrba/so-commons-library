@@ -319,7 +319,7 @@ void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*))
 	return result;
 }
 
-t_list_iterator* list_iterator_start(t_list* list) {
+t_list_iterator* list_iterator_create(t_list* list) {
 	t_list_iterator* new = malloc(sizeof(t_list_iterator));
 	new->self = list;
 	new->prev = NULL;
@@ -349,7 +349,7 @@ void list_iterator_remove(t_list_iterator* iterator) {
 	iterator->index--;
 }
 
-void list_iterator_end(t_list_iterator* iterator) {
+void list_iterator_destroy(t_list_iterator* iterator) {
 	free(iterator);
 }
 

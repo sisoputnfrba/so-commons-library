@@ -547,28 +547,28 @@ context (test_list) {
             it("Should iterate all elements") {
                 char* names[] = {"Juan", "Nicolas", "Matias", "Juan Manuel", "Sebastian", "Rodrigo", "Agustin", "Juan Pablo"};
 
-                t_list_iterator* list_iterator = list_iterator_start(list);
+                t_list_iterator* list_iterator = list_iterator_create(list);
                 while(list_iterator_has_next(list_iterator)) {
                     t_person* person = list_iterator_next(list_iterator);
                     should_string(person->name) be equal to (names[list_iterator->index]);
                 }
-                list_iterator_end(list_iterator);
+                list_iterator_destroy(list_iterator);
             } end
 
             it("Should iterate an empty list") {
                 t_list* empty_list = list_create();
-                t_list_iterator* list_iterator = list_iterator_start(empty_list);
+                t_list_iterator* list_iterator = list_iterator_create(empty_list);
                 while(list_iterator_has_next(list_iterator)) {
                     t_person* person = list_iterator_next(list_iterator);
                     should_bool (true) be falsey;
                 }
-                list_iterator_end(list_iterator);
+                list_iterator_destroy(list_iterator);
                 list_destroy(empty_list);
             } end
 
             it("Should remove an element") {
                 char* names[] = {"Nicolas", "Matias", "Sebastian", "Rodrigo", "Agustin"};
-                t_list_iterator* list_iterator = list_iterator_start(list);
+                t_list_iterator* list_iterator = list_iterator_create(list);
                 while(list_iterator_has_next(list_iterator)) {
                     t_person* person = list_iterator_next(list_iterator);
                     if(string_contains(person->name, "Juan")) {
@@ -578,7 +578,7 @@ context (test_list) {
                     }
                     should_string(person->name) be equal to (names[list_iterator->index]);
                 }
-                list_iterator_end(list_iterator);
+                list_iterator_destroy(list_iterator);
                 should_int(list->elements_count) be equal to (5);
                 assert_person_in_list(list, 0, "Nicolas"  ,  6);
                 assert_person_in_list(list, 1, "Matias"   , 70);

@@ -237,10 +237,10 @@
 	void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*));
 
 	/**
-	 * @NAME: list_iterator_start
+	 * @NAME: list_iterator_create
 	 * @DESC: Inicializa una iteración externa de la lista
 	 */
-	t_list_iterator* list_iterator_start(t_list* list);
+	t_list_iterator* list_iterator_create(t_list* list);
 
 	/**
 	 * @NAME: list_iterator_has_next
@@ -250,7 +250,8 @@
 
 	/**
 	 * @NAME: list_iterator_next
-	 * @DESC: Obtiene el próximo elemento a iterar de la lista
+	 * @DESC: Avanza hacia el siguiente elemento a iterar de la lista y
+	 * lo devuelve
 	 */
 	void* list_iterator_next(t_list_iterator* iterator);
 
@@ -261,10 +262,10 @@
 	void list_iterator_remove(t_list_iterator* iterator);
 
 	/**
-	 * @NAME: list_iterator_end
+	 * @NAME: list_iterator_destroy
 	 * @DESC: Finaliza la instancia de iteración externa liberando sus
 	 * recursos
 	 */
-	void list_iterator_end(t_list_iterator* iterator);
+	void list_iterator_destroy(t_list_iterator* iterator);
 
 #endif /*LIST_H_*/
