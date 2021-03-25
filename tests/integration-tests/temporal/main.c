@@ -7,64 +7,40 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <commons/txt.h>
 #include <commons/temporal.h>
 #include <commons/string.h>
 #include <pthread.h>
 
-static void log_in_disk(char* temp_file) {
-    FILE* file = txt_open_for_append(temp_file);
+static void print_time() {
+    char* date = temporal_get_string_time("day/month/year -- %d/%m/%y\n");
+    char* time = temporal_get_string_time("hour:min:sec:milisec -- %H:%M:%S:%MS\n");
 
-    char* day = temporal_get_string_time("day: %d\n");
-    char* month = temporal_get_string_time("month: %m\n");
-    char* year = temporal_get_string_time("year: %y\n");
+    txt_write_in_stdout(date);
+    txt_write_in_stdout(time);
 
-    char* hour = temporal_get_string_time("hour: %H\n");
-    char* min = temporal_get_string_time("min: %M\n");
-    char* sec = temporal_get_string_time("sec: %S\n");
-    char* milisec = temporal_get_string_time("milisec: %MS\n");
-
-    txt_write_in_file(file, day);
-    txt_write_in_file(file, month);
-    txt_write_in_file(file, year);
-
-    txt_write_in_file(file, hour);
-    txt_write_in_file(file, min);
-    txt_write_in_file(file, sec);
-    txt_write_in_file(file, milisec);
-
-    free(day);
-    free(month);
-    free(year);
-
-    free(hour);
-    free(min);
-    free(sec);
-    free(milisec);
-
-    txt_close_file(file);
-    free(temp_file);
+    free(date);
+    free(time);
 }
 
 int main(int argc, char** argv) {
-    pthread_t th1, th2;
-    
-    char temp_file[] = "build/XXXXXX";
+    pthread_t th1, th2, th3, th4, th5, th6;
 
-    close(mkstemp(temp_file));
+    printf("Verificar que fecha y hora sean correctas: \n");
 
-    if (temp_file != NULL) {
-        pthread_create(&th1, NULL, (void*) log_in_disk, string_duplicate(temp_file));
-        pthread_create(&th2, NULL, (void*) log_in_disk, string_duplicate(temp_file));
+    pthread_create(&th1, NULL, (void*) print_time, NULL);
+    pthread_create(&th2, NULL, (void*) print_time, NULL);
+    pthread_create(&th3, NULL, (void*) print_time, NULL);
+    pthread_create(&th4, NULL, (void*) print_time, NULL);
+    pthread_create(&th5, NULL, (void*) print_time, NULL);
+    pthread_create(&th6, NULL, (void*) print_time, NULL);
 
-        pthread_join(th1, NULL);
-        pthread_join(th2, NULL);
-        printf("\nRevisar el archivo de log que se creo en: %s\n", temp_file);
-    } else {
-        printf("No se pudo generar el archivo de log\n");
-    }
-    
+    pthread_join(th1, NULL);
+    pthread_join(th2, NULL);
+    pthread_join(th3, NULL);
+    pthread_join(th4, NULL);
+    pthread_join(th5, NULL);
+    pthread_join(th6, NULL);
     
     return (EXIT_SUCCESS);
 }
