@@ -205,6 +205,7 @@ context (test_string) {
                 should_string(substrings[1]) be equal to ("path");
                 should_string(substrings[2]) be equal to ("to");
                 should_string(substrings[3]) be equal to ("file");
+                should_ptr(substrings[4]) be null;
 
                 string_iterate_lines(substrings, (void*) free);
                 free(substrings);
@@ -219,6 +220,7 @@ context (test_string) {
                 should_string(substrings[1]) be equal to ("to");
                 should_string(substrings[2]) be equal to ("file");
                 should_string(substrings[3]) be equal to ("");
+                should_ptr(substrings[4]) be null;
 
                 string_iterate_lines(substrings, (void*) free);
                 free(substrings);
@@ -233,6 +235,7 @@ context (test_string) {
                 should_string(substrings[1]) be equal to ("to");
                 should_string(substrings[2]) be equal to ("");
                 should_string(substrings[3]) be equal to ("file");
+                should_ptr(substrings[4]) be null;
 
                 string_iterate_lines(substrings, (void*) free);
                 free(substrings);
@@ -244,6 +247,7 @@ context (test_string) {
 
                 should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to("");
+                should_ptr(substrings[1]) be null;
 
                 string_iterate_lines(substrings, (void*) free);
                 free(substrings);
