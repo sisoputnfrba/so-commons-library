@@ -192,8 +192,7 @@ context (test_string) {
                 should_string(substrings[2]) be equal to ("file");
                 should_ptr(substrings[3]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("split_starting_with_delimitator") {
@@ -207,8 +206,7 @@ context (test_string) {
                 should_string(substrings[3]) be equal to ("file");
                 should_ptr(substrings[4]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("split_ending_with_delimitator") {
@@ -222,8 +220,7 @@ context (test_string) {
                 should_string(substrings[3]) be equal to ("");
                 should_ptr(substrings[4]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("split_having_delimitators_in_between") {
@@ -237,8 +234,7 @@ context (test_string) {
                 should_string(substrings[3]) be equal to ("file");
                 should_ptr(substrings[4]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("split_is_empty") {
@@ -249,8 +245,7 @@ context (test_string) {
                 should_string(substrings[0]) be equal to("");
                 should_ptr(substrings[1]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
 
             } end
 
@@ -263,8 +258,7 @@ context (test_string) {
                 should_string(substrings[1]) be equal to("planeta tierra");
                 should_ptr(substrings[2]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("n_split_when_n_is_equals_than_splitted_elements") {
@@ -277,8 +271,7 @@ context (test_string) {
                 should_string(substrings[2]) be equal to("tierra");
                 should_ptr(substrings[3]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("n_split_when_separator_isnt_included") {
@@ -289,8 +282,7 @@ context (test_string) {
                 should_string(substrings[0]) be equal to(line);
                 should_ptr(substrings[1]) be null;
 
-                string_iterate_lines(substrings, (void *) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("n_split_when_n_is_greather_than_splitted_elements") {
@@ -303,8 +295,7 @@ context (test_string) {
                 should_string(substrings[2]) be equal to("tierra");
                 should_ptr(substrings[3]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("n_split_is_empty") {
@@ -314,8 +305,7 @@ context (test_string) {
                 should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to("");
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
         } end
@@ -428,8 +418,7 @@ context (test_string) {
                     should_ptr(empty_array) not be null;
                     should_ptr(empty_array[0]) be null;
 
-                    string_iterate_lines(empty_array, (void*) free);
-                    free(empty_array);
+                    string_array_destroy(empty_array);
                 } end
 
                 it("get_string_full_array") {
@@ -445,8 +434,7 @@ context (test_string) {
                         free(value);
                     }
 
-                    string_iterate_lines(numbers_array, (void*) free);
-                    free(numbers_array);
+                    string_array_destroy(numbers_array);
 
                 } end
 

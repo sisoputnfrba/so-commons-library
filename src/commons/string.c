@@ -222,6 +222,11 @@ char** string_array_new() {
 	return array;
 }
 
+void string_array_destroy(char** array) {
+	string_iterate_lines(array, (void*) free);
+	free(array);
+}
+
 int string_array_size(char** array) {
 	int size = 0;
 	void _count_lines(char* _) {

@@ -256,6 +256,12 @@
 	char**  string_array_new();
 
 	/**
+	* @NAME: string_array_destroy
+	* @DESC: Destruye un array con sus strings
+	*/
+	void    string_array_destroy(char** array);
+
+	/**
 	* @NAME: string_array_size
 	* @DESC: Retorna la cantidad de líneas del
 	* array de strings
