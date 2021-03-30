@@ -1,7 +1,7 @@
 RM=rm -rf
 CC=gcc
 
-TAD=logger
+TAD=temporal
 BIN=build/commons-integration-test-$(TAD)
 
 C_SRCS=./main.c
