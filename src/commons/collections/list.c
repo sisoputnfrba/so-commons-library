@@ -295,18 +295,12 @@ void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*)) {
 	return list_fold_elements(self->head, seed, operation);
 }
 
-void* list_get_minimum(t_list* self, int (*comparator)(void*, void*)) {
-	void* _return_minimum(void* seed, void* data) {
-		return comparator(seed, data) <= 0 ? seed : data;
-	}
-	return list_fold1(self, _return_minimum);
+void* list_get_minimum(t_list* self, void* (*minimum)(void*, void*)) {
+	return list_fold1(self, minimum);
 }
 
-void* list_get_maximum(t_list* self, int (*comparator)(void*, void*)) {
-	void* _return_maximum(void* seed, void* data) {
-		return comparator(seed, data) >= 0 ? seed : data;
-	}
-	return list_fold1(self, _return_maximum);
+void* list_get_maximum(t_list* self, void* (*maximum)(void*, void*)) {
+	return list_fold1(self, maximum);
 }
 
 /********* PRIVATE FUNCTIONS **************/

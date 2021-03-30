@@ -43,12 +43,12 @@ static bool _ayudantes_menor(t_person *joven, t_person *menos_joven) {
     return joven->age < menos_joven->age;
 }
 
-static int _ayudantes_comparador_edad(t_person* person1, t_person* person2) {
-    return person1->age - person2->age;
+static void* _ayudantes_minimo_edad(t_person* person1, t_person* person2) {
+    return person1->age <= person2->age ? person1 : person2;
 }
 
-static int _ayudantes_comparador_nombre(t_person* person1, t_person* person2) {
-    return strcmp(person1->name, person2->name);
+static void* _ayudantes_maximo_edad(t_person* person1, t_person* person2) {
+    return person1->age >= person2->age ? person1 : person2;
 }
 
 context (test_list) {
@@ -505,15 +505,15 @@ context (test_list) {
             } end
 
             it("should get minimum") {
-                t_person* youngestPerson = (t_person*) list_get_minimum(list, (void*)_ayudantes_comparador_edad);
+                t_person* youngestPerson = (t_person*) list_get_minimum(list, (void*)_ayudantes_minimo_edad);
 
                 assert_person(youngestPerson, "Juan Manuel", 1);
             } end
 
             it("should get maximum") {
-                t_person* lastAlphabetical = (t_person*) list_get_maximum(list, (void*)_ayudantes_comparador_nombre);
+                t_person* oldestPerson = (t_person*) list_get_maximum(list, (void*)_ayudantes_maximo_edad);
 
-                assert_person(lastAlphabetical, "Sebastian", 8);
+                assert_person(oldestPerson, "Juan", 124);
             } end
 
         } end

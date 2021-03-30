@@ -72,18 +72,16 @@
 	/**
 	* @NAME: list_get_minimum
 	* @DESC: Retorna el minimo de la lista según el comparador
-	* El comparador devuelve la diferencia entre el valor del primer 
-	* parámetro y el del segundo
+	* El comparador devuelve cuál es el mínimo de dos valores
 	*/
-	void *list_get_minimum(t_list* self, int (*comparator)(void*, void*));
+	void *list_get_minimum(t_list* self, void* (*minimum)(void*, void*));
 
 	/**
 	* @NAME: list_get_maximum
 	* @DESC: Retorna el maximo de la lista según el comparador
-	* El comparador devuelve la diferencia entre el valor del primer 
-	* parámetro y el del segundo
+	* El comparador devuelve cuál es el máximo de dos valores
 	*/
-	void *list_get_maximum(t_list* self, int (*comparator)(void*, void*));
+	void *list_get_maximum(t_list* self, void* (*maximum)(void*, void*));
 
 	/**
 	* @NAME: list_take
