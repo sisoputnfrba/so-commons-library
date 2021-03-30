@@ -244,8 +244,8 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
 	t_link_element* new_element = list_create_element(data);
 
-	bool _insert_element_sorted(void* element_data, int i) {
-		return !comparator(element_data, data);
+	bool _insert_element_sorted(t_link_element* element, int i) {
+		return element == NULL || !comparator(element->data, data);
 	}
 	return list_add_element(self, new_element, _insert_element_sorted);
 }
