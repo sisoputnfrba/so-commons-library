@@ -8,21 +8,22 @@ OBJS=$(C_SRCS:./%.c=build/%.o)
 # Clean and compile .so
 all: build/libcommons.so
 
-create-dirs:
-	mkdir -p build/commons/collections
+build/commons/collections:
+	mkdir -p $@
 
-build/libcommons.so: create-dirs $(OBJS)
-	$(CC) -shared -o "build/libcommons.so" $(OBJS)
+build/libcommons.so: build/commons/collections $(OBJS)
+	$(CC) -shared -o "$@" $(OBJS)
 
-build/commons/%.o: commons/%.c
-	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-
-build/commons/collections/%.o: commons/collections/%.c
+build/%.o: %.c
 	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # Add debug parameters and compile
 debug: CC += -DDEBUG -g
 debug: all
+
+# Print all sources
+sources:
+	@echo $(C_SRCS) $(H_SRCS)
 
 # Clean build files
 clean:
@@ -36,4 +37,4 @@ uninstall:
 	rm -f /usr/lib/libcommons.so
 	rm -rf /usr/include/commons
 
-.PHONY: all create-dirs clean install uninstall
+.PHONY: all debug sources clean install uninstall
