@@ -17,38 +17,33 @@
 #include "error.h"
 #include "string.h"
 
-#include <stdlib.h>
-#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/timeb.h>
+#include <time.h>
 #include <string.h>
 
-char *temporal_get_string_time() {
-	struct tm *log_tm = malloc(sizeof(struct tm));
-	char *str_time = string_duplicate("hh:mm:ss:mmmm");
-	struct timeb tmili;
-	time_t log_time;
+char *temporal_get_string_time(const char* format) {
+	char* str_time = strdup(format);
 
-	if ((log_time = time(NULL)) == -1) {
-		error_show("Error getting date!");
-		return 0;
+	struct timespec* log_timespec = malloc(sizeof(struct timespec));
+	struct tm* log_tm = malloc(sizeof(struct tm));
+	char* milisec;
+
+	if(clock_gettime(CLOCK_REALTIME, log_timespec) == -1) {
+		return NULL;
+	}
+	milisec = string_from_format("%03d", log_timespec->tv_nsec / 1000000);
+
+	for(char* ms = strstr(str_time, "%MS"); ms != NULL; ms = strstr(ms + 3, "%MS")) {
+		memcpy(ms, milisec, 3);
 	}
 
-	localtime_r(&log_time, log_tm);
+	localtime_r(&log_timespec->tv_sec, log_tm);
+	strftime(str_time, strlen(format) + 1, str_time, log_tm);
 
-	if (ftime(&tmili)) {
-		error_show("Error getting time!");
-		return 0;
-	}
-
-	char *partial_time = string_duplicate("hh:mm:ss");
-	strftime(partial_time, 127, "%H:%M:%S", log_tm);
-	sprintf(str_time, "%s:%hu", partial_time, tmili.millitm);
-	free(partial_time);
+	free(milisec);
 	free(log_tm);
+	free(log_timespec);
 
-	//Adjust memory allocation
-	str_time = realloc(str_time, strlen(str_time) + 1);
 	return str_time;
 }
