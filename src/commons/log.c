@@ -122,17 +122,17 @@ static void _log_write_in_level(t_log* logger, t_log_level level, const char* me
 		char *message, *time, *buffer, *console_buffer;
 		unsigned int thread_id;
 
-                message = string_from_vformat(message_template, list_arguments);
-		time = temporal_get_string_time();
+		message = string_from_vformat(message_template, list_arguments);
+		time = temporal_get_string_time("%H:%M:%S:%MS");
 		thread_id = process_get_thread_id();
 
 		buffer = string_from_format("[%s] %s %s/(%d:%d): %s\n",
-                                log_level_as_string(level),
-                                time,
-                                logger->program_name,
-				logger->pid,
-                                thread_id,
-                                message);
+			log_level_as_string(level),
+			time,
+			logger->program_name,
+			logger->pid,
+			thread_id,
+			message);
 
 		if (logger->file != NULL) {
 			txt_write_in_file(logger->file, buffer);

@@ -19,8 +19,12 @@
 	/**
 	* @NAME: temporal_get_string_time
 	* @DESC: Retorna un string con la hora actual,
-	* con el siguiente formato: hh:mm:ss:mmmm
+	* con el formato recibido por parámetro.
+	* Ejemplos:
+	* temporal_get_string_time("%d/%m/%y") => "30/09/20"
+	* temporal_get_string_time("%H:%M:%S:%MS") => "12:51:59:331"
+	* temporal_get_string_time("%d/%m/%y %H:%M:%S") => "30/09/20 12:51:59"
 	*/
-	char *temporal_get_string_time();
+	char *temporal_get_string_time(const char* format);
 
 #endif /* TEMPORAL_H_ */
