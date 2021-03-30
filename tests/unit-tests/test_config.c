@@ -37,15 +37,15 @@ context (test_config) {
         describe ("Inexistent file") {
 
             it ("should return null when try to open a non-existent config file") {
-            	t_config *config = config_create("this_doesnt_exist.really.dont.cfg");
+                t_config *config = config_create("this_doesnt_exist.really.dont.cfg");
                 should_ptr(config) be null;
             } end
 
         } end
 
-		describe ("Existent file") {
+        describe ("Existent file") {
 
-        	t_config* config;
+            t_config* config;
 
             before {
                 config = config_create("resources/config.cfg");
@@ -91,6 +91,8 @@ context (test_config) {
 
                     char* empty_array_expected[] = {NULL};
                     _assert_equals_array(empty_array_expected, empty_array, 0);
+
+                    string_iterate_lines(empty_array, (void*) free);
                     free(empty_array);
                 } end
 
@@ -164,10 +166,10 @@ context (test_config) {
             config = config_create("resources/config.cfg");
         } end
 
-    	after {
+        after {
             remove(new_file_path);
             config_destroy(config);
-    	} end
+        } end
 
         it ("should create a file with the specified config") {
             int result = config_save_in_file(config, new_file_path);
@@ -175,7 +177,7 @@ context (test_config) {
             should_int(access(new_file_path, F_OK)) be equal to (0);
         } end
 
-    	it ("should override a config") {
+        it ("should override a config") {
             char* key = "PORT";
             char* expected = "3000";
             config_set_value(config, key, expected);
@@ -183,7 +185,7 @@ context (test_config) {
             t_config *new_config = config_create(new_file_path);
             should_string(config_get_string_value(new_config, key)) be equal to (expected);
             config_destroy(new_config);    	    
-    	} end
+        } end
 
         it ("should create a config file without the specified key") {
             char* key = "PORT";

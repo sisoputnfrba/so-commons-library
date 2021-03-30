@@ -30,7 +30,7 @@
 	* @NAME: string_itoa
 	* @DESC: Crea un string a partir de un numero
 	*/
-	char* string_itoa(int number);
+	char*   string_itoa(int number);
 
 	/**
 	* @NAME: string_from_format
@@ -71,7 +71,7 @@
 	*
 	* => unaPalabra = "HOLA PEPE"
 	*/
-	void 	string_append(char ** original, char * string_to_add);
+	void    string_append(char ** original, char * string_to_add);
 
 	/**
 	* @NAME: string_append_with_format
@@ -93,58 +93,58 @@
 	* @DESC: Retorna una copia del string pasado
 	* como argumento
 	*/
-	char*	string_duplicate(char* original);
+	char*   string_duplicate(char* original);
 
 	/**
 	* @NAME: string_to_upper
 	* @DESC: Pone en mayuscula todos los caracteres de un string
 	*/
-	void 	string_to_upper(char * text);
+	void    string_to_upper(char * text);
 
 	/**
 	* @NAME: string_to_lower
 	* @DESC: Pone en minuscula todos los caracteres de un string
 	*/
-	void 	string_to_lower(char * text);
+	void    string_to_lower(char * text);
 
 	/**
 	* @NAME: string_capitalized
 	* @DESC: Capitaliza un string
 	*/
-	void 	string_capitalized(char * text);
+	void    string_capitalized(char * text);
 
 	/**
 	* @NAME: string_trim
 	* @DESC: Remueve todos los caracteres
 	* vacios de la derecha y la izquierda
 	*/
-	void 	string_trim(char ** text);
+	void    string_trim(char ** text);
 
 	/**
 	* @NAME: string_trim_left
 	* @DESC: Remueve todos los caracteres
 	* vacios de la izquierda
 	*/
-	void 	string_trim_left(char ** text);
+	void    string_trim_left(char ** text);
 
 	/**
 	* @NAME: string_trim_right
 	* @DESC: Remueve todos los caracteres
 	* vacios de la derecha
 	*/
-	void 	string_trim_right(char ** text);
+	void    string_trim_right(char ** text);
 
 	/**
 	* @NAME: string_length
 	* @DESC: Retorna la longitud del string
 	*/
-	int 	string_length(char * text);
+	int     string_length(char * text);
 
 	/**
 	* @NAME: string_is_empty
 	* @DESC: Retorna si un string es ""
 	*/
-	bool 	string_is_empty(char * text);
+	bool    string_is_empty(char * text);
 
 	/**
 	* @NAME: string_starts_with
@@ -152,7 +152,7 @@
 	* si un string comienza con el
 	* string pasado por parametro
 	*/
-	bool 	string_starts_with(char * text, char * begin);
+	bool    string_starts_with(char * text, char * begin);
 
 	/**
 	* @NAME: string_ends_with
@@ -160,14 +160,14 @@
 	* si un string finaliza con el
 	* string pasado por parametro
 	*/
-	bool	string_ends_with(char* text, char* end);
+	bool    string_ends_with(char* text, char* end);
 
 	/**
 	* @NAME: string_equals_ignore_case
 	* @DESC: Retorna si dos strings son iguales
 	* ignorando las mayusculas y minusculas
 	*/
-	bool 	string_equals_ignore_case(char * actual, char * expected);
+	bool    string_equals_ignore_case(char * actual, char * expected);
 
 	/**
 	* @NAME: string_split
@@ -218,7 +218,7 @@
 	* @DESC: Itera un array de strings aplicando
 	* el closure a cada string, hasta que encuentre un NULL
 	*/
-	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
+	void    string_iterate_lines(char ** strings, void (*closure)(char *));
 
 	/**
 	* @NAME: string_get_string_as_array
@@ -240,13 +240,13 @@
 	 * char* original = "boo";
 	 * string_reverse(original) => "oob"
 	 */
-	char*	string_reverse(char* text);
+	char*   string_reverse(char* text);
 
 	/**
 	 * @NAME: string_contains
 	 * @DESC: Retorna un boolean que indica si text contiene o no
 	 * a substring.
 	 */
-	bool	string_contains(char* text, char *substring);
+	bool    string_contains(char* text, char *substring);
 
 #endif /* STRING_UTILS_H_ */
