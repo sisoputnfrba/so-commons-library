@@ -89,8 +89,8 @@ context (test_config) {
                     should_string(config_get_string_value(config, "EMPTY_ARRAY")) be equal to("[]");
                     char** empty_array  = config_get_array_value(config, "EMPTY_ARRAY");
 
-                    char* empty_array_expected[] = {"", NULL};
-                    _assert_equals_array(empty_array_expected, empty_array, 1);
+                    char* empty_array_expected[] = {NULL};
+                    _assert_equals_array(empty_array_expected, empty_array, 0);
 
                     string_iterate_lines(empty_array, (void*) free);
                     free(empty_array);

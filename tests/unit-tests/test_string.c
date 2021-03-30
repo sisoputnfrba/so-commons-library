@@ -426,7 +426,7 @@ context (test_string) {
                     char* string_empty_array = "[]";
                     char** empty_array = string_get_string_as_array(string_empty_array);
                     should_ptr(empty_array) not be null;
-                    should_string(empty_array[0]) be equal to("");
+                    should_ptr(empty_array[0]) be null;
 
                     string_iterate_lines(empty_array, (void*) free);
                     free(empty_array);

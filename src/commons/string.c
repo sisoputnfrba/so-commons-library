@@ -159,13 +159,13 @@ char** string_n_split(char *text, int n, char* separator) {
 
 char**  string_get_string_as_array(char* text) {
 	int length_value = strlen(text) - 2;
+	if (length_value == 0) return calloc(1, sizeof(char*));
+
 	char* value_without_brackets = string_substring(text, 1, length_value);
 	char **array_values = string_split(value_without_brackets, ",");
 
-	int i = 0;
-	while (array_values[i] != NULL) {
+	for (int i = 0; array_values[i] != NULL; i++) {
 		string_trim(&(array_values[i]));
-		i++;
 	}
 
 	free(value_without_brackets);
