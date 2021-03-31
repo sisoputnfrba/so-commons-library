@@ -521,18 +521,6 @@ context (test_list) {
                 assert_person(oldestPerson, "Juan", 124);
             } end
 
-            it("should fold an empty list") {
-                list_clean_and_destroy_elements(list, (void*) persona_destroy);
-
-                t_person* get_oldest_person(t_person* person1, t_person* person2) {
-                    return person1->age >= person2->age ? person1 : person2;
-                }
-
-                t_person* oldestPerson = (t_person*) list_fold1(list, (void*) get_oldest_person);
-
-                should_ptr(oldestPerson) be null;
-            } end
-
             it("should get minimum") {
                 t_person* youngestPerson = (t_person*) list_get_minimum(list, (void*)_ayudantes_minimo_edad);
 

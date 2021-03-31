@@ -297,7 +297,7 @@ t_list* list_duplicate(t_list* self) {
 }
 
 void* list_fold1(t_list* self, void* (*operation)(void*, void*)) {
-	return self->elements_count > 0 ? list_fold_elements(self->head->next, self->head->data, operation) : NULL;
+	return list_fold_elements(self->head->next, self->head->data, operation);
 }
 
 void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*)) {
