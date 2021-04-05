@@ -194,6 +194,18 @@ context (test_list) {
                 should_int(list_size(list)) be equal to(4);
             } end
 
+            it("should remove a value from its pointer") {
+                should_int(list_size(list)) be equal to(5);
+
+                t_person* aux = list_get(list, 1);
+                list_remove_element(list, aux);
+                persona_destroy(aux);
+
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                should_int(list_size(list)) be equal to(4);
+
+            } end
+
             it("should remove and destroy a value at index") {
                 assert_person_in_list(list, 0, "Matias", 24);
                 should_int(list_size(list)) be equal to(5);

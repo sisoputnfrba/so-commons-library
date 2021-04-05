@@ -70,7 +70,7 @@
 	* El comparador devuelve si el primer parametro debe aparecer antes que el
 	* segundo en la lista
 	*/
-	int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*));
+	int list_add_sorted(t_list *self, void* element, bool (*comparator)(void*,void*));
 
 	/**
 	* @NAME: list_add_all
@@ -160,6 +160,12 @@
 	* una determinada posicion y lo retorna.
 	*/
 	void *list_remove(t_list *, int index);
+
+	/**
+	* @NAME: list_remove_element
+	* @DESC: Remueve al elemento de la lista recibido por parámetro.
+	*/
+	void list_remove_element(t_list* self, void* element);
 
 	/**
 	* @NAME: list_remove_and_destroy_element
