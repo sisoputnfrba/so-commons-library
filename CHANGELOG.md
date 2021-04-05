@@ -20,4 +20,4 @@ cuando estos eran el string vacío.
 devolviera una lista inconsistente cuando el count recibido era mayor
 al tamaño de la lista.
 - Se corrigió el comportamiento de las funciones de t_list que recibían un index
-y no ocultaban el error en caso de que este no sea válido.
+y ocultaban el error en caso de que este no sea válido. Este comportamiento ya no pasa y el error queda expuesto
