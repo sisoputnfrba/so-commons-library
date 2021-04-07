@@ -51,7 +51,7 @@ t_config *config_create(char *path) {
 	char** lines = string_split(buffer, "\n");
 
 	void add_cofiguration(char *line) {
-		if (!string_starts_with(line, "#")) {
+		if (!string_is_empty(line) && !string_starts_with(line, "#")) {
 			char** keyAndValue = string_n_split(line, 2, "=");
 			dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
 			free(keyAndValue[0]);
