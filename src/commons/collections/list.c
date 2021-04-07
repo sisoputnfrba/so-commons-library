@@ -187,37 +187,40 @@ void list_destroy_and_destroy_elements(t_list *self, void(*element_destroyer)(vo
 }
 
 t_list* list_take(t_list* self, int count) {
+	return list_slice(self, 0, count);
+}
+
+t_list* list_slice(t_list* self, int start, int count) {
 	t_list* sublist = list_create();
 
 	bool _take_count_elements(void* element_data, int index) {
-		return index < count;
+		return start <= index && index < (start + count);
 	}
 	list_append_to_sublist(sublist, self, _take_count_elements, NULL);
 
 	return sublist;
 }
 
-t_list* list_take_and_remove(t_list* self, int count) {
+t_list* list_slice_and_remove(t_list* self, int start, int count) {
+	t_link_element* previous = NULL;
+	t_link_element* element = self->head;
+	for(int i = 0; i < start; i++) {
+		previous = element;
+		element = element->next;
+	}
 	t_list* sublist = list_create();
-	if(count > 0) {
-		sublist->head = self->head;
-		if(count < self->elements_count) {
-			t_link_element* last = self->head;
-			for(int i = 0; i < count - 1; i++) {
-				last = last->next;
-			}
-
-			self->head = last->next;
-			last->next = NULL;
-			sublist->elements_count = count;
-			self->elements_count -= count;
-		} else {
-			self->head = NULL;
-			sublist->elements_count = self->elements_count;
-			self->elements_count = 0;
-		}
+	t_link_element* sublist_last_element = NULL;
+	for(int j = 0; j < count && element != NULL; j++) {
+		list_unlink_element(self, previous, element, start);
+		list_link_element(sublist, sublist_last_element, element, sublist->elements_count);
+		sublist_last_element = element;
+		element = ( start == 0 ? self->head : previous->next );
 	}
 	return sublist;
+}
+
+t_list* list_take_and_remove(t_list* self, int count) {
+	return list_slice_and_remove(self, 0, count);
 }
 
 t_list* list_filter(t_list* self, bool(*condition)(void*)){
