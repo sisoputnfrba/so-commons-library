@@ -59,9 +59,8 @@ t_config *config_create(char *path) {
 		}
 	}
 	string_iterate_lines(lines, add_cofiguration);
-	string_iterate_lines(lines, (void*) free);
 
-	free(lines);
+	string_array_destroy(lines);
 	free(buffer);
 	fclose(file);
 

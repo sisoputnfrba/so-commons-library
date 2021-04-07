@@ -92,8 +92,7 @@ context (test_config) {
                     char* empty_array_expected[] = {NULL};
                     _assert_equals_array(empty_array_expected, empty_array, 0);
 
-                    string_iterate_lines(empty_array, (void*) free);
-                    free(empty_array);
+                    string_array_destroy(empty_array);
                 } end
 
                 it ("should get an array with values") {
@@ -103,8 +102,7 @@ context (test_config) {
                     char** numbers = config_get_array_value(config, "NUMBERS");
                     _assert_equals_array(numbers_expected, numbers, 5);
 
-                    string_iterate_lines(numbers, (void*) free);
-                    free(numbers);
+                    string_array_destroy(numbers);
                 } end
 
                 it ("should get an array with values without spaces between entries") {
@@ -114,8 +112,7 @@ context (test_config) {
                   char** strings = config_get_array_value(config, "NO_SPACES");
                   _assert_equals_array(strings_expected, strings, 5);
 
-                  string_iterate_lines(strings, (void*) free);
-                  free(strings);
+                  string_array_destroy(strings);
                 } end
 
             } end

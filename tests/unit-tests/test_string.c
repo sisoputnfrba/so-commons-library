@@ -192,8 +192,7 @@ context (test_string) {
                 should_string(substrings[2]) be equal to ("file");
                 should_ptr(substrings[3]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("split_starting_with_delimitator") {
@@ -207,8 +206,7 @@ context (test_string) {
                 should_string(substrings[3]) be equal to ("file");
                 should_ptr(substrings[4]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("split_ending_with_delimitator") {
@@ -222,8 +220,7 @@ context (test_string) {
                 should_string(substrings[3]) be equal to ("");
                 should_ptr(substrings[4]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("split_having_delimitators_in_between") {
@@ -237,8 +234,7 @@ context (test_string) {
                 should_string(substrings[3]) be equal to ("file");
                 should_ptr(substrings[4]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("split_is_empty") {
@@ -249,8 +245,7 @@ context (test_string) {
                 should_string(substrings[0]) be equal to("");
                 should_ptr(substrings[1]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
 
             } end
 
@@ -263,8 +258,7 @@ context (test_string) {
                 should_string(substrings[1]) be equal to("planeta tierra");
                 should_ptr(substrings[2]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("n_split_when_n_is_equals_than_splitted_elements") {
@@ -277,8 +271,7 @@ context (test_string) {
                 should_string(substrings[2]) be equal to("tierra");
                 should_ptr(substrings[3]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("n_split_when_separator_isnt_included") {
@@ -289,8 +282,7 @@ context (test_string) {
                 should_string(substrings[0]) be equal to(line);
                 should_ptr(substrings[1]) be null;
 
-                string_iterate_lines(substrings, (void *) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("n_split_when_n_is_greather_than_splitted_elements") {
@@ -303,8 +295,7 @@ context (test_string) {
                 should_string(substrings[2]) be equal to("tierra");
                 should_ptr(substrings[3]) be null;
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
             it("n_split_is_empty") {
@@ -314,8 +305,7 @@ context (test_string) {
                 should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to("");
 
-                string_iterate_lines(substrings, (void*) free);
-                free(substrings);
+                string_array_destroy(substrings);
             } end
 
         } end
@@ -428,8 +418,7 @@ context (test_string) {
                     should_ptr(empty_array) not be null;
                     should_ptr(empty_array[0]) be null;
 
-                    string_iterate_lines(empty_array, (void*) free);
-                    free(empty_array);
+                    string_array_destroy(empty_array);
                 } end
 
                 it("get_string_full_array") {
@@ -445,8 +434,7 @@ context (test_string) {
                         free(value);
                     }
 
-                    string_iterate_lines(numbers_array, (void*) free);
-                    free(numbers_array);
+                    string_array_destroy(numbers_array);
 
                 } end
 
@@ -489,6 +477,96 @@ context (test_string) {
           should_bool(string_contains("", "")) be truthy;
         } end
 
-    } end
+        describe ("String array") {
+            char** names;
 
+            before {
+                names = string_array_new();
+
+                string_array_push(&names, "Gaston");
+                string_array_push(&names, "Matias");
+                string_array_push(&names, "Sebastian");
+                string_array_push(&names, "Daniela");
+            } end
+
+            after {
+                free(names);
+            } end
+
+            it ("add an element at the end") {
+                string_array_push(&names, "Agustin");
+
+                should_int(string_array_size(names)) be equal to (5);
+                should_ptr(names[5]) be null;
+
+                char* expected[] = {"Gaston", "Matias", "Sebastian", "Daniela", "Agustin"};
+                int i = 0;
+                void _assert_names(char* name) {
+                    should_ptr(name) not be null;
+                    should_string(name) be equal to (expected[i]);
+                    i++;
+                }
+                string_iterate_lines(names, _assert_names);
+            } end
+
+            it("remove the last element") {
+                char* name = string_array_pop(names);
+
+                should_string(name) be equal to ("Daniela");
+
+                should_int(string_array_size(names)) be equal to (3);
+                should_ptr(names[3]) be null;
+
+                char* expected[] = {"Gaston", "Matias", "Sebastian"};
+                int i = 0;
+                void _assert_names(char* name) {
+                    should_ptr(name) not be null;
+                    should_string(name) be equal to (expected[i]);
+                    i++;
+                }
+                string_iterate_lines(names, _assert_names);
+            } end
+
+            it ("not to remove elements in an empty array") {
+                for(int i = 0; i < 10; i++) {
+                    string_array_pop(names);
+                }
+
+                should_int(string_array_size(names)) be equal to (0);
+                should_bool(string_array_is_empty(names)) be truthy;
+            } end
+
+            it("replace an element") {
+                char* name = string_array_replace(names, 2, "Damian");
+
+                should_string(name) be equal to ("Sebastian");
+
+                char* expected[] = {"Gaston", "Matias", "Damian", "Daniela"};
+                int i = 0;
+                void _assert_names(char* name) {
+                    should_ptr(name) not be null;
+                    should_string(name) be equal to (expected[i]);
+                    i++;
+                }
+                string_iterate_lines(names, _assert_names);
+            } end
+
+            it("not to replace an element outside the array") {
+                char* name = string_array_replace(names, 4, "Damian");
+
+                should_ptr(name) be null;
+                should_int(string_array_size(names)) be equal to (4);
+                should_ptr(names[4]) be null;
+
+                char* expected[] = {"Gaston", "Matias", "Sebastian", "Daniela"};
+                int i = 0;
+                void _assert_names(char* name) {
+                    should_ptr(name) not be null;
+                    should_string(name) be equal to (expected[i]);
+                    i++;
+                }
+                string_iterate_lines(names, _assert_names);
+            } end
+        } end
+    } end
 }
