@@ -47,6 +47,14 @@ static bool _ayudantes_alfabetico(t_person *primero, t_person *segundo) {
     return strcmp(primero->name, segundo->name) <= 0;
 }
 
+static void* _ayudantes_minimo_edad(t_person* person1, t_person* person2) {
+    return person1->age <= person2->age ? person1 : person2;
+}
+
+static void* _ayudantes_maximo_edad(t_person* person1, t_person* person2) {
+    return person1->age >= person2->age ? person1 : person2;
+}
+
 context (test_list) {
 
     void assert_person(t_person *person, char* name, int age) {
@@ -512,6 +520,40 @@ context (test_list) {
 
         } end
 
+        describe("Fold1") {
+            before {
+                list_add(list, persona_create("Nicolas", 6));
+                list_add(list, persona_create("Matias", 70));
+                list_add(list, persona_create("Juan", 124));
+                list_add(list, persona_create("Juan Manuel", 1));
+                list_add(list, persona_create("Sebastian", 8));
+                list_add(list, persona_create("Rodrigo", 40));
+            } end
+
+            it("should fold all values into a single one, starting with first element") {
+                t_person* get_oldest_person(t_person* person1, t_person* person2) {
+                    return person1->age >= person2->age ? person1 : person2;
+                }
+
+                t_person* oldestPerson = (t_person*) list_fold1(list, (void*) get_oldest_person);
+
+                assert_person(oldestPerson, "Juan", 124);
+            } end
+
+            it("should get minimum") {
+                t_person* youngestPerson = (t_person*) list_get_minimum(list, (void*)_ayudantes_minimo_edad);
+
+                assert_person(youngestPerson, "Juan Manuel", 1);
+            } end
+
+            it("should get maximum") {
+                t_person* oldestPerson = (t_person*) list_get_maximum(list, (void*)_ayudantes_maximo_edad);
+
+                assert_person(oldestPerson, "Juan", 124);
+            } end
+
+        } end
+
         describe ("Fold") {
 
             before {
@@ -545,7 +587,7 @@ context (test_list) {
                     return accum + person->age;
                 }
 
-                int sum = list_fold(list, 0, (void*) add_age);
+                int sum = (int)list_fold(list, 0, (void*) add_age);
                 should_int(sum) be equal to(273);
             } end
 

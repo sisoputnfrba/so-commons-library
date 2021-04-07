@@ -86,6 +86,20 @@
 	void *list_get(t_list *, int index);
 
 	/**
+	* @NAME: list_get_minimum
+	* @DESC: Retorna el minimo de la lista según el comparador
+	* El comparador devuelve cuál es el mínimo de dos valores
+	*/
+	void *list_get_minimum(t_list* self, void* (*minimum)(void*, void*));
+
+	/**
+	* @NAME: list_get_maximum
+	* @DESC: Retorna el maximo de la lista según el comparador
+	* El comparador devuelve cuál es el máximo de dos valores
+	*/
+	void *list_get_maximum(t_list* self, void* (*maximum)(void*, void*));
+
+	/**
 	* @NAME: list_take
 	* @DESC: Retorna una nueva lista con
 	* los primeros n elementos
@@ -236,11 +250,20 @@
 	t_list* list_duplicate(t_list* self);
 
 	/**
+	 * @NAME: list_fold1
+	 * @DESC: Devuelve un valor que resulta de aplicar la operacion entre todos los elementos
+	 * de la lista, tomando al primero como semilla y partiendo desde el segundo (si existe).
+	 *
+	 * La funcion 'operation' debe recibir dos valores del tipo de los elementos de la lista.
+	 */
+	void* list_fold1(t_list* self, void* (*operation)(void*, void*));
+
+	/**
 	 * @NAME: list_fold
-	 * @DESC: Devuelve un valor que resulta de aplicar la 
-	 * operacion entre todos los elementos de la lista, partiendo desde el primero.
-	 * 
-	 * La funcion 'operation' debe recibir 2 dos valores, uno del tipo del valor initial (seed)
+	 * @DESC: Devuelve un valor que resulta de aplicar la operacion entre todos los elementos 
+	 * de la lista, partiendo desde el primero.
+	 *
+	 * La funcion 'operation' debe recibir dos valores: uno del tipo del valor initial (seed)
 	 * y otro del tipo de los elementos de la lista.
 	 */
 	void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*));

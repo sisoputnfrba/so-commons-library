@@ -26,6 +26,7 @@ static t_link_element* list_find_element(t_list *self, bool(*cutting_condition)(
 static int list_add_element(t_list* self, t_link_element* element, bool(*cutting_condition)(t_link_element*, int));
 static t_link_element* list_remove_element(t_list *self, bool(*cutting_condition)(t_link_element*, int));
 static void list_append_to_sublist(t_list* sublist, t_list *self, bool(*condition)(void*, int), void* (*transformer)(void*));
+static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*));
 
 t_list *list_create() {
 	t_list *list = malloc(sizeof(t_list));
@@ -304,18 +305,20 @@ t_list* list_duplicate(t_list* self) {
 	return duplicated;
 }
 
-void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*))
-{
-	t_link_element* element = self->head;
-	void* result = seed;
+void* list_fold1(t_list* self, void* (*operation)(void*, void*)) {
+	return list_fold_elements(self->head->next, self->head->data, operation);
+}
 
-	while(element != NULL)
-	{
-		result = operation(result, element->data);
-		element = element->next;
-	}
+void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*)) {
+	return list_fold_elements(self->head, seed, operation);
+}
 
-	return result;
+void* list_get_minimum(t_list* self, void* (*minimum)(void*, void*)) {
+	return list_fold1(self, minimum);
+}
+
+void* list_get_maximum(t_list* self, void* (*maximum)(void*, void*)) {
+	return list_fold1(self, maximum);
 }
 
 t_list_iterator* list_iterator_create(t_list* list) {
@@ -448,4 +451,14 @@ static void list_append_to_sublist(t_list* sublist, t_list *self, bool(*conditio
 		index++;
 		aux = aux->next;
 	}
+}
+
+static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*)) {
+	void* result = seed;
+	while(element != NULL) {
+		result = operation(result, element->data);
+		element = element->next;
+	}
+
+	return result;
 }
