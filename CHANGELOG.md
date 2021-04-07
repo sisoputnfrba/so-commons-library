@@ -5,10 +5,12 @@
 #### Features
 
 - La interfaz de `temporal_get_string_time()` cambió a `temporal_get_string_time(1)`,
-recibiendp por parámetro el formato de fecha a devolver.
+recibiendo por parámetro el formato de fecha a devolver.
 - Se añadió un iterador externo para `t_list` con sus operaciones básicas
 `create()`, `has_next()`, `next()`, `remove()` y `destroy()`.
 - Se añadió un insertar ordenado para `t_list`: `list_add_sorted(3)`.
+- Se añadieron nuevos foldeos para `t_list`: `list_fold1(2)`, `list_get_minimum(2)` y
+`list_get_maximum(2)`.
 
 #### Bugs
 
@@ -19,5 +21,6 @@ cuando estos eran el string vacío.
 - Se corrigió un bug de `list_take()` y `list_take_and_remove()` que hacía que se
 devolviera una lista inconsistente cuando el count recibido era mayor
 al tamaño de la lista.
-- Se corrigió el comportamiento de las funciones de t_list que recibían un index
-y ocultaban el error en caso de que este no sea válido. Este comportamiento ya no pasa y el error queda expuesto
+- Se corrigió el comportamiento de las funciones de `t_list` que recibían un index
+y ocultaban el error en caso de que este no sea válido. Este comportamiento ya no 
+pasa y el error queda expuesto.
