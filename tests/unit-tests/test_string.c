@@ -182,95 +182,141 @@ context (test_string) {
 
         describe("Split") {
 
-                it("split_with_delimitators") {
-                    char *line = "Hola planeta tierra";
-                    char** substrings = string_split(line, " ");
+            it("split_with_delimitators") {
+                char *line = "path/to/file";
+                char** substrings = string_split(line, "/");
 
-                    should_ptr(substrings) not be null;
-                    should_string(substrings[0]) be equal to("Hola");
-                    should_string(substrings[1]) be equal to("planeta");
-                    should_string(substrings[2]) be equal to("tierra");
-                    should_ptr(substrings[3]) be null;
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("path");
+                should_string(substrings[1]) be equal to ("to");
+                should_string(substrings[2]) be equal to ("file");
+                should_ptr(substrings[3]) be null;
 
-                    free(substrings[0]);
-                    free(substrings[1]);
-                    free(substrings[2]);
-                    free(substrings);
-                } end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-                it("split_is_empty") {
-                    char* line = "";
-                    char** substrings = string_split(line, ";");
+            it("split_starting_with_delimitator") {
+                char* line = "/path/to/file";
+                char** substrings = string_split(line, "/");
 
-                    should_ptr(substrings) not be null;
-                    should_ptr(substrings[0]) be null;
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("");
+                should_string(substrings[1]) be equal to ("path");
+                should_string(substrings[2]) be equal to ("to");
+                should_string(substrings[3]) be equal to ("file");
+                should_ptr(substrings[4]) be null;
 
-                    free(substrings);
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-                } end
+            it("split_ending_with_delimitator") {
+                char* line = "path/to/file/";
+                char** substrings = string_split(line, "/");
 
-                it("n_split_when_n_is_less_than_splitted_elements") {
-                    char *line = "Hola planeta tierra";
-                    char** substrings = string_n_split(line, 2, " ");
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("path");
+                should_string(substrings[1]) be equal to ("to");
+                should_string(substrings[2]) be equal to ("file");
+                should_string(substrings[3]) be equal to ("");
+                should_ptr(substrings[4]) be null;
 
-                    should_ptr(substrings) not be null;
-                    should_string(substrings[0]) be equal to("Hola");
-                    should_string(substrings[1]) be equal to("planeta tierra");
-                    should_ptr(substrings[2]) be null;
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-                    string_iterate_lines(substrings, (void*) free);
-                    free(substrings);
-                } end
+            it("split_having_delimitators_in_between") {
+                char* line = "path/to//file";
+                char** substrings = string_split(line, "/");
 
-                it("n_split_when_n_is_equals_than_splitted_elements") {
-                    char *line = "Hola planeta tierra";
-                    char** substrings = string_n_split(line, 3, " ");
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("path");
+                should_string(substrings[1]) be equal to ("to");
+                should_string(substrings[2]) be equal to ("");
+                should_string(substrings[3]) be equal to ("file");
+                should_ptr(substrings[4]) be null;
 
-                    should_ptr(substrings) not be null;
-                    should_string(substrings[0]) be equal to("Hola");
-                    should_string(substrings[1]) be equal to("planeta");
-                    should_string(substrings[2]) be equal to("tierra");
-                    should_ptr(substrings[3]) be null;
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-                    string_iterate_lines(substrings, (void*) free);
-                    free(substrings);
-                } end
+            it("split_is_empty") {
+                char* line = "";
+                char** substrings = string_split(line, "/");
 
-                it("n_split_when_separator_isnt_included") {
-                    char *line = "Hola planeta tierra";
-                    char ** substrings = string_n_split(line, 5, ";");
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to("");
+                should_ptr(substrings[1]) be null;
 
-                    should_ptr(substrings) not be null;
-                    should_string(substrings[0]) be equal to(line);
-                    should_ptr(substrings[1]) be null;
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
 
-                    string_iterate_lines(substrings, (void *) free);
-                    free(substrings);
-                } end
+            } end
 
-                it("n_split_when_n_is_greather_than_splitted_elements") {
-                    char *line = "Hola planeta tierra";
-                    char** substrings = string_n_split(line, 10, " ");
+            it("n_split_when_n_is_less_than_splitted_elements") {
+                char *line = "Hola planeta tierra";
+                char** substrings = string_n_split(line, 2, " ");
 
-                    should_ptr(substrings) not be null;
-                    should_string(substrings[0]) be equal to("Hola");
-                    should_string(substrings[1]) be equal to("planeta");
-                    should_string(substrings[2]) be equal to("tierra");
-                    should_ptr(substrings[3]) be null;
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to("Hola");
+                should_string(substrings[1]) be equal to("planeta tierra");
+                should_ptr(substrings[2]) be null;
 
-                    string_iterate_lines(substrings, (void*) free);
-                    free(substrings);
-                } end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
-                it("n_split_is_empty") {
-                    char* line = "";
-                    char** substrings = string_n_split(line, 10, ";");
+            it("n_split_when_n_is_equals_than_splitted_elements") {
+                char *line = "Hola planeta tierra";
+                char** substrings = string_n_split(line, 3, " ");
 
-                    should_ptr(substrings) not be null;
-                    should_ptr(substrings[0]) be null;
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to("Hola");
+                should_string(substrings[1]) be equal to("planeta");
+                should_string(substrings[2]) be equal to("tierra");
+                should_ptr(substrings[3]) be null;
 
-                    free(substrings);
-                } end
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
+
+            it("n_split_when_separator_isnt_included") {
+                char *line = "Hola planeta tierra";
+                char ** substrings = string_n_split(line, 5, ";");
+
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to(line);
+                should_ptr(substrings[1]) be null;
+
+                string_iterate_lines(substrings, (void *) free);
+                free(substrings);
+            } end
+
+            it("n_split_when_n_is_greather_than_splitted_elements") {
+                char *line = "Hola planeta tierra";
+                char** substrings = string_n_split(line, 10, " ");
+
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to("Hola");
+                should_string(substrings[1]) be equal to("planeta");
+                should_string(substrings[2]) be equal to("tierra");
+                should_ptr(substrings[3]) be null;
+
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
+
+            it("n_split_is_empty") {
+                char* line = "";
+                char** substrings = string_n_split(line, 10, ";");
+
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to("");
+
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
 
         } end
 
@@ -381,6 +427,8 @@ context (test_string) {
                     char** empty_array = string_get_string_as_array(string_empty_array);
                     should_ptr(empty_array) not be null;
                     should_ptr(empty_array[0]) be null;
+
+                    string_iterate_lines(empty_array, (void*) free);
                     free(empty_array);
                 } end
 
