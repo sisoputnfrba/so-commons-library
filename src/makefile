@@ -30,11 +30,11 @@ clean:
 	$(RM) build
 
 install: all
-	cp -u build/libcommons.so /usr/lib
-	cp --parents -u $(H_SRCS) /usr/include
+	sudo cp -u build/libcommons.so /usr/lib
+	sudo cp --parents -u $(H_SRCS) /usr/include
 
 uninstall:
-	rm -f /usr/lib/libcommons.so
-	rm -rf /usr/include/commons
+	sudo rm -f /usr/lib/libcommons.so
+	sudo rm -rf /usr/include/commons
 
 .PHONY: all debug sources clean install uninstall
