@@ -34,9 +34,9 @@ Instrucciones de instalación:
 
 - Clonar el repositorio desde git (no usar el link de **Download ZIP** que provee GitHub).
 
-- `sudo make install` -> instala la biblioteca en el sistema
+- `make install` -> instala la biblioteca en el sistema
 
-- `sudo make uninstall` -> desinstala la biblioteca
+- `make uninstall` -> desinstala la biblioteca
 
 [![asciicast](https://asciinema.org/a/17x56e36koqybtq1jx8p3kfnp.png)](https://asciinema.org/a/17x56e36koqybtq1jx8p3kfnp)
 

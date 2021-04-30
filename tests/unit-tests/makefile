@@ -1,22 +1,33 @@
 RM=rm -rf
 CC=gcc
 
-C_SPEC=../../cspec
+BASE_DIR=../..
+
+C_SPEC=$(BASE_DIR)/cspec
 C_SPEC_BIN=$(C_SPEC)/release
+C_SPEC_SO=$(C_SPEC_BIN)/libcspecs.so
+
+COMMONS=$(BASE_DIR)/src
+COMMONS_BIN=$(COMMONS)/build
+COMMONS_SO=$(COMMONS_BIN)/libcommons.so
+COMMONS_SRCS=$(patsubst ./%,$(COMMONS)/%,$(shell make --no-print-directory -C $(COMMONS) sources)) 
 
 C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
 OBJS=$(C_SRCS:./%.c=build/%.o)
 
-all: build/commons-unit-test
+BIN_DIR=build
+BIN=$(BIN_DIR)/commons-unit-test
 
-create-dirs:
-	mkdir -p build
+all: $(BIN)
 
-build/commons-unit-test: dependents create-dirs $(OBJS)
-	$(CC) -L"../../src/build" -L"$(C_SPEC_BIN)" -o "build/commons-unit-test" $(OBJS) -lcommons -lcspecs
+$(BIN_DIR):
+	mkdir -p $@
+
+$(BIN): $(C_SPEC_SO) $(COMMONS_SO) $(BIN_DIR) $(OBJS)
+	$(CC) -L"$(COMMONS_BIN)" -L"$(C_SPEC_BIN)" -o "$@" $(OBJS) -lcommons -lcspecs
 
 build/%.o: ./%.c
-	$(CC) -I"../../src" -I"$(C_SPEC)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	$(CC) -I"$(COMMONS)" -I"$(C_SPEC)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 debug: CC += -DDEBUG -g
 debug: all
@@ -25,16 +36,16 @@ clean:
 	$(RM) build
 
 test: all
-	LD_LIBRARY_PATH="../../src/build/:$(C_SPEC_BIN)" build/commons-unit-test
+	LD_LIBRARY_PATH="$(COMMONS_BIN):$(C_SPEC_BIN)" ./$(BIN)
 
-dependents: install-cspec
-	-cd ../../src/ && $(MAKE) all
+$(COMMONS_SO): $(COMMONS_SRCS)
+	-cd $(COMMONS) && $(MAKE) all
 
-install-cspec:
-	-cd ../../ && git submodule init && git submodule update
-	-cd ../../cspec && $(MAKE) all
+$(C_SPEC_SO):
+	-cd $(BASE_DIR) && git submodule init && git submodule update
+	-cd $(C_SPEC) && $(MAKE) all
 
-valgrind: all
-	LD_LIBRARY_PATH="../../src/build/:$(C_SPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./build/commons-unit-test
+valgrind: debug
+	LD_LIBRARY_PATH="$(COMMONS_BIN)/:$(C_SPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
 
-.PHONY: all create-dirs clean install-cspec valgrind
+.PHONY: all debug clean test valgrind
