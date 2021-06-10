@@ -183,8 +183,8 @@ context (test_string) {
         describe("Split") {
 
             it("split_with_delimitators") {
-                char *line = "path/to/file";
-                char** substrings = string_split(line, "/");
+                char *line = "path//to//file";
+                char** substrings = string_split(line, "//");
 
                 should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to ("path");
