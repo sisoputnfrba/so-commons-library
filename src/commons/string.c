@@ -26,7 +26,7 @@ static void _string_do(char *text, void (*closure)(char*));
 static void _string_lower_element(char* ch);
 static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
-char** _string_split(char* text, char* separator, bool(*condition)(char*, int));
+char** _string_split(char* text, char* separator, bool(*condition)(char*, char*, int));
 
 
 char *string_repeat(char character, int count) {
@@ -144,17 +144,17 @@ bool string_equals_ignore_case(char *actual, char *expected) {
 }
 
 char **string_split(char *text, char *separator) {
-	bool _is_last_token(char* next, int _) {
-		return next != NULL;
+	bool _isnt_last_token(char* start, char* next, int _) {
+		return start[0] != '\0' && next != NULL;
 	}
-	return _string_split(text, separator, _is_last_token);
+	return _string_split(text, separator, _isnt_last_token);
 }
 
 char** string_n_split(char *text, int n, char* separator) {
-	bool _is_last_token(char* next, int index) {
-		return next != NULL && index < (n - 1);
+	bool _isnt_last_token(char* start, char* next, int index) {
+		return start[0] != '\0' && next != NULL && index < (n - 1);
 	}
-	return _string_split(text, separator, _is_last_token);
+	return _string_split(text, separator, _isnt_last_token);
 }
 
 char**  string_get_string_as_array(char* text) {
@@ -247,23 +247,28 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 	free(temporal);
 }
 
-char** _string_split(char* text, char* separator, bool(*condition)(char*, int)) {
+char** _string_split(char* text, char* separator, bool(*condition)(char*, char*, int)) {
 	char **substrings = NULL;
 	int size = 0, separator_length = strlen(separator);
 
 	char* start = text;
-	char* next = strstr(start, separator);
-	while(condition(next, size)) {
+	char* next = separator_length ? strstr(start, separator) : start + 1;
+	while(condition(start, next, size)) {
 		size++;
 		substrings = realloc(substrings, sizeof(char*) * size);
 		substrings[size - 1] = string_substring_until(start, next - start);
 		start = next + separator_length;
-		next = strstr(start, separator);
-	};
+		next = separator_length ? strstr(start, separator) : start + 1;
+	}
 
-	size += 2;
+	if(separator_length > 0) {
+		size++;
+		substrings = realloc(substrings, sizeof(char*) * size);
+		substrings[size - 1] = string_duplicate(start);
+	}
+
+	size++;
 	substrings = realloc(substrings, sizeof(char*) * size);
-	substrings[size - 2] = string_duplicate(start);
 	substrings[size - 1] = NULL;
 
 	return substrings;
