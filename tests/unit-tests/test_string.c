@@ -195,6 +195,22 @@ context (test_string) {
                 string_array_destroy(substrings);
             } end
 
+            it("split_with_empty_string") {
+                char *line = "hello";
+                char** substrings = string_split(line, "");
+
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("h");
+                should_string(substrings[1]) be equal to ("e");
+                should_string(substrings[2]) be equal to ("l");
+                should_string(substrings[3]) be equal to ("l");
+                should_string(substrings[4]) be equal to ("o");
+                should_ptr(substrings[5]) be null;
+
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
+
             it("split_starting_with_delimitator") {
                 char* line = "/path/to/file";
                 char** substrings = string_split(line, "/");
