@@ -288,25 +288,23 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 
 char** _string_split(char* text, char* separator, bool(*condition)(char*, int)) {
 	char **substrings = string_array_new();
-	int size = 0;
+	int size = 0, separator_length = strlen(separator);
 
-	char *text_to_iterate = string_duplicate(text);
-	char *next = text_to_iterate;
-
+	char* start = text;
+	char* next = strstr(start, separator);
 	while(condition(next, size)) {
-		char* token = strsep(&next, separator);
-		if(token == NULL) {
-			break;
-		}
-		_string_array_push(&substrings, string_duplicate(token), size);
 		size++;
+		substrings = realloc(substrings, sizeof(char*) * size);
+		substrings[size - 1] = string_substring_until(start, next - start);
+		start = next + separator_length;
+		next = strstr(start, separator);
 	};
 
-	if (next != NULL) {
-		_string_array_push(&substrings, string_duplicate(next), size);
-	}
+	size += 2;
+	substrings = realloc(substrings, sizeof(char*) * size);
+	substrings[size - 2] = string_duplicate(start);
+	substrings[size - 1] = NULL;
 
-	free(text_to_iterate);
 	return substrings;
 }
 
