@@ -182,7 +182,7 @@ context (test_string) {
 
         describe("Split") {
 
-            it("split_with_delimitators") {
+            it("split_with_separators") {
                 char *line = "path//to//file";
                 char** substrings = string_split(line, "//");
 
@@ -195,7 +195,7 @@ context (test_string) {
                 string_array_destroy(substrings);
             } end
 
-            it("split_with_empty_string") {
+            it("split_with_empty_string_as_separator") {
                 char *line = "hello";
                 char** substrings = string_split(line, "");
 
@@ -211,7 +211,19 @@ context (test_string) {
                 free(substrings);
             } end
 
-            it("split_starting_with_delimitator") {
+            it("split_with_null_separator") {
+                char *line = "path/to/file";
+                char** substrings = string_split(line, NULL);
+
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("path/to/file");
+                should_ptr(substrings[1]) be null;
+
+                string_iterate_lines(substrings, (void*) free);
+                free(substrings);
+            } end
+
+            it("split_starting_with_separator") {
                 char* line = "/path/to/file";
                 char** substrings = string_split(line, "/");
 
@@ -225,7 +237,7 @@ context (test_string) {
                 string_array_destroy(substrings);
             } end
 
-            it("split_ending_with_delimitator") {
+            it("split_ending_with_separator") {
                 char* line = "path/to/file/";
                 char** substrings = string_split(line, "/");
 
@@ -239,7 +251,7 @@ context (test_string) {
                 string_array_destroy(substrings);
             } end
 
-            it("split_having_delimitators_in_between") {
+            it("split_having_separators_in_between") {
                 char* line = "path/to//file";
                 char** substrings = string_split(line, "/");
 
