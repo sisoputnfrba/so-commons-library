@@ -36,7 +36,6 @@ t_config *config_create(char *path) {
 	t_config *config = malloc(sizeof(t_config));
 
 	config->path = strdup(path);
-	config->properties = dictionary_create();
 
 	char* buffer = calloc(1, stat_file.st_size + 1);
 	fread(buffer, stat_file.st_size, 1, file);
@@ -48,19 +47,8 @@ t_config *config_create(char *path) {
 		 "and use `dos2unix` program to convert your files to Unix style.\n\n", path);
 	}
 
-	char** lines = string_split(buffer, "\n");
+	config->properties = dictionary_parse(buffer, (void*) string_duplicate);
 
-	void add_cofiguration(char *line) {
-		if (!string_is_empty(line) && !string_starts_with(line, "#")) {
-			char** keyAndValue = string_n_split(line, 2, "=");
-			dictionary_put(config->properties, keyAndValue[0], keyAndValue[1]);
-			free(keyAndValue[0]);
-			free(keyAndValue);
-		}
-	}
-	string_iterate_lines(lines, add_cofiguration);
-
-	string_array_destroy(lines);
 	free(buffer);
 	fclose(file);
 
@@ -129,7 +117,7 @@ int config_save_in_file(t_config *self, char* path) {
 	FILE* file = fopen(path, "wb+");
 
 	if (file == NULL) {
-			return -1;
+		return -1;
 	}
 
 	char* lines = string_new();

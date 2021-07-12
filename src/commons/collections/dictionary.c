@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "../string.h"
 #include "dictionary.h"
 
 static unsigned int dictionary_hash(char *key, int key_len);
@@ -40,6 +41,23 @@ t_dictionary *dictionary_create() {
 	self->elements = calloc(self->table_max_size, sizeof(t_hash_element*));
 	self->table_current_size = 0;
 	self->elements_amount = 0;
+	return self;
+}
+
+t_dictionary* dictionary_parse(char* buffer, void* (*data_parser)(char*)) {
+	t_dictionary* self = dictionary_create();
+	char** lines = string_split(buffer, "\n");
+
+	void add_cofiguration(char *line) {
+		if (!string_is_empty(line) && !string_starts_with(line, "#")) {
+			char** keyAndValue = string_n_split(line, 2, "=");
+			dictionary_put(self, keyAndValue[0], data_parser(keyAndValue[1]));
+			string_array_destroy(keyAndValue);
+		}
+	}
+	string_iterate_lines(lines, add_cofiguration);
+	string_array_destroy(lines);
+
 	return self;
 }
 
