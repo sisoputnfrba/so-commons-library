@@ -567,38 +567,12 @@ context (test_string) {
                 string_iterate_lines(names, _assert_names);
             } end
 
-            it ("not to remove elements in an empty array") {
-                for(int i = 0; i < 10; i++) {
-                    string_array_pop(names);
-                }
-
-                should_int(string_array_size(names)) be equal to (0);
-                should_bool(string_array_is_empty(names)) be truthy;
-            } end
-
             it("replace an element") {
                 char* name = string_array_replace(names, 2, "Damian");
 
                 should_string(name) be equal to ("Sebastian");
 
                 char* expected[] = {"Gaston", "Matias", "Damian", "Daniela"};
-                int i = 0;
-                void _assert_names(char* name) {
-                    should_ptr(name) not be null;
-                    should_string(name) be equal to (expected[i]);
-                    i++;
-                }
-                string_iterate_lines(names, _assert_names);
-            } end
-
-            it("not to replace an element outside the array") {
-                char* name = string_array_replace(names, 4, "Damian");
-
-                should_ptr(name) be null;
-                should_int(string_array_size(names)) be equal to (4);
-                should_ptr(names[4]) be null;
-
-                char* expected[] = {"Gaston", "Matias", "Sebastian", "Daniela"};
                 int i = 0;
                 void _assert_names(char* name) {
                     should_ptr(name) not be null;

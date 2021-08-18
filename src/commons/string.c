@@ -28,7 +28,6 @@ static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
 char** _string_split(char* text, char* separator, bool(*is_last_token)(int));
 static void _string_array_push(char*** array, char* text, int size);
-static char* _string_array_replace(char** array, int pos, char* text);
 
 char *string_repeat(char character, int count) {
 	char *text = calloc(count + 1, 1);
@@ -246,11 +245,14 @@ void string_array_push(char*** array, char* text) {
 }
 
 char* string_array_replace(char** array, int pos, char* text) {
-	return string_array_size(array) > pos && pos >= 0 ? _string_array_replace(array, pos, text) : NULL;
+	char* old_text = array[pos];
+	array[pos] = text;
+
+	return old_text;
 }
 
 char* string_array_pop(char** array) {
-	return string_array_size(array) > 0 ? _string_array_replace(array, string_array_size(array) - 1, NULL) : NULL;
+	return string_array_replace(array, string_array_size(array) - 1, NULL);
 }
 
 /** PRIVATE FUNCTIONS **/
@@ -313,11 +315,4 @@ static void _string_array_push(char*** array, char* text, int size) {
 	*array = realloc(*array, sizeof(char*) * (size + 2));
 	(*array)[size] = text;
 	(*array)[size + 1] = NULL;
-}
-
-static char* _string_array_replace(char** array, int pos, char* text) {
-	char* old_text = array[pos];
-	array[pos] = text;
-
-	return old_text;
 }
