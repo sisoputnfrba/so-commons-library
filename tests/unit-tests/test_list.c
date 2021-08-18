@@ -299,6 +299,18 @@ context (test_list) {
                 list_destroy(sublist);
             } end
 
+            it("should return a new list with the first \"N\" elements starting at a given index of a list") {
+                t_list* sublist = list_slice(list, 1, 3);
+                should_int(list_size(list)) be equal to(5);
+                should_int(list_size(sublist)) be equal to(3);
+
+                assert_person_in_list(sublist, 0, "Gaston"   , 25);
+                assert_person_in_list(sublist, 1, "Sebastian", 21);
+                assert_person_in_list(sublist, 2, "Ezequiel" , 25);
+
+                list_destroy(sublist);
+            } end
+
             it("should return a new list with the first \"N\" elements of a list and remove them from original list") {
                 t_list* sublist = list_take_and_remove(list, 3);
                 should_int(list_size(list)) be equal to(2);
@@ -307,6 +319,30 @@ context (test_list) {
                 assert_person_in_list(sublist, 0, "Matias"   , 24);
                 assert_person_in_list(sublist, 1, "Gaston"   , 25);
                 assert_person_in_list(sublist, 2, "Sebastian", 21);
+
+                list_destroy_and_destroy_elements(sublist, (void*)persona_destroy);
+            } end
+
+            it("should return a new list with the first \"N\" elements starting at a given index and remove them from the original list") {
+                t_list* sublist = list_slice_and_remove(list, 1, 3);
+                should_int(list_size(list)) be equal to(2);
+                should_int(list_size(sublist)) be equal to(3);
+
+                assert_person_in_list(sublist, 0, "Gaston"   , 25);
+                assert_person_in_list(sublist, 1, "Sebastian", 21);
+                assert_person_in_list(sublist, 2, "Ezequiel" , 25);
+
+                list_destroy_and_destroy_elements(sublist, (void*)persona_destroy);
+            } end
+
+            it("should return a new list with the remaining elements starting at a given index and remove them from the original list when \"N\" is too big") {
+                t_list* sublist = list_slice_and_remove(list, 2, 10);
+                should_int(list_size(list)) be equal to(2);
+                should_int(list_size(sublist)) be equal to(3);
+
+                assert_person_in_list(sublist, 0, "Sebastian", 21);
+                assert_person_in_list(sublist, 1, "Ezequiel" , 25);
+                assert_person_in_list(sublist, 2, "Facundo"  , 25);
 
                 list_destroy_and_destroy_elements(sublist, (void*)persona_destroy);
             } end
@@ -583,12 +619,14 @@ context (test_list) {
 
 
             it("should fold all values using a intial value with different type") {
-                int add_age(int accum, t_person* person) {
-                    return accum + person->age;
+                int* add_age(int* accum, t_person* person) {
+                    *accum = *accum + person->age;
+                    return accum;
                 }
 
-                int sum = (int)list_fold(list, 0, (void*) add_age);
-                should_int(sum) be equal to(273);
+                int* sum = list_fold(list, calloc(1, sizeof(int)), (void*) add_age);
+                should_int(*sum) be equal to(273);
+                free(sum);
             } end
 
         } end
