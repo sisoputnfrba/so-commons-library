@@ -153,6 +153,25 @@ void list_remove_and_destroy_by_condition(t_list *self, bool(*condition)(void*),
 	}
 }
 
+void list_remove_and_destroy_all_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*)) {
+	t_link_element *element = self->head;
+	t_link_element *previous;
+
+	int index = 0;
+	while(element != NULL) {
+		if(condition(element->data)) {
+			list_unlink_element(self, previous, element, index);
+			element_destroyer(element->data);
+			free(element);
+			element = previous->next;
+		} else {
+			previous = element;
+			element = element->next;
+			index++;
+		}
+	}
+}
+
 int list_size(t_list *list) {
 	return list->elements_count;
 }
