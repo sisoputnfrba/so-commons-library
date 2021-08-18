@@ -26,7 +26,7 @@ static void _string_do(char *text, void (*closure)(char*));
 static void _string_lower_element(char* ch);
 static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
-char** _string_split(char* text, char* separator, bool(*condition)(char*, char*, int));
+char** _string_split(char* text, char* separator, bool(*is_last_token)(int));
 static void _string_array_push(char*** array, char* text, int size);
 static char* _string_array_replace(char** array, int pos, char* text);
 
@@ -145,17 +145,17 @@ bool string_equals_ignore_case(char *actual, char *expected) {
 }
 
 char **string_split(char *text, char *separator) {
-	bool _isnt_last_token(char* start, char* next, int _) {
-		return start[0] != '\0' && next != NULL;
+	bool _is_last_token(int _) {
+		return false;
 	}
-	return _string_split(text, separator, _isnt_last_token);
+	return _string_split(text, separator, _is_last_token);
 }
 
 char** string_n_split(char *text, int n, char* separator) {
-	bool _isnt_last_token(char* start, char* next, int index) {
-		return start[0] != '\0' && next != NULL && index < (n - 1);
+	bool _is_last_token(int index) {
+		return index == (n - 1);
 	}
-	return _string_split(text, separator, _isnt_last_token);
+	return _string_split(text, separator, _is_last_token);
 }
 
 char**  string_get_string_as_array(char* text) {
@@ -286,34 +286,24 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 	free(temporal);
 }
 
-char** _string_split(char* text, char* separator, bool(*condition)(char*, char*, int)) {
-	char **substrings = NULL;
-	int size = 0;
+char** _string_split(char* text, char* separator, bool(*is_last_token)(int)) {
+	char **substrings = string_array_new();
+	int index = 0;
 
-	char* start = text;
-	if(separator != NULL) {
-		int separator_length = strlen(separator);
-		do {
-			char* next = separator_length ? strstr(start, separator) : start + 1;
-			if(!condition(start, next, size)) {
+	char *start = text, *next;
+	while (separator != NULL && !is_last_token(index) && (next = strstr(start, separator))) {
+		if (strlen(separator) == 0) {
+			if (strlen(start) == 1) {
 				break;
 			}
-			size++;
-			substrings = realloc(substrings, sizeof(char*) * size);
-			substrings[size - 1] = string_substring_until(start, next - start);
-			start = next + separator_length;
-		} while(true);
+			next++;
+		}
+		_string_array_push(&substrings, string_substring_until(start, next - start), index);
+		start = next + strlen(separator);
+		index++;
 	}
 
-	if(separator == NULL || separator[0] != '\0') {
-		size++;
-		substrings = realloc(substrings, sizeof(char*) * size);
-		substrings[size - 1] = string_duplicate(start);
-	}
-
-	size++;
-	substrings = realloc(substrings, sizeof(char*) * size);
-	substrings[size - 1] = NULL;
+	_string_array_push(&substrings, string_duplicate(start), index);
 
 	return substrings;
 }
