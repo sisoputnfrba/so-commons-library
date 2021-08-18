@@ -124,7 +124,7 @@ void *list_remove(t_list *self, int index) {
 	return data;
 }
 
-void list_remove_element(t_list* self, void* item) {
+bool list_remove_element(t_list* self, void* item) {
 	t_link_element *element = NULL;
 
 	bool _remove_item(t_link_element* element, int i) {
@@ -135,6 +135,8 @@ void list_remove_element(t_list* self, void* item) {
 	if(element != NULL) {
 		free(element);
 	}
+
+	return !!element;
 }
 
 void* list_remove_by_condition(t_list *self, bool(*condition)(void*)) {

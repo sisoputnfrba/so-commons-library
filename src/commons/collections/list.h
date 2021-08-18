@@ -163,9 +163,10 @@
 
 	/**
 	* @NAME: list_remove_element
-	* @DESC: Remueve al elemento de la lista recibido por parámetro.
+	* @DESC: Remueve al elemento de la lista recibido por parámetro. Retorna true
+	* si el elemento fue removido correctamente y false si no se encontró
 	*/
-	void list_remove_element(t_list* self, void* element);
+	bool list_remove_element(t_list* self, void* element);
 
 	/**
 	* @NAME: list_remove_and_destroy_element

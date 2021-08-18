@@ -198,12 +198,20 @@ context (test_list) {
                 should_int(list_size(list)) be equal to(5);
 
                 t_person* aux = list_get(list, 1);
-                list_remove_element(list, aux);
+                should_bool(list_remove_element(list, aux)) be truthy;
                 persona_destroy(aux);
 
                 assert_person_in_list(list, 1, "Sebastian", 21);
                 should_int(list_size(list)) be equal to(4);
 
+            } end
+
+            it("shouldn't remove a value that doesn't belong to the list") {
+                should_int(list_size(list)) be equal to(5);
+
+                should_bool(list_remove_element(list, NULL)) be falsey;
+
+                should_int(list_size(list)) be equal to(5);
             } end
 
             it("should remove and destroy a value at index") {
