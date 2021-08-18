@@ -1,6 +1,6 @@
 ## Commons Library For C ##
 
-[![Build Status](https://travis-ci.org/sisoputnfrba/so-commons-library.svg?branch=master)](https://travis-ci.org/sisoputnfrba/so-commons-library)
+[![Build Status](https://travis-ci.com/sisoputnfrba/so-commons-library.svg?branch=master)](https://travis-ci.com/sisoputnfrba/so-commons-library)
 
 Biblioteca con TADs útiles para el desarrollo de aplicaciones hechas con el lenguaje C
 
