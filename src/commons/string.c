@@ -293,7 +293,7 @@ char** _string_split(char* text, char* separator, bool(*is_last_token)(int)) {
 	char *start = text, *next;
 	while (separator != NULL && !is_last_token(index) && (next = strstr(start, separator))) {
 		if (strlen(separator) == 0) {
-			if (strlen(start) == 1) {
+			if (strlen(start) <= 1) {
 				break;
 			}
 			next++;

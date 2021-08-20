@@ -277,6 +277,18 @@ context (test_string) {
 
             } end
 
+            it("split_is_empty_with_empty_separator") {
+                char* line = "";
+                char** substrings = string_split(line, "");
+
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to("");
+                should_ptr(substrings[1]) be null;
+
+                string_array_destroy(substrings);
+
+            } end
+
             it("n_split_when_n_is_less_than_splitted_elements") {
                 char *line = "Hola planeta tierra";
                 char** substrings = string_n_split(line, 2, " ");
