@@ -290,17 +290,18 @@ char** _string_split(char* text, char* separator, bool(*is_last_token)(int)) {
 	char **substrings = string_array_new();
 	int index = 0;
 
-	char *start = text, *next;
-	while (separator != NULL && !is_last_token(index) && (next = strstr(start, separator))) {
-		if (strlen(separator) == 0) {
-			if (strlen(start) <= 1) {
-				break;
+	char *end, *start = text;
+	if (separator != NULL) {
+		while ((end = strstr(start, separator)) != NULL && !is_last_token(index)) {
+			if (string_is_empty(separator)) {
+				if (string_length(start) > 1)
+					end = start + 1;
+			 	else
+					break;
 			}
-			next++;
+			_string_array_push(&substrings, string_substring_until(start, end - start), index++);
+			start = end + string_length(separator);
 		}
-		_string_array_push(&substrings, string_substring_until(start, next - start), index);
-		start = next + strlen(separator);
-		index++;
 	}
 
 	_string_array_push(&substrings, string_duplicate(start), index);
