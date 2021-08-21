@@ -26,7 +26,7 @@ static void _string_do(char *text, void (*closure)(char*));
 static void _string_lower_element(char* ch);
 static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
-char** _string_split(char* text, char* separator, bool(*condition)(char*, int));
+char** _string_split(char* text, char* separator, bool(*is_last_token)(int));
 static void _string_array_push(char*** array, char* text, int size);
 static char* _string_array_replace(char** array, int pos, char* text);
 
@@ -145,15 +145,15 @@ bool string_equals_ignore_case(char *actual, char *expected) {
 }
 
 char **string_split(char *text, char *separator) {
-	bool _is_last_token(char* next, int _) {
-		return next != NULL;
+	bool _is_last_token(int _) {
+		return false;
 	}
 	return _string_split(text, separator, _is_last_token);
 }
 
 char** string_n_split(char *text, int n, char* separator) {
-	bool _is_last_token(char* next, int index) {
-		return next != NULL && index < (n - 1);
+	bool _is_last_token(int index) {
+		return index == (n - 1);
 	}
 	return _string_split(text, separator, _is_last_token);
 }
@@ -286,27 +286,26 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 	free(temporal);
 }
 
-char** _string_split(char* text, char* separator, bool(*condition)(char*, int)) {
+char** _string_split(char* text, char* separator, bool(*is_last_token)(int)) {
 	char **substrings = string_array_new();
-	int size = 0;
+	int index = 0;
 
-	char *text_to_iterate = string_duplicate(text);
-	char *next = text_to_iterate;
-
-	while(condition(next, size)) {
-		char* token = strsep(&next, separator);
-		if(token == NULL) {
-			break;
+	char *end, *start = text;
+	if (separator != NULL) {
+		while ((end = strstr(start, separator)) != NULL && !is_last_token(index)) {
+			if (string_is_empty(separator)) {
+				if (string_length(start) > 1)
+					end = start + 1;
+			 	else
+					break;
+			}
+			_string_array_push(&substrings, string_substring_until(start, end - start), index++);
+			start = end + string_length(separator);
 		}
-		_string_array_push(&substrings, string_duplicate(token), size);
-		size++;
-	};
-
-	if (next != NULL) {
-		_string_array_push(&substrings, string_duplicate(next), size);
 	}
 
-	free(text_to_iterate);
+	_string_array_push(&substrings, string_duplicate(start), index);
+
 	return substrings;
 }
 
