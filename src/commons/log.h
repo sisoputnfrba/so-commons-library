@@ -39,9 +39,19 @@
 
 	/**
 	* @NAME: log_create
-	* @DESC: Crea una instancia de logger, tomando por parametro
-	* el nombre del programa, el nombre del archivo donde se van a generar los logs,
-	* el nivel de detalle minimo a loguear y si además se muestra por pantalla lo que se loguea.
+	* @DESC: Crea una instancia de logger
+	* @PARAMS:
+	*        file - la ruta hacia el archivo donde se van a generar los logs:
+	*            a) si el archivo ya existe, se escribirá al final del mismo
+	*            b) si el archivo no existe, se creará uno nuevo en el directorio indicado
+	*            c) si el directorio hacia el archivo no existe, se producirá un error
+	*        process_name - el nombre a ser mostrado en los logs
+	*        is_active_console - si lo que se loguea debe mostrarse por consola
+	*        level - el nivel de detalle mínimo a loguear (ver definición de t_log_level)
+	*            ejemplo: LOG_LEVEL_INFO logueará mediante log_error, log_warning y log_info 
+	*            e ignorará los llamados a log_debug y log_trace 
+	* @RETURN:
+	*        retorna una instancia de logger, o NULL en caso de error
 	*/
 	t_log* 		log_create(char* file, char *program_name, bool is_active_console, t_log_level level);
 
@@ -55,7 +65,7 @@
 	* @NAME: log_trace
 	* @DESC: Loguea un mensaje con el siguiente formato
 	*
-	* [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* [TRACE] hh:mm:ss:mmmm PROGRAM_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_trace(t_log* logger, const char* message, ...);
@@ -64,7 +74,7 @@
 	* @NAME: log_debug
 	* @DESC: Loguea un mensaje con el siguiente formato
 	*
-	* [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* [DEBUG] hh:mm:ss:mmmm PROGRAM_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_debug(t_log* logger, const char* message, ...);
@@ -73,7 +83,7 @@
 	* @NAME: log_info
 	* @DESC: Loguea un mensaje con el siguiente formato
 	*
-	* [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* [INFO] hh:mm:ss:mmmm PROGRAM_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_info(t_log* logger, const char* message, ...);
@@ -82,7 +92,7 @@
 	* @NAME: log_warning
 	* @DESC: Loguea un mensaje con el siguiente formato
 	*
-	* [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* [WARNING] hh:mm:ss:mmmm PROGRAM_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_warning(t_log* logger, const char* message, ...);
@@ -91,7 +101,7 @@
 	* @NAME: log_error
 	* @DESC: Loguea un mensaje con el siguiente formato
 	*
-	* [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* [ERROR] hh:mm:ss:mmmm PROGRAM_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_error(t_log* logger, const char* message, ...);
