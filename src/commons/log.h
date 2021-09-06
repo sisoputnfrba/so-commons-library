@@ -42,9 +42,9 @@
 	* @DESC: Crea una instancia de logger
 	* @PARAMS:
 	*        file - la ruta hacia el archivo donde se van a generar los logs:
-	*            a) si el archivo ya existe, se escribirá al final del mismo
-	*            b) si el archivo no existe, se creará uno nuevo en el directorio indicado
-	*            c) si el directorio hacia el archivo no existe, se producirá un error
+	*            + si el archivo ya existe, se escribirá al final del mismo
+	*            + si el archivo no existe, se creará uno nuevo en el directorio indicado
+	*            + si el directorio hacia el archivo no existe, se producirá un error
 	*        process_name - el nombre a ser mostrado en los logs
 	*        is_active_console - si lo que se loguea debe mostrarse por consola
 	*        level - el nivel de detalle mínimo a loguear (ver definición de t_log_level)
