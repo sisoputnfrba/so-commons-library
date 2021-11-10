@@ -58,7 +58,7 @@
 	* [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
-	void 		log_trace(t_log* logger, const char* message, ...);
+	void 		log_trace(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	* @NAME: log_debug
@@ -67,7 +67,7 @@
 	* [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
-	void 		log_debug(t_log* logger, const char* message, ...);
+	void 		log_debug(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	* @NAME: log_info
@@ -76,7 +76,7 @@
 	* [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
-	void 		log_info(t_log* logger, const char* message, ...);
+	void 		log_info(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	* @NAME: log_warning
@@ -85,7 +85,7 @@
 	* [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
-	void 		log_warning(t_log* logger, const char* message, ...);
+	void 		log_warning(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	* @NAME: log_error
@@ -94,7 +94,7 @@
 	* [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
-	void 		log_error(t_log* logger, const char* message, ...);
+	void 		log_error(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	* @NAME: log_level_as_string
