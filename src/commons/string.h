@@ -41,7 +41,7 @@
 	*
 	* => saludo = "Hola mundo"
 	*/
-	char*   string_from_format(const char* format, ...);
+	char*   string_from_format(const char* format, ...) __attribute__((format(printf, 1, 2)));
 
 	/**
 	* @NAME: string_from_vformat
@@ -86,7 +86,7 @@
 	*
 	* => saludo = "HOLA PEPE!"
 	*/
-	void    string_append_with_format(char **original, const char *format, ...);
+	void    string_append_with_format(char **original, const char *format, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	* @NAME: string_duplicate
