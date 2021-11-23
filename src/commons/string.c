@@ -219,19 +219,22 @@ char* string_reverse(char* palabra) {
 }
 
 char* string_replace(char* text, char* pattern, char* replacement) {
-	char* result = string_new();
-	char* start = text;
-	char* next;
+	char *result = string_new();
+	char *start = text;
 
-	while((next = strstr(start, pattern)) != NULL && *pattern != '\0') {
-		string_n_append(&result, start, next - start);
-		string_append(&result, replacement);
+	if (pattern != NULL) {
+		char *end = strstr(start, pattern) + !string_is_empty(text) * string_is_empty(pattern);
+		while(end != NULL && !string_is_empty(end)) {
+			string_n_append(&result, start, end - start);
+			string_append(&result, replacement);
 
-		start = next + strlen(pattern);
+			start = end + strlen(pattern);
+			end = strstr(start, pattern) + string_is_empty(pattern);
+		}
 	}
 	string_append(&result, start);
 
-	if(*pattern == '\0') {
+	if (pattern != NULL && string_is_empty(pattern)) {
 		string_append(&result, replacement);
 	}
 
@@ -318,19 +321,16 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 
 char** _string_split(char* text, char* separator, bool(*is_last_token)(int)) {
 	char **substrings = string_array_new();
+	char *start = text;
 	int index = 0;
 
-	char *end, *start = text;
 	if (separator != NULL) {
-		while ((end = strstr(start, separator)) != NULL && !is_last_token(index)) {
-			if (string_is_empty(separator)) {
-				if (string_length(start) > 1)
-					end = start + 1;
-			 	else
-					break;
-			}
+		char* end = strstr(start, separator) + !string_is_empty(text) * string_is_empty(separator);
+
+		while (end != NULL && !string_is_empty(end) && !is_last_token(index)) {
 			_string_array_push(&substrings, string_substring_until(start, end - start), index++);
 			start = end + string_length(separator);
+			end = strstr(start, separator) + string_is_empty(separator);
 		}
 	}
 
