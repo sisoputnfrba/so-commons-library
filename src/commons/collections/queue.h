@@ -82,6 +82,6 @@
 	* @NAME: queue_is_empty
 	* @DESC: Verifica si la cola esta vacía
 	*/
-	int queue_is_empty(t_queue *);
+	bool queue_is_empty(t_queue *);
 
 #endif /*QUEUE_H_*/

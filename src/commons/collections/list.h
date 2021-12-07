@@ -223,7 +223,7 @@
 	* @NAME: list_is_empty
 	* @DESC: Verifica si la lista esta vacia
 	*/
-	int list_is_empty(t_list *);
+	bool list_is_empty(t_list *);
 
 	/**
 	* @NAME: list_sort
