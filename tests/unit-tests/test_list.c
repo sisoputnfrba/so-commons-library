@@ -166,8 +166,8 @@ context (test_list) {
         describe ("Replace, remove and destroy") {
 
             before {
-                list_add(list, persona_create("Matias"   , 24));
-                list_add(list, persona_create("Gaston"   , 25));
+                list_add(list, persona_create("Matias"   , 25));
+                list_add(list, persona_create("Gaston"   , 24));
                 list_add(list, persona_create("Sebastian", 21));
                 list_add(list, persona_create("Ezequiel" , 25));
                 list_add(list, persona_create("Facundo"  , 25));
@@ -187,20 +187,20 @@ context (test_list) {
                 should_int(list_size(list)) be equal to(5);
 
                 t_person *aux = list_remove(list, 0);
-                assert_person(aux, "Matias", 24);
+                assert_person(aux, "Matias", 25);
                 persona_destroy(aux);
 
-                assert_person_in_list(list, 0, "Gaston", 25);
+                assert_person_in_list(list, 0, "Gaston", 24);
                 should_int(list_size(list)) be equal to(4);
             } end
 
             it("should remove and destroy a value at index") {
-                assert_person_in_list(list, 0, "Matias", 24);
+                assert_person_in_list(list, 0, "Matias", 25);
                 should_int(list_size(list)) be equal to(5);
 
                 list_remove_and_destroy_element(list, 0, (void*)persona_destroy);
 
-                assert_person_in_list(list, 0, "Gaston", 25);
+                assert_person_in_list(list, 0, "Gaston", 24);
                 should_int(list_size(list)) be equal to(4);
             } end
 
@@ -212,15 +212,15 @@ context (test_list) {
                 }
 
                 t_person *aux = list_remove_by_condition(list, (void*) _is_gaston);
-                assert_person(aux, "Gaston", 25);
+                assert_person(aux, "Gaston", 24);
                 persona_destroy(aux);
 
                 should_int(list_size(list)) be equal to(4);
             } end
 
             it("should remove all values which satisfy a condition") {
-                assert_person_in_list(list, 0, "Matias"   , 24);
-                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 0, "Matias"   , 25);
+                assert_person_in_list(list, 1, "Gaston"   , 24);
                 assert_person_in_list(list, 2, "Sebastian", 21);
                 assert_person_in_list(list, 3, "Ezequiel" , 25);
                 assert_person_in_list(list, 4, "Facundo"  , 25);
@@ -231,7 +231,7 @@ context (test_list) {
                 }
                 list_remove_and_destroy_all_by_condition(list, (void*) _is_25_years_old, (void*) persona_destroy);
 
-                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 0, "Gaston"   , 24);
                 assert_person_in_list(list, 1, "Sebastian", 21);
                 should_int(list_size(list)) be equal to (2);
             } end
