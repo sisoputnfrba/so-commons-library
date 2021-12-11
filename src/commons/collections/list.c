@@ -163,7 +163,7 @@ void list_remove_and_destroy_all_by_condition(t_list *self, bool(*condition)(voi
 			list_unlink_element(self, previous, element, index);
 			element_destroyer(element->data);
 			free(element);
-			element = previous->next;
+			element = index == 0 ? self->head : previous->next;
 		} else {
 			previous = element;
 			element = element->next;
