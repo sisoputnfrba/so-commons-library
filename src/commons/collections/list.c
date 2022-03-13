@@ -176,7 +176,7 @@ int list_size(t_list *list) {
 	return list->elements_count;
 }
 
-int list_is_empty(t_list *list) {
+bool list_is_empty(t_list *list) {
 	return list_size(list) == 0;
 }
 
