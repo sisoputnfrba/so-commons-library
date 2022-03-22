@@ -32,7 +32,7 @@ char *temporal_get_string_time(const char* format) {
 	if(clock_gettime(CLOCK_REALTIME, log_timespec) == -1) {
 		return NULL;
 	}
-	milisec = string_from_format("%03d", log_timespec->tv_nsec / 1000000);
+	milisec = string_from_format("%03ld", log_timespec->tv_nsec / 1000000);
 
 	for(char* ms = strstr(str_time, "%MS"); ms != NULL; ms = strstr(ms + 3, "%MS")) {
 		memcpy(ms, milisec, 3);
