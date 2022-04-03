@@ -26,9 +26,11 @@
 
 	/**
 	* @NAME: config_create
-	* @DESC: Crea y devuelve un puntero a una estructura t_config
+	* @DESC: Crea una estructura t_config
 	* @PARAMS:
 	* 		path - path del archivo de configuracion
+	* @RETURN: Devuelve un puntero hacia la estructura creada o NULL 
+	* en caso de no encotrar el archivo en el path especificado.
 	*/
 	t_config *config_create(char *path);
 
