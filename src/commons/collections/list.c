@@ -21,11 +21,10 @@
 static void list_link_element(t_list* self, t_link_element** indirect, t_link_element* element);
 static t_link_element* list_unlink_element(t_list* self, t_link_element** indirect);
 static t_link_element* list_create_element(void* data);
-static t_link_element** list_get_last_element(t_list* self);
 static t_link_element** list_find_element(t_list *self, bool(*cutting_condition)(t_link_element*, int));
 static int list_add_element(t_list* self, t_link_element* element, bool(*cutting_condition)(t_link_element*, int));
 static t_link_element* list_remove_element(t_list *self, bool(*cutting_condition)(t_link_element*, int));
-static void list_append_to_sublist(t_list* sublist, t_list *self, bool(*condition)(void*, int), void* (*transformer)(void*));
+static void list_add_all_elements_by_condition(t_list *self, t_list *other, bool(*condition)(void*, int));
 static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*));
 
 t_list *list_create() {
@@ -48,7 +47,7 @@ void list_add_all(t_list* self, t_list* other) {
 	bool _add_all_elements(void* element_data, int index) {
 		return true;
 	}
-	list_append_to_sublist(self, other, _add_all_elements, NULL);
+	list_add_all_elements_by_condition(self, other, _add_all_elements);
 }
 
 void* list_get(t_list *self, int index) {
@@ -210,7 +209,7 @@ t_list* list_slice(t_list* self, int start, int count) {
 	bool _take_count_elements(void* element_data, int index) {
 		return start <= index && index < (start + count);
 	}
-	list_append_to_sublist(sublist, self, _take_count_elements, NULL);
+	list_add_all_elements_by_condition(sublist, self, _take_count_elements);
 
 	return sublist;
 }
@@ -243,18 +242,16 @@ t_list* list_filter(t_list* self, bool(*condition)(void*)){
 	bool _add_if_condition(void* element_data, int index) {
 		return condition(element_data);
 	}
-	list_append_to_sublist(filtered, self, _add_if_condition, NULL);
+	list_add_all_elements_by_condition(filtered, self, _add_if_condition);
 
 	return filtered;
 }
 
 t_list* list_map(t_list* self, void*(*transformer)(void*)){
-	t_list* mapped = list_create();
-
-	bool _transform_all(void* element_data, int index) {
-			return true;
+	t_list* mapped = list_duplicate(self);
+	for (t_link_element *element = mapped->head; element != NULL; element = element->next) {
+		element->data = transformer(element->data);
 	}
-	list_append_to_sublist(mapped, self, _transform_all, transformer);
 
 	return mapped;
 }
@@ -391,15 +388,6 @@ static t_link_element* list_create_element(void* data) {
 	return element;
 }
 
-static t_link_element** list_get_last_element(t_list* self) {
-	t_link_element** last = &self->head;
-	while ((*last) != NULL) {
-		last = &(*last)->next;
-	}
-
-	return last;
-}
-
 static t_link_element** list_find_element(t_list *self, bool(*cutting_condition)(t_link_element*, int)) {
 	t_link_element** element = &self->head;
 	int index = 0;
@@ -437,19 +425,22 @@ static t_link_element* list_remove_element(t_list *self, bool(*cutting_condition
 	return list_unlink_element(self, aux);
 }
 
-static void list_append_to_sublist(t_list* sublist, t_list *self, bool(*condition)(void*, int), void* (*transformer)(void*)) {
-	t_link_element **last_element = list_get_last_element(sublist);
-	t_link_element **aux = &self->head;
+static void list_add_all_elements_by_condition(t_list *self, t_list *other, bool(*condition)(void*, int)) {
+	t_link_element **last;
+	bool _find_last_element(t_link_element *element, int _) {
+		return element == NULL;
+	}
+	last = list_find_element(self, _find_last_element);
+
 	int index = 0;
-	while((*aux) != NULL) {
-		if(condition((*aux)->data, index)) {
-			t_link_element* new_element = list_create_element(transformer ? transformer((*aux)->data) : (*aux)->data);
-			list_link_element(sublist, last_element, new_element);
-			last_element = &(*last_element)->next;
+	void _filter_and_add(void *data) {
+		if(condition(data, index)) {
+			list_link_element(self, last, list_create_element(data));
+			last = &(*last)->next;
 		}
 		index++;
-		aux = &(*aux)->next;
 	}
+	list_iterate(other, _filter_and_add);
 }
 
 static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*)) {
