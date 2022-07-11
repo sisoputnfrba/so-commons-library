@@ -223,6 +223,10 @@ char* string_replace(char* text, char* pattern, char* replacement) {
 	char *result = string_new();
 	char *last_part;
 
+	if (pattern != NULL && string_is_empty(pattern) && !string_is_empty(text)) {
+		string_append(&result, replacement);
+	}
+
 	bool _replace_pattern(char* start, char* end) {
 		string_n_append(&result, start, end - start);
 		string_append(&result, replacement);

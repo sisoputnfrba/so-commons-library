@@ -553,7 +553,7 @@ context (test_string) {
 
             it ("replace the end when empty string is the pattern") {
                 replaced = string_replace("hello", "", "x");
-                should_string(replaced) be equal to ("hxexlxlxox");
+                should_string(replaced) be equal to ("xhxexlxlxox");
             } end
 
             it ("replace the end when empty string is text and pattern") {
