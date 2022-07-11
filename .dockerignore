@@ -1,0 +1,6 @@
+*
+!src
+!tests
+!makefile
+
+**/build
