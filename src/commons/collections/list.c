@@ -22,7 +22,7 @@ static void list_link_element(t_list* self, t_link_element** indirect, t_link_el
 static t_link_element* list_unlink_element(t_list* self, t_link_element** indirect);
 static t_link_element* list_create_element(void* data);
 static t_link_element** list_get_last_element(t_list* self);
-static t_link_element* list_find_element(t_list *self, bool(*cutting_condition)(t_link_element*, int));
+static t_link_element** list_find_element(t_list *self, bool(*cutting_condition)(t_link_element*, int));
 static int list_add_element(t_list* self, t_link_element* element, bool(*cutting_condition)(t_link_element*, int));
 static t_link_element* list_remove_element(t_list *self, bool(*cutting_condition)(t_link_element*, int));
 static void list_append_to_sublist(t_list* sublist, t_list *self, bool(*condition)(void*, int), void* (*transformer)(void*));
@@ -52,13 +52,13 @@ void list_add_all(t_list* self, t_list* other) {
 }
 
 void* list_get(t_list *self, int index) {
-	t_link_element* element_in_index;
+	t_link_element** element_in_index;
 	bool _find_element_in_index(t_link_element* _, int i) {
 		return i == index;
 	}
 	element_in_index = list_find_element(self, _find_element_in_index);
 
-	return element_in_index->data;
+	return (*element_in_index)->data;
 }
 
 void list_add_in_index(t_list *self, int index, void *data) {
@@ -71,15 +71,15 @@ void list_add_in_index(t_list *self, int index, void *data) {
 
 void *list_replace(t_list *self, int index, void *data) {
 	void *old_data = NULL;
-	t_link_element* element;
+	t_link_element** element;
 
 	bool _find_element_at_index(t_link_element* _, int i) {
 		return i == index;
 	}
 	element = list_find_element(self, _find_element_at_index);
 
-	old_data = element->data;
-	element->data = data;
+	old_data = (*element)->data;
+	(*element)->data = data;
 
 	return old_data;
 }
@@ -90,13 +90,13 @@ void list_replace_and_destroy_element(t_list *self, int index, void *data, void(
 }
 
 void* list_find(t_list *self, bool(*condition)(void*)) {
-	t_link_element* element;
+	t_link_element** element;
 	bool _find_by_condition(t_link_element* element, int i) {
 		return element == NULL || condition(element->data);
 	}
 	element = list_find_element(self, _find_by_condition);
 
-	return element != NULL ? element->data : NULL;
+	return (*element) != NULL ? (*element)->data : NULL;
 }
 
 void list_iterate(t_list* self, void(*closure)(void*)) {
@@ -216,16 +216,20 @@ t_list* list_slice(t_list* self, int start, int count) {
 }
 
 t_list* list_slice_and_remove(t_list* self, int start, int count) {
-	t_link_element** aux = &self->head;
-	for(int i = 0; i < start; i++) {
-		aux = &(*aux)->next;
-	}
 	t_list* sublist = list_create();
-	t_link_element** sublist_last_element = &sublist->head;
-	for(int j = 0; j < count && (*aux) != NULL; j++) {
-		list_link_element(sublist, sublist_last_element, list_unlink_element(self, aux));
-		sublist_last_element = &(*sublist_last_element)->next;
+	t_link_element** last = &sublist->head;
+	t_link_element** to_remove;
+
+	bool _find_first_element_to_remove(t_link_element* _, int index) {
+		return index == start;
 	}
+	to_remove = list_find_element(self, _find_first_element_to_remove);
+
+	for(int j = 0; j < count && (*to_remove) != NULL; j++) {
+		list_link_element(sublist, last, list_unlink_element(self, to_remove));
+		last = &(*last)->next;
+	}
+
 	return sublist;
 }
 
@@ -396,12 +400,12 @@ static t_link_element** list_get_last_element(t_list* self) {
 	return last;
 }
 
-static t_link_element* list_find_element(t_list *self, bool(*cutting_condition)(t_link_element*, int)) {
-	t_link_element* element = self->head;
+static t_link_element** list_find_element(t_list *self, bool(*cutting_condition)(t_link_element*, int)) {
+	t_link_element** element = &self->head;
 	int index = 0;
 
-	while(!cutting_condition(element, index)) {
-		element = element->next;
+	while(!cutting_condition(*element, index)) {
+		element = &(*element)->next;
 		index++;
 	}
 
