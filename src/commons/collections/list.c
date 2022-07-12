@@ -18,13 +18,15 @@
 
 #include "list.h"
 
+static t_link_element *list_create_element(void* data);
 static void list_link_element(t_list* self, t_link_element** indirect, t_link_element* element);
-static t_link_element* list_unlink_element(t_list* self, t_link_element** indirect);
-static t_link_element* list_create_element(void* data);
-static t_link_element** list_find_element(t_list *self, bool(*found)(t_link_element**, int), int *index);
-static int list_add_element(t_list* self, t_link_element* element, bool(*found)(t_link_element**, int));
-static t_link_element* list_remove_element(t_list *self, bool(*found)(t_link_element**, int));
-static void list_add_all_elements_by_condition(t_list *self, t_list *other, bool(*condition)(void*, int));
+static t_link_element *list_unlink_element(t_list* self, t_link_element** indirect);
+static t_link_element **list_get_indirect_in_tail(t_list *self);
+static t_link_element **list_get_indirect_in_index(t_list *self, int index);
+static t_link_element **list_get_indirect_by_condition(t_list *self, bool(*condition)(void*));
+static void *list_replace_indirect(t_link_element **indirect, void *data);
+static void *list_remove_indirect(t_list *self, t_link_element **indirect);
+static t_list *list_merge_sorted(t_list *left, t_list *right, bool (*comparator)(void*, void*));
 static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*));
 
 t_list *list_create() {
@@ -35,52 +37,32 @@ t_list *list_create() {
 }
 
 int list_add(t_list *self, void *data) {
-	t_link_element *new_element = list_create_element(data);
-
-	bool _add_as_last(t_link_element** indirect, int _) {
-		return (*indirect) == NULL;
-	}
-	return list_add_element(self, new_element, _add_as_last);
+	t_link_element **indirect = list_get_indirect_in_tail(self);
+	list_link_element(self, indirect, list_create_element(data));
+	return list_size(self) - 1;
 }
 
 void list_add_all(t_list* self, t_list* other) {
-	bool _add_all_elements(void* data, int index) {
-		return true;
+	t_link_element **indirect = list_get_indirect_in_tail(self);
+	for (t_link_element *element = other->head; element != NULL; element = element->next) {
+		list_link_element(self, indirect, list_create_element(element->data));
+		indirect = &(*indirect)->next;
 	}
-	list_add_all_elements_by_condition(self, other, _add_all_elements);
 }
 
 void* list_get(t_list *self, int index) {
-	t_link_element** element_in_index;
-	bool _find_element_in_index(t_link_element** _, int i) {
-		return i == index;
-	}
-	element_in_index = list_find_element(self, _find_element_in_index, NULL);
-
-	return (*element_in_index)->data;
+	t_link_element **indirect = list_get_indirect_in_index(self, index);
+	return (*indirect)->data;
 }
 
 void list_add_in_index(t_list *self, int index, void *data) {
-	t_link_element* element = list_create_element(data);
-	bool _add_element_at_index(t_link_element** _, int i) {
-		return i == index;
-	}
-	list_add_element(self, element, _add_element_at_index);
+	t_link_element **indirect = list_get_indirect_in_index(self, index);
+	list_link_element(self, indirect, list_create_element(data));
 }
 
 void *list_replace(t_list *self, int index, void *data) {
-	void *old_data = NULL;
-	t_link_element** element;
-
-	bool _find_element_at_index(t_link_element** _, int i) {
-		return i == index;
-	}
-	element = list_find_element(self, _find_element_at_index, NULL);
-
-	old_data = (*element)->data;
-	(*element)->data = data;
-
-	return old_data;
+	t_link_element **indirect = list_get_indirect_in_index(self, index);
+	return list_replace_indirect(indirect, data);
 }
 
 void list_replace_and_destroy_element(t_list *self, int index, void *data, void(*element_destroyer)(void*)) {
@@ -89,13 +71,8 @@ void list_replace_and_destroy_element(t_list *self, int index, void *data, void(
 }
 
 void* list_find(t_list *self, bool(*condition)(void*)) {
-	t_link_element** found;
-	bool _find_by_condition(t_link_element** indirect, int _) {
-		return (*indirect) == NULL || condition((*indirect)->data);
-	}
-	found = list_find_element(self, _find_by_condition, NULL);
-
-	return (*found) != NULL ? (*found)->data : NULL;
+	t_link_element **indirect = list_get_indirect_by_condition(self, condition);
+	return (*indirect) != NULL ? (*indirect)->data : NULL;
 }
 
 void list_iterate(t_list* self, void(*closure)(void*)) {
@@ -109,35 +86,13 @@ void list_iterate(t_list* self, void(*closure)(void*)) {
 }
 
 void *list_remove(t_list *self, int index) {
-	void *data = NULL;
-	t_link_element *element = NULL;
-
-	bool _remove_at_index(t_link_element** _, int i) {
-		return i == index;
-	}
-	element = list_remove_element(self, _remove_at_index);
-
-	data = element->data;
-	free(element);
-
-	return data;
+	t_link_element **indirect = list_get_indirect_in_index(self, index);
+	return list_remove_indirect(self, indirect);
 }
 
 void* list_remove_by_condition(t_list *self, bool(*condition)(void*)) {
-	t_link_element *removed = NULL;
-	void *data = NULL;
-
-	bool _remove_by_condition(t_link_element** indirect, int _) {
-		return (*indirect) == NULL || condition((*indirect)->data);
-	}
-	removed = list_remove_element(self, _remove_by_condition);
-
-	if(removed != NULL) {
-		data = removed->data;
-		free(removed);
-	}
-
-	return data;
+	t_link_element **indirect = list_get_indirect_by_condition(self, condition);
+	return (*indirect) != NULL ? list_remove_indirect(self, indirect) : NULL;
 }
 
 void list_remove_and_destroy_element(t_list *self, int index, void(*element_destroyer)(void*)) {
@@ -147,21 +102,19 @@ void list_remove_and_destroy_element(t_list *self, int index, void(*element_dest
 
 void list_remove_and_destroy_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*)) {
 	void* data = list_remove_by_condition(self, condition);
-	if(data != NULL) {
+	if (data != NULL) {
 		element_destroyer(data);
 	}
 }
 
 void list_remove_and_destroy_all_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*)) {
-	t_link_element **aux = &self->head;
-
-	while(*aux != NULL) {
-		if(condition((*aux)->data)) {
-			t_link_element *element = list_unlink_element(self, aux);
-			element_destroyer(element->data);
-			free(element);
+	t_link_element **indirect = &self->head;
+	while ((*indirect) != NULL) {
+		if (condition((*indirect)->data)) {
+			void* data = list_remove_indirect(self, indirect);
+			element_destroyer(data);
 		} else {
-			aux = &(*aux)->next;
+			indirect = &(*indirect)->next;
 		}
 	}
 }
@@ -175,13 +128,10 @@ bool list_is_empty(t_list *list) {
 }
 
 void list_clean(t_list *self) {
-	t_link_element* element;
-	while (self->head != NULL) {
-		element = self->head;
-		self->head = self->head->next;
-		free(element);
+	t_link_element **indirect = &self->head;
+	while ((*indirect) != NULL) {
+		list_remove_indirect(self, indirect);
 	}
-	self->elements_count = 0;
 }
 
 void list_clean_and_destroy_elements(t_list *self, void(*element_destroyer)(void*)){
@@ -205,28 +155,29 @@ t_list* list_take(t_list* self, int count) {
 
 t_list* list_slice(t_list* self, int start, int count) {
 	t_list* sublist = list_create();
+	t_link_element **sublist_indirect = &sublist->head;
 
-	bool _take_count_elements(void* element_data, int index) {
-		return start <= index && index < (start + count);
+	t_link_element *element = *list_get_indirect_in_index(self, start);
+	for (int i = 0; (i < count) && (element != NULL); ++i) {
+		t_link_element *sublist_element = list_create_element(element->data);
+		list_link_element(sublist, sublist_indirect, sublist_element);
+		sublist_indirect = &(*sublist_indirect)->next;
+
+		element = element->next;
 	}
-	list_add_all_elements_by_condition(sublist, self, _take_count_elements);
 
 	return sublist;
 }
 
 t_list* list_slice_and_remove(t_list* self, int start, int count) {
 	t_list* sublist = list_create();
-	t_link_element** last = &sublist->head;
-	t_link_element** to_remove;
+	t_link_element **sublist_indirect = &sublist->head;
 
-	bool _find_first_element_to_remove(t_link_element** _, int index) {
-		return index == start;
-	}
-	to_remove = list_find_element(self, _find_first_element_to_remove, NULL);
-
-	for(int j = 0; j < count && (*to_remove) != NULL; j++) {
-		list_link_element(sublist, last, list_unlink_element(self, to_remove));
-		last = &(*last)->next;
+	t_link_element **indirect = list_get_indirect_in_index(self, start);
+	for (int i = 0; (i < count) && ((*indirect) != NULL); ++i) {
+		t_link_element *sublist_element = list_unlink_element(self, indirect);
+		list_link_element(sublist, sublist_indirect, sublist_element);
+		sublist_indirect = &(*sublist_indirect)->next;
 	}
 
 	return sublist;
@@ -237,61 +188,67 @@ t_list* list_take_and_remove(t_list* self, int count) {
 }
 
 t_list* list_filter(t_list* self, bool(*condition)(void*)){
-	t_list* filtered = list_create();
+	t_list *sublist = list_create();
+	t_link_element **indirect = &sublist->head;
 
-	bool _add_if_condition(void* element_data, int _) {
-		return condition(element_data);
+	void _filter_data(void* data) {
+		if (condition(data)) {
+			list_link_element(sublist, indirect, list_create_element(data));
+			indirect = &(*indirect)->next;
+		}
 	}
-	list_add_all_elements_by_condition(filtered, self, _add_if_condition);
+	list_iterate(self, _filter_data);
 
-	return filtered;
+	return sublist;
 }
 
 t_list* list_map(t_list* self, void*(*transformer)(void*)){
-	t_list* mapped = list_duplicate(self);
-	for (t_link_element *element = mapped->head; element != NULL; element = element->next) {
-		element->data = transformer(element->data);
-	}
+	t_list *sublist = list_create();
+	t_link_element **indirect = &sublist->head;
 
-	return mapped;
+	void _map_data(void* data) {
+		t_link_element *element = list_create_element(transformer(data));
+		list_link_element(sublist, indirect, element);
+		indirect = &(*indirect)->next;
+	}
+	list_iterate(self, _map_data);
+
+	return sublist;
 }
 
 int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
-	t_link_element* new_element = list_create_element(data);
-
-	bool _insert_element_sorted(t_link_element** element, int _) {
-		return (*element) == NULL || !comparator((*element)->data, data);
+	t_link_element **indirect = &self->head;
+	int index = 0;
+	while ((*indirect) != NULL && comparator((*indirect)->data, data)) {
+		indirect = &(*indirect)->next;
+		index++;
 	}
-	return list_add_element(self, new_element, _insert_element_sorted);
+	list_link_element(self, indirect, list_create_element(data));
+
+	return index;
 }
 
+
+
 void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
-	if(self->elements_count > 1) {
-		t_list* sorted = list_create();
-		t_link_element* removed = NULL;
-
-		while(self->elements_count > 0) {
-			bool _remove_first_element(t_link_element** element, int _) {
-				return (*element) != NULL;
-			}
-			removed = list_remove_element(self,_remove_first_element);
-
-			bool _insert_element_sorted(t_link_element** element, int _) {
-				return (*element) == NULL || !comparator((*element)->data, removed->data);
-			}
-			list_add_element(sorted, removed, _insert_element_sorted);
-		}
-
-		self->head = sorted->head;
-		self->elements_count = sorted->elements_count;
-		free(sorted);
+	if (list_size(self) <= 1) {
+		return;
 	}
+	t_list *left = list_take_and_remove(self, list_size(self) / 2);
+	t_list *right = list_take_and_remove(self, list_size(self));
+
+	list_sort(left, comparator);
+	list_sort(right, comparator);
+
+	t_list *result = list_merge_sorted(left, right, comparator);
+	*self = *result;
+	free(result);
 }
 
 t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
-	t_list* duplicated = list_duplicate(self);
-	list_sort(duplicated, comparator);
-	return duplicated;
+	t_list *other = list_duplicate(self);
+	list_sort(other, comparator);
+	return other;
 }
 
 int list_count_satisfying(t_list* self, bool(*condition)(void*)){
@@ -368,6 +325,13 @@ void list_iterator_destroy(t_list_iterator* iterator) {
 
 /********* PRIVATE FUNCTIONS **************/
 
+static t_link_element* list_create_element(void* data) {
+	t_link_element* element = malloc(sizeof(t_link_element));
+	element->data = data;
+	element->next = NULL;
+	return element;
+}
+
 static void list_link_element(t_list* self, t_link_element** indirect, t_link_element* element) {
 	element->next = *indirect;
 	*indirect = element;
@@ -381,60 +345,64 @@ static t_link_element* list_unlink_element(t_list* self, t_link_element** indire
 	return element;
 }
 
-static t_link_element* list_create_element(void* data) {
-	t_link_element* element = malloc(sizeof(t_link_element));
-	element->data = data;
-	element->next = NULL;
-	return element;
+static t_link_element **list_get_indirect_in_tail(t_list *self) {
+	t_link_element **indirect = &self->head;
+	while ((*indirect) != NULL) {
+		indirect = &(*indirect)->next;
+	}
+	return indirect;
 }
 
-static t_link_element** list_find_element(t_list *self, bool(*found)(t_link_element**, int), int *index) {
-	t_link_element** element = &self->head;
-	int i = 0;
-
-	while(!found(element, i)) {
-		element = &(*element)->next;
-		i++;
+static t_link_element **list_get_indirect_in_index(t_list *self, int index) {
+	t_link_element **indirect = &self->head;
+	for (int i = 0; i < index; ++i) {
+		indirect = &(*indirect)->next;
 	}
-
-	if (index != NULL) {
-		*index = i;
-	}
-
-	return element;
+	return indirect;
 }
 
-static int list_add_element(t_list* self, t_link_element* element, bool(*found)(t_link_element**, int)) {
-	int index;
-	list_link_element(self, list_find_element(self, found, &index), element);
-	return index;
+static t_link_element **list_get_indirect_by_condition(t_list *self, bool(*condition)(void*)) {
+	t_link_element** indirect = &self->head;
+	while ((*indirect) != NULL && !condition((*indirect)->data)) {
+		indirect = &(*indirect)->next;
+	}
+	return indirect;
 }
 
-static t_link_element* list_remove_element(t_list *self, bool(*found)(t_link_element**, int)) {
-	return list_unlink_element(self, list_find_element(self, found, NULL));
+static void *list_replace_indirect(t_link_element **indirect, void *data) {
+	void *old_data = (*indirect)->data;
+	(*indirect)->data = data;
+	return old_data;
 }
 
-static void list_add_all_elements_by_condition(t_list *self, t_list *other, bool(*condition)(void*, int)) {
-	t_link_element **last;
-	bool _find_last_element(t_link_element **element, int _) {
-		return (*element) == NULL;
-	}
-	last = list_find_element(self, _find_last_element, NULL);
+static void *list_remove_indirect(t_list *self, t_link_element **indirect) {
+	t_link_element *element = list_unlink_element(self, indirect);
+	void *data = element->data;
+	free(element);
+	return data;
+}
 
-	int index = 0;
-	void _filter_and_add(void *data) {
-		if(condition(data, index)) {
-			list_link_element(self, last, list_create_element(data));
-			last = &(*last)->next;
-		}
-		index++;
+static t_list *list_merge_sorted(t_list *left, t_list *right, bool (*comparator)(void*, void*)) {
+	if (list_is_empty(left)) {
+		list_destroy(left);
+		return right;
 	}
-	list_iterate(other, _filter_and_add);
+	if (list_is_empty(right)) {
+		list_destroy(right);
+		return left;
+	}
+	t_link_element *element = comparator(left->head->data, right->head->data)
+							  ? list_unlink_element(left, &left->head)
+							  : list_unlink_element(right, &right->head);
+	t_list *sorted = list_merge_sorted(left, right, comparator);
+	list_link_element(sorted, &sorted->head, element);
+
+	return sorted;
 }
 
 static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*)) {
 	void* result = seed;
-	while(element != NULL) {
+	while (element != NULL) {
 		result = operation(result, element->data);
 		element = element->next;
 	}
