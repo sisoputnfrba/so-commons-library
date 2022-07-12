@@ -27,7 +27,7 @@ static t_link_element **list_get_indirect_by_condition(t_list *self, bool(*condi
 static void *list_replace_indirect(t_link_element **indirect, void *data);
 static void *list_remove_indirect(t_list *self, t_link_element **indirect);
 static void list_iterate_indirects(t_list* self, int start, int count, t_link_element **(*next)(t_link_element**));
-static t_list *list_merge_sorted(t_list *left, t_list *right, bool (*comparator)(void*, void*));
+static int list_add_element_sorted(t_list *self, t_link_element* element, bool (*comparator)(void*,void*));
 static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*));
 
 t_list *list_create() {
@@ -217,30 +217,22 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 }
 
 int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
-	t_link_element **indirect = &self->head;
-	int index = 0;
-	while ((*indirect) != NULL && comparator((*indirect)->data, data)) {
-		indirect = &(*indirect)->next;
-		index++;
-	}
-	list_link_element(self, indirect, list_create_element(data));
-
-	return index;
+	return list_add_element_sorted(self, list_create_element(data), comparator);
 }
 
 void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
-	if (list_size(self) <= 1) {
+	if (list_size(self) < 2) {
 		return;
 	}
-	t_list *left = list_take_and_remove(self, list_size(self) / 2);
-	t_list *right = list_take_and_remove(self, list_size(self));
 
-	list_sort(left, comparator);
-	list_sort(right, comparator);
-
-	t_list *result = list_merge_sorted(left, right, comparator);
-	*self = *result;
-	free(result);
+	t_list aux = { 0 };
+	t_link_element **_remove_and_insert_sorted(t_link_element **self_indirect) {
+		t_link_element *element = list_unlink_element(self, self_indirect);
+		list_add_element_sorted(&aux, element, comparator);
+		return self_indirect;
+	}
+	list_iterate_indirects(self, 0, list_size(self), _remove_and_insert_sorted);
+	*self = aux;
 }
 
 t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
@@ -380,24 +372,6 @@ static void *list_remove_indirect(t_list *self, t_link_element **indirect) {
 	return data;
 }
 
-static t_list *list_merge_sorted(t_list *left, t_list *right, bool (*comparator)(void*, void*)) {
-	if (list_is_empty(left)) {
-		list_destroy(left);
-		return right;
-	}
-	if (list_is_empty(right)) {
-		list_destroy(right);
-		return left;
-	}
-	t_link_element *element = comparator(left->head->data, right->head->data)
-							  ? list_unlink_element(left, &left->head)
-							  : list_unlink_element(right, &right->head);
-	t_list *sorted = list_merge_sorted(left, right, comparator);
-	list_link_element(sorted, &sorted->head, element);
-
-	return sorted;
-}
-
 static void list_iterate_indirects(t_list *self, int start, int count, t_link_element **(*next)(t_link_element**)) {
 	t_link_element **indirect = list_get_indirect_in_index(self, start);
 	int i = 0;
@@ -405,6 +379,18 @@ static void list_iterate_indirects(t_list *self, int start, int count, t_link_el
 		indirect = next(indirect);
 		++i;
 	}
+}
+
+static int list_add_element_sorted(t_list *self, t_link_element* element, bool (*comparator)(void*,void*)) {
+	t_link_element **indirect = &self->head;
+	int index = 0;
+	while ((*indirect) != NULL && comparator((*indirect)->data, element->data)) {
+		indirect = &(*indirect)->next;
+		index++;
+	}
+	list_link_element(self, indirect, element);
+
+	return index;
 }
 
 static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*)) {
