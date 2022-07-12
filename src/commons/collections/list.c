@@ -28,7 +28,7 @@ static void list_add_element(t_list *self, t_link_element **indirect, void *data
 static void *list_replace_indirect(t_link_element **indirect, void *data);
 static void *list_remove_indirect(t_list *self, t_link_element **indirect);
 static void list_iterate_indirects(t_list* self, int start, int count, t_link_element **(*next)(t_link_element**));
-static int list_add_element_sorted(t_list *self, t_link_element* element, bool (*comparator)(void*,void*));
+static int list_add_element_sorted(t_list *self, t_link_element **indirect, t_link_element* element, bool (*comparator)(void*,void*));
 static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*));
 
 t_list *list_create() {
@@ -194,7 +194,7 @@ t_list* list_filter(t_list* self, bool(*condition)(void*)){
 
 	void _filter_data(void* data) {
 		if (condition(data)) {
-			list_add_element(self, indirect, data);
+			list_add_element(sublist, indirect, data);
 			indirect = &(*indirect)->next;
 		}
 	}
@@ -217,7 +217,7 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 }
 
 int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
-	return list_add_element_sorted(self, list_create_element(data), comparator);
+	return list_add_element_sorted(self, &self->head, list_create_element(data), comparator);
 }
 
 void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
@@ -225,14 +225,14 @@ void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
 		return;
 	}
 
-	t_list aux = { 0 };
+	t_link_element *head = NULL;
 	t_link_element **_remove_and_insert_sorted(t_link_element **self_indirect) {
 		t_link_element *element = list_unlink_element(self, self_indirect);
-		list_add_element_sorted(&aux, element, comparator);
+		list_add_element_sorted(self, &head, element, comparator);
 		return self_indirect;
 	}
 	list_iterate_indirects(self, 0, list_size(self), _remove_and_insert_sorted);
-	*self = aux;
+	self->head = head;
 }
 
 t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
@@ -243,12 +243,12 @@ t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
 
 int list_count_satisfying(t_list* self, bool(*condition)(void*)){
 	int result = 0;
-	void _count_satisfying(void* element_data) {
+	void _count_by_condition(void* element_data) {
 		if(condition(element_data)) {
 			result++;
 		}
 	}
-	list_iterate(self, _count_satisfying);
+	list_iterate(self, _count_by_condition);
 	return result;
 }
 
@@ -385,8 +385,7 @@ static void list_iterate_indirects(t_list *self, int start, int count, t_link_el
 	}
 }
 
-static int list_add_element_sorted(t_list *self, t_link_element* element, bool (*comparator)(void*,void*)) {
-	t_link_element **indirect = &self->head;
+static int list_add_element_sorted(t_list *self, t_link_element **indirect, t_link_element* element, bool (*comparator)(void*,void*)) {
 	int index = 0;
 	while ((*indirect) != NULL && comparator((*indirect)->data, element->data)) {
 		indirect = &(*indirect)->next;
