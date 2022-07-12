@@ -792,6 +792,28 @@ context (test_list) {
                 assert_person_in_list(list, 2, "Sebastian", 21);
             } end
 
+            it("Should add and element and then continue the iteration") {
+                char *names[] = { "Matias", "Gaston", "Sebastian", "Daniela" };
+                int i = 0;
+
+                while (list_iterator_has_next(list_iterator)) {
+                    t_person* person = list_iterator_next(list_iterator);
+                    should_string(person->name) be equal to (names[i++]);
+
+                    list_iterator_add(list_iterator, persona_create("Agustin", 23));
+                }
+
+                should_int(list->elements_count) be equal to (8);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Agustin"  , 23);
+                assert_person_in_list(list, 2, "Gaston"   , 25);
+                assert_person_in_list(list, 3, "Agustin"  , 23);
+                assert_person_in_list(list, 4, "Sebastian", 21);
+                assert_person_in_list(list, 5, "Agustin"  , 23);
+                assert_person_in_list(list, 6, "Daniela"  , 19);
+                assert_person_in_list(list, 7, "Agustin"  , 23);
+            } end
+
         } end
 
     } end

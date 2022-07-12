@@ -307,6 +307,13 @@
 	void* list_iterator_next(t_list_iterator* iterator);
 
 	/**
+	 * @NAME: list_iterator_add
+	 * @DESC: Agrega a la lista un elemento delante del actual y detrás
+	 * del siguiente
+	*/
+	void list_iterator_add(t_list_iterator* iterator, void *data);
+
+	/**
 	 * @NAME: list_iterator_remove
 	 * @DESC: Remueve de la lista al elemento actual de la iteración
 	 */
