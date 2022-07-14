@@ -109,15 +109,15 @@ void list_remove_and_destroy_by_condition(t_list *self, bool(*condition)(void*),
 }
 
 void list_remove_and_destroy_all_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*)) {
-	t_link_element **indirect = &self->head;
-	while ((*indirect) != NULL) {
+	t_link_element **_remove_and_destroy_data(t_link_element **indirect) {
 		if (condition((*indirect)->data)) {
-			void* data = list_remove_indirect(self, indirect);
+			void *data = list_remove_indirect(self, indirect);
 			element_destroyer(data);
-		} else {
-			indirect = &(*indirect)->next;
+			return indirect;
 		}
+		return &(*indirect)->next;
 	}
+	list_iterate_indirects(self, 0, list_size(self), _remove_and_destroy_data);
 }
 
 int list_size(t_list *list) {
@@ -244,7 +244,7 @@ t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
 int list_count_satisfying(t_list* self, bool(*condition)(void*)){
 	int result = 0;
 	void _count_by_condition(void* element_data) {
-		if(condition(element_data)) {
+		if (condition(element_data)) {
 			result++;
 		}
 	}
