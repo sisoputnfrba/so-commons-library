@@ -21,7 +21,6 @@
 static t_link_element *list_create_element(void* data);
 static void list_link_element(t_list* self, t_link_element** indirect, t_link_element* element);
 static t_link_element *list_unlink_element(t_list* self, t_link_element** indirect);
-static t_link_element **list_get_indirect_in_tail(t_list *self);
 static t_link_element **list_get_indirect_in_index(t_list *self, int index);
 static t_link_element **list_get_indirect_by_condition(t_list *self, bool(*condition)(void*));
 static void list_add_element(t_list *self, t_link_element **indirect, void *data);
@@ -39,13 +38,13 @@ t_list *list_create() {
 }
 
 int list_add(t_list *self, void *data) {
-	t_link_element **indirect = list_get_indirect_in_tail(self);
+	t_link_element **indirect = list_get_indirect_in_index(self, list_size(self));
 	list_add_element(self, indirect, data);
 	return list_size(self) - 1;
 }
 
 void list_add_all(t_list* self, t_list* other) {
-	t_link_element **indirect = list_get_indirect_in_tail(self);
+	t_link_element **indirect = list_get_indirect_in_index(self, list_size(self));
 	void _add_one(void *data) {
 		list_add_element(self, indirect, data);
 		indirect = &(*indirect)->next;
@@ -333,14 +332,6 @@ static t_link_element* list_unlink_element(t_list* self, t_link_element** indire
 	*indirect = element->next;
 	self->elements_count--;
 	return element;
-}
-
-static t_link_element **list_get_indirect_in_tail(t_list *self) {
-	t_link_element **indirect = &self->head;
-	while ((*indirect) != NULL) {
-		indirect = &(*indirect)->next;
-	}
-	return indirect;
 }
 
 static t_link_element **list_get_indirect_in_index(t_list *self, int index) {
