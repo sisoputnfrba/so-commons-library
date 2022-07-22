@@ -744,8 +744,13 @@ context (test_list) {
 
         describe("Remove") {
             void _remove_all_by_name(char *filter) {
+                char *names[] = { "Matias", "Gaston", "Sebastian", "Daniela" };
+                int i = 0;
+
                 while(list_iterator_has_next(list_iterator)) {
                     t_person* person = list_iterator_next(list_iterator);
+                    should_string(person->name) be equal to (names[i++]);
+
                     if (string_contains(person->name, filter)) {
                         list_iterator_remove(list_iterator);
                         persona_destroy(person);
