@@ -127,9 +127,8 @@ bool list_is_empty(t_list *list) {
 }
 
 void list_clean(t_list *self) {
-	t_link_element **indirect = &self->head;
-	while ((*indirect) != NULL) {
-		list_remove_indirect(self, indirect);
+	while (!list_is_empty(self)) {
+		list_remove_indirect(self, &self->head);
 	}
 }
 
@@ -204,7 +203,7 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 	t_link_element **indirect = &sublist->head;
 
 	void _map_data(void* data) {
-		list_add_element(self, indirect, transformer(data));
+		list_add_element(sublist, indirect, transformer(data));
 		indirect = &(*indirect)->next;
 	}
 	list_iterate(self, _map_data);
@@ -217,10 +216,6 @@ int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
 }
 
 void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
-	if (list_size(self) < 2) {
-		return;
-	}
-
 	t_list *aux = list_create();
 	while (!list_is_empty(self)) {
 		list_add_element_sorted(aux, list_unlink_element(self, &self->head), comparator);
