@@ -259,14 +259,13 @@
 	/**
 	* @NAME: string_replace
 	* @DESC: Retorna una copia de un string con todas las ocurrencias
-	* de 'pattern' siendo reemplazadas por 'replacement'. En caso de
-	* recibir un string vacío como 'pattern', concatena 'replacement'
-	* al final de 'text'.
+	* de 'pattern' siendo reemplazadas por 'replacement'.
 	*
 	* Ejemplo:
 	* char* original = "hello";
 	* string_replace(original, "o", "o world!") => "hello world!"
-	* string_replace(original, "", "!") => "hello!"
+	* string_replace(original, "", "x"); => "xhxexlxlxox"
+	* string_replace(original, NULL, "x"); => "hello"
 	*/
 	char*   string_replace(char* text, char* pattern, char* replacement);
 
