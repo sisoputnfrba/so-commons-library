@@ -28,7 +28,7 @@ static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
 char** _string_split(char* text, char* separator, bool(*is_last_token)(int));
 static void _string_array_push(char*** array, char* text, int size);
-static char* _string_iterate_with_pattern(char* text, char* pattern, bool(*iterator)(char*, char*));
+static char* _string_iterate_with_pattern(char* text, char* pattern, bool(*iterator)(char*, int));
 
 char *string_repeat(char character, int count) {
 	char *text = calloc(count + 1, 1);
@@ -219,25 +219,18 @@ char* string_reverse(char* palabra) {
 	return resultado;
 }
 
-char* string_replace(char* text, char* pattern, char* replacement) {
+char* string_replace(char* text, char* substring, char* replacement) {
 	char *result = string_new();
 	char *last_part;
 
-	if (pattern != NULL && string_is_empty(pattern) && !string_is_empty(text)) {
-		string_append(&result, replacement);
-	}
-
-	bool _replace_pattern(char* start, char* end) {
-		string_n_append(&result, start, end - start);
+	bool _replace_pattern(char* start, int length) {
+		string_n_append(&result, start, length);
 		string_append(&result, replacement);
 		return false;
 	}
-	last_part = _string_iterate_with_pattern(text, pattern, _replace_pattern);
 
+	last_part = _string_iterate_with_pattern(text, substring, _replace_pattern);
 	string_append(&result, last_part);
-	if (pattern != NULL && string_is_empty(pattern)) {
-		string_append(&result, replacement);
-	}
 
 	return result;
 }
@@ -325,15 +318,15 @@ char** _string_split(char* text, char* separator, bool(*is_last_token)(int)) {
 	char *last_token;
 	int index = 0;
 
-	bool _push_substring(char* start, char* end) {
+	bool _push_substring(char* start, int length) {
 		if (is_last_token(index)) {
 			return true;
 		}
-		_string_array_push(&substrings, string_substring_until(start, end - start), index++);
+		_string_array_push(&substrings, string_substring_until(start, length), index++);
 		return false;
 	}
-	last_token = _string_iterate_with_pattern(text, separator, _push_substring);
 
+	last_token = _string_iterate_with_pattern(text, separator, _push_substring);
 	_string_array_push(&substrings, string_duplicate(last_token), index);
 
 	return substrings;
@@ -345,20 +338,21 @@ static void _string_array_push(char*** array, char* text, int size) {
 	(*array)[size + 1] = NULL;
 }
 
-static char* _string_iterate_with_pattern(char* text, char* pattern, bool(*iterator)(char*, char*)) {
-	char* start = text;
+static char* _string_iterate_with_pattern(char* text, char* pattern, bool(*iterator)(char*, int)) {
+	if (pattern == NULL) {
+		return text;
+	}
 
-	if (pattern != NULL) {
-		char *end = strstr(start, pattern) + !string_is_empty(text) * string_is_empty(pattern);
+	char *start = text;
+	char *end = strstr(start, pattern) + !string_is_empty(text) * string_is_empty(pattern);
 
-		while(end != NULL && !string_is_empty(end)) {
-			if (iterator(start, end)) {
-				break;
-			}
-
-			start = end + strlen(pattern);
-			end = strstr(start, pattern) + string_is_empty(pattern);
+	while (end != NULL && !string_is_empty(end)) {
+		if (iterator(start, end - start)) {
+			break;
 		}
+
+		start = end + strlen(pattern);
+		end = strstr(start, pattern) + string_is_empty(pattern);
 	}
 
 	return start;

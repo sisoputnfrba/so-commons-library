@@ -259,15 +259,15 @@
 	/**
 	* @NAME: string_replace
 	* @DESC: Retorna una copia de un string con todas las ocurrencias
-	* de 'pattern' siendo reemplazadas por 'replacement'.
+	* de un substring no vacío siendo reemplazadas por otro string.
 	*
 	* Ejemplo:
 	* char* original = "hello";
-	* string_replace(original, "o", "o world!") => "hello world!"
-	* string_replace(original, "", "x"); => "xhxexlxlxox"
-	* string_replace(original, NULL, "x"); => "hello"
+	* string_replace(original, "ello", "ola") => "hola"
+	* string_replace(original, "l", ""); => "heo"
+	* string_replace(original, "not a substring", "yay!"); => "hello"
 	*/
-	char*   string_replace(char* text, char* pattern, char* replacement);
+	char*   string_replace(char* text, char* substring, char* replacement);
 
 	/**
 	 * @NAME: string_contains

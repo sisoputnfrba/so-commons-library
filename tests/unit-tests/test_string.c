@@ -550,21 +550,6 @@ context (test_string) {
                 replaced = string_replace("hello", "definitely not a substring", "test failed!");
                 should_string(replaced) be equal to ("hello");
             } end
-
-            it ("replace the end when empty string is the pattern") {
-                replaced = string_replace("hello", "", "x");
-                should_string(replaced) be equal to ("xhxexlxlxox");
-            } end
-
-            it ("replace the end when empty string is text and pattern") {
-                replaced = string_replace("", "", "x");
-                should_string(replaced) be equal to ("x");
-            } end
-
-            it ("replace with null pattern duplicates original text") {
-                replaced = string_replace("hello", NULL, "error");
-                should_string(replaced) be equal to ("hello");
-            } end
         } end
 
         it("Contains") {
