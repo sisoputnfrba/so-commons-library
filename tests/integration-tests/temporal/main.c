@@ -11,6 +11,7 @@
 #include <commons/temporal.h>
 #include <commons/string.h>
 #include <pthread.h>
+#include <unistd.h>
 
 static void print_time() {
     char* date = temporal_get_string_time("day/month/year -- %d/%m/%y\n");
@@ -21,6 +22,133 @@ static void print_time() {
 
     free(date);
     free(time);
+}
+
+void test_temporal_gettime() {
+    /**
+    * @DESC: El tiempo que se obtiene es correcto.
+    */
+    t_temporal *temporal = temporal_create();
+    sleep(2);
+    
+    printf("\ntest_temporal_gettime: %ldms (expected: ~2000ms)\n\n", temporal_gettime(temporal));
+
+    temporal_destroy(temporal);
+}
+
+void test_temporal_stop() {
+    /**
+    * @DESC: Al detener el temporal, deja de sumar tiempo.
+    */
+    t_temporal *temporal = temporal_create();
+    sleep(1);
+    temporal_stop(temporal);
+    sleep(2);
+
+    printf("test_temporal_stop: %ldms (expected: ~1000ms)\n\n", temporal_gettime(temporal));
+
+    temporal_destroy(temporal);
+}
+
+void test_temporal_resume() {
+    /**
+    * @DESC: Al detener y reanudar el temporal varias veces, el tiempo que este suma es correcto.
+    */
+    t_temporal* temporal = temporal_create();
+
+    temporal_stop(temporal);
+    sleep(3); // +0
+
+    printf("test_temporal_resume: %ldms (expected: ~0ms)\n", temporal_gettime(temporal));
+
+    temporal_resume(temporal);
+    sleep(2);  // +2
+    temporal_stop(temporal);
+
+    printf("test_temporal_resume: %ldms (expected: ~2000ms)\n", temporal_gettime(temporal));
+    
+    temporal_resume(temporal);
+    sleep(2); // +2
+
+    printf("test_temporal_resume: %ldms (expected: ~4000ms)\n", temporal_gettime(temporal));
+
+    temporal_stop(temporal);
+    sleep(2); // +0
+    temporal_resume(temporal);
+    sleep(1); // +1
+
+    printf("test_temporal_resume: %ldms (expected: ~5000ms)\n\n", temporal_gettime(temporal));
+
+    temporal_destroy(temporal);
+}
+
+void test_temporal_diff() {
+    /**
+    * @DESC: Comparar dos variables temporales.
+    */
+
+    t_temporal* temporal1 = temporal_create();
+    t_temporal* temporal2 = temporal_create();
+
+    sleep(1);
+    temporal_stop(temporal2);
+    sleep(1);
+
+    t_temporal* temporal3 = temporal_create();
+
+    printf("test_temporal_diff: %ldms (expected: ~1000ms)\n", temporal_diff(temporal1, temporal2));
+    printf("test_temporal_diff: %ldms (expected: ~2000ms)\n", temporal_diff(temporal1, temporal3));
+    printf("test_temporal_diff: %ldms (expected: ~1000ms)\n\n", temporal_diff(temporal2, temporal3));
+
+    temporal_destroy(temporal1);
+    temporal_destroy(temporal2);
+    temporal_destroy(temporal3);
+}
+
+void test_temporal_gettime_since_running() {
+    /**
+    * @DESC: Obtener el tiempo transcurrido en el último período del temporal.
+    */
+
+    t_temporal* temporal = temporal_create();
+    
+    sleep(1);
+    temporal_stop(temporal);
+    temporal_resume(temporal);
+    sleep(1);
+    
+    temporal_gettime_since_running(temporal);
+    
+    printf("test_temporal_gettime_since_running: %lums (expected: ~1000ms)\n\n", temporal_gettime_since_running(temporal));
+    
+    temporal_destroy(temporal);
+}
+
+void test_temporal_state() {
+    /**
+    * @DESC: Verificar el comportamiento del temporal en sus diferentes estados.
+    *        En este test se verifica que no ocurra ningún error al usar el temporal de cualquier forma.
+    */
+
+    t_temporal* temporal1 = temporal_create();
+    temporal_destroy(temporal1);
+
+    t_temporal* temporal2 = temporal_create();
+    temporal_stop(temporal2);
+    temporal_destroy(temporal2);
+
+    t_temporal* temporal3 = temporal_create();
+    temporal_resume(temporal3);
+    temporal_resume(temporal3);
+    temporal_stop(temporal3);
+    temporal_stop(temporal3);
+    sleep(1);
+    temporal_resume(temporal3);
+    sleep(1);
+
+    printf("test_temporal_state: %lums (expected: ~1000ms)\n\n", temporal_gettime(temporal3));
+
+    temporal_destroy(temporal3);
 }
 
 int main(int argc, char** argv) {
@@ -41,7 +169,13 @@ int main(int argc, char** argv) {
     pthread_join(th4, NULL);
     pthread_join(th5, NULL);
     pthread_join(th6, NULL);
+
+    test_temporal_gettime();
+    test_temporal_stop();
+    test_temporal_resume();
+    test_temporal_diff();
+    test_temporal_gettime_since_running();
+    test_temporal_state();
     
     return (EXIT_SUCCESS);
 }
-

@@ -16,6 +16,8 @@
 #ifndef TEMPORAL_H_
 #define TEMPORAL_H_
 
+	#include <stdint.h>
+
 	/**
 	* @NAME: temporal_get_string_time
 	* @DESC: Retorna un string con la hora actual,
@@ -27,4 +29,86 @@
 	*/
 	char *temporal_get_string_time(const char* format);
 
+	/**
+	* @NAME: t_state
+	* @DESC: Estado de una variable temporal.
+	*/
+	typedef enum {
+		STOPPED,
+		RUNNING
+	} t_state;
+
+	/**
+	* @NAME: t_temporal
+	* @DESC: Estructura de una Variable temporal.
+	*/
+	typedef struct {
+		struct timespec* current;
+		int64_t elapsed_ms;
+		t_state state;
+	} t_temporal;
+
+	/**
+	* @NAME: temporal_create
+	* @DESC: Crea una variable temporal.
+	*/
+	t_temporal* temporal_create(void);
+
+	/**
+	* @NAME: temporal_destroy
+	* @DESC: Destruye una variable temporal.
+	* @PARAMS: 
+	*		temporal - Variable temporal a destruir.
+	*/
+	void temporal_destroy(t_temporal* temporal);
+
+	/**
+	* @NAME: temporal_gettime
+	* @DESC: Retorna el tiempo transcurrido mientras el temporal estuvo activo en milisegundos.
+	* @PARAMS:
+	*		temporal - Variable temporal.
+	*/
+	int64_t temporal_gettime(t_temporal* temporal);
+	
+	/**
+	* @NAME: temporal_gettime_since_running
+	* @DESC: Retorna el tiempo transcurrido en el último período en el cual el temporal estuvo activo, en milisegundos.
+			 si el temporal fue detenido y reanudado, sólo retornará el tiempo transcurrido desde el último reanudado.
+			 Ejemplo:
+			 	t_temporal temporal = temporal_create();
+				sleep(2)
+				temporal_stop(temporal);
+				temporal_resume(temporal);
+				sleep(1);
+				temporal_gettime_since_running(temporal); => 1000 (Último período)
+	* @PARAMS:
+	*		temporal - Variable temporal.
+	*/
+	int64_t temporal_gettime_since_running(t_temporal* temporal);
+
+	/**
+	* @NAME: temporal_stop
+	* @DESC: "Frena" el timer de una variable temporal. Deja de sumar tiempo.
+	* @PARAMS:
+	*		temporal - Variable temporal a frenar.
+	*/
+	void temporal_stop(t_temporal* temporal);
+
+	/**
+	* @NAME: temporal_resume
+	* @DESC: Reanuda el timer de una variable temporal, vuelve a sumar tiempo.
+	* @PARAMS:
+	*		temporal - Variable temporal a reanudar.
+	*/
+	void temporal_resume(t_temporal* temporal);
+
+	/**
+	* @NAME: temporal_diff
+	* @DESC: Retorna la diferencia entre dos variables temporales en milisegundos
+	* @PARAMS:
+	*		temporal_1 - Primer variable temporal, idealmente, la que se creó antes.
+	*		temporal_2 - Segunda variable temporal.
+	*/
+	int64_t temporal_diff(t_temporal* start, t_temporal* end);
+	
 #endif /* TEMPORAL_H_ */

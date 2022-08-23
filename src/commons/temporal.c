@@ -17,6 +17,7 @@
 #include "error.h"
 #include "string.h"
 
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -46,4 +47,78 @@ char *temporal_get_string_time(const char* format) {
 	free(log_timespec);
 
 	return str_time;
+}
+
+t_temporal* temporal_create(void) {
+    t_temporal* self = malloc(sizeof(t_temporal));
+    struct timespec* current = malloc(sizeof(struct timespec));
+    
+    self -> elapsed_ms = 0;
+    self -> state = RUNNING;
+    self -> current = current;
+    
+    clock_gettime(CLOCK_MONOTONIC_RAW, current);
+    
+    return self;
+}
+
+void temporal_destroy(t_temporal* temporal) {
+    if (temporal -> current) {
+		free(temporal -> current);
+	}
+
+    free(temporal);
+}
+
+int64_t temporal_gettime(t_temporal* temporal) {
+    if (temporal -> state == STOPPED) {
+        return temporal -> elapsed_ms;
+    }
+
+    t_temporal* now = temporal_create();
+
+    int64_t delta_ms = (now -> current -> tv_sec - temporal -> current -> tv_sec) * 1000 
+                        + (now -> current -> tv_nsec - temporal -> current -> tv_nsec) / 1000000;
+    
+    temporal_destroy(now);
+
+    return delta_ms + temporal -> elapsed_ms;
+}
+
+int64_t temporal_gettime_since_running(t_temporal* temporal) {
+	if (temporal -> state == STOPPED) {
+        return 0;
+    }
+
+    t_temporal* now = temporal_create();
+
+    int64_t delta_ms = (now -> current -> tv_sec - temporal -> current -> tv_sec) * 1000 
+                        + (now -> current -> tv_nsec - temporal -> current -> tv_nsec) / 1000000;
+    
+    temporal_destroy(now);
+
+    return delta_ms;
+}
+
+void temporal_stop(t_temporal* temporal) {
+    temporal -> elapsed_ms += temporal_gettime_since_running(temporal);
+    temporal -> state = STOPPED;
+    
+    free(temporal -> current);
+    temporal -> current = NULL;
+}
+
+void temporal_resume(t_temporal* temporal) {
+    if (temporal -> state == RUNNING) {
+        return;
+    }
+    
+    temporal -> state = RUNNING;
+    temporal -> current = malloc(sizeof(struct timespec));
+    
+    clock_gettime(CLOCK_MONOTONIC_RAW, temporal -> current);
+}
+
+int64_t temporal_diff(t_temporal* start, t_temporal* end) {
+    return temporal_gettime(start) - temporal_gettime(end);
 }
