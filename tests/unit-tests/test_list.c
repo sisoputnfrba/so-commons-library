@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <stdint.h>
 #include <commons/collections/list.h>
 #include <commons/string.h>
 #include <cspecs/cspec.h>
@@ -84,61 +85,84 @@ context (test_list) {
 
             it ("should add a value") {
                 list_add(list, persona_create("Matias", 24));
+
+                should_int(list_size(list)) be equal to(1);
                 assert_person_in_list(list, 0, "Matias", 24);
 
                 list_add(list, persona_create("Gaston", 25));
-                assert_person_in_list(list, 1, "Gaston", 25);
 
                 should_int(list_size(list)) be equal to(2);
+                assert_person_in_list(list, 0, "Matias", 24);
+                assert_person_in_list(list, 1, "Gaston", 25);
             } end
 
             it ("should add a value at index") {
                 list_add(list, persona_create("Matias", 24));
-                assert_person_in_list(list, 0, "Matias", 24);
-                should_int(list_size(list)) be equal to(1);
 
                 list_add_in_index(list, 0, persona_create("Gaston", 25));
+
+                should_int(list_size(list)) be equal to(2);
                 assert_person_in_list(list, 0, "Gaston", 25);
                 assert_person_in_list(list, 1, "Matias", 24);
             } end
 
-            it ("should add a value in sorted list") {
+            it ("should add a value first in sorted list") {
                 list_add(list, persona_create("Sebastian", 21));
                 list_add(list, persona_create("Matias"   , 24));
-                list_add(list, persona_create("Gaston"   , 25));
+
+                list_add_sorted(list, persona_create("Daniela", 19), (void*) _ayudantes_menor);
 
                 should_int(list_size(list)) be equal to(3);
-                list_add_sorted(list, persona_create("Daniela", 19), (void*) _ayudantes_menor);
-                list_add_sorted(list, persona_create("Agustin", 26), (void*) _ayudantes_menor);
-                list_add_sorted(list, persona_create("Ezequiel", 25), (void*) _ayudantes_menor);
-                should_int(list_size(list)) be equal to(6);
-
                 assert_person_in_list(list, 0, "Daniela"  , 19);
                 assert_person_in_list(list, 1, "Sebastian", 21);
                 assert_person_in_list(list, 2, "Matias"   , 24);
-                assert_person_in_list(list, 3, "Gaston"   , 25);
-                assert_person_in_list(list, 4, "Ezequiel" , 25);
-                assert_person_in_list(list, 5, "Agustin"  , 26);
+            } end
+
+            it ("should add a value in the middle of sorted list") {
+                list_add(list, persona_create("Sebastian", 21));
+                list_add(list, persona_create("Matias"   , 24));
+
+                list_add_sorted(list, persona_create("Agustin", 22), (void*) _ayudantes_menor);
+
+                should_int(list_size(list)) be equal to(3);
+                assert_person_in_list(list, 0, "Sebastian", 21);
+                assert_person_in_list(list, 1, "Agustin"  , 22);
+                assert_person_in_list(list, 2, "Matias"   , 24);
+            } end
+
+            it ("should add a value last in sorted list") {
+                list_add(list, persona_create("Sebastian", 21));
+                list_add(list, persona_create("Matias"   , 24));
+
+                list_add_sorted(list, persona_create("Gaston", 25), (void*) _ayudantes_menor);
+
+                should_int(list_size(list)) be equal to(3);
+                assert_person_in_list(list, 0, "Sebastian", 21);
+                assert_person_in_list(list, 1, "Matias"   , 24);
+                assert_person_in_list(list, 2, "Gaston"   , 25);
             } end
 
             it("should add all list into other list") {
-                t_list* other = list_create();
-
                 list_add(list, persona_create("Matias"   , 24));
                 list_add(list, persona_create("Gaston"   , 25));
                 list_add(list, persona_create("Sebastian", 21));
+
+                t_list* other = list_create();
                 list_add(other, persona_create("Daniela" , 19));
                 list_add(other, persona_create("Facundo" , 25));
 
-                should_int(list_size(list)) be equal to(3);
                 list_add_all(list, other);
-                should_int(list_size(list)) be equal to(5);
 
+                should_int(list_size(list)) be equal to(5);
                 assert_person_in_list(list, 0, "Matias"   , 24);
                 assert_person_in_list(list, 1, "Gaston"   , 25);
                 assert_person_in_list(list, 2, "Sebastian", 21);
                 assert_person_in_list(list, 3, "Daniela"  , 19);
                 assert_person_in_list(list, 4, "Facundo"  , 25);
+
+                should_int(list_size(other)) be equal to(2);
+                should_ptr(list_get(other, 0)) be equal to (list_get(list, 3));
+                should_ptr(list_get(other, 1)) be equal to (list_get(list, 4));
 
                 list_destroy(other);
             } end
@@ -147,16 +171,21 @@ context (test_list) {
 
         describe ("Duplicate") {
 
-            it("should add all elements in a new list") {
+            it("should duplicate all elements in a new list") {
                 list_add(list, persona_create("Juan", 22));
                 list_add(list, persona_create("Diana", 22));
 
                 t_list* duplicated = list_duplicate(list);
-                should_int(list_size(duplicated)) be equal to(2);
 
                 should_ptr(duplicated) not be equal to(list);
+
+                should_int(list_size(duplicated)) be equal to(2);
                 assert_person_in_list(duplicated, 0, "Juan", 22);
                 assert_person_in_list(duplicated, 1, "Diana", 22);
+
+                should_int(list_size(list)) be equal to(2);
+                should_ptr(list_get(list, 0)) be equal to (list_get(duplicated, 0));
+                should_ptr(list_get(list, 1)) be equal to (list_get(duplicated, 1));
 
                 list_destroy(duplicated);
             } end
@@ -175,12 +204,17 @@ context (test_list) {
 
             it("should replace a value at index with other value") {
                 t_person *aux = list_replace(list, 3, persona_create("Daniela", 19));
+
                 assert_person(aux, "Ezequiel", 25);
 
-                persona_destroy(aux);
+                should_int(list_size(list)) be equal to (5);
+                assert_person_in_list(list, 0, "Matias"   , 25);
+                assert_person_in_list(list, 1, "Gaston"   , 24);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Daniela"  , 19);
+                assert_person_in_list(list, 4, "Facundo"  , 25);
 
-                aux = list_get(list, 3);
-                assert_person(aux, "Daniela", 19);
+                persona_destroy(aux);
             } end
 
             it("should remove a value at index") {
@@ -188,10 +222,14 @@ context (test_list) {
 
                 t_person *aux = list_remove(list, 0);
                 assert_person(aux, "Matias", 25);
-                persona_destroy(aux);
 
-                assert_person_in_list(list, 0, "Gaston", 24);
                 should_int(list_size(list)) be equal to(4);
+                assert_person_in_list(list, 0, "Gaston"   , 24);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                assert_person_in_list(list, 2, "Ezequiel" , 25);
+                assert_person_in_list(list, 3, "Facundo"  , 25);
+
+                persona_destroy(aux);
             } end
 
             it("should remove and destroy a value at index") {
@@ -200,8 +238,11 @@ context (test_list) {
 
                 list_remove_and_destroy_element(list, 0, (void*)persona_destroy);
 
-                assert_person_in_list(list, 0, "Gaston", 24);
                 should_int(list_size(list)) be equal to(4);
+                assert_person_in_list(list, 0, "Gaston"   , 24);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                assert_person_in_list(list, 2, "Ezequiel" , 25);
+                assert_person_in_list(list, 3, "Facundo"  , 25);
             } end
 
             it("should remove the first value that satisfies a condition") {
@@ -216,24 +257,40 @@ context (test_list) {
                 persona_destroy(aux);
 
                 should_int(list_size(list)) be equal to(4);
+                assert_person_in_list(list, 0, "Matias"   , 25);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                assert_person_in_list(list, 2, "Ezequiel" , 25);
+                assert_person_in_list(list, 3, "Facundo"  , 25);
             } end
 
-            it("should remove all values which satisfy a condition") {
-                assert_person_in_list(list, 0, "Matias"   , 25);
-                assert_person_in_list(list, 1, "Gaston"   , 24);
-                assert_person_in_list(list, 2, "Sebastian", 21);
-                assert_person_in_list(list, 3, "Ezequiel" , 25);
-                assert_person_in_list(list, 4, "Facundo"  , 25);
-                should_int(list_size(list)) be equal to (5);
+            it("should remove and destroy all values which satisfy a condition") {
+                should_int(list_size(list)) be equal to(5);
 
                 bool _is_25_years_old(t_person *p) {
                     return p->age == 25;
                 }
                 list_remove_and_destroy_all_by_condition(list, (void*) _is_25_years_old, (void*) persona_destroy);
 
+                should_int(list_size(list)) be equal to (2);
                 assert_person_in_list(list, 0, "Gaston"   , 24);
                 assert_person_in_list(list, 1, "Sebastian", 21);
-                should_int(list_size(list)) be equal to (2);
+            } end
+
+            it("should clean a list without destroying any element") {
+               t_list *other = list_duplicate(list);
+
+                should_int(list_size(list)) be equal to(5);
+                list_clean(list);
+                should_bool(list_is_empty(list)) be truthy;
+
+                should_int(list_size(other)) be equal to(5);
+                assert_person_in_list(other, 0, "Matias"   , 25);
+                assert_person_in_list(other, 1, "Gaston"   , 24);
+                assert_person_in_list(other, 2, "Sebastian", 21);
+                assert_person_in_list(other, 3, "Ezequiel" , 25);
+                assert_person_in_list(other, 4, "Facundo"  , 25);
+
+                list_destroy_and_destroy_elements(other, (void*) persona_destroy);
             } end
 
             it("should clean a list and leave it empty") {
@@ -271,25 +328,46 @@ context (test_list) {
 
             it("should filter a list with the values that satisfies a condition") {
                 should_int(list_size(list)) be equal to(5);
+
                 bool _is_young(t_person* person) {
                     return person->age <= 24;
                 }
                 t_list* filtered = list_filter(list, (void*) _is_young);
+
                 should_int(list_size(filtered)) be equal to(2);
-                assert_person_in_list(filtered, 0, "Matias", 24);
-                assert_person_in_list(filtered, 1, "Sebastian", 21);
+                should_ptr(list_get(filtered, 0)) be equal to (list_get(list, 0));
+                should_ptr(list_get(filtered, 1)) be equal to (list_get(list, 2));
+
+                should_int(list_size(list)) be equal to(5);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Facundo"  , 25);
+
                 list_destroy(filtered);
             } end
 
             it("should map a list with the function result") {
-                char* names_array[] = { "Matias", "Gaston", "Sebastian", "Ezequiel", "Facundo" };
                 char* _get_name(t_person* person) {
                     return person->name;
                 }
                 t_list* names = list_map(list, (void*) _get_name);
-                int i; for (i = 0; i < 5; i++) {
-                    should_string(list_get(names, i)) be equal to(names_array[i]);
-                }
+
+                should_int(list_size(list)) be equal to(5);
+                should_string(list_get(names, 0)) be equal to ("Matias");
+                should_string(list_get(names, 1)) be equal to ("Gaston");
+                should_string(list_get(names, 2)) be equal to ("Sebastian");
+                should_string(list_get(names, 3)) be equal to ("Ezequiel");
+                should_string(list_get(names, 4)) be equal to ("Facundo");
+
+                should_int(list_size(list)) be equal to(5);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Facundo"  , 25);
+
                 list_destroy(names);
             } end
 
@@ -307,60 +385,81 @@ context (test_list) {
 
             it("should return a new list with the first \"N\" elements of a list") {
                 t_list* sublist = list_take(list, 3);
-                should_int(list_size(list)) be equal to(5);
-                should_int(list_size(sublist)) be equal to(3);
 
-                assert_person_in_list(sublist, 0, "Matias"   , 24);
-                assert_person_in_list(sublist, 1, "Gaston"   , 25);
-                assert_person_in_list(sublist, 2, "Sebastian", 21);
+                should_int(list_size(sublist)) be equal to(3);
+                should_ptr(list_get(sublist, 0)) be equal to (list_get(list, 0));
+                should_ptr(list_get(sublist, 1)) be equal to (list_get(list, 1));
+                should_ptr(list_get(sublist, 2)) be equal to (list_get(list, 2));
+
+                should_int(list_size(list)) be equal to(5);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Facundo"  , 25);
 
                 list_destroy(sublist);
             } end
 
             it("should return a new list with the first \"N\" elements starting at a given index of a list") {
                 t_list* sublist = list_slice(list, 1, 3);
-                should_int(list_size(list)) be equal to(5);
-                should_int(list_size(sublist)) be equal to(3);
 
-                assert_person_in_list(sublist, 0, "Gaston"   , 25);
-                assert_person_in_list(sublist, 1, "Sebastian", 21);
-                assert_person_in_list(sublist, 2, "Ezequiel" , 25);
+                should_int(list_size(sublist)) be equal to(3);
+                should_ptr(list_get(sublist, 0)) be equal to (list_get(list, 1));
+                should_ptr(list_get(sublist, 1)) be equal to (list_get(list, 2));
+                should_ptr(list_get(sublist, 2)) be equal to (list_get(list, 3));
+
+                should_int(list_size(list)) be equal to(5);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Facundo"  , 25);
 
                 list_destroy(sublist);
             } end
 
             it("should return a new list with the first \"N\" elements of a list and remove them from original list") {
                 t_list* sublist = list_take_and_remove(list, 3);
-                should_int(list_size(list)) be equal to(2);
-                should_int(list_size(sublist)) be equal to(3);
 
+                should_int(list_size(sublist)) be equal to(3);
                 assert_person_in_list(sublist, 0, "Matias"   , 24);
                 assert_person_in_list(sublist, 1, "Gaston"   , 25);
                 assert_person_in_list(sublist, 2, "Sebastian", 21);
+
+                should_int(list_size(list)) be equal to(2);
+                assert_person_in_list(list, 0, "Ezequiel", 25);
+                assert_person_in_list(list, 1, "Facundo" , 25);
 
                 list_destroy_and_destroy_elements(sublist, (void*)persona_destroy);
             } end
 
             it("should return a new list with the first \"N\" elements starting at a given index and remove them from the original list") {
                 t_list* sublist = list_slice_and_remove(list, 1, 3);
-                should_int(list_size(list)) be equal to(2);
-                should_int(list_size(sublist)) be equal to(3);
 
+                should_int(list_size(sublist)) be equal to(3);
                 assert_person_in_list(sublist, 0, "Gaston"   , 25);
                 assert_person_in_list(sublist, 1, "Sebastian", 21);
                 assert_person_in_list(sublist, 2, "Ezequiel" , 25);
+
+                should_int(list_size(list)) be equal to(2);
+                assert_person_in_list(list, 0, "Matias" , 24);
+                assert_person_in_list(list, 1, "Facundo", 25);
 
                 list_destroy_and_destroy_elements(sublist, (void*)persona_destroy);
             } end
 
             it("should return a new list with the remaining elements starting at a given index and remove them from the original list when \"N\" is too big") {
                 t_list* sublist = list_slice_and_remove(list, 2, 10);
-                should_int(list_size(list)) be equal to(2);
-                should_int(list_size(sublist)) be equal to(3);
 
+                should_int(list_size(sublist)) be equal to(3);
                 assert_person_in_list(sublist, 0, "Sebastian", 21);
                 assert_person_in_list(sublist, 1, "Ezequiel" , 25);
                 assert_person_in_list(sublist, 2, "Facundo"  , 25);
+
+                should_int(list_size(list)) be equal to(2);
+                assert_person_in_list(list, 0, "Matias", 24);
+                assert_person_in_list(list, 1, "Gaston", 25);
 
                 list_destroy_and_destroy_elements(sublist, (void*)persona_destroy);
             } end
@@ -376,7 +475,6 @@ context (test_list) {
                     list_sort(list, (void*) _ayudantes_menor);
 
                     should_bool(list_is_empty(list)) be truthy;
-
                 } end
 
             } end
@@ -403,23 +501,6 @@ context (test_list) {
                     assert_person_in_list(a_sorted_list, 4, "Ezequiel" , 25);
                 }
 
-                void _verify_a_sort_with_multiple_comparators(t_list* (*sorted_list_generator)()) {
-                	list_add(list, persona_create("Ezequiel", 25));
-                    list_add(list, persona_create("Julian"  , 25));
-                    list_add(list, persona_create("Facundo" , 25));
-                    list_sort(list, (void*) _ayudantes_alfabetico);
-
-                    t_list* a_sorted_list = sorted_list_generator();
-
-                    assert_person_in_list(a_sorted_list, 0, "Daniela"  , 19);
-                    assert_person_in_list(a_sorted_list, 1, "Sebastian", 21);
-                    assert_person_in_list(a_sorted_list, 2, "Matias"   , 24);
-                    assert_person_in_list(a_sorted_list, 3, "Ezequiel" , 25);
-                    assert_person_in_list(a_sorted_list, 4, "Facundo"  , 25);
-                    assert_person_in_list(a_sorted_list, 5, "Gaston"   , 25);
-                    assert_person_in_list(a_sorted_list, 6, "Julian"   , 25);
-                }
-
                 before {
                     list_add(list, persona_create("Matias"   , 24));
                     list_add(list, persona_create("Gaston"   , 25));
@@ -443,10 +524,6 @@ context (test_list) {
                         _verify_a_sort_with_duplicates(__sorted_list);
                     } end
 
-                    it("should sort a list with multiple comparators") {
-                        _verify_a_sort_with_multiple_comparators(__sorted_list);
-                    } end
-
                 } end
 
                 describe ("Sorted - without side effect") {
@@ -468,10 +545,6 @@ context (test_list) {
 
                     it("should sort a list with duplicated values") {
                         _verify_a_sort_with_duplicates(__sorted_list);
-                    } end
-
-                    it("should sort a list with multiple comparators") {
-                        _verify_a_sort_with_multiple_comparators(__sorted_list);
                     } end
 
                 } end
@@ -576,34 +649,22 @@ context (test_list) {
 
         describe("Fold1") {
             before {
-                list_add(list, persona_create("Nicolas", 6));
-                list_add(list, persona_create("Matias", 70));
-                list_add(list, persona_create("Juan", 124));
-                list_add(list, persona_create("Juan Manuel", 1));
-                list_add(list, persona_create("Sebastian", 8));
-                list_add(list, persona_create("Rodrigo", 40));
-            } end
-
-            it("should fold all values into a single one, starting with first element") {
-                t_person* get_oldest_person(t_person* person1, t_person* person2) {
-                    return person1->age >= person2->age ? person1 : person2;
-                }
-
-                t_person* oldestPerson = (t_person*) list_fold1(list, (void*) get_oldest_person);
-
-                assert_person(oldestPerson, "Juan", 124);
+                list_add(list, persona_create("Matias"   , 24));
+                list_add(list, persona_create("Gaston"   , 25));
+                list_add(list, persona_create("Sebastian", 21));
+                list_add(list, persona_create("Daniela"  , 19));
             } end
 
             it("should get minimum") {
                 t_person* youngestPerson = (t_person*) list_get_minimum(list, (void*)_ayudantes_minimo_edad);
 
-                assert_person(youngestPerson, "Juan Manuel", 1);
+                assert_person(youngestPerson, "Daniela", 19);
             } end
 
             it("should get maximum") {
                 t_person* oldestPerson = (t_person*) list_get_maximum(list, (void*)_ayudantes_maximo_edad);
 
-                assert_person(oldestPerson, "Juan", 124);
+                assert_person(oldestPerson, "Gaston", 25);
             } end
 
         } end
@@ -611,17 +672,13 @@ context (test_list) {
         describe ("Fold") {
 
             before {
-                list_add(list, persona_create("Jorge", 24));
-                list_add(list, persona_create("Matias", 70));
-                list_add(list, persona_create("Juan", 124));
-                list_add(list, persona_create("Nicolas", 6));
-                list_add(list, persona_create("Juan Manuel", 1));
-                list_add(list, persona_create("Sebastian", 8));
-                list_add(list, persona_create("Rodrigo", 40));
+                list_add(list, persona_create("Matias"   , 24));
+                list_add(list, persona_create("Gaston"   , 25));
+                list_add(list, persona_create("Sebastian", 21));
+                list_add(list, persona_create("Daniela"  , 19));
             } end
 
             it("should fold all list values into a single one, depending on what the given function does") {
-
                 t_person* seedPerson = persona_create("Maximiliano", 150);
 
                 t_person* get_oldest_person(t_person* person1, t_person* person2) {
@@ -630,79 +687,111 @@ context (test_list) {
 
                 t_person* oldestPerson = (t_person*) list_fold(list, seedPerson, (void*) get_oldest_person);
 
-                should_int(oldestPerson->age) be equal to(150);
-
+                assert_person(oldestPerson, "Maximiliano", 150);
                 persona_destroy(seedPerson);
             } end
 
 
-            it("should fold all values using a intial value with different type") {
-                int* add_age(int* accum, t_person* person) {
-                    *accum = *accum + person->age;
-                    return accum;
+            it("should fold all values using a initial value with different type") {
+                intptr_t add_age(intptr_t accum, t_person* person) {
+                    return accum + person->age;
                 }
 
-                int* sum = list_fold(list, calloc(1, sizeof(int)), (void*) add_age);
-                should_int(*sum) be equal to(273);
-                free(sum);
+                intptr_t sum = (intptr_t) list_fold(list, (intptr_t) 0, (void*) add_age);
+                should_int(sum) be equal to(24 + 25 + 21 + 19);
             } end
 
         } end
 
-        describe("Iterator") {
-            before {
-                list_add(list, persona_create("Juan", 124));
-                list_add(list, persona_create("Nicolas", 6));
-                list_add(list, persona_create("Matias", 70));
-                list_add(list, persona_create("Juan Manuel", 1));
-                list_add(list, persona_create("Sebastian", 8));
-                list_add(list, persona_create("Rodrigo", 40));
-                list_add(list, persona_create("Agustin", 21));
-                list_add(list, persona_create("Juan Pablo", 33));
-            } end
+    } end
 
-            it("Should iterate all elements") {
-                char* names[] = {"Juan", "Nicolas", "Matias", "Juan Manuel", "Sebastian", "Rodrigo", "Agustin", "Juan Pablo"};
+    describe("Iterator") {
+        t_list *list;
+        t_list_iterator* list_iterator;
 
-                t_list_iterator* list_iterator = list_iterator_create(list);
+        before {
+            list = list_create();
+            list_iterator = list_iterator_create(list);
+        } end
+
+        after {
+            list_iterator_destroy(list_iterator);
+            list_destroy_and_destroy_elements(list, (void*) persona_destroy);
+        } end
+
+        it("Should iterate all elements") {
+            list_add(list, persona_create("Matias"   , 24));
+            list_add(list, persona_create("Gaston"   , 25));
+            list_add(list, persona_create("Sebastian", 21));
+            list_add(list, persona_create("Daniela"  , 19));
+
+            char* names[] = {"Matias", "Gaston", "Sebastian", "Daniela"};
+            int i = 0;
+            while(list_iterator_has_next(list_iterator)) {
+                t_person* person = list_iterator_next(list_iterator);
+                should_string(person->name) be equal to (names[list_iterator->index]);
+                i++;
+            }
+
+            should_int(i) be equal to (list_size(list));
+        } end
+
+        it("Should iterate an empty list") {
+            list_clean_and_destroy_elements(list, (void*) persona_destroy);
+
+            should_bool(list_iterator_has_next(list_iterator)) be falsey;
+        } end
+
+        describe("Remove") {
+            void _remove_all_by_name(char *filter) {
+                char *names[] = { "Matias", "Gaston", "Sebastian", "Daniela" };
+                int i = 0;
+
                 while(list_iterator_has_next(list_iterator)) {
                     t_person* person = list_iterator_next(list_iterator);
-                    should_string(person->name) be equal to (names[list_iterator->index]);
-                }
-                list_iterator_destroy(list_iterator);
-            } end
+                    should_string(person->name) be equal to (names[i++]);
 
-            it("Should iterate an empty list") {
-                t_list* empty_list = list_create();
-                t_list_iterator* list_iterator = list_iterator_create(empty_list);
-                while(list_iterator_has_next(list_iterator)) {
-                    t_person* person = list_iterator_next(list_iterator);
-                    should_bool (true) be falsey;
-                }
-                list_iterator_destroy(list_iterator);
-                list_destroy(empty_list);
-            } end
-
-            it("Should remove an element") {
-                char* names[] = {"Nicolas", "Matias", "Sebastian", "Rodrigo", "Agustin"};
-                t_list_iterator* list_iterator = list_iterator_create(list);
-                while(list_iterator_has_next(list_iterator)) {
-                    t_person* person = list_iterator_next(list_iterator);
-                    if(string_contains(person->name, "Juan")) {
+                    if (string_contains(person->name, filter)) {
                         list_iterator_remove(list_iterator);
                         persona_destroy(person);
-                        continue;
                     }
-                    should_string(person->name) be equal to (names[list_iterator->index]);
                 }
-                list_iterator_destroy(list_iterator);
-                should_int(list->elements_count) be equal to (5);
-                assert_person_in_list(list, 0, "Nicolas"  ,  6);
-                assert_person_in_list(list, 1, "Matias"   , 70);
-                assert_person_in_list(list, 2, "Sebastian",  8);
-                assert_person_in_list(list, 3, "Rodrigo"  , 40);
-                assert_person_in_list(list, 4, "Agustin"  , 21);
+            }
+
+            before {
+                list_add(list, persona_create("Matias"   , 24));
+                list_add(list, persona_create("Gaston"   , 25));
+                list_add(list, persona_create("Sebastian", 21));
+                list_add(list, persona_create("Daniela"  , 19));
             } end
+
+            it("Should remove first element") {
+                _remove_all_by_name("Matias");
+
+                should_int(list->elements_count) be equal to (3);
+                assert_person_in_list(list, 0, "Gaston"   , 25);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                assert_person_in_list(list, 2, "Daniela"  , 19);
+            } end
+
+            it("Should remove an element in the middle") {
+                _remove_all_by_name("Gaston");
+
+                should_int(list->elements_count) be equal to (3);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Sebastian", 21);
+                assert_person_in_list(list, 2, "Daniela"  , 19);
+            } end
+
+            it("Should remove last element") {
+                _remove_all_by_name("Daniela");
+
+                should_int(list->elements_count) be equal to (3);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+            } end
+
         } end
 
     } end
