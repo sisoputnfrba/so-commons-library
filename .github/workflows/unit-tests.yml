@@ -1,0 +1,20 @@
+name: Run Unit Tests
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: sudo apt-get install -y cmake valgrind
+
+      - name: Run unit tests with Valgrind
+        run: make valgrind
