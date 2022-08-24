@@ -25,27 +25,25 @@ static int64_t calculate_delta_ms(t_temporal* temporal);
 char *temporal_get_string_time(const char* format) {
 	char* str_time = strdup(format);
 
-	struct timespec* log_timespec = malloc(sizeof(struct timespec));
-	struct tm* log_tm = malloc(sizeof(struct tm));
+	struct timespec log_timespec;
+	struct tm log_tm;
 	char* milisec;
 
-	if (clock_gettime(CLOCK_REALTIME, log_timespec) == -1) {
+	if (clock_gettime(CLOCK_REALTIME, &log_timespec) == -1) {
 		error_show("Error getting date!");
 		free(str_time);
 		return NULL;
 	}
-	milisec = string_from_format("%03ld", log_timespec->tv_nsec / 1000000);
+	milisec = string_from_format("%03ld", log_timespec.tv_nsec / 1000000);
 
 	for (char* ms = strstr(str_time, "%MS"); ms != NULL; ms = strstr(ms + 3, "%MS")) {
 		memcpy(ms, milisec, 3);
 	}
 
-	localtime_r(&log_timespec->tv_sec, log_tm);
-	strftime(str_time, strlen(format) + 1, str_time, log_tm);
+	localtime_r(&log_timespec.tv_sec, &log_tm);
+	strftime(str_time, strlen(format) + 1, str_time, &log_tm);
 
 	free(milisec);
-	free(log_tm);
-	free(log_timespec);
 
 	return str_time;
 }
