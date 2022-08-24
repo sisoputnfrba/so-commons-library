@@ -23,6 +23,8 @@
 #include <time.h>
 #include <string.h>
 
+static int64_t calculate_delta_ms(t_temporal* temporal);
+
 char *temporal_get_string_time(const char* format) {
 	char* str_time = strdup(format);
 
@@ -50,75 +52,57 @@ char *temporal_get_string_time(const char* format) {
 }
 
 t_temporal* temporal_create(void) {
-    t_temporal* self = malloc(sizeof(t_temporal));
-    struct timespec* current = malloc(sizeof(struct timespec));
-    
-    self -> elapsed_ms = 0;
-    self -> state = RUNNING;
-    self -> current = current;
-    
-    clock_gettime(CLOCK_MONOTONIC_RAW, current);
-    
-    return self;
+	t_temporal* self = malloc(sizeof(t_temporal));
+	
+	self->elapsed_ms = 0;
+	self->state = TEMPORAL_STATUS_RUNNING;
+	
+	clock_gettime(CLOCK_MONOTONIC_RAW, &self->current);
+	
+	return self;
 }
 
 void temporal_destroy(t_temporal* temporal) {
-    if (temporal -> current) {
-		free(temporal -> current);
-	}
-
-    free(temporal);
+	free(temporal);
 }
 
 int64_t temporal_gettime(t_temporal* temporal) {
-    if (temporal -> state == STOPPED) {
-        return temporal -> elapsed_ms;
-    }
+	if (temporal->state == TEMPORAL_STATUS_STOPPED) {
+		return temporal->elapsed_ms;
+	}
+	
+	int64_t delta_ms = calculate_delta_ms(temporal);
 
-    t_temporal* now = temporal_create();
-
-    int64_t delta_ms = (now -> current -> tv_sec - temporal -> current -> tv_sec) * 1000 
-                        + (now -> current -> tv_nsec - temporal -> current -> tv_nsec) / 1000000;
-    
-    temporal_destroy(now);
-
-    return delta_ms + temporal -> elapsed_ms;
-}
-
-int64_t temporal_gettime_since_running(t_temporal* temporal) {
-	if (temporal -> state == STOPPED) {
-        return 0;
-    }
-
-    t_temporal* now = temporal_create();
-
-    int64_t delta_ms = (now -> current -> tv_sec - temporal -> current -> tv_sec) * 1000 
-                        + (now -> current -> tv_nsec - temporal -> current -> tv_nsec) / 1000000;
-    
-    temporal_destroy(now);
-
-    return delta_ms;
+	return delta_ms + temporal->elapsed_ms;
 }
 
 void temporal_stop(t_temporal* temporal) {
-    temporal -> elapsed_ms += temporal_gettime_since_running(temporal);
-    temporal -> state = STOPPED;
-    
-    free(temporal -> current);
-    temporal -> current = NULL;
+	if (temporal->state == TEMPORAL_STATUS_STOPPED) {
+		return;
+	}
+
+	temporal->elapsed_ms += calculate_delta_ms(temporal);
+	temporal->state = TEMPORAL_STATUS_STOPPED;
 }
 
 void temporal_resume(t_temporal* temporal) {
-    if (temporal -> state == RUNNING) {
-        return;
-    }
-    
-    temporal -> state = RUNNING;
-    temporal -> current = malloc(sizeof(struct timespec));
-    
-    clock_gettime(CLOCK_MONOTONIC_RAW, temporal -> current);
+	if (temporal->state == TEMPORAL_STATUS_RUNNING) {
+		return;
+	}
+
+	temporal->state = TEMPORAL_STATUS_RUNNING;
+	clock_gettime(CLOCK_MONOTONIC_RAW, &temporal->current);
 }
 
-int64_t temporal_diff(t_temporal* start, t_temporal* end) {
-    return temporal_gettime(start) - temporal_gettime(end);
+int64_t temporal_diff(t_temporal* temporal_1, t_temporal* temporal_2) {
+	return temporal_gettime(temporal_1) - temporal_gettime(temporal_2);
+}
+
+static int64_t calculate_delta_ms(t_temporal* temporal) {
+	struct timespec now;
+	clock_gettime(CLOCK_MONOTONIC_RAW, &now);
+	
+	int64_t delta_ms = (now.tv_sec - temporal->current.tv_sec) * 1000 + (now.tv_nsec - temporal->current.tv_nsec) / 1000000;
+	
+	return delta_ms;
 }

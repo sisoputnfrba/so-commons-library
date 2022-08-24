@@ -17,6 +17,7 @@
 #define TEMPORAL_H_
 
 	#include <stdint.h>
+	#include <time.h>
 
 	/**
 	* @NAME: temporal_get_string_time
@@ -34,8 +35,8 @@
 	* @DESC: Estado de una variable temporal.
 	*/
 	typedef enum {
-		STOPPED,
-		RUNNING
+		TEMPORAL_STATUS_STOPPED,
+		TEMPORAL_STATUS_RUNNING
 	} t_state;
 
 	/**
@@ -43,7 +44,7 @@
 	* @DESC: Estructura de una Variable temporal.
 	*/
 	typedef struct {
-		struct timespec* current;
+		struct timespec current;
 		int64_t elapsed_ms;
 		t_state state;
 	} t_temporal;
@@ -69,22 +70,6 @@
 	*		temporal - Variable temporal.
 	*/
 	int64_t temporal_gettime(t_temporal* temporal);
-	
-	/**
-	* @NAME: temporal_gettime_since_running
-	* @DESC: Retorna el tiempo transcurrido en el último período en el cual el temporal estuvo activo, en milisegundos.
-			 si el temporal fue detenido y reanudado, sólo retornará el tiempo transcurrido desde el último reanudado.
-			 Ejemplo:
-			 	t_temporal temporal = temporal_create();
-				sleep(2)
-				temporal_stop(temporal);
-				temporal_resume(temporal);
-				sleep(1);
-				temporal_gettime_since_running(temporal); => 1000 (Último período)
-	* @PARAMS:
-	*		temporal - Variable temporal.
-	*/
-	int64_t temporal_gettime_since_running(t_temporal* temporal);
 
 	/**
 	* @NAME: temporal_stop
