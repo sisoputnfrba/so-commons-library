@@ -16,6 +16,9 @@
 #ifndef TEMPORAL_H_
 #define TEMPORAL_H_
 
+	#include <stdint.h>
+	#include <time.h>
+
 	/**
 	* @NAME: temporal_get_string_time
 	* @DESC: Retorna un string con la hora actual,
@@ -27,4 +30,70 @@
 	*/
 	char *temporal_get_string_time(const char* format);
 
+	/**
+	* @NAME: t_state
+	* @DESC: Estado de una variable temporal.
+	*/
+	typedef enum {
+		TEMPORAL_STATUS_STOPPED,
+		TEMPORAL_STATUS_RUNNING
+	} t_state;
+
+	/**
+	* @NAME: t_temporal
+	* @DESC: Estructura de una Variable temporal.
+	*/
+	typedef struct {
+		struct timespec current;
+		int64_t elapsed_ms;
+		t_state state;
+	} t_temporal;
+
+	/**
+	* @NAME: temporal_create
+	* @DESC: Crea una variable temporal e inicia su cronómetro.
+	*/
+	t_temporal* temporal_create(void);
+
+	/**
+	* @NAME: temporal_destroy
+	* @DESC: Destruye una variable temporal.
+	* @PARAMS: 
+	*		temporal - Variable temporal a destruir.
+	*/
+	void temporal_destroy(t_temporal* temporal);
+
+	/**
+	* @NAME: temporal_gettime
+	* @DESC: Retorna el tiempo total transcurrido mientras el cronómetro estuvo activo en milisegundos.
+	* @PARAMS:
+	*		temporal - Variable temporal.
+	*/
+	int64_t temporal_gettime(t_temporal* temporal);
+
+	/**
+	* @NAME: temporal_stop
+	* @DESC: Detiene el cronómetro de una variable temporal.
+	* @PARAMS:
+	*		temporal - Variable temporal a frenar.
+	*/
+	void temporal_stop(t_temporal* temporal);
+
+	/**
+	* @NAME: temporal_resume
+	* @DESC: Reanuda el cronómetro de una variable temporal.
+	* @PARAMS:
+	*		temporal - Variable temporal a reanudar.
+	*/
+	void temporal_resume(t_temporal* temporal);
+
+	/**
+	* @NAME: temporal_diff
+	* @DESC: Retorna la diferencia del tiempo total transcurrido entre dos variables temporales en milisegundos
+	* @PARAMS:
+	*		temporal_1 - Primera variable temporal.
+	*		temporal_2 - Segunda variable temporal.
+	*/
+	int64_t temporal_diff(t_temporal* temporal_1, t_temporal* temporal_2);
+	
 #endif /* TEMPORAL_H_ */
