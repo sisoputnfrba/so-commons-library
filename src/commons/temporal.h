@@ -20,6 +20,25 @@
 	#include <time.h>
 
 	/**
+	* @NAME: t_temporal_status
+	* @DESC: Estado de una variable temporal.
+	*/
+	typedef enum {
+		TEMPORAL_STATUS_STOPPED,
+		TEMPORAL_STATUS_RUNNING
+	} t_temporal_status;
+
+	/**
+	* @NAME: t_temporal
+	* @DESC: Estructura de una Variable temporal.
+	*/
+	typedef struct {
+		struct timespec current;
+		int64_t elapsed_ms;
+		t_temporal_status status;
+	} t_temporal;
+
+	/**
 	* @NAME: temporal_get_string_time
 	* @DESC: Retorna un string con la hora actual,
 	* con el formato recibido por parámetro.
@@ -29,25 +48,6 @@
 	* temporal_get_string_time("%d/%m/%y %H:%M:%S") => "30/09/20 12:51:59"
 	*/
 	char *temporal_get_string_time(const char* format);
-
-	/**
-	* @NAME: t_state
-	* @DESC: Estado de una variable temporal.
-	*/
-	typedef enum {
-		TEMPORAL_STATUS_STOPPED,
-		TEMPORAL_STATUS_RUNNING
-	} t_state;
-
-	/**
-	* @NAME: t_temporal
-	* @DESC: Estructura de una Variable temporal.
-	*/
-	typedef struct {
-		struct timespec current;
-		int64_t elapsed_ms;
-		t_state state;
-	} t_temporal;
 
 	/**
 	* @NAME: temporal_create

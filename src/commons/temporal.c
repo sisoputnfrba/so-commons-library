@@ -14,11 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "temporal.h"
-#include "error.h"
 #include "string.h"
 
-#include <unistd.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
@@ -32,14 +29,14 @@ char *temporal_get_string_time(const char* format) {
 	struct tm* log_tm = malloc(sizeof(struct tm));
 	char* milisec;
 
-	if(clock_gettime(CLOCK_REALTIME, log_timespec) == -1) {
+	if (clock_gettime(CLOCK_REALTIME, log_timespec) == -1) {
 		error_show("Error getting date!");
 		free(str_time);
 		return NULL;
 	}
 	milisec = string_from_format("%03ld", log_timespec->tv_nsec / 1000000);
 
-	for(char* ms = strstr(str_time, "%MS"); ms != NULL; ms = strstr(ms + 3, "%MS")) {
+	for (char* ms = strstr(str_time, "%MS"); ms != NULL; ms = strstr(ms + 3, "%MS")) {
 		memcpy(ms, milisec, 3);
 	}
 
@@ -57,7 +54,7 @@ t_temporal* temporal_create(void) {
 	t_temporal* self = malloc(sizeof(t_temporal));
 
 	self->elapsed_ms = 0;
-	self->state = TEMPORAL_STATUS_RUNNING;
+	self->status = TEMPORAL_STATUS_RUNNING;
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &self->current);
 
@@ -69,7 +66,7 @@ void temporal_destroy(t_temporal* temporal) {
 }
 
 int64_t temporal_gettime(t_temporal* temporal) {
-	if (temporal->state == TEMPORAL_STATUS_STOPPED) {
+	if (temporal->status == TEMPORAL_STATUS_STOPPED) {
 		return temporal->elapsed_ms;
 	}
 
@@ -79,20 +76,20 @@ int64_t temporal_gettime(t_temporal* temporal) {
 }
 
 void temporal_stop(t_temporal* temporal) {
-	if (temporal->state == TEMPORAL_STATUS_STOPPED) {
+	if (temporal->status == TEMPORAL_STATUS_STOPPED) {
 		return;
 	}
 
 	temporal->elapsed_ms += calculate_delta_ms(temporal);
-	temporal->state = TEMPORAL_STATUS_STOPPED;
+	temporal->status = TEMPORAL_STATUS_STOPPED;
 }
 
 void temporal_resume(t_temporal* temporal) {
-	if (temporal->state == TEMPORAL_STATUS_RUNNING) {
+	if (temporal->status == TEMPORAL_STATUS_RUNNING) {
 		return;
 	}
 
-	temporal->state = TEMPORAL_STATUS_RUNNING;
+	temporal->status = TEMPORAL_STATUS_RUNNING;
 	clock_gettime(CLOCK_MONOTONIC_RAW, &temporal->current);
 }
 
