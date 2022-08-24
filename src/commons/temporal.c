@@ -33,6 +33,8 @@ char *temporal_get_string_time(const char* format) {
 	char* milisec;
 
 	if(clock_gettime(CLOCK_REALTIME, log_timespec) == -1) {
+		error_show("Error getting date!");
+		free(str_time);
 		return NULL;
 	}
 	milisec = string_from_format("%03ld", log_timespec->tv_nsec / 1000000);
@@ -53,12 +55,12 @@ char *temporal_get_string_time(const char* format) {
 
 t_temporal* temporal_create(void) {
 	t_temporal* self = malloc(sizeof(t_temporal));
-	
+
 	self->elapsed_ms = 0;
 	self->state = TEMPORAL_STATUS_RUNNING;
-	
+
 	clock_gettime(CLOCK_MONOTONIC_RAW, &self->current);
-	
+
 	return self;
 }
 
@@ -70,7 +72,7 @@ int64_t temporal_gettime(t_temporal* temporal) {
 	if (temporal->state == TEMPORAL_STATUS_STOPPED) {
 		return temporal->elapsed_ms;
 	}
-	
+
 	int64_t delta_ms = calculate_delta_ms(temporal);
 
 	return delta_ms + temporal->elapsed_ms;
@@ -101,8 +103,8 @@ int64_t temporal_diff(t_temporal* temporal_1, t_temporal* temporal_2) {
 static int64_t calculate_delta_ms(t_temporal* temporal) {
 	struct timespec now;
 	clock_gettime(CLOCK_MONOTONIC_RAW, &now);
-	
+
 	int64_t delta_ms = (now.tv_sec - temporal->current.tv_sec) * 1000 + (now.tv_nsec - temporal->current.tv_nsec) / 1000000;
-	
+
 	return delta_ms;
 }
