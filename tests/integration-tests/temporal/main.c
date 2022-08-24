@@ -106,7 +106,7 @@ void test_temporal_diff() {
 	temporal_destroy(temporal3);
 }
 
-void test_temporal_state() {
+void test_temporal_status() {
 	/**
 	* @DESC: Verificar el comportamiento del temporal en sus diferentes estados.
 	*        En este test se verifica que no ocurra ningún error al usar el temporal de cualquier forma.
@@ -128,7 +128,7 @@ void test_temporal_state() {
 	temporal_resume(temporal3);
 	sleep(1);
 
-	printf("test_temporal_state: %lums (expected: ~1000ms)\n\n", temporal_gettime(temporal3));
+	printf("test_temporal_status: %lums (expected: ~1000ms)\n\n", temporal_gettime(temporal3));
 
 	temporal_destroy(temporal3);
 }
@@ -156,7 +156,7 @@ int main(int argc, char** argv) {
 	test_temporal_stop();
 	test_temporal_resume();
 	test_temporal_diff();
-	test_temporal_state();
+	test_temporal_status();
 	
 	return (EXIT_SUCCESS);
 }
