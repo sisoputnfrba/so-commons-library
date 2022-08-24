@@ -50,7 +50,7 @@
 
 	/**
 	* @NAME: temporal_create
-	* @DESC: Crea una variable temporal.
+	* @DESC: Crea una variable temporal e inicia su cronómetro.
 	*/
 	t_temporal* temporal_create(void);
 
@@ -64,7 +64,7 @@
 
 	/**
 	* @NAME: temporal_gettime
-	* @DESC: Retorna el tiempo transcurrido mientras el temporal estuvo activo en milisegundos.
+	* @DESC: Retorna el tiempo total transcurrido mientras el cronómetro estuvo activo en milisegundos.
 	* @PARAMS:
 	*		temporal - Variable temporal.
 	*/
@@ -88,7 +88,7 @@
 
 	/**
 	* @NAME: temporal_stop
-	* @DESC: "Frena" el timer de una variable temporal. Deja de sumar tiempo.
+	* @DESC: Detiene el cronómetro de una variable temporal.
 	* @PARAMS:
 	*		temporal - Variable temporal a frenar.
 	*/
@@ -96,7 +96,7 @@
 
 	/**
 	* @NAME: temporal_resume
-	* @DESC: Reanuda el timer de una variable temporal, vuelve a sumar tiempo.
+	* @DESC: Reanuda el cronómetro de una variable temporal.
 	* @PARAMS:
 	*		temporal - Variable temporal a reanudar.
 	*/
@@ -104,11 +104,11 @@
 
 	/**
 	* @NAME: temporal_diff
-	* @DESC: Retorna la diferencia entre dos variables temporales en milisegundos
+	* @DESC: Retorna la diferencia del tiempo total transcurrido entre dos variables temporales en milisegundos
 	* @PARAMS:
-	*		temporal_1 - Primer variable temporal, idealmente, la que se creó antes.
+	*		temporal_1 - Primera variable temporal.
 	*		temporal_2 - Segunda variable temporal.
 	*/
-	int64_t temporal_diff(t_temporal* start, t_temporal* end);
+	int64_t temporal_diff(t_temporal* temporal_1, t_temporal* temporal_2);
 	
 #endif /* TEMPORAL_H_ */
