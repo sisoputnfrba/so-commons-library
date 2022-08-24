@@ -107,7 +107,7 @@
 
 	/**
 	* @NAME: list_slice
-	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo 
+	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo
 	* desde el índice indicado.
 	*/
 	t_list* list_slice(t_list* self, int start, int count);
@@ -121,7 +121,7 @@
 
 	/**
 	* @NAME: list_slice_and_remove
-	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo 
+	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo
 	* desde el índice indicado, eliminando del origen estos elementos.
 	*/
 	t_list* list_slice_and_remove(t_list* self, int start, int count);
@@ -160,6 +160,13 @@
 	* una determinada posicion y lo retorna.
 	*/
 	void *list_remove(t_list *, int index);
+
+	/**
+	* @NAME: list_remove_element
+	* @DESC: Remueve al elemento de la lista recibido por parámetro. Devuelve
+	* false en caso de no haberlo encontrado.
+	*/
+	bool list_remove_element(t_list* self, void* element);
 
 	/**
 	* @NAME: list_remove_and_destroy_element
@@ -279,7 +286,7 @@
 
 	/**
 	 * @NAME: list_fold
-	 * @DESC: Devuelve un valor que resulta de aplicar la operacion entre todos los elementos 
+	 * @DESC: Devuelve un valor que resulta de aplicar la operacion entre todos los elementos
 	 * de la lista, partiendo desde el primero.
 	 *
 	 * La funcion 'operation' debe recibir dos valores: uno del tipo del valor initial (seed)

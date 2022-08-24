@@ -90,6 +90,13 @@ void *list_remove(t_list *self, int index) {
 	return list_remove_indirect(self, indirect);
 }
 
+bool list_remove_element(t_list *self, void *element) {
+	bool _is_the_element(void *data) {
+		return element == data;
+	}
+	return list_remove_by_condition(self, _is_the_element) != NULL;
+}
+
 void* list_remove_by_condition(t_list *self, bool(*condition)(void*)) {
 	t_link_element **indirect = list_get_indirect_by_condition(self, condition);
 	return (*indirect) != NULL ? list_remove_indirect(self, indirect) : NULL;
