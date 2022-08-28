@@ -1,10 +1,8 @@
 FROM gcc:11.2.0
 
-WORKDIR /usr/src/so-commons-library
+RUN apt-get update && apt-get -y install cmake
 
-RUN git clone https://github.com/mumuki/cspec \
-  && cd cspec \
-  && git reset --hard 396445c217b366fd3a41c33a38e9a8dd75c3f0e5
+WORKDIR /usr/src/so-commons-library
 
 COPY . ./
 

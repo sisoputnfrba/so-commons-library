@@ -1,6 +1,6 @@
 *
 !src
 !tests
+!CMakeLists.txt
 !makefile
 
-**/build
