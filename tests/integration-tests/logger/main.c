@@ -28,17 +28,15 @@ static void log_in_disk(char* temp_file) {
 int main(int argc, char** argv) {
     pthread_t th1, th2;
     
-    char temp_file[] = "build/XXXXXX";
-
-    close(mkstemp(temp_file));
+    char temp_file[] = "XXXXXX";
     
-    if (temp_file != NULL) {
+    if (close(mkstemp(temp_file)) != -1) {
         pthread_create(&th1, NULL, (void*) log_in_disk, string_duplicate(temp_file));
         pthread_create(&th2, NULL, (void*) log_in_disk, string_duplicate(temp_file));
 
         pthread_join(th1, NULL);
         pthread_join(th2, NULL);
-        printf("\nRevisar el archivo de log que se creo en: %s\n", temp_file);
+        printf("\nRevisar el archivo de log que se creo en: %s/%s\n", getenv("PWD"), temp_file);
     } else {
         printf("No se pudo generar el archivo de log\n");
     }
