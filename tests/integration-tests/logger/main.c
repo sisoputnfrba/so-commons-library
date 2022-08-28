@@ -28,9 +28,9 @@ static void log_in_disk(char* temp_file) {
 int main(int argc, char** argv) {
     pthread_t th1, th2;
     
-    char temp_file[] = "XXXXXX";
+    char temp_file[] = "XXXXXX.log";
     
-    if (close(mkstemp(temp_file)) != -1) {
+    if (close(mkstemps(temp_file, 4)) != -1) {
         pthread_create(&th1, NULL, (void*) log_in_disk, string_duplicate(temp_file));
         pthread_create(&th2, NULL, (void*) log_in_disk, string_duplicate(temp_file));
 
