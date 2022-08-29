@@ -1,6 +1,6 @@
-## Commons Library For C ##
+# Commons Library For C
 
-[![Build Status](https://travis-ci.com/sisoputnfrba/so-commons-library.svg?branch=master)](https://travis-ci.com/sisoputnfrba/so-commons-library)
+[![Build Status](https://github.com/sisoputnfrba/so-commons-library/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/sisoputnfrba/so-commons-library/actions/workflows/unit-tests.yml)
 
 Biblioteca con TADs útiles para el desarrollo de aplicaciones hechas con el lenguaje C
 
@@ -19,16 +19,16 @@ Provee los siguientes TADs:
   * Dictionary (commons/collections/dictionary.h)
   * Queue (commons/collections/queue.h)
 
-## Notas: ##
+## Notas
 
 Algunas de las consideraciones a tener a la hora de su uso:
 
 * Ninguna de las implementaciones utiliza semáforos, por lo que el uso concurrente debe ser implementado por el usuario de estas.
 * Ninguna de las funciones implementadas posee validaciones para manejo de errores.
 
-## Guía de Instalación: ##
+## Guía de Instalación
 
-Estas Bibliotecas utilizan CSpec para testear todas las funcionalidades, mas informacion en: https://github.com/mumuki/cspec
+Esta biblioteca utiliza CSpec para testear todas las funcionalidades, más información en: https://github.com/mumuki/cspec
 
 Instrucciones de instalación:
 
@@ -38,13 +38,11 @@ Instrucciones de instalación:
 
 - `make uninstall` -> desinstala la biblioteca
 
-[![asciicast](https://asciinema.org/a/17x56e36koqybtq1jx8p3kfnp.png)](https://asciinema.org/a/17x56e36koqybtq1jx8p3kfnp)
-
-## Guía para el uso: ##
+## Guía para el uso
 
 Linkear con `-lcommons`
 
-Para usarla en un .c/.h debería incluirse de la siguiente forma: `commons/<Nombre_TAD>`
+Para usarla en un .c/.h deberá incluirse de la siguiente forma: `commons/<Nombre_TAD>`
 
 Por ejemplo:
 
@@ -53,7 +51,7 @@ Por ejemplo:
 #include <commons/collections/list.h>
 ```
 
-### Desde eclipse
+### Desde Eclipse
 
 1. Ir a las Properties del proyecto (en el Project Explorer - la columna de la izquierda - la opción aparece dándole click derecho al proyecto), y dentro de la categoría `C/C++ Build` entrar a `Settings`, y ahí a `Tool Settings`.
 2. Buscar `GCC Linker` > `Libraries` > `Libraries`. Notar que entre paréntesis dice `-l`, el parámetro de `gcc` que estamos buscando.
