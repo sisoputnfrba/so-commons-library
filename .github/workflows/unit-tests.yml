@@ -4,17 +4,26 @@ on:
     branches: [master]
   pull_request:
     types: [opened, synchronize, ready_for_review]
+    paths:
+      - '.github/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'makefile'
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-22.04
+    if: github.repository_owner == 'sisoputnfrba' && ! github.event.pull_request.draft
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: sudo apt-get install -y cmake valgrind
+
+      - name: Build project
+        run: make debug
 
       - name: Run unit tests with Valgrind
         run: make valgrind
