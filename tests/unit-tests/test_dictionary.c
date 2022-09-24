@@ -116,25 +116,25 @@ context (test_dictionary) {
                 list_destroy(keys);
             } end
 
-            it("should get all values") {
+            it("should get all elements") {
                 dictionary_put(dictionary, "Matias" , persona_create("Matias" , 24));
                 dictionary_put(dictionary, "Gaston" , persona_create("Gaston" , 25));
 
-                t_list* values = dictionary_values(dictionary);
+                t_list* elements = dictionary_elements(dictionary);
                 
-                should_int(list_size(values)) be equal to(2);
+                should_int(list_size(elements)) be equal to(2);
                 
-                t_list* names = list_map(values, _get_name);
+                t_list* names = list_map(elements, _get_name);
                 should_bool(list_contains_string(names, "Matias")) be truthy;
                 should_bool(list_contains_string(names, "Gaston")) be truthy;
                 list_destroy(names);
 
-                t_list* ages = list_map(values, _get_age);
+                t_list* ages = list_map(elements, _get_age);
                 should_bool(list_contains_string(ages, "24")) be truthy;
                 should_bool(list_contains_string(ages, "25")) be truthy;
                 list_destroy_and_destroy_elements(ages, free);
 
-                list_destroy(values);
+                list_destroy(elements);
             } end
 
         } end

@@ -111,4 +111,15 @@
 	*/
 	void 		  dictionary_destroy_and_destroy_elements(t_dictionary *, void(*data_destroyer)(void*));
 
+	/**
+	* @NAME: dictionary_keys
+	* @DESC: Retorna todas las keys en una lista
+	*/
+	t_list 		  *dictionary_keys(t_dictionary *self);
+
+	/**
+	* @NAME: dictionary_elements
+	* @DESC: Retorna todos los elementos en una lista
+	*/
+	t_list 		  *dictionary_elements(t_dictionary *self);
 #endif /* DICTIONARY_H_ */

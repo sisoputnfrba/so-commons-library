@@ -145,7 +145,7 @@ t_list * dictionary_keys(t_dictionary *self) {
     return keys;
 }
 
-t_list * dictionary_values(t_dictionary *self) {
+t_list * dictionary_elements(t_dictionary *self) {
     t_list * values = list_create();
 
     void* add_value_to_list(char* _, char* value) {
