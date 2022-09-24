@@ -1,4 +1,4 @@
-all: 
+all:
 	-cd src && $(MAKE) all
 	-cd tests/unit-tests && $(MAKE) all
 
@@ -11,7 +11,7 @@ debug:
 	-cd tests/unit-tests && $(MAKE) debug
 
 test: all
-	-cd tests/unit-tests && $(MAKE) test
+	cd tests/unit-tests && $(MAKE) test
 
 install: test
 	-cd src && $(MAKE) install
@@ -20,4 +20,4 @@ uninstall:
 	-cd src && $(MAKE) uninstall
 
 valgrind: debug
-	-cd tests/unit-tests && $(MAKE) valgrind
+	cd tests/unit-tests && $(MAKE) valgrind

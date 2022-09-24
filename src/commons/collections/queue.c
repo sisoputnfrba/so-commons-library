@@ -59,6 +59,6 @@ int queue_size(t_queue* self) {
 	return list_size(self->elements);
 }
 
-int queue_is_empty(t_queue *self) {
+bool queue_is_empty(t_queue *self) {
 	return list_is_empty(self->elements);
 }

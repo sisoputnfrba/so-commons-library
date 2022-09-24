@@ -5,6 +5,10 @@ C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
 H_SRCS=$(shell find . -iname "*.h" | tr '\n' ' ')
 OBJS=$(C_SRCS:./%.c=build/%.o)
 
+ifneq ($(shell id -un),root)
+SUDO=sudo
+endif
+
 # Clean and compile .so
 all: build/libcommons.so
 
@@ -30,11 +34,11 @@ clean:
 	$(RM) build
 
 install: all
-	sudo cp -u build/libcommons.so /usr/lib
-	sudo cp --parents -u $(H_SRCS) /usr/include
+	$(SUDO) cp -u build/libcommons.so /usr/lib
+	$(SUDO) cp --parents -u $(H_SRCS) /usr/include
 
 uninstall:
-	sudo rm -f /usr/lib/libcommons.so
-	sudo rm -rf /usr/include/commons
+	$(SUDO) rm -f /usr/lib/libcommons.so
+	$(SUDO) rm -rf /usr/include/commons
 
 .PHONY: all debug sources clean install uninstall

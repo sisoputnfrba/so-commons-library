@@ -26,9 +26,9 @@
 	} t_list;
 
 	typedef struct {
-		t_list *self;
-		t_link_element *prev;
-		t_link_element *element;
+		t_list *list;
+		t_link_element **actual;
+		t_link_element **next;
 		int index;
 	} t_list_iterator;
 
@@ -223,7 +223,7 @@
 	* @NAME: list_is_empty
 	* @DESC: Verifica si la lista esta vacia
 	*/
-	int list_is_empty(t_list *);
+	bool list_is_empty(t_list *);
 
 	/**
 	* @NAME: list_sort

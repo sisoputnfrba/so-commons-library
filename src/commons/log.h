@@ -39,11 +39,21 @@
 
 	/**
 	* @NAME: log_create
-	* @DESC: Crea una instancia de logger, tomando por parametro
-	* el nombre del programa, el nombre del archivo donde se van a generar los logs,
-	* el nivel de detalle minimo a loguear y si además se muestra por pantalla lo que se loguea.
+	* @DESC: Crea una instancia de logger
+	* @PARAMS:
+	*        file - la ruta hacia el archivo donde se van a generar los logs:
+	*            + si el archivo ya existe, se escribirá al final del mismo
+	*            + si el archivo no existe, se creará uno nuevo en el directorio indicado
+	*            + si el directorio hacia el archivo no existe, se producirá un error
+	*        process_name - el nombre a ser mostrado en los logs
+	*        is_active_console - si lo que se loguea debe mostrarse por consola
+	*        level - el nivel de detalle mínimo a loguear (ver definición de t_log_level)
+	*            ejemplo: LOG_LEVEL_INFO logueará mediante log_error, log_warning y log_info 
+	*            e ignorará los llamados a log_debug y log_trace 
+	* @RETURN:
+	*        retorna una instancia de logger, o NULL en caso de error
 	*/
-	t_log* 		log_create(char* file, char *program_name, bool is_active_console, t_log_level level);
+	t_log* 		log_create(char* file, char *process_name, bool is_active_console, t_log_level level);
 
 	/**
 	* @NAME: log_destroy

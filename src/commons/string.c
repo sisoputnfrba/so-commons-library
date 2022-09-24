@@ -28,6 +28,7 @@ static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
 char** _string_split(char* text, char* separator, bool(*is_last_token)(int));
 static void _string_array_push(char*** array, char* text, int size);
+static bool _string_match(char* text, char* pattern, char **where);
 
 char *string_repeat(char character, int count) {
 	char *text = calloc(count + 1, 1);
@@ -45,6 +46,14 @@ char* string_duplicate(char* original) {
 void string_append(char** original, char* string_to_add) {
 	*original = realloc(*original, strlen(*original) + strlen(string_to_add) + 1);
 	strcat(*original, string_to_add);
+}
+
+void string_n_append(char** original, char* string_to_add, int n) {
+	if(strlen(string_to_add) < n) {
+		n = strlen(string_to_add);
+	}
+	*original = realloc(*original, strlen(*original) + n + 1);
+	strncat(*original, string_to_add, n);
 }
 
 char* string_new() {
@@ -210,6 +219,22 @@ char* string_reverse(char* palabra) {
 	return resultado;
 }
 
+char* string_replace(char* text, char* substring, char* replacement) {
+	char *result = string_new();
+
+	char *start = text;
+	char *end;
+
+	while (_string_match(start, substring, &end)) {
+		string_n_append(&result, start, end - start);
+		string_append(&result, replacement);
+		start = end + string_length(substring);
+	}
+
+	string_append(&result, start);
+	return result;
+}
+
 bool string_contains(char* text, char *substring) {
 	return strstr(text, substring) != NULL;
 }
@@ -292,22 +317,15 @@ char** _string_split(char* text, char* separator, bool(*is_last_token)(int)) {
 	char **substrings = string_array_new();
 	int index = 0;
 
-	char *end, *start = text;
-	if (separator != NULL) {
-		while ((end = strstr(start, separator)) != NULL && !is_last_token(index)) {
-			if (string_is_empty(separator)) {
-				if (string_length(start) > 1)
-					end = start + 1;
-			 	else
-					break;
-			}
-			_string_array_push(&substrings, string_substring_until(start, end - start), index++);
-			start = end + string_length(separator);
-		}
+	char *start = text;
+	char *end;
+
+	while (_string_match(start, separator, &end) && !is_last_token(index)) {
+		_string_array_push(&substrings, string_substring_until(start, end - start), index++);
+		start = end + string_length(separator);
 	}
 
 	_string_array_push(&substrings, string_duplicate(start), index);
-
 	return substrings;
 }
 
@@ -315,4 +333,13 @@ static void _string_array_push(char*** array, char* text, int size) {
 	*array = realloc(*array, sizeof(char*) * (size + 2));
 	(*array)[size] = text;
 	(*array)[size + 1] = NULL;
+}
+
+static bool _string_match(char* text, char* pattern, char **where) {
+	if (string_is_empty(text) || pattern == NULL || !string_contains(text, pattern)) {
+		return false;
+	}
+
+	*where = string_is_empty(pattern) ? text + 1 : strstr(text, pattern);
+	return !string_is_empty(*where);
 }
