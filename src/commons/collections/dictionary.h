@@ -21,6 +21,7 @@
 
 	#include "node.h"
 	#include <stdbool.h>
+	#include "list.h"
 
 	typedef struct {
 		t_hash_element **elements;
