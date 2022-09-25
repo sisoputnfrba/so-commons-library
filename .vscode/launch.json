@@ -27,7 +27,8 @@
           "text": "-enable-pretty-printing",
           "ignoreFailures": true
         }
-      ]
+      ],
+      "preLaunchTask": "CMake: Build commons-unit-test",
     },
     {
       "name": "commons-integration-test-logger",
@@ -52,7 +53,8 @@
           "text": "-enable-pretty-printing",
           "ignoreFailures": true
         }
-      ]
+      ],
+      "preLaunchTask": "CMake: Build commons-integration-test-logger",
     },
     {
       "name": "commons-integration-test-temporal",
@@ -77,7 +79,8 @@
           "text": "-enable-pretty-printing",
           "ignoreFailures": true
         }
-      ]
+      ],
+      "preLaunchTask": "CMake: Build commons-integration-test-temporal",
     },
   ]
 }

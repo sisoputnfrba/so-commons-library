@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cmake",
+      "label": "CMake: Build commons-unit-test",
+      "command": "build",
+      "targets": [
+        "commons-unit-test"
+      ],
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "CMake template build task"
+    },
+    {
+      "type": "cmake",
+      "label": "CMake: Build commons-integration-test-logger",
+      "command": "build",
+      "targets": [
+        "commons-integration-test-logger"
+      ],
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "CMake template build task"
+    },
+    {
+      "type": "cmake",
+      "label": "CMake: Build commons-integration-test-temporal",
+      "command": "build",
+      "targets": [
+        "commons-integration-test-temporal"
+      ],
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "CMake template build task"
+    }
+  ]
+}
