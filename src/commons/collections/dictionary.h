@@ -45,7 +45,7 @@
 
 	/**
 	* @NAME: dictionary_get
-	* @DESC: Obtiene el elemento asociada a key.
+	* @DESC: Obtiene el elemento asociado a la key.
 	*/
 	void 		 *dictionary_get(t_dictionary *, char *key);
 
@@ -65,7 +65,7 @@
 	* @NAME: dictionary_iterator
 	* @DESC: Aplica closure a todos los elementos del diccionario.
 	*
-	* La función que se pasa por paremtro recibe (char* key, void* value)
+	* La función que se pasa por paremtro recibe (char* key, void* element)
 	*/
 	void 		  dictionary_iterator(t_dictionary *, void(*closure)(char*,void*));
 
@@ -121,6 +121,6 @@
 	* @NAME: dictionary_destroy_and_destroy_elements
 	* @DESC: Destruye el diccionario y destruye sus elementos
 	*/
-	void 		  dictionary_destroy_and_destroy_elements(t_dictionary *, void(*data_destroyer)(void*));
+	void 		  dictionary_destroy_and_destroy_elements(t_dictionary *, void(*element_destroyer)(void*));
 
 #endif /* DICTIONARY_H_ */
