@@ -9,9 +9,9 @@
 		"args": { "VARIANT": "ubuntu-22.04" }
 	},
 	"extensions": [
-    "ms-vscode.cpptools-extension-pack",
-    "ms-vscode.hexeditor"
-  ],
+		"ms-vscode.cpptools-extension-pack",
+		"ms-vscode.hexeditor"
+	],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "",
