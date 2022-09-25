@@ -38,14 +38,14 @@
 
 	/**
 	* @NAME: dictionary_put
-	* @DESC: Inserta un nuevo par (key->data) al diccionario, en caso de ya existir la key actualiza la data.
-	* [Warning] - Tener en cuenta que esto no va a liberar la memoria del `data` original.
+	* @DESC: Inserta un nuevo par (key->element) al diccionario, en caso de ya existir la key actualiza el elemento.
+	* [Warning] - Tener en cuenta que esto no va a liberar la memoria del `element` original.
 	*/
-	void 		  dictionary_put(t_dictionary *, char *key, void *data);
+	void 		  dictionary_put(t_dictionary *, char *key, void *element);
 
 	/**
 	* @NAME: dictionary_get
-	* @DESC: Obtiene la data asociada a key.
+	* @DESC: Obtiene el elemento asociada a key.
 	*/
 	void 		 *dictionary_get(t_dictionary *, char *key);
 
@@ -59,7 +59,7 @@
 	* @NAME: dictionary_remove_and_destroy
 	* @DESC: Remueve un elemento del diccionario y lo destruye.
 	*/
-	void 		  dictionary_remove_and_destroy(t_dictionary *, char *, void(*data_destroyer)(void*));
+	void 		  dictionary_remove_and_destroy(t_dictionary *, char *, void(*element_destroyer)(void*));
 
 	/**
 	* @NAME: dictionary_iterator
@@ -79,7 +79,7 @@
 	* @NAME: dictionary_clean_and_destroy_elements
 	* @DESC: Quita todos los elementos del diccionario y los destruye
 	*/
-	void 		  dictionary_clean_and_destroy_elements(t_dictionary *, void(*data_destroyer)(void*));
+	void 		  dictionary_clean_and_destroy_elements(t_dictionary *, void(*element_destroyer)(void*));
 
 	/**
 	* @NAME: dictionary_has_key
@@ -100,6 +100,18 @@
 	int 		  dictionary_size(t_dictionary *);
 
 	/**
+	* @NAME: dictionary_keys
+	* @DESC: Retorna todas las keys en una lista
+	*/
+	t_list 		  *dictionary_keys(t_dictionary *self);
+
+	/**
+	* @NAME: dictionary_elements
+	* @DESC: Retorna todos los elementos en una lista
+	*/
+	t_list 		  *dictionary_elements(t_dictionary *self);
+
+	/**
 	* @NAME: dictionary_destroy
 	* @DESC: Destruye el diccionario
 	*/
@@ -111,15 +123,4 @@
 	*/
 	void 		  dictionary_destroy_and_destroy_elements(t_dictionary *, void(*data_destroyer)(void*));
 
-	/**
-	* @NAME: dictionary_keys
-	* @DESC: Retorna todas las keys en una lista
-	*/
-	t_list 		  *dictionary_keys(t_dictionary *self);
-
-	/**
-	* @NAME: dictionary_elements
-	* @DESC: Retorna todos los elementos en una lista
-	*/
-	t_list 		  *dictionary_elements(t_dictionary *self);
 #endif /* DICTIONARY_H_ */
