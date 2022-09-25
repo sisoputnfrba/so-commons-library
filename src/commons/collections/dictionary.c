@@ -136,9 +136,8 @@ void dictionary_clean(t_dictionary *self) {
 t_list * dictionary_keys(t_dictionary *self) {
     t_list * keys = list_create();
 
-    void* add_key_to_list(char* key, char* _) {
+    void add_key_to_list(char* key, void* _) {
         list_add(keys, key);
-        return keys;
     }
 
     dictionary_iterator(self, add_key_to_list);
@@ -148,9 +147,8 @@ t_list * dictionary_keys(t_dictionary *self) {
 t_list * dictionary_elements(t_dictionary *self) {
     t_list * values = list_create();
 
-    void* add_value_to_list(char* _, char* value) {
+    void add_value_to_list(char* _, void* value) {
         list_add(values, value);
-        return values;
     }
 
     dictionary_iterator(self, add_value_to_list);

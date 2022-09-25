@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <commons/string.h>
 #include <commons/collections/dictionary.h>
 #include <cspecs/cspec.h>
 
@@ -95,12 +96,12 @@ context (test_dictionary) {
                 dictionary_put(dictionary, "Gaston", persona_create("Gaston", 23));
                 dictionary_put(dictionary, "Fernando", persona_create("Fernando", 24));
                 dictionary_put(dictionary, "Matias", persona_create("Matias", 26));
-                
+
                 t_person* old_fernando = dictionary_get(dictionary, "Fernando");
                 dictionary_put(dictionary, "Fernando", persona_create("Velcic", 25));
                 should_int(dictionary_size(dictionary)) be equal to(3);
                 assert_person(dictionary_get(dictionary, "Fernando"), "Velcic", 25);
-                
+
                 persona_destroy(old_fernando);
             } end
 
@@ -109,7 +110,7 @@ context (test_dictionary) {
                 dictionary_put(dictionary, "Gaston" , persona_create("Gaston" , 25));
 
                 t_list* keys = dictionary_keys(dictionary);
-                
+
                 should_int(list_size(keys)) be equal to(2);
                 should_bool(list_contains_string(keys, "Matias")) be truthy;
                 should_bool(list_contains_string(keys, "Gaston")) be truthy;
@@ -121,15 +122,15 @@ context (test_dictionary) {
                 dictionary_put(dictionary, "Gaston" , persona_create("Gaston" , 25));
 
                 t_list* elements = dictionary_elements(dictionary);
-                
+
                 should_int(list_size(elements)) be equal to(2);
-                
-                t_list* names = list_map(elements, _get_name);
+
+                t_list* names = list_map(elements, (void*) _get_name);
                 should_bool(list_contains_string(names, "Matias")) be truthy;
                 should_bool(list_contains_string(names, "Gaston")) be truthy;
                 list_destroy(names);
 
-                t_list* ages = list_map(elements, _get_age);
+                t_list* ages = list_map(elements, (void*) _get_age);
                 should_bool(list_contains_string(ages, "24")) be truthy;
                 should_bool(list_contains_string(ages, "25")) be truthy;
                 list_destroy_and_destroy_elements(ages, free);
