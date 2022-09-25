@@ -8,9 +8,12 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
     build-essential \
     cmake \
-    gdb \
     ninja-build \
     tig \
     valgrind
+
+RUN wget "https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/ppa/+build/23606523/+files/gdb_12.1-0ubuntu1~22.04_$(dpkg --print-architecture).deb" \
+    && apt-get install -y ./gdb_12.1-0ubuntu1~22.04_$(dpkg --print-architecture).deb \
+    && rm ./gdb_12.1-0ubuntu1~22.04_$(dpkg --print-architecture).deb
 
 RUN echo "alias g='git'" >> /etc/bash.bashrc
