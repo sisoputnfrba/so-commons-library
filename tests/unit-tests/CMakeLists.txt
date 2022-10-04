@@ -1,13 +1,8 @@
-include(ExternalProject)
-ExternalProject_Add(cspecs
-        GIT_REPOSITORY https://github.com/mumuki/cspec
-        GIT_SHALLOW true
-        UPDATE_DISCONNECTED true
-        INSTALL_DIR "${CMAKE_BINARY_DIR}"
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR})
+include(FetchContent)
+FetchContent_Declare(cspecs GIT_REPOSITORY https://github.com/mumuki/cspec)
+FetchContent_MakeAvailable(cspecs)
 
-include_directories(${CMAKE_BINARY_DIR}/include)
-link_directories(${CMAKE_BINARY_DIR}/lib)
+include_directories(${cspecs_SOURCE_DIR})
 link_libraries(cspecs)
 
 add_executable(commons-unit-test
