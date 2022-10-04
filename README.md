@@ -11,7 +11,7 @@ Provee los siguientes TADs:
 * Manipulación de archivos de configuración (commons/config.h)
 * Funciones de fechas (commons/temporal.h)
 * Manejo de array de bits (commons/bitarray.h)
-* Manejo de fechas (commons/temporal.h)
+* Manejo de timestamps (commons/temporal.h)
 * Información de procesos (commons/process.h)
 * Manejo simple de archivos de texto (commons/txt.h)
 * Conjunto de elementos
@@ -40,9 +40,9 @@ Instrucciones de instalación:
 
 ## Guía para el uso
 
-Linkear con `-lcommons`
+1. Linkear con `-lcommons`
 
-Para usarla en un .c/.h deberá incluirse de la siguiente forma: `commons/<Nombre_TAD>`
+2. Para usarla en un .c/.h deberá incluirse de la siguiente forma: `commons/<Nombre_TAD>`
 
 Por ejemplo:
 
