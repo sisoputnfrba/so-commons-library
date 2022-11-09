@@ -211,6 +211,22 @@ t_list* list_map(t_list* self, void*(*transformer)(void*)){
 	return sublist;
 }
 
+t_list* list_flatten(t_list* self) {
+	t_list *sublist = list_create();
+	t_link_element **indirect = &sublist->head;
+
+	void _flatten_data(t_list* list) {
+		void _add_data(void* data) {
+			list_add_element(sublist, indirect, data);
+			indirect = &(*indirect)->next;
+		}
+		list_iterate(list, (void*) _add_data);
+	}
+	list_iterate(self, (void*) _flatten_data);
+
+	return sublist;
+}
+
 int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
 	return list_add_element_sorted(self, list_create_element(data), comparator);
 }

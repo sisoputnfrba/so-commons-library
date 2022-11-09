@@ -141,6 +141,13 @@
 	t_list* list_map(t_list*, void*(*transformer)(void*));
 
 	/**
+	 * @NAME: list_flatten
+	 * @DESC: Retorna una nueva lista con los elementos de
+	 * la lista de listas recibida
+	 */
+	t_list* list_flatten(t_list* self);
+
+	/**
 	* @NAME: list_replace
 	* @DESC: Coloca un elemento en una de la posiciones
 	* de la lista retornando el valor anterior
