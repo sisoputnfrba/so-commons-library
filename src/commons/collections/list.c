@@ -291,6 +291,10 @@ void* list_iterator_next(t_list_iterator* iterator) {
 	return (*iterator->actual)->data;
 }
 
+int list_iterator_index(t_list_iterator* iterator) {
+	return iterator->index;
+}
+
 void list_iterator_add(t_list_iterator* iterator, void *data) {
 	iterator->actual = &(*iterator->actual)->next;
 	list_add_element(iterator->list, iterator->actual, data);

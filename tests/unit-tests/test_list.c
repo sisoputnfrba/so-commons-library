@@ -729,7 +729,8 @@ context (test_list) {
             int i = 0;
             while(list_iterator_has_next(list_iterator)) {
                 t_person* person = list_iterator_next(list_iterator);
-                should_string(person->name) be equal to (names[list_iterator->index]);
+                should_string(person->name) be equal to (names[i]);
+                should_int(list_iterator_index(list_iterator)) be equal to (i);
                 i++;
             }
 
