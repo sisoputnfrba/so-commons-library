@@ -148,6 +148,17 @@
 	void *list_replace(t_list*, int index, void* element);
 
 	/**
+	* @NAME: list_replace_by_condition
+	* @DESC: Coloca un elemento en la posición de la lista
+	* en donde se encuentra el primer valor que haga que
+	* condition sea != 0, retornando el valor anterior.
+	*
+	* En caso de no encontrar ningún valor, no realiza el
+	* reemplazo y retorna NULL.
+	*/
+	void *list_replace_by_condition(t_list*, bool(*condition)(void*), void* element);
+
+	/**
 	* @NAME: list_replace_and_destroy_element
 	* @DESC: Coloca un valor en una de la posiciones
 	* de la lista liberando el valor anterior
