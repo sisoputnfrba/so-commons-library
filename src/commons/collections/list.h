@@ -315,7 +315,7 @@
 	/**
 	 * @NAME: list_iterator_add
 	 * @DESC: Agrega a la lista un elemento delante del actual y detrás
-	 * del siguiente
+	 * del siguiente. Luego, avanza hacia el elemento agregado.
 	*/
 	void list_iterator_add(t_list_iterator* iterator, void *data);
 
