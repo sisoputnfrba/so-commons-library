@@ -7,7 +7,7 @@ SUDO=sudo
 endif
 
 all: | $(BUILD_DIR)
-	cd $(BUILD_DIR); cmake --build .
+	cmake --build $(BUILD_DIR)
 
 $(BUILD_DIR):
 	cmake -S . -B $@ -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) -DCMAKE_INSTALL_PREFIX=$(INSTALL_PREFIX)
@@ -19,7 +19,7 @@ debug: CMAKE_BUILD_TYPE = Debug
 debug: all
 
 test: all
-	cd $(BUILD_DIR)/tests/unit-tests; ./commons-unit-test
+	ctest --test-dir $(BUILD_DIR) --extra-verbose -R commons-unit-test
 
 install: test
 	cd $(BUILD_DIR); $(SUDO) make install
@@ -29,6 +29,6 @@ uninstall:
 	$(SUDO) rm -rvf /usr/include/commons
 
 valgrind: debug
-	cd $(BUILD_DIR)/tests/unit-tests; valgrind --error-exitcode=42 --leak-check=full -v ./commons-unit-test
+	ctest --test-dir $(BUILD_DIR) --extra-verbose -R commons-unit-test-valgrind
 
 .PHONY: all clean debug test install uninstall valgrind

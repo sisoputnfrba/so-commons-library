@@ -16,3 +16,13 @@ add_executable(commons-unit-test
 
 configure_file(resources/config.cfg resources/config.cfg COPYONLY)
 configure_file(resources/config-double-newline.cfg resources/config-double-newline.cfg COPYONLY)
+
+add_test(NAME commons-unit-test COMMAND ./commons-unit-test)
+
+add_test(NAME commons-unit-test-valgrind
+        COMMAND valgrind
+        --leak-check=full
+        --track-origins=yes
+        --error-exitcode=1
+        -v
+        ./commons-unit-test)
