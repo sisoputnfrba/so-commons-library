@@ -22,7 +22,7 @@ test: all
 	ctest --test-dir $(BUILD_DIR) --extra-verbose -R commons-unit-test
 
 install: test
-	cd $(BUILD_DIR); $(SUDO) make install
+	$(SUDO) cmake --install $(BUILD_DIR)
 
 uninstall:
 	$(SUDO) rm -vf /usr/lib/libcommons.so
