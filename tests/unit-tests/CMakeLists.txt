@@ -1,6 +1,10 @@
 include(FetchContent)
 FetchContent_Declare(cspecs GIT_REPOSITORY https://github.com/mumuki/cspec)
-FetchContent_MakeAvailable(cspecs)
+FetchContent_GetProperties(cspecs)
+if(NOT cspecs_POPULATED)
+    FetchContent_Populate(cspecs)
+    add_subdirectory(${cspecs_SOURCE_DIR} ${cspecs_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
 
 include_directories(${cspecs_SOURCE_DIR})
 link_libraries(cspecs)
