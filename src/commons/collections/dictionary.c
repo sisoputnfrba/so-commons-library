@@ -133,6 +133,28 @@ void dictionary_clean(t_dictionary *self) {
 	internal_dictionary_clean_and_destroy_elements(self, NULL);
 }
 
+t_list * dictionary_keys(t_dictionary *self) {
+    t_list * keys = list_create();
+
+    void add_key_to_list(char* key, void* _) {
+        list_add(keys, key);
+    }
+
+    dictionary_iterator(self, add_key_to_list);
+    return keys;
+}
+
+t_list * dictionary_elements(t_dictionary *self) {
+    t_list * values = list_create();
+
+    void add_value_to_list(char* _, void* value) {
+        list_add(values, value);
+    }
+
+    dictionary_iterator(self, add_value_to_list);
+    return values;
+}
+
 void dictionary_clean_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*)) {
 	internal_dictionary_clean_and_destroy_elements(self, data_destroyer);
 }
