@@ -180,6 +180,13 @@
 	void *list_remove(t_list *, int index);
 
 	/**
+	* @NAME: list_remove_element
+	* @DESC: Remueve al elemento de la lista recibido por parámetro. Devuelve
+	* false en caso de no haberlo encontrado.
+	*/
+	bool list_remove_element(t_list* self, void* element);
+
+	/**
 	* @NAME: list_remove_and_destroy_element
 	* @DESC: Remueve un elemento de la lista de una
 	* determinada posicion y libera la memoria.
