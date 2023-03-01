@@ -235,8 +235,8 @@ context (test_list) {
             it("should remove an element from its pointer") {
                 should_int(list_size(list)) be equal to(5);
 
-                t_person* aux = list_get(list, 1);
-                should_bool(list_remove_element(list, aux)) be truthy;
+                t_person* element = list_get(list, 1);
+                should_bool(list_remove_element(list, element)) be truthy;
 
                 should_int(list_size(list)) be equal to(4);
                 assert_person_in_list(list, 0, "Matias"   , 25);
@@ -244,7 +244,7 @@ context (test_list) {
                 assert_person_in_list(list, 2, "Ezequiel" , 25);
                 assert_person_in_list(list, 3, "Facundo"  , 25);
 
-                persona_destroy(aux);
+                persona_destroy(element);
             } end
 
             it("should not remove any value from an unknown pointer") {
