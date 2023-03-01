@@ -250,8 +250,8 @@ context (test_list) {
             it("should not remove any value from an unknown pointer") {
                 should_int(list_size(list)) be equal to(5);
 
-                t_person *aux = persona_create("Agustin", 23);
-                should_bool(list_remove_element(list, aux)) be falsey;
+                t_person *element = persona_create("Agustin", 23);
+                should_bool(list_remove_element(list, element)) be falsey;
 
                 should_int(list_size(list)) be equal to(5);
                 assert_person_in_list(list, 0, "Matias"   , 25);
@@ -260,7 +260,7 @@ context (test_list) {
                 assert_person_in_list(list, 3, "Ezequiel" , 25);
                 assert_person_in_list(list, 4, "Facundo"  , 25);
 
-                persona_destroy(aux);
+                persona_destroy(element);
             } end
 
             it("should remove and destroy a value at index") {
