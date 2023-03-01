@@ -253,9 +253,9 @@ context (test_list) {
             } end
 
             it("should replace a value at index with other value") {
-                t_person *aux = list_replace(list, 3, persona_create("Daniela", 19));
+                t_person *replaced = list_replace(list, 3, persona_create("Daniela", 19));
 
-                assert_person(aux, "Ezequiel", 25);
+                assert_person(replaced, "Ezequiel", 25);
 
                 should_int(list_size(list)) be equal to (5);
                 assert_person_in_list(list, 0, "Matias"   , 25);
@@ -264,14 +264,52 @@ context (test_list) {
                 assert_person_in_list(list, 3, "Daniela"  , 19);
                 assert_person_in_list(list, 4, "Facundo"  , 25);
 
-                persona_destroy(aux);
+                persona_destroy(replaced);
+            } end
+
+            it("should replace a value by condition with other value") {
+                bool _is_gaston(t_person *p) {
+                    return string_equals_ignore_case(p->name, "Gaston");
+                }
+                t_person *replaced = list_replace_by_condition(list, (void*) _is_gaston, persona_create("Daniela", 19));
+
+                assert_person(replaced, "Gaston", 24);
+
+                should_int(list_size(list)) be equal to (5);
+                assert_person_in_list(list, 0, "Matias"   , 25);
+                assert_person_in_list(list, 1, "Daniela"  , 19);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Facundo"  , 25);
+
+                persona_destroy(replaced);
+            } end
+
+            it("shouldn't replace any value if the condition isn't satisfied") {
+                t_person *replacement = persona_create("Daniela", 19);
+
+                bool _is_pepe(t_person *p) {
+                    return string_equals_ignore_case(p->name, "Pepe");
+                }
+                t_person *replaced = list_replace_by_condition(list, (void*) _is_pepe, replacement);
+
+                should_ptr(replaced) be equal to(NULL);
+
+                should_int(list_size(list)) be equal to (5);
+                assert_person_in_list(list, 0, "Matias"   , 25);
+                assert_person_in_list(list, 1, "Gaston"   , 24);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Ezequiel" , 25);
+                assert_person_in_list(list, 4, "Facundo"  , 25);
+
+                persona_destroy(replacement);
             } end
 
             it("should remove a value at index") {
                 should_int(list_size(list)) be equal to(5);
 
-                t_person *aux = list_remove(list, 0);
-                assert_person(aux, "Matias", 25);
+                t_person *removed = list_remove(list, 0);
+                assert_person(removed, "Matias", 25);
 
                 should_int(list_size(list)) be equal to(4);
                 assert_person_in_list(list, 0, "Gaston"   , 24);
@@ -279,7 +317,7 @@ context (test_list) {
                 assert_person_in_list(list, 2, "Ezequiel" , 25);
                 assert_person_in_list(list, 3, "Facundo"  , 25);
 
-                persona_destroy(aux);
+                persona_destroy(removed);
             } end
 
             it("should remove and destroy a value at index") {
@@ -302,9 +340,9 @@ context (test_list) {
                     return string_equals_ignore_case(p->name, "Gaston");
                 }
 
-                t_person *aux = list_remove_by_condition(list, (void*) _is_gaston);
-                assert_person(aux, "Gaston", 24);
-                persona_destroy(aux);
+                t_person *removed = list_remove_by_condition(list, (void*) _is_gaston);
+                assert_person(removed, "Gaston", 24);
+                persona_destroy(removed);
 
                 should_int(list_size(list)) be equal to(4);
                 assert_person_in_list(list, 0, "Matias"   , 25);

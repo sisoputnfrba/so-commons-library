@@ -67,6 +67,11 @@ void *list_replace(t_list *self, int index, void *data) {
 	return list_replace_indirect(indirect, data);
 }
 
+void *list_replace_by_condition(t_list* self, bool(*condition)(void*), void* element) {
+	t_link_element **indirect = list_get_indirect_by_condition(self, condition);
+	return (*indirect) != NULL ? list_replace_indirect(indirect, element) : NULL;
+}
+
 void list_replace_and_destroy_element(t_list *self, int index, void *data, void(*element_destroyer)(void*)) {
 	void *old_data = list_replace(self, index, data);
 	element_destroyer(old_data);
