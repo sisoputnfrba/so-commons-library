@@ -107,7 +107,7 @@
 
 	/**
 	* @NAME: list_slice
-	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo 
+	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo
 	* desde el índice indicado.
 	*/
 	t_list* list_slice(t_list* self, int start, int count);
@@ -121,7 +121,7 @@
 
 	/**
 	* @NAME: list_slice_and_remove
-	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo 
+	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo
 	* desde el índice indicado, eliminando del origen estos elementos.
 	*/
 	t_list* list_slice_and_remove(t_list* self, int start, int count);
@@ -286,7 +286,7 @@
 
 	/**
 	 * @NAME: list_fold
-	 * @DESC: Devuelve un valor que resulta de aplicar la operacion entre todos los elementos 
+	 * @DESC: Devuelve un valor que resulta de aplicar la operacion entre todos los elementos
 	 * de la lista, partiendo desde el primero.
 	 *
 	 * La funcion 'operation' debe recibir dos valores: uno del tipo del valor initial (seed)
@@ -312,6 +312,19 @@
 	 * lo devuelve
 	 */
 	void* list_iterator_next(t_list_iterator* iterator);
+
+	/**
+	 * @NAME: list_iterator_index
+	 * @DESC: Devuelve el índice del elemento actual de la iteración
+	 */
+	int list_iterator_index(t_list_iterator* iterator);
+
+	/**
+	 * @NAME: list_iterator_add
+	 * @DESC: Agrega a la lista un elemento delante del actual y detrás
+	 * del siguiente. Luego, avanza hacia el elemento agregado.
+	*/
+	void list_iterator_add(t_list_iterator* iterator, void *data);
 
 	/**
 	 * @NAME: list_iterator_remove

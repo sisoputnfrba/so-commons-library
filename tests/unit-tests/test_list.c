@@ -779,7 +779,8 @@ context (test_list) {
             int i = 0;
             while(list_iterator_has_next(list_iterator)) {
                 t_person* person = list_iterator_next(list_iterator);
-                should_string(person->name) be equal to (names[list_iterator->index]);
+                should_string(person->name) be equal to (names[i]);
+                should_int(list_iterator_index(list_iterator)) be equal to (i);
                 i++;
             }
 
@@ -790,6 +791,48 @@ context (test_list) {
             list_clean_and_destroy_elements(list, (void*) persona_destroy);
 
             should_bool(list_iterator_has_next(list_iterator)) be falsey;
+        } end
+
+        describe("Add") {
+            it("Should add multiple elements to an empty list") {
+                list_iterator_add(list_iterator, persona_create("Matias"   , 24));
+                list_iterator_add(list_iterator, persona_create("Gaston"   , 25));
+                list_iterator_add(list_iterator, persona_create("Sebastian", 21));
+                list_iterator_add(list_iterator, persona_create("Daniela"  , 19));
+
+                should_int(list_size(list)) be equal to (4);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Daniela"  , 19);
+            } end
+
+            it("Should add and element and then continue the iteration") {
+                list_add(list, persona_create("Matias"   , 24));
+                list_add(list, persona_create("Gaston"   , 25));
+                list_add(list, persona_create("Sebastian", 21));
+                list_add(list, persona_create("Daniela"  , 19));
+
+                char *names[] = { "Matias", "Gaston", "Sebastian", "Daniela" };
+                int i = 0;
+
+                while (list_iterator_has_next(list_iterator)) {
+                    t_person* person = list_iterator_next(list_iterator);
+                    should_string(person->name) be equal to (names[i++]);
+
+                    list_iterator_add(list_iterator, persona_create("Agustin", 23));
+                }
+
+                should_int(list->elements_count) be equal to (8);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Agustin"  , 23);
+                assert_person_in_list(list, 2, "Gaston"   , 25);
+                assert_person_in_list(list, 3, "Agustin"  , 23);
+                assert_person_in_list(list, 4, "Sebastian", 21);
+                assert_person_in_list(list, 5, "Agustin"  , 23);
+                assert_person_in_list(list, 6, "Daniela"  , 19);
+                assert_person_in_list(list, 7, "Agustin"  , 23);
+            } end
         } end
 
         describe("Remove") {
@@ -841,7 +884,6 @@ context (test_list) {
                 assert_person_in_list(list, 1, "Gaston"   , 25);
                 assert_person_in_list(list, 2, "Sebastian", 21);
             } end
-
         } end
 
     } end

@@ -307,6 +307,17 @@ void* list_iterator_next(t_list_iterator* iterator) {
 	return (*iterator->actual)->data;
 }
 
+int list_iterator_index(t_list_iterator* iterator) {
+	return iterator->index;
+}
+
+void list_iterator_add(t_list_iterator* iterator, void *data) {
+	iterator->actual = iterator->next;
+	list_add_element(iterator->list, iterator->actual, data);
+	iterator->next = &(*iterator->actual)->next;
+	iterator->index++;
+}
+
 void list_iterator_remove(t_list_iterator* iterator) {
 	list_remove_indirect(iterator->list, iterator->actual);
 	iterator->next = iterator->actual;
