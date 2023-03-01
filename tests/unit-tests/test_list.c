@@ -193,49 +193,49 @@ context (test_list) {
         } end
 
         describe ("Flatten") {
-            t_list* list_of_lists;
-            t_list* list2;
-            t_list* list3;
+            t_list* sublist1;
+            t_list* sublist2;
+            t_list* sublist3;
 
             before {
-                list_of_lists = list_create();
-
-                list_add(list_of_lists, list);
-                list2 = list_create();
-                list_add(list_of_lists, list2);
-                list3 = list_create();
-                list_add(list_of_lists, list3);
+                sublist1 = list_create();
+                list_add(list, sublist1);
+                sublist2 = list_create();
+                list_add(list, sublist2);
+                sublist3 = list_create();
+                list_add(list, sublist3);
             } end
 
             after {
-                list_destroy_and_destroy_elements(list3, (void*) persona_destroy);
-                list_destroy_and_destroy_elements(list2, (void*) persona_destroy);
-                list_destroy(list_of_lists);
+                list_destroy_and_destroy_elements(sublist3, (void*) persona_destroy);
+                list_destroy_and_destroy_elements(sublist2, (void*) persona_destroy);
+                list_destroy_and_destroy_elements(sublist1, (void*) persona_destroy);
+                list_clean(list);
             } end
 
             it ("Should flatten a list of lists") {
-                list_add(list, persona_create("Juan", 22));
-                list_add(list, persona_create("Diana", 22));
-                list_add(list2, persona_create("Matias", 24));
-                list_add(list2, persona_create("Gaston", 25));
-                list_add(list3, persona_create("Sebastian", 21));
-                list_add(list3, persona_create("Agustin", 22));
+                list_add(sublist1, persona_create("Juan", 22));
+                list_add(sublist1, persona_create("Diana", 22));
+                list_add(sublist2, persona_create("Matias", 24));
+                list_add(sublist2, persona_create("Gaston", 25));
+                list_add(sublist3, persona_create("Sebastian", 21));
+                list_add(sublist3, persona_create("Agustin", 22));
 
-                t_list* flattened = list_flatten(list_of_lists);
+                t_list* flattened = list_flatten(list);
 
                 should_int(list_size(flattened)) be equal to(6);
                 assert_person_in_list(flattened, 0, "Juan", 22);
-                should_ptr(list_get(flattened, 0)) be equal to (list_get(list, 0));
+                should_ptr(list_get(flattened, 0)) be equal to (list_get(sublist1, 0));
                 assert_person_in_list(flattened, 1, "Diana", 22);
-                should_ptr(list_get(flattened, 1)) be equal to (list_get(list, 1));
+                should_ptr(list_get(flattened, 1)) be equal to (list_get(sublist1, 1));
                 assert_person_in_list(flattened, 2, "Matias", 24);
-                should_ptr(list_get(flattened, 2)) be equal to (list_get(list2, 0));
+                should_ptr(list_get(flattened, 2)) be equal to (list_get(sublist2, 0));
                 assert_person_in_list(flattened, 3, "Gaston", 25);
-                should_ptr(list_get(flattened, 3)) be equal to (list_get(list2, 1));
+                should_ptr(list_get(flattened, 3)) be equal to (list_get(sublist2, 1));
                 assert_person_in_list(flattened, 4, "Sebastian", 21);
-                should_ptr(list_get(flattened, 4)) be equal to (list_get(list3, 0));
+                should_ptr(list_get(flattened, 4)) be equal to (list_get(sublist3, 0));
                 assert_person_in_list(flattened, 5, "Agustin", 22);
-                should_ptr(list_get(flattened, 5)) be equal to (list_get(list3, 1));
+                should_ptr(list_get(flattened, 5)) be equal to (list_get(sublist3, 1));
 
                 list_destroy(flattened);
             } end
