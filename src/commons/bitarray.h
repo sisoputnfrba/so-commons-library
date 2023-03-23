@@ -55,13 +55,13 @@
 	* @fn    bitarray_create
 	* @brief Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
 	*
-	* @param bitarray - el bloque de memoria que contiene los bits a leer/escribir
-	* @param size - la cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
+	* @param bitarray El bloque de memoria que contiene los bits a leer/escribir
+	* @param size     La cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
 	*
 	* @example bitarray de 8 posiciones (bits),
 	* @code
-	* 			void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
-	* 			bitarray_create(puntero_a_bits, 1)
+	* void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
+	* bitarray_create(puntero_a_bits, 1)
 	* @endcode
 	*/
 	t_bitarray 	*bitarray_create(char *bitarray, size_t size) __attribute__((deprecated));
@@ -70,14 +70,14 @@
 	* @fn    bitarray_create_with_mode
 	* @brief Crea y devuelve un puntero a una estructura t_bitarray
 	*
-	* @param bitarray - el bloque de memoria que contiene los bits a leer/escribir
-	* @param size - la cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
-	* @param mode - LSB_FIRST o MSB_FIRST
+	* @param bitarray El bloque de memoria que contiene los bits a leer/escribir
+	* @param size     La cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
+	* @param mode     LSB_FIRST o MSB_FIRST @see bit_numbering_t
 	*
 	* @example bitarray de 8 posiciones (bits) con LSB_FIRST,
 	* @code
-	*			void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
-	*			bitarray_create_with_mode(puntero_a_bits, 1, LSB_FIRST)
+	* void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
+	* bitarray_create_with_mode(puntero_a_bits, 1, LSB_FIRST)
 	* @endcode
 	*/
 	t_bitarray	*bitarray_create_with_mode(char *bitarray, size_t size, bit_numbering_t mode);
