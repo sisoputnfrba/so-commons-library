@@ -18,10 +18,9 @@
 
 
 	/**
-	* @NAME: error_show
-	* @DESC: imprime un mensaje con el siguiente formato
-	*
-	* 	[[ERROR]] MESSAGE
+	* @fn    error_show
+	* @brief imprime un mensaje con el siguiente formato
+	* 	     [[ERROR]] MESSAGE
 	*/
 	void error_show(char *message, ...);
 
