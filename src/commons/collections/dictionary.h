@@ -39,6 +39,7 @@
 	/**
 	* @fn    dictionary_put
 	* @brief Inserta un nuevo par (key->element) al diccionario, en caso de ya existir la key actualiza el elemento.
+	*
 	* @warning Tener en cuenta que esto no va a liberar la memoria del `element` original.
 	*/
 	void 		  dictionary_put(t_dictionary *, char *key, void *element);
