@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <commons/txt.h>
 #include <commons/temporal.h>
-#include <commons/string.h>
 #include <pthread.h>
 #include <unistd.h>
 
@@ -26,7 +25,7 @@ static void print_time() {
 
 void test_temporal_gettime() {
 	/**
-	* @DESC: El tiempo que se obtiene es correcto.
+	* @brief El tiempo que se obtiene es correcto.
 	*/
 	t_temporal *temporal = temporal_create();
 	sleep(2);
@@ -38,7 +37,7 @@ void test_temporal_gettime() {
 
 void test_temporal_stop() {
 	/**
-	* @DESC: Al detener el temporal, deja de sumar tiempo.
+	* @brief Al detener el temporal, deja de sumar tiempo.
 	*/
 	t_temporal *temporal = temporal_create();
 	sleep(1);
@@ -52,7 +51,8 @@ void test_temporal_stop() {
 
 void test_temporal_resume() {
 	/**
-	* @DESC: Al detener y reanudar el temporal varias veces, el tiempo que este suma es correcto.
+	* @brief Al detener y reanudar el temporal varias veces, el tiempo que este
+	*        suma es correcto.
 	*/
 	t_temporal* temporal = temporal_create();
 
@@ -84,7 +84,7 @@ void test_temporal_resume() {
 
 void test_temporal_diff() {
 	/**
-	* @DESC: Comparar dos variables temporales.
+	* @brief Comparar dos variables temporales.
 	*/
 
 	t_temporal* temporal1 = temporal_create();
@@ -108,8 +108,10 @@ void test_temporal_diff() {
 
 void test_temporal_status() {
 	/**
-	* @DESC: Verificar el comportamiento del temporal en sus diferentes estados.
-	*        En este test se verifica que no ocurra ningún error al usar el temporal de cualquier forma.
+	* @brief Verificar el comportamiento del temporal en sus diferentes estados.
+	*
+	* @note En este test se verifica que no ocurra ningún error al usar el
+	*       temporal de cualquier forma.
 	*/
 
 	t_temporal* temporal1 = temporal_create();
