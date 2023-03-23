@@ -33,327 +33,330 @@
 	} t_list_iterator;
 
 	/**
-	* @NAME: list_create
-	* @DESC: Crea una lista
+	* @fn    list_create
+	* @brief Crea una lista
 	*/
 	t_list * list_create();
 
 	/**
-	* @NAME: list_destroy
-	* @DESC: Destruye una lista sin liberar
+	* @fn    list_destroy
+	* @brief Destruye una lista sin liberar
 	* los elementos contenidos en los nodos
 	*/
 	void list_destroy(t_list *);
 
 	/**
-	* @NAME: list_destroy_and_destroy_elements
-	* @DESC: Destruye una lista y sus elementos
+	* @fn    list_destroy_and_destroy_elements
+	* @brief Destruye una lista y sus elementos
 	*/
 	void list_destroy_and_destroy_elements(t_list*, void(*element_destroyer)(void*));
 
 	/**
-	* @NAME: list_add
-	* @DESC: Agrega un elemento al final de la lista
+	* @fn    list_add
+	* @brief Agrega un elemento al final de la lista
 	*/
 	int list_add(t_list *, void *element);
 
 	/**
-	* @NAME: list_add_in_index
-	* @DESC: Agrega un elemento en una posicion determinada de la lista
+	* @fn    list_add_in_index
+	* @brief Agrega un elemento en una posicion determinada de la lista
 	*/
 	void list_add_in_index(t_list *, int index, void *element);
 
 	/**
-	* @NAME: list_add_sorted
-	* @DESC: Agrega un elemento a una lista ordenada, manteniendo el
-	* orden definido por el comparador
-	* El comparador devuelve si el primer parametro debe aparecer antes que el
-	* segundo en la lista
+	* @fn    list_add_sorted
+	* @brief Agrega un elemento a una lista ordenada, manteniendo el
+	*        orden definido por el comparador
+	*
+	* @note El comparador devuelve true si el primer parametro debe aparecer
+	*       antes que el segundo en la lista
 	*/
 	int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*));
 
 	/**
-	* @NAME: list_add_all
-	* @DESC: Agrega todos los elementos de
-	* la segunda lista en la primera
+	* @fn    list_add_all
+	* @brief Agrega todos los elementos de la segunda lista en la primera
 	*/
 	void list_add_all(t_list*, t_list* other);
 
 	/**
-	* @NAME: list_get
-	* @DESC: Retorna el contenido de una posicion determianda de la lista
+	* @fn    list_get
+	* @brief Retorna el contenido de una posicion determianda de la lista
 	*/
 	void *list_get(t_list *, int index);
 
 	/**
-	* @NAME: list_get_minimum
-	* @DESC: Retorna el minimo de la lista según el comparador
-	* El comparador devuelve cuál es el mínimo de dos valores
+	* @fn    list_get_minimum
+	* @brief Retorna el minimo de la lista según el comparador
+	*
+	* @note El comparador devuelve cuál es el mínimo de dos valores
 	*/
 	void *list_get_minimum(t_list* self, void* (*minimum)(void*, void*));
 
 	/**
-	* @NAME: list_get_maximum
-	* @DESC: Retorna el maximo de la lista según el comparador
-	* El comparador devuelve cuál es el máximo de dos valores
+	* @fn    list_get_maximum
+	* @brief Retorna el maximo de la lista según el comparador
+	*
+	* @note El comparador devuelve cuál es el máximo de dos valores
 	*/
 	void *list_get_maximum(t_list* self, void* (*maximum)(void*, void*));
 
 	/**
-	* @NAME: list_take
-	* @DESC: Retorna una nueva lista con los primeros n elementos.
+	* @fn    list_take
+	* @brief Retorna una nueva lista con los primeros n elementos.
 	*/
 	t_list* list_take(t_list*, int count);
 
 	/**
-	* @NAME: list_slice
-	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo
-	* desde el índice indicado.
+	* @fn    list_slice
+	* @brief Retorna una nueva lista con los primeros n elementos partiendo
+	*        desde el índice indicado.
 	*/
 	t_list* list_slice(t_list* self, int start, int count);
 
 	/**
-	* @NAME: list_take_and_remove
-	* @DESC: Retorna una nueva lista con los primeros n elementos, eliminando
-	* del origen estos elementos.
+	* @fn    list_take_and_remove
+	* @brief Retorna una nueva lista con los primeros n elementos, eliminando
+	*        del origen estos elementos.
 	*/
 	t_list* list_take_and_remove(t_list*, int count);
 
 	/**
-	* @NAME: list_slice_and_remove
-	* @DESC: Retorna una nueva lista con los primeros n elementos partiendo
-	* desde el índice indicado, eliminando del origen estos elementos.
+	* @fn    list_slice_and_remove
+	* @brief Retorna una nueva lista con los primeros n elementos partiendo
+	*        desde el índice indicado, eliminando del origen estos elementos.
 	*/
 	t_list* list_slice_and_remove(t_list* self, int start, int count);
 
 	/**
-	* @NAME: list_filter
-	* @DESC: Retorna una nueva lista con los
-	* elementos que cumplen la condicion
+	* @fn    list_filter
+	* @brief Retorna una nueva lista con los elementos que cumplen la condicion
 	*/
 	t_list* list_filter(t_list*, bool(*condition)(void*));
 
 	/**
-	* @NAME: list_map
-	* @DESC: Retorna una nueva lista con los
-	* con los elementos transformados
+	* @fn    list_map
+	* @brief Retorna una nueva lista con los elementos transformados
 	*/
 	t_list* list_map(t_list*, void*(*transformer)(void*));
 
 	/**
-	 * @NAME: list_flatten
-	 * @DESC: Retorna una nueva lista con los elementos de
-	 * la lista de listas recibida
+	 * @fn    list_flatten
+	 * @brief Retorna una nueva lista con los elementos de la lista de listas
+	 *        recibida
 	 */
 	t_list* list_flatten(t_list* self);
 
 	/**
-	* @NAME: list_replace
-	* @DESC: Coloca un elemento en una de la posiciones
-	* de la lista retornando el valor anterior
+	* @fn    list_replace
+	* @brief Coloca un elemento en una de la posiciones de la lista retornando
+	*       el valor anterior
 	*/
 	void *list_replace(t_list*, int index, void* element);
 
 	/**
-	* @NAME: list_replace_by_condition
-	* @DESC: Coloca un elemento en la posición de la lista
-	* en donde se encuentra el primer valor que haga que
-	* condition sea != 0, retornando el valor anterior.
+	* @fn    list_replace_by_condition
+	* @brief Coloca un elemento en la posición de la lista
+	*        en donde se encuentra el primer valor que haga que
+	*        condition sea != 0, retornando el valor anterior.
 	*
-	* En caso de no encontrar ningún valor, no realiza el
-	* reemplazo y retorna NULL.
+	* @note En caso de no encontrar ningún valor, no realiza el
+	*       reemplazo y retorna NULL.
 	*/
 	void *list_replace_by_condition(t_list*, bool(*condition)(void*), void* element);
 
 	/**
-	* @NAME: list_replace_and_destroy_element
-	* @DESC: Coloca un valor en una de la posiciones
-	* de la lista liberando el valor anterior
+	* @fn    list_replace_and_destroy_element
+	* @brief Coloca un valor en una de la posiciones de la lista liberando el
+	*        valor anterior
 	*/
 	void list_replace_and_destroy_element(t_list*, int index, void* element, void(*element_destroyer)(void*));
 
 	/**
-	* @NAME: list_remove
-	* @DESC: Remueve un elemento de la lista de
-	* una determinada posicion y lo retorna.
+	* @fn    list_remove
+	* @brief Remueve un elemento de la lista de una determinada posicion y lo
+	*        retorna.
 	*/
 	void *list_remove(t_list *, int index);
 
 	/**
-	* @NAME: list_remove_element
-	* @DESC: Remueve al elemento de la lista recibido por parámetro. Devuelve
-	* false en caso de no haberlo encontrado.
+	* @fn    list_remove_element
+	* @brief Remueve al elemento de la lista recibido por parámetro. Devuelve
+	*        false en caso de no haberlo encontrado.
 	*/
 	bool list_remove_element(t_list* self, void* element);
 
 	/**
-	* @NAME: list_remove_and_destroy_element
-	* @DESC: Remueve un elemento de la lista de una
-	* determinada posicion y libera la memoria.
+	* @fn    list_remove_and_destroy_element
+	* @brief Remueve un elemento de la lista de una determinada posicion y
+	*        libera la memoria.
 	*/
 	void list_remove_and_destroy_element(t_list *, int index, void(*element_destroyer)(void*));
 
 	/**
-	* @NAME: list_remove_by_condition
-	* @DESC: Remueve el primer elemento de la lista
-	* que haga que condition devuelva != 0.
+	* @fn    list_remove_by_condition
+	* @brief Remueve el primer elemento de la lista que haga que condition
+	*        devuelva != 0.
 	*/
 	void *list_remove_by_condition(t_list *, bool(*condition)(void*));
 
 	/**
-	* @NAME: list_remove_and_destroy_by_condition
-	* @DESC: Remueve y destruye el primer elemento de
-	* la lista que haga que condition devuelva != 0.
+	* @fn    list_remove_and_destroy_by_condition
+	* @brief Remueve y destruye el primer elemento de la lista que haga que
+	*        condition devuelva != 0.
 	*/
 	void list_remove_and_destroy_by_condition(t_list *, bool(*condition)(void*), void(*element_destroyer)(void*));
 
 	/**
-	* @NAME: list_remove_and_destroy_all_by_condition
-	* @DESC: Remueve y destruye todos los elementos de
-	* la lista que hagan que condition devuelva != 0.
+	* @fn    list_remove_and_destroy_all_by_condition
+	* @brief Remueve y destruye todos los elementos de la lista que hagan que
+	*        condition devuelva != 0.
 	*/
 	void list_remove_and_destroy_all_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*));
 
 	/**
-	* @NAME: list_clean
-	* @DESC: Quita todos los elementos de la lista.
+	* @fn    list_clean
+	* @brief Quita todos los elementos de la lista.
 	*/
 	void list_clean(t_list *);
 
 	/**
-	* @NAME: list_clean
-	* @DESC: Quita y destruye todos los elementos de la lista
+	* @fn    list_clean
+	* @brief Quita y destruye todos los elementos de la lista
 	*/
 	void list_clean_and_destroy_elements(t_list *self, void(*element_destroyer)(void*));
 
 	/**
-	* @NAME: list_iterate
-	* @DESC: Itera la lista llamando al closure por cada elemento
+	* @fn    list_iterate
+	* @brief Itera la lista llamando al closure por cada elemento
 	*/
 	void list_iterate(t_list *, void(*closure)(void*));
 
 	/**
-	* @NAME: list_find
-	* @DESC: Retorna el primer valor encontrado, el cual haga que condition devuelva != 0
+	* @fn    list_find
+	* @brief Retorna el primer valor encontrado, el cual haga que condition
+	*        devuelva != 0
 	*/
 	void *list_find(t_list *, bool(*closure)(void*));
 
 	/**
-	* @NAME: list_size
-	* @DESC: Retorna el tamaño de la lista
+	* @fn    list_size
+	* @brief Retorna el tamaño de la lista
 	*/
 	int list_size(t_list *);
 
 	/**
-	* @NAME: list_is_empty
-	* @DESC: Verifica si la lista esta vacia
+	* @fn    list_is_empty
+	* @brief Verifica si la lista esta vacia
 	*/
 	bool list_is_empty(t_list *);
 
 	/**
-	* @NAME: list_sort
-	* @DESC: Ordena la lista segun el comparador
-	* El comparador devuelve si el primer parametro debe aparecer antes que el
-	* segundo en la lista
+	* @fn    list_sort
+	* @brief Ordena la lista segun el comparador
+	*
+	* @note El comparador devuelve si el primer parametro debe aparecer antes
+	*       que el segundo en la lista
 	*/
 	void list_sort(t_list *, bool (*comparator)(void *, void *));
 
 	/**
-	* @NAME: list_sorted
-	* @DESC: Retorna una lista nueva ordenada segun el comparador
-	* El comparador devuelve si el primer parametro debe aparecer antes que el
-	* segundo en la lista
+	* @fn    list_sorted
+	* @brief Retorna una lista nueva ordenada segun el comparador
+	*
+	* @note El comparador devuelve si el primer parametro debe aparecer antes
+	*       que el segundo en la lista
 	*/
 	t_list* list_sorted(t_list *, bool (*comparator)(void *, void *));
 
 	/**
-	* @NAME: list_count_satisfying
-	* @DESC: Cuenta la cantidad de elementos de
-	* la lista que cumplen una condición
+	* @fn    list_count_satisfying
+	* @brief Cuenta la cantidad de elementos de la lista que cumplen una
+	*        condición
 	*/
 	int list_count_satisfying(t_list* self, bool(*condition)(void*));
 
 	/**
-	* @NAME: list_any_satisfy
-	* @DESC: Determina si algún elemento
-	* de la lista cumple una condición
+	* @fn    list_any_satisfy
+	* @brief Determina si algún elemento de la lista cumple una condición
 	*/
 	bool list_any_satisfy(t_list* self, bool(*condition)(void*));
 
 	/**
-	* @NAME: list_any_satisfy
-	* @DESC: Determina si todos los elementos
-	* de la lista cumplen una condición
+	* @fn    list_any_satisfy
+	* @brief Determina si todos los elementos de la lista cumplen una condición
 	*/
 	bool list_all_satisfy(t_list* self, bool(*condition)(void*));
 
 	/**
-	* @NAME: list_duplicate
-	* @DESC: Crea una lista nueva con los mismos elementos que la original.
+	* @fn    list_duplicate
+	* @brief Crea una lista nueva con los mismos elementos que la original.
 	**/
 	t_list* list_duplicate(t_list* self);
 
 	/**
-	 * @NAME: list_fold1
-	 * @DESC: Devuelve un valor que resulta de aplicar la operacion entre todos los elementos
-	 * de la lista, tomando al primero como semilla y partiendo desde el segundo (si existe).
+	 * @fn    list_fold1
+	 * @brief Devuelve un valor que resulta de aplicar la operacion entre todos
+	 *        los elementos de la lista, tomando al primero como semilla y
+	 *        partiendo desde el segundo (si existe).
 	 *
-	 * La funcion 'operation' debe recibir dos valores del tipo de los elementos de la lista.
+	 * @note La funcion 'operation' debe recibir dos valores del tipo de los
+	 *       elementos de la lista.
 	 */
 	void* list_fold1(t_list* self, void* (*operation)(void*, void*));
 
 	/**
-	 * @NAME: list_fold
-	 * @DESC: Devuelve un valor que resulta de aplicar la operacion entre todos los elementos
-	 * de la lista, partiendo desde el primero.
+	 * @fn    list_fold
+	 * @brief Devuelve un valor que resulta de aplicar la operacion entre todos
+	 *        los elementos de la lista, partiendo desde el primero.
 	 *
-	 * La funcion 'operation' debe recibir dos valores: uno del tipo del valor initial (seed)
-	 * y otro del tipo de los elementos de la lista.
+	 * @note La funcion 'operation' debe recibir dos valores: uno del tipo del
+	 *       valor initial (seed) y otro del tipo de los elementos de la lista.
 	 */
 	void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*));
 
 	/**
-	 * @NAME: list_iterator_create
-	 * @DESC: Inicializa una iteración externa de la lista
+	 * @fn    list_iterator_create
+	 * @brief Inicializa una iteración externa de la lista
 	 */
 	t_list_iterator* list_iterator_create(t_list* list);
 
 	/**
-	 * @NAME: list_iterator_has_next
-	 * @DESC: Devuelve true si quedan elementos de la lista por recorrer
+	 * @fn    list_iterator_has_next
+	 * @brief Devuelve true si quedan elementos de la lista por recorrer
 	 */
 	bool list_iterator_has_next(t_list_iterator* iterator);
 
 	/**
-	 * @NAME: list_iterator_next
-	 * @DESC: Avanza hacia el siguiente elemento a iterar de la lista y
-	 * lo devuelve
+	 * @fn    list_iterator_next
+	 * @brief Avanza hacia el siguiente elemento a iterar de la lista y
+	 *        lo devuelve
 	 */
 	void* list_iterator_next(t_list_iterator* iterator);
 
 	/**
-	 * @NAME: list_iterator_index
-	 * @DESC: Devuelve el índice del elemento actual de la iteración
+	 * @fn    list_iterator_index
+	 * @brief Devuelve el índice del elemento actual de la iteración
 	 */
 	int list_iterator_index(t_list_iterator* iterator);
 
 	/**
-	 * @NAME: list_iterator_add
-	 * @DESC: Agrega a la lista un elemento delante del actual y detrás
-	 * del siguiente. Luego, avanza hacia el elemento agregado.
+	 * @fn    list_iterator_add
+	 * @brief Agrega a la lista un elemento delante del actual y detrás
+	 *        del siguiente. Luego, avanza hacia el elemento agregado.
 	*/
 	void list_iterator_add(t_list_iterator* iterator, void *data);
 
 	/**
-	 * @NAME: list_iterator_remove
-	 * @DESC: Remueve de la lista al elemento actual de la iteración
+	 * @fn    list_iterator_remove
+	 * @brief Remueve de la lista al elemento actual de la iteración
 	 */
 	void list_iterator_remove(t_list_iterator* iterator);
 
 	/**
-	 * @NAME: list_iterator_destroy
-	 * @DESC: Finaliza la instancia de iteración externa liberando sus
-	 * recursos
+	 * @fn    list_iterator_destroy
+	 * @brief Finaliza la instancia de iteración externa liberando sus
+	 *        recursos
 	 */
 	void list_iterator_destroy(t_list_iterator* iterator);
 
