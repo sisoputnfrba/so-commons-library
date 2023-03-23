@@ -222,10 +222,6 @@ static void dictionary_resize(t_dictionary *self, int new_max_size) {
 	free(old_table);
 }
 
-/*
- * @NAME: dictionary_clean
- * @DESC: Destruye todos los elementos del diccionario
-*/
 static void internal_dictionary_clean_and_destroy_elements(t_dictionary *self, void(*data_destroyer)(void*)) {
 	int table_index;
 
