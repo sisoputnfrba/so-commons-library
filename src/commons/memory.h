@@ -27,14 +27,14 @@
   /* amount of hex columns allow without a separator */
   #define HEXDUMP_COLS_SEP 8
   /**
-    * @NAME: mem_hexstring
-    * @DESC: Devuelve un dump hexadecimal en formato string de una porción de memoria dada
+    * @fn    mem_hexstring
+    * @brief Devuelve un dump hexadecimal en formato string de una porción de memoria dada
     */
   char *mem_hexstring(void *source, size_t length);
 
   /**
-    * @NAME: mem_hexdump
-    * @DESC: Imprime un dump hexadecimal por pantalla de una porción de memoria dada
+    * @fn    mem_hexdump
+    * @brief Imprime un dump hexadecimal por pantalla de una porción de memoria dada
     */
   void mem_hexdump(void *source, size_t length);
 
