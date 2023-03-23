@@ -20,26 +20,26 @@
 #include <stdio.h>
 
 /**
-* @NAME: txt_open_for_append
-* @DESC: Abre un archivo para agregarle contenido al final
+* @fn    txt_open_for_append
+* @brief Abre un archivo para agregarle contenido al final
 */
 FILE* txt_open_for_append(char* path);
 
 /**
-* @NAME: txt_write_in_file
-* @DESC: Agrega contenido al final del archivo
+* @fn    txt_write_in_file
+* @brief Agrega contenido al final del archivo
 */
 void txt_write_in_file(FILE* file, char* string);
 
 /**
-* @NAME: txt_write_in_stdout
-* @DESC: Imprime un mensaje en la salida estandar
+* @fn    txt_write_in_stdout
+* @brief Imprime un mensaje en la salida estandar
 */
 void txt_write_in_stdout(char* string);
 
 /**
-* @NAME: txt_close_file
-* @DESC: Cierra el archivo
+* @fn    txt_close_file
+* @brief Cierra el archivo
 */
 void txt_close_file(FILE* file);
 
