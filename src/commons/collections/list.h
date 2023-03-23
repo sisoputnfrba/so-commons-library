@@ -41,7 +41,7 @@
 	/**
 	* @fn    list_destroy
 	* @brief Destruye una lista sin liberar
-	* los elementos contenidos en los nodos
+	*        los elementos contenidos en los nodos
 	*/
 	void list_destroy(t_list *);
 
@@ -81,7 +81,7 @@
 
 	/**
 	* @fn    list_get
-	* @brief Retorna el contenido de una posicion determianda de la lista
+	* @brief Retorna el contenido de una posicion determinada de la lista
 	*/
 	void *list_get(t_list *, int index);
 
