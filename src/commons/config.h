@@ -28,9 +28,9 @@
 	* @fn    config_create
 	* @brief Crea una estructura t_config
 	*
-	* @param path - path del archivo de configuracion
-	* @return       un puntero hacia la estructura creada o NULL
-	*               en caso de no encotrar el archivo en el path especificado.
+	* @param path Ruta hacia el archivo de configuracion
+	* @return     Retorna un puntero hacia la estructura creada, o NULL
+	*             en caso de no encontrar el archivo en el path especificado.
 	*/
 	t_config *config_create(char *path);
 
