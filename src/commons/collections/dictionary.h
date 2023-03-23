@@ -39,7 +39,7 @@
 	/**
 	* @fn    dictionary_put
 	* @brief Inserta un nuevo par (key->element) al diccionario, en caso de ya existir la key actualiza el elemento.
-	* [Warning] - Tener en cuenta que esto no va a liberar la memoria del `element` original.
+	* @warning Tener en cuenta que esto no va a liberar la memoria del `element` original.
 	*/
 	void 		  dictionary_put(t_dictionary *, char *key, void *element);
 
@@ -64,10 +64,8 @@
 	/**
 	* @fn    dictionary_iterator
 	* @brief Aplica closure a todos los elementos del diccionario.
-	*
-	* La función que se pasa por paremtro recibe (char* key, void* element)
 	*/
-	void 		  dictionary_iterator(t_dictionary *, void(*closure)(char*,void*));
+	void 		  dictionary_iterator(t_dictionary *, void(*closure)(char* key, void* element));
 
 	/**
 	* @fn    dictionary_clean

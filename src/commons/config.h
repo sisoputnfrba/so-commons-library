@@ -67,8 +67,9 @@
 	/**
 	* @fn    config_get_array_value
 	* @brief Retorna un array con los valores asociados a la key especificada.
-	* En el archivo de configuracion un valor de este tipo debería ser representado
-	* de la siguiente forma [lista_valores_separados_por_coma]
+	*
+	* @note En el archivo de configuracion un valor de este tipo debería ser representado
+	*       de la siguiente forma [lista_valores_separados_por_coma]
 	*
 	* @example VALORES=[1,2,3,4,5]
 	* @note    El array que devuelve termina en NULL
