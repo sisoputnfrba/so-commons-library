@@ -1,0 +1,32 @@
+{
+  // See https://go.microsoft.com/fwlink/?linkid=830387
+  // for the documentation about the launch.json format
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "test",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/commons-integration-test-${workspaceFolderBasename}",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/../../../src/build"
+        }
+      ],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build",
+    }
+  ]
+}

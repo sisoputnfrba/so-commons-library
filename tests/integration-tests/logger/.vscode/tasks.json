@@ -1,0 +1,43 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "dependsOn": [
+        "build_sources",
+        "build_tests"
+      ],
+    },
+    {
+      "label": "build_sources",
+      "command": "make --no-print-directory -C ../../../src debug",
+      "type": "shell",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "build_tests",
+      "command": "make debug",
+      "type": "shell",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "clean",
+      "command": "make clean",
+      "type": "shell",
+      "group": {
+        "kind": "none"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
