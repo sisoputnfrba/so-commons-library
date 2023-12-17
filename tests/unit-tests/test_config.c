@@ -64,7 +64,7 @@ context (test_config) {
             } end
 
             it("should return the keys count") {
-                should_int(config_keys_amount(config)) be equal to(8);
+                should_int(config_keys_amount(config)) be equal to(9);
             } end
 
             describe("Get") {
@@ -115,6 +115,11 @@ context (test_config) {
                   string_array_destroy(strings);
                 } end
 
+                it ("should get a value ignoring trailing spaces") {
+                    should_string(config_get_string_value(config, "TRAILING_WHITESPACES")) be equal to("42");
+                    should_int(config_get_int_value(config, "TRAILING_WHITESPACES")) be equal to(42);
+                } end
+
             } end
 
         } end
@@ -124,7 +129,7 @@ context (test_config) {
     describe("Double newline") {
 
         it ("should not fail when the config file ends with two newlines") {
-            t_config *config = config_create("resources/config-double-newline.cfg");
+            t_config *config = config_create("resources/config.cfg");
             config_destroy(config);
         } end
     } end
