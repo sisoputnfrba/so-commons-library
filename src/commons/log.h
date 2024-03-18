@@ -38,83 +38,80 @@
 	}t_log;
 
 	/**
-	* @NAME: log_create
-	* @DESC: Crea una instancia de logger
-	* @PARAMS:
-	*        file - la ruta hacia el archivo donde se van a generar los logs:
-	*            + si el archivo ya existe, se escribirá al final del mismo
-	*            + si el archivo no existe, se creará uno nuevo en el directorio indicado
-	*            + si el directorio hacia el archivo no existe, se producirá un error
-	*        process_name - el nombre a ser mostrado en los logs
-	*        is_active_console - si lo que se loguea debe mostrarse por consola
-	*        level - el nivel de detalle mínimo a loguear (ver definición de t_log_level)
-	*            ejemplo: LOG_LEVEL_INFO logueará mediante log_error, log_warning y log_info 
-	*            e ignorará los llamados a log_debug y log_trace 
-	* @RETURN:
-	*        retorna una instancia de logger, o NULL en caso de error
-	*/
+	 * @fn    log_create
+	 * @brief Crea una instancia de logger
+	 *
+	 * @param file              La ruta hacia el archivo donde se van a generar los logs
+	 * @param process_name      El nombre a ser mostrado en los logs
+	 * @param is_active_console Si lo que se loguea debe mostrarse por consola
+	 * @param level             El nivel de detalle mínimo a loguear (ver definición de t_log_level)
+	 *
+	 * @note si file ya existe, se escribirá al final del archivo
+	 * @note si file no existe, se creará un nuevo archivo en el directorio indicado
+	 * @note si el directorio hacia file no existe, se producirá un error
+	 *
+	 * @example si level es LOG_LEVEL_INFO, se loguearán los mensajes de nivel INFO, WARNING y ERROR
+	 *          y se ignorarán los mensajes de nivel DEBUG y TRACE
+	 *
+	 * @return Retorna una instancia de logger, o NULL en caso de error
+	 */
 	t_log* 		log_create(char* file, char *process_name, bool is_active_console, t_log_level level);
 
 	/**
-	* @NAME: log_destroy
-	* @DESC: Destruye una instancia de logger
+	* @fn    log_destroy
+	* @brief Destruye una instancia de logger
 	*/
 	void 		log_destroy(t_log* logger);
 
 	/**
-	* @NAME: log_trace
-	* @DESC: Loguea un mensaje con el siguiente formato
-	*
-	* [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* @fn    log_trace
+	* @brief Loguea un mensaje con el siguiente formato
+	*        [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_trace(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
-	* @NAME: log_debug
-	* @DESC: Loguea un mensaje con el siguiente formato
-	*
-	* [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* @fn    log_debug
+	* @brief Loguea un mensaje con el siguiente formato
+	*        [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_debug(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
-	* @NAME: log_info
-	* @DESC: Loguea un mensaje con el siguiente formato
-	*
-	* [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* @fn    log_info
+	* @brief Loguea un mensaje con el siguiente formato
+	*        [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_info(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
-	* @NAME: log_warning
-	* @DESC: Loguea un mensaje con el siguiente formato
-	*
-	* [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* @fn    log_warning
+	* @brief Loguea un mensaje con el siguiente formato
+	*        [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_warning(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
-	* @NAME: log_error
-	* @DESC: Loguea un mensaje con el siguiente formato
-	*
-	* [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	* @fn    log_error
+	* @brief Loguea un mensaje con el siguiente formato
+	*        [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
 	*
 	*/
 	void 		log_error(t_log* logger, const char* message, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
-	* @NAME: log_level_as_string
-	* @DESC: Convierte un t_log_level a su representacion en string
+	* @fn    log_level_as_string
+	* @brief Convierte un t_log_level a su representacion en string
 	*/
 	char 		*log_level_as_string(t_log_level level);
 
 	/**
-	* @NAME: log_level_from_string
-	* @DESC: Convierte un string a su representacion en t_log_level
+	* @fn    log_level_from_string
+	* @brief Convierte un string a su representacion en t_log_level
 	*/
 	t_log_level log_level_from_string(char *level);
 

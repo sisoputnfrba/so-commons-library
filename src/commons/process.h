@@ -18,14 +18,14 @@
 #define PROCESS_H_
 
 /**
-* @NAME: process_get_thread_id
-* @DESC: Obtiene el ID del thread actual
+* @fn    process_get_thread_id
+* @brief Obtiene el ID del thread actual
 */
 unsigned int process_get_thread_id();
 
 /**
-* @NAME: process_getpid
-* @DESC: Obtiene el ID del proceso actual
+* @fn    process_getpid
+* @brief Obtiene el ID del proceso actual
 */
 unsigned int process_getpid();
 

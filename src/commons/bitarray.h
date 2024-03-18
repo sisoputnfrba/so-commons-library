@@ -25,17 +25,19 @@
 	#define BIT_CHAR(bit)         ((bit) / CHAR_BIT)
 
 	/**
-	 * Define el orden bajo el cual se guardarán los bits a la hora de llenar los bytes.
-	 * La mayoría de las implementaciones de bitmap usan LSB_FIRST. Si no estás seguro
-	 * de cuál usar, probablemente quieras usar esta.
+	 * @brief Define el orden bajo el cual se guardarán los bits a la hora de llenar los bytes.
+	 * @note  La mayoría de las implementaciones de bitmap usan LSB_FIRST. Si no estás seguro
+	 *        de cuál usar, probablemente quieras usar esta.
 	 */
 	typedef enum {
-		/* Completa los bits en un byte priorizando el bit menos significativo:
-		 * 00000001 00000000
+		/**
+		 *  @brief   Completa los bits en un byte priorizando el bit menos significativo:
+		 *  @example 00000001 00000000
 		 */
 		LSB_FIRST,
-		/* Completa los bits en un byte priorizando el bit más significativo:
-		 * 10000000 00000000
+		/**
+		 *  @brief   Completa los bits en un byte priorizando el bit más significativo:
+		 *  @example 10000000 00000000
 		 */
 		MSB_FIRST
 	} bit_numbering_t;
@@ -47,62 +49,66 @@
 	} t_bitarray;
 
 	/**
-	* @DEPRECATED: La firma de esta función se encuentra en revisión y probablemente cambie
-	* 			   en próximas versiones. Usar bitarray_create_with_mode.
+	* @deprecated Esta función se encuentra en revisión y probablemente cambie en próximas versiones.
+	*             Usar bitarray_create_with_mode.
 	*
-	* @NAME: bitarray_create
-	* @DESC: Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
-	* @PARAMS:
-	* 		bitarray - el bloque de memoria que contiene los bits a leer/escribir
-	*		size - la cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
+	* @fn    bitarray_create
+	* @brief Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
 	*
-	*		ejemplo: bitarray de 8 posiciones (bits), 
-	*			void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
-	*			bitarray_create(puntero_a_bits, 1)
+	* @param bitarray El bloque de memoria que contiene los bits a leer/escribir
+	* @param size     La cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
+	*
+	* @example bitarray de 8 posiciones (bits),
+	* @code
+	* void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
+	* bitarray_create(puntero_a_bits, 1)
+	* @endcode
 	*/
-	t_bitarray 	*bitarray_create(char *bitarray, size_t size);
+	t_bitarray 	*bitarray_create(char *bitarray, size_t size) __attribute__((deprecated));
 
 	/**
-	* @NAME: bitarray_create_with_mode
-	* @DESC: Crea y devuelve un puntero a una estructura t_bitarray
-	* @PARAMS:
-	* 		bitarray - el bloque de memoria que contiene los bits a leer/escribir
-	*		size - la cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
-	*		mode - LSB_FIRST ó MSB_FIRST
+	* @fn    bitarray_create_with_mode
+	* @brief Crea y devuelve un puntero a una estructura t_bitarray
 	*
-	*		ejemplo: bitarray de 8 posiciones (bits) con LSB_FIRST, 
-	*			void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
-	*			bitarray_create_with_mode(puntero_a_bits, 1, LSB_FIRST)
+	* @param bitarray El bloque de memoria que contiene los bits a leer/escribir
+	* @param size     La cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
+	* @param mode     LSB_FIRST o MSB_FIRST @see bit_numbering_t
+	*
+	* @example bitarray de 8 posiciones (bits) con LSB_FIRST,
+	* @code
+	* void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
+	* bitarray_create_with_mode(puntero_a_bits, 1, LSB_FIRST)
+	* @endcode
 	*/
 	t_bitarray	*bitarray_create_with_mode(char *bitarray, size_t size, bit_numbering_t mode);
 
 	/**
-	* @NAME: bitarray_test_bit
-	* @DESC: Devuelve el valor del bit de la posicion indicada
+	* @fn    bitarray_test_bit
+	* @brief Devuelve el valor del bit de la posicion indicada
 	*/
 	bool 		 bitarray_test_bit(t_bitarray*, off_t bit_index);
 
 	/**
-	* @NAME: bitarray_set_bit
-	* @DESC: Setea el valor del bit de la posicion indicada
+	* @fn    bitarray_set_bit
+	* @brief Setea el valor del bit de la posicion indicada
 	*/
 	void		 bitarray_set_bit(t_bitarray*, off_t bit_index);
 
 	/**
-	* @NAME: bitarray_clean_bit
-	* @DESC: Limpia el valor del bit de la posicion indicada
+	* @fn    bitarray_clean_bit
+	* @brief Limpia el valor del bit de la posicion indicada
 	*/
 	void		 bitarray_clean_bit(t_bitarray*, off_t bit_index);
 
 	/**
-	* @NAME: bitarray_get_max_bit
-	* @DESC: Devuelve la cantidad de bits en el bitarray
+	* @fn    bitarray_get_max_bit
+	* @brief Devuelve la cantidad de bits en el bitarray
 	*/
 	size_t		 bitarray_get_max_bit(t_bitarray*);
 
 	/**
-	* @NAME: bitarray_destroy
-	* @DESC: Destruye el bit array
+	* @fn    bitarray_destroy
+	* @brief Destruye el bit array
 	*/
 	void 		 bitarray_destroy(t_bitarray*);
 

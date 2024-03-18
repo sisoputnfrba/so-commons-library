@@ -24,63 +24,63 @@
 	} t_queue;
 
 	/**
-	* @NAME: queue_create
-	* @DESC: Crea y devuelve un puntero a una cola
+	* @fn    queue_create
+	* @brief Crea y devuelve un puntero a una cola
 	*/
 	t_queue *queue_create();
 
 	/**
-	* @NAME: queue_destroy
-	* @DESC: Destruye una cola.
+	* @fn    queue_destroy
+	* @brief Destruye una cola.
 	*/
 	void queue_destroy(t_queue *);
 
 	/**
-	* @NAME: queue_destroy_and_destroy_elements
-	* @DESC: Destruye una cola, recibiendo como argumento el metodo encargado de liberar cada
-	* 		elemento de la cola.
+	* @fn    queue_destroy_and_destroy_elements
+	* @brief Destruye una cola, recibiendo como argumento el metodo encargado de
+	*        liberar cada elemento de la cola.
 	*/
 	void queue_destroy_and_destroy_elements(t_queue*, void(*element_destroyer)(void*));
 
 	/**
-	* @NAME: queue_push
-	* @DESC: Agrega un elemento al final de la cola
+	* @fn    queue_push
+	* @brief Agrega un elemento al final de la cola
 	*/
 	void queue_push(t_queue *, void *element);
 
 	/**
-	* @NAME: queue_pop
-	* @DESC: quita el primer elemento de la cola
+	* @fn    queue_pop
+	* @brief quita el primer elemento de la cola
 	*/
 	void *queue_pop(t_queue *);
 
 	/**
-	* @NAME: queue_peek
-	* @DESC: Devuelve el primer elemento de la cola sin extraerlo
+	* @fn    queue_peek
+	* @brief Devuelve el primer elemento de la cola sin extraerlo
 	*/
 	void *queue_peek(t_queue *);
 
 	/**
-	* @NAME: queue_clean
-	* @DESC: Elimina todos los elementos de la cola.
+	* @fn    queue_clean
+	* @brief Elimina todos los elementos de la cola.
 	*/
 	void queue_clean(t_queue *);
 
 	/**
-	* @NAME: queue_clean_and_destroy_elements
-	* @DESC: Elimina y destruye todos los elementos de la cola.
+	* @fn    queue_clean_and_destroy_elements
+	* @brief Elimina y destruye todos los elementos de la cola.
 	*/
 	void queue_clean_and_destroy_elements(t_queue *, void(*element_destroyer)(void*));
 
 	/**
-	* @NAME: queue_size
-	* @DESC: Devuelve la cantidad de elementos de la cola
+	* @fn    queue_size
+	* @brief Devuelve la cantidad de elementos de la cola
 	*/
 	int queue_size(t_queue *);
 
 	/**
-	* @NAME: queue_is_empty
-	* @DESC: Verifica si la cola esta vacía
+	* @fn    queue_is_empty
+	* @brief Verifica si la cola esta vacía
 	*/
 	bool queue_is_empty(t_queue *);
 

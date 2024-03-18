@@ -25,89 +25,90 @@
 	} t_config;
 
 	/**
-	* @NAME: config_create
-	* @DESC: Crea una estructura t_config
-	* @PARAMS:
-	* 		path - path del archivo de configuracion
-	* @RETURN: Devuelve un puntero hacia la estructura creada o NULL 
-	* en caso de no encotrar el archivo en el path especificado.
+	* @fn    config_create
+	* @brief Crea una estructura t_config
+	*
+	* @param path Ruta hacia el archivo de configuracion
+	* @return     Retorna un puntero hacia la estructura creada, o NULL
+	*             en caso de no encontrar el archivo en el path especificado.
 	*/
 	t_config *config_create(char *path);
 
 	/**
-	* @NAME: config_has_property
-	* @DESC: Retorna true si key se encuentra en la configuracion.
+	* @fn    config_has_property
+	* @brief Retorna true si key se encuentra en la configuracion.
 	*/
 	bool 	  config_has_property(t_config*, char* key);
 
 	/**
-	* @NAME: config_get_string_value
-	* @DESC: Retorna un string con el valor asociado a key.
+	* @fn    config_get_string_value
+	* @brief Retorna un string con el valor asociado a key.
 	*/
 	char 	 *config_get_string_value(t_config*, char *key);
 
 	/**
-	* @NAME: config_get_int_value
-	* @DESC:Retorna un int con el valor asociado a key.
+	* @fn    config_get_int_value
+	* @brief Retorna un int con el valor asociado a key.
 	*/
 	int 	  config_get_int_value(t_config*, char *key);
 
 	/**
-	* @NAME: config_get_long_value
-	* @DESC:Retorna un long con el valor asociado a key.
+	* @fn    config_get_long_value
+	* @brief Retorna un long con el valor asociado a key.
 	*/
 	long	  config_get_long_value(t_config*, char *key);
 
 	/**
-	* @NAME: config_get_double_value
-	* @DESC:Retorna un double con el valor asociado a key.
+	* @fn    config_get_double_value
+	* @brief Retorna un double con el valor asociado a key.
 	*/
 	double 	  config_get_double_value(t_config*, char *key);
 
 	/**
-	* @NAME: config_get_array_value
-	* @DESC: Retorna un array con los valores asociados a la key especificada.
-	* En el archivo de configuracion un valor de este tipo debería ser representado
-	* de la siguiente forma [lista_valores_separados_por_coma]
-	* Ejemplo:
-	* VALORES=[1,2,3,4,5]
-	* El array que devuelve termina en NULL
+	* @fn    config_get_array_value
+	* @brief Retorna un array con los valores asociados a la key especificada.
+	*
+	* @note En el archivo de configuracion un valor de este tipo debería ser representado
+	*       de la siguiente forma [lista_valores_separados_por_coma]
+	*
+	* @example VALORES=[1,2,3,4,5]
+	* @note    El array que devuelve termina en NULL
 	*/
 	char**    config_get_array_value(t_config*, char* key);
 
 	/**
-	* @NAME: config_key_amount
-	* @DESC: Retorna la cantidad de keys.
+	* @fn    config_key_amount
+	* @brief Retorna la cantidad de keys.
 	*/
 	int 	  config_keys_amount(t_config*);
 
 	/**
-	* @NAME: config_destroy
-	* @DESC: Destruye la estructura config.
+	* @fn    config_destroy
+	* @brief Destruye la estructura config.
 	*/
 	void 	  config_destroy(t_config *config);
 
 	/**
-	* @NAME: config_set_value
-	* @DESC: Setea el valor en el archivo de config, a la key asociada.
+	* @fn    config_set_value
+	* @brief Setea el valor en el archivo de config, a la key asociada.
 	*/
 	void      config_set_value(t_config*, char *key, char *value);
 
 	/**
-	* @NAME: config_remove_key
-	* @DESC: Remueve la clave y su valor asociado del archivo de config.
+	* @fn    config_remove_key
+	* @brief Remueve la clave y su valor asociado del archivo de config.
 	*/
 	void      config_remove_key(t_config*, char *key);
 
 	/**
-	* @NAME: config_save
-	* @DESC: Reescribe el archivo de configuracion con los valores del config.
+	* @fn    config_save
+	* @brief Reescribe el archivo de configuracion con los valores del config.
 	*/
 	int       config_save(t_config*);
 
 	/**
-	* @NAME: config_save_in_file
-	* @DESC: Escribe un archivo de configuracion en el path indicado con los valores del config.
+	* @fn    config_save_in_file
+	* @brief Escribe un archivo de configuracion en el path indicado con los valores del config.
 	*/
 	int       config_save_in_file(t_config*, char *path);
 
