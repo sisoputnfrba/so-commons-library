@@ -193,15 +193,26 @@ context (test_string) {
 
         describe("Split") {
 
-            it("split_with_separators") {
-                char *line = "path//to//file";
-                char** substrings = string_split(line, "//");
+            it("split_with_separator_found") {
+                char *line = "path\\to\\file";
+                char** substrings = string_split(line, "\\");
 
                 should_ptr(substrings) not be null;
                 should_string(substrings[0]) be equal to ("path");
                 should_string(substrings[1]) be equal to ("to");
                 should_string(substrings[2]) be equal to ("file");
                 should_ptr(substrings[3]) be null;
+
+                string_array_destroy(substrings);
+            } end
+
+            it("split_with_separator_not_found") {
+                char *line = "path";
+                char **substrings = string_split(line, "/");
+
+                should_ptr(substrings) not be null;
+                should_string(substrings[0]) be equal to ("path");
+                should_ptr(substrings[1]) be null;
 
                 string_array_destroy(substrings);
             } end

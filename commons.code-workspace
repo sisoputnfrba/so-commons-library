@@ -1,0 +1,23 @@
+{
+	"settings": {
+		"debug.onTaskErrors": "abort",
+		"files.associations": {
+			"*.h": "c",
+		},
+		"C_Cpp.errorSquiggles": "disabled",
+	},
+	"folders": [
+		{
+			"path": "src"
+		},
+		{
+			"path": "tests/unit-tests"
+		},
+		{
+			"path": "tests/integration-tests/temporal"
+		},
+		{
+			"path": "tests/integration-tests/logger"
+		}
+	]
+}
