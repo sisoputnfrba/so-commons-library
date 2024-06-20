@@ -1,5 +1,18 @@
 RM=rm -rf
 CC=gcc
+DEST=/usr
+
+ifeq ($(shell uname -s),Linux)
+    CC=gcc
+    CP=cp
+    DEST=/usr
+else ifeq ($(shell uname -s),Darwin)
+    CC=gcc-14
+    CP=gcp
+    DEST=/usr/local
+else
+    $(error 'OS not supported!')
+endif
 
 C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
 H_SRCS=$(shell find . -iname "*.h" | tr '\n' ' ')
@@ -34,11 +47,11 @@ clean:
 	$(RM) build
 
 install: all
-	$(SUDO) cp -u build/libcommons.so /usr/lib
-	$(SUDO) cp --parents -u $(H_SRCS) /usr/include
+	$(SUDO) $(CP) -u build/libcommons.so $(DEST)/lib
+	$(SUDO) $(CP) --parents -u $(H_SRCS) $(DEST)/include
 
 uninstall:
-	$(SUDO) rm -f /usr/lib/libcommons.so
-	$(SUDO) rm -rf /usr/include/commons
+	$(SUDO) rm -f $(DEST)/lib/libcommons.so
+	$(SUDO) rm -rf $(DEST)/include/commons
 
 .PHONY: all debug sources clean install uninstall
