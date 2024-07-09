@@ -22,12 +22,15 @@ uninstall:
 valgrind: debug
 	cd tests/unit-tests && $(MAKE) valgrind
 
-docs: | /usr/local/share/doxygen-awesome-css/
+serve: docs
+	cd build/html && python3 -m http.server
+
+docs: | doxygen-awesome-css
 	doxygen
 
-/usr/local/share/doxygen-awesome-css/:
-	curl -fsSL https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.3.3.tar.gz | tar -xz
-	sudo make install -C doxygen-awesome-css-*
-	rm -rf doxygen-awesome-css-*
+doxygen-awesome-css:
+	mkdir -p doxygen-awesome-css
+	curl -fsSL https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.3.3.tar.gz \
+		| tar -xvzC doxygen-awesome-css --wildcards --strip-components=1 'doxygen-awesome-css-*/doxygen-awesome*'
 
-.PHONY: all clean debug test install uninstall valgrind docs
+.PHONY: all clean debug test install uninstall valgrind serve docs
