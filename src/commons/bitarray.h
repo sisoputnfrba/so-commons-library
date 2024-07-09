@@ -47,6 +47,9 @@
 	} t_bitarray;
 
 	/**
+	* @warning Esta función se encuentra en revisión y probablemente cambie en próximas versiones.
+	*          Usar bitarray_create_with_mode().
+	*
 	* @brief Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
 	* @relates t_bitarray
 	*
@@ -58,8 +61,6 @@
 	* bitarray_create(puntero_a_bits, 1)
 	* @endcode
 	*
-	* @warning Esta función se encuentra en revisión y probablemente cambie en próximas versiones.
-	*          Usar bitarray_create_with_mode.
 	*/
 	t_bitarray 	*bitarray_create(char *bitarray, size_t size) __attribute__((deprecated));
 

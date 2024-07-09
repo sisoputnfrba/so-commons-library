@@ -73,9 +73,12 @@
 	* @relates t_config
 	*
 	* @note En el archivo de configuracion un valor de este tipo debería ser representado
-	*       de la siguiente forma [lista_valores_separados_por_coma]
+	*       de la siguiente forma [lista_valores_separados_por_coma]. Ejemplo:
 	*
-	*          VALORES=[1,2,3,4,5]
+	* @code
+	* VALORES=[1,2,3,4,5]
+	* @endcode
+	*
 	* @note    El array que devuelve termina en NULL
 	*/
 	char**    config_get_array_value(t_config*, char* key);
