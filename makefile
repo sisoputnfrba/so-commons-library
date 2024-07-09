@@ -5,6 +5,7 @@ all:
 clean:
 	-cd src && $(MAKE) clean
 	-cd tests/unit-tests && $(MAKE) clean
+	-cd docs && $(MAKE) clean
 
 debug:
 	-cd src && $(MAKE) debug
