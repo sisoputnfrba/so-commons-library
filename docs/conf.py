@@ -31,9 +31,9 @@ html_static_path = ['_static']
 
 # Breathe Configuration
 breathe_projects = {
-  "commons": "../doxygen/xml/",
+  "so-commons-library": "./build/doxygen/xml/",
 }
-breathe_default_project = 'commons'
+breathe_default_project = 'so-commons-library'
 
 # Setup the exhale extension
 exhale_args = {

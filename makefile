@@ -23,8 +23,6 @@ valgrind: debug
 	cd tests/unit-tests && $(MAKE) valgrind
 
 docs:
-	rm -rf docs/build
-	cmake -S docs -B docs/build
-	cd docs/build && $(MAKE)
+	sphinx-build -M html docs docs/build
 
 .PHONY: all clean debug test install uninstall valgrind docs
