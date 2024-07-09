@@ -22,10 +22,9 @@ uninstall:
 valgrind: debug
 	cd tests/unit-tests && $(MAKE) valgrind
 
-docs: | docs/build
-	cd docs/build && $(MAKE)
-
-docs/build:
+docs:
+	rm -rf docs/build
 	cmake -S docs -B docs/build
+	cd docs/build && $(MAKE)
 
 .PHONY: all clean debug test install uninstall valgrind docs

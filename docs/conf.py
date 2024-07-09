@@ -6,19 +6,22 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'commons'
+project = 'so-commons-library'
 copyright = '2024, sisoputnfrba'
 author = 'sisoputnfrba'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['breathe']
+extensions = [
+  'breathe',
+  'exhale',
+]
 
 templates_path = ['_templates']
 exclude_patterns = []
 
-language = 'es'
+language = 'en'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -31,3 +34,27 @@ breathe_projects = {
   "commons": "../doxygen/xml/",
 }
 breathe_default_project = 'commons'
+
+# Setup the exhale extension
+exhale_args = {
+    # These arguments are required
+    "containmentFolder":     "./build/exhale",
+    "rootFileName":          "library_root.rst",
+    "doxygenStripFromPath":  "../src/",
+    # Heavily encouraged optional argument (see docs)
+    "rootFileTitle":         "Tipos Abstractos de Datos",
+    "afterTitleDescription": "Esta documentación fue generada automáticamente en base al código fuente que se encuentra en `sisoputnfrba/so-commons-library <https://github.com/sisoputnfrba/so-commons-library>`_.",
+    # Suggested optional arguments
+    "createTreeView":        True,
+    # TIP: if using the sphinx-bootstrap-theme, you need
+    # "treeViewIsBootstrap": True,
+    "exhaleExecutesDoxygen": True,
+    "exhaleDoxygenStdin":    "INPUT = ../src/commons",
+    "unabridgedOrphanKinds": {"define", "function", "variable"}
+}
+
+# Tell sphinx what the primary language being documented is.
+primary_domain = 'c'
+
+# Tell sphinx what the pygments highlight language should be.
+highlight_language = 'c'
