@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build": "doxygen",
+    "start": "doxygen && npx http-server build/html"
+  },
+  "devDependencies": {
+    "@jothepro/doxygen-awesome-css": "github:jothepro/doxygen-awesome-css#v2.3.3"
+  }
+}
