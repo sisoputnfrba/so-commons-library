@@ -12,3 +12,4 @@ Debug
 build
 test_save_config.cfg
 .idea
+node_modules
