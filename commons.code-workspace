@@ -18,9 +18,6 @@
 		},
 		{
 			"path": "tests/integration-tests/logger"
-		},
-		{
-			"path": "docs"
-		},
+		}
 	]
 }
