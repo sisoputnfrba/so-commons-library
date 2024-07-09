@@ -23,7 +23,4 @@ uninstall:
 valgrind: debug
 	cd tests/unit-tests && $(MAKE) valgrind
 
-docs:
-	cd docs && $(MAKE) html
-
 .PHONY: all clean debug test install uninstall valgrind docs
