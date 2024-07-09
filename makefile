@@ -23,6 +23,6 @@ valgrind: debug
 	cd tests/unit-tests && $(MAKE) valgrind
 
 docs:
-	sphinx-build -M html docs docs/build
+	cd docs && $(MAKE) html
 
 .PHONY: all clean debug test install uninstall valgrind docs
