@@ -20,14 +20,18 @@
 	#include "node.h"
 	#include <stdbool.h>
 
-  /**
-   * @struct t_list
-   */
+	/**
+	 * @struct t_list
+	 * @brief Estructura de una lista enlazada
+	 */
 	typedef struct {
 		t_link_element *head;
 		int elements_count;
 	} t_list;
 
+	/**
+	 * @brief Iterador de listas
+	 */
 	typedef struct {
 		t_list *list;
 		t_link_element **actual;
@@ -384,46 +388,46 @@
 
 	/**
 	 * @brief Inicializa una iteración externa de la lista
-	 * @relates t_list
+	 * @relates t_list_iterator
 	 */
 	t_list_iterator* list_iterator_create(t_list* list);
 
 	/**
 	 * @brief Devuelve true si quedan elementos de la lista por recorrer
-	 * @relates t_list
+	 * @relates t_list_iterator
 	 */
 	bool list_iterator_has_next(t_list_iterator* iterator);
 
 	/**
 	 * @brief Avanza hacia el siguiente elemento a iterar de la lista y
 	 *        lo devuelve
-	 * @relates t_list
+	 * @relates t_list_iterator
 	 */
 	void* list_iterator_next(t_list_iterator* iterator);
 
 	/**
 	 * @brief Devuelve el índice del elemento actual de la iteración
-	 * @relates t_list
+	 * @relates t_list_iterator
 	 */
 	int list_iterator_index(t_list_iterator* iterator);
 
 	/**
 	 * @brief Agrega a la lista un elemento delante del actual y detrás
 	 *        del siguiente. Luego, avanza hacia el elemento agregado.
-	 * @relates t_list
+	 * @relates t_list_iterator
 	*/
 	void list_iterator_add(t_list_iterator* iterator, void *data);
 
 	/**
 	 * @brief Remueve de la lista al elemento actual de la iteración
-	 * @relates t_list
+	 * @relates t_list_iterator
 	 */
 	void list_iterator_remove(t_list_iterator* iterator);
 
 	/**
 	 * @brief Finaliza la instancia de iteración externa liberando sus
 	 *        recursos
-	 * @relates t_list
+	 * @relates t_list_iterator
 	 */
 	void list_iterator_destroy(t_list_iterator* iterator);
 
