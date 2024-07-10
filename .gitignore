@@ -12,4 +12,4 @@ Debug
 build
 test_save_config.cfg
 .idea
-doxygen-awesome-css
+html

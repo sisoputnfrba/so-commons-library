@@ -5,6 +5,7 @@ all:
 clean:
 	-cd src && $(MAKE) clean
 	-cd tests/unit-tests && $(MAKE) clean
+	-cd docs && $(MAKE) clean
 
 debug:
 	-cd src && $(MAKE) debug
@@ -22,15 +23,7 @@ uninstall:
 valgrind: debug
 	cd tests/unit-tests && $(MAKE) valgrind
 
-serve: docs
-	cd build/html && python3 -m http.server
+docs:
+	-cd docs && $(MAKE) all
 
-docs: | doxygen-awesome-css
-	doxygen
-
-doxygen-awesome-css:
-	mkdir -p doxygen-awesome-css
-	curl -fsSL https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.3.3.tar.gz \
-		| tar -xvzC doxygen-awesome-css --wildcards --strip-components=1 'doxygen-awesome-css-*/doxygen-awesome*'
-
-.PHONY: all clean debug test install uninstall valgrind serve docs
+.PHONY: all clean debug test install uninstall valgrind docs
