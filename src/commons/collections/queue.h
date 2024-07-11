@@ -21,69 +21,69 @@
 
 	/**
 	 * @struct t_queue
-	 * @brief Estructura que representa una cola
+	 * @brief  Estructura que representa una cola
 	 */
 	typedef struct {
 		t_list* elements;
 	} t_queue;
 
 	/**
-	* @brief Crea y devuelve un puntero a una cola
+	* @brief   Crea y devuelve un puntero a una cola
 	* @relates t_queue
 	*/
 	t_queue *queue_create();
 
 	/**
-	* @brief Destruye una cola.
+	* @brief   Destruye una cola.
 	* @relates t_queue
 	*/
 	void queue_destroy(t_queue *);
 
 	/**
-	* @brief Destruye una cola, recibiendo como argumento el metodo encargado de
+	* @brief   Destruye una cola, recibiendo como argumento el metodo encargado de
 	* @relates t_queue
 	*        liberar cada elemento de la cola.
 	*/
 	void queue_destroy_and_destroy_elements(t_queue*, void(*element_destroyer)(void*));
 
 	/**
-	* @brief Agrega un elemento al final de la cola
+	* @brief   Agrega un elemento al final de la cola
 	* @relates t_queue
 	*/
 	void queue_push(t_queue *, void *element);
 
 	/**
-	* @brief quita el primer elemento de la cola
+	* @brief   quita el primer elemento de la cola
 	* @relates t_queue
 	*/
 	void *queue_pop(t_queue *);
 
 	/**
-	* @brief Devuelve el primer elemento de la cola sin extraerlo
+	* @brief   Devuelve el primer elemento de la cola sin extraerlo
 	* @relates t_queue
 	*/
 	void *queue_peek(t_queue *);
 
 	/**
-	* @brief Elimina todos los elementos de la cola.
+	* @brief   Elimina todos los elementos de la cola.
 	* @relates t_queue
 	*/
 	void queue_clean(t_queue *);
 
 	/**
-	* @brief Elimina y destruye todos los elementos de la cola.
+	* @brief   Elimina y destruye todos los elementos de la cola.
 	* @relates t_queue
 	*/
 	void queue_clean_and_destroy_elements(t_queue *, void(*element_destroyer)(void*));
 
 	/**
-	* @brief Devuelve la cantidad de elementos de la cola
+	* @brief   Devuelve la cantidad de elementos de la cola
 	* @relates t_queue
 	*/
 	int queue_size(t_queue *);
 
 	/**
-	* @brief Verifica si la cola esta vacía
+	* @brief   Verifica si la cola esta vacía
 	* @relates t_queue
 	*/
 	bool queue_is_empty(t_queue *);

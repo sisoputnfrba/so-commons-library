@@ -22,24 +22,23 @@
 
 	/**
 	 * @struct string
-	 * @brief Funciones para manipulación de strings
-	 * @include commons/string.h
+	 * @brief  Funciones para manipulación de strings
 	 */
 
 	/**
-	* @brief Crea un string vacio
+	* @brief   Crea un string vacio
 	* @relates string
 	*/
 	char*   string_new();
 
 	/**
-	* @brief Crea un string a partir de un numero
+	* @brief   Crea un string a partir de un numero
 	* @relates string
 	*/
 	char*   string_itoa(int number);
 
 	/**
-	* @brief Crea un nuevo string a partir de un formato especificado
+	* @brief   Crea un nuevo string a partir de un formato especificado
 	* @relates string
 	*
 	* @code
@@ -51,14 +50,14 @@
 	char*   string_from_format(const char* format, ...) __attribute__((format(printf, 1, 2)));
 
 	/**
-	* @brief Crea un nuevo string a partir de un formato especificado
-	*        pasando un va_list con los argumentos
+	* @brief   Crea un nuevo string a partir de un formato especificado
+	*          pasando un va_list con los argumentos
 	* @relates string
 	*/
 	char*   string_from_vformat(const char* format, va_list arguments);
 
 	/**
-	* @brief Crea un string de longitud 'count' con el mismo caracter.
+	* @brief   Crea un string de longitud 'count' con el mismo caracter.
 	* @relates string
 	*
 	* @code
@@ -68,7 +67,7 @@
 	char*   string_repeat(char ch, int count);
 
 	/**
-	* @brief Agrega al primer string el segundo
+	* @brief   Agrega al primer string el segundo
 	* @relates string
 	*
 	* @code
@@ -82,8 +81,8 @@
 	void    string_append(char ** original, char * string_to_add);
 
 	/**
-	* @brief Agrega al primer string un máximo de n caracteres
-	*        del segundo.
+	* @brief   Agrega al primer string un máximo de n caracteres
+	*          del segundo.
 	* @relates string
 	*
 	* @code
@@ -97,8 +96,8 @@
 	void    string_n_append(char** original, char* string_to_add, int n);
 
 	/**
-	* @brief Concatena al primer string el resultado de aplicar los parametros
-	*        al formato especificado
+	* @brief   Concatena al primer string el resultado de aplicar los parametros
+	*          al formato especificado
 	* @relates string
 	*
 	* @code
@@ -113,82 +112,82 @@
 	void    string_append_with_format(char **original, const char *format, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
-	* @brief Retorna una copia del string pasado como argumento
+	* @brief   Retorna una copia del string pasado como argumento
 	* @relates string
 	*/
 	char*   string_duplicate(char* original);
 
 	/**
-	* @brief Pone en mayuscula todos los caracteres de un string
+	* @brief   Pone en mayuscula todos los caracteres de un string
 	* @relates string
 	*/
 	void    string_to_upper(char * text);
 
 	/**
-	* @brief Pone en minuscula todos los caracteres de un string
+	* @brief   Pone en minuscula todos los caracteres de un string
 	* @relates string
 	*/
 	void    string_to_lower(char * text);
 
 	/**
-	* @brief Capitaliza un string
+	* @brief   Capitaliza un string
 	* @relates string
 	*/
 	void    string_capitalized(char * text);
 
 	/**
-	* @brief Remueve todos los caracteres vacios de la derecha y la izquierda
+	* @brief   Remueve todos los caracteres vacios de la derecha y la izquierda
 	* @relates string
 	*/
 	void    string_trim(char ** text);
 
 	/**
-	* @brief Remueve todos los caracteres vacios de la izquierda
+	* @brief   Remueve todos los caracteres vacios de la izquierda
 	* @relates string
 	*/
 	void    string_trim_left(char ** text);
 
 	/**
-	* @brief Remueve todos los caracteres vacios de la derecha
+	* @brief   Remueve todos los caracteres vacios de la derecha
 	* @relates string
 	*/
 	void    string_trim_right(char ** text);
 
 	/**
-	* @brief Retorna la longitud del string
+	* @brief   Retorna la longitud del string
 	* @relates string
 	*/
 	int     string_length(char * text);
 
 	/**
-	* @brief Retorna si un string es ""
+	* @brief   Retorna si un string es ""
 	* @relates string
 	*/
 	bool    string_is_empty(char * text);
 
 	/**
-	* @brief Retorna un boolean que indica si un string comienza con el string
-	*        pasado por parametro
+	* @brief   Retorna un boolean que indica si un string comienza con el string
+	*          pasado por parametro
 	* @relates string
 	*/
 	bool    string_starts_with(char * text, char * begin);
 
 	/**
-	* @brief Retorna un boolean que indica si un string finaliza con el string
-	*        pasado por parametro
+	* @brief   Retorna un boolean que indica si un string finaliza con el string
+	*          pasado por parametro
 	* @relates string
 	*/
 	bool    string_ends_with(char* text, char* end);
 
 	/**
-	* @brief Retorna si dos strings son iguales ignorando las mayusculas y
-	*        minusculas
+	* @brief   Retorna si dos strings son iguales ignorando las mayusculas y
+	*          minusculas
 	* @relates string
 	*/
 	bool    string_equals_ignore_case(char * actual, char * expected);
 
 	/**
-	* @brief Separa un string dado un separador
+	* @brief   Separa un string dado un separador
 	* @relates string
 	*
 	* @return Retorna un array con cada palabra y en la última posición un NULL
@@ -202,7 +201,7 @@
 
 
 	/**
-	 * @brief Separa un string tantas veces por su separador como n lo permita
+	 * @brief   Separa un string tantas veces por su separador como n lo permita
 	 * @relates string
 	 *
 	 *
@@ -215,35 +214,35 @@
 	char**  string_n_split(char* text, int n, char* separator);
 
 	/**
-	* @brief Retorna los length caracteres de text empezando en start
-	*        en un nuevo string
+	* @brief   Retorna los length caracteres de text empezando en start
+	*          en un nuevo string
 	* @relates string
 	*/
 	char*   string_substring(char* text, int start, int length);
 
 	/**
-	* @brief Retorna el substring de text desde el indice start hasta
-	*        el último de la palabra
+	* @brief   Retorna el substring de text desde el indice start hasta
+	*          el último de la palabra
 	* @relates string
 	*/
 	char*   string_substring_from(char *text, int start);
 
 	/**
-	* @brief Retorna los primeros length caracteres de text como un nuevo string
+	* @brief   Retorna los primeros length caracteres de text como un nuevo string
 	* @relates string
 	*/
 	char*   string_substring_until(char *text, int length);
 
 	/**
-	* @brief Itera un array de strings aplicando
-	*        el closure a cada string, hasta que encuentre un NULL
+	* @brief   Itera un array de strings aplicando
+	*          el closure a cada string, hasta que encuentre un NULL
 	* @relates string
 	*/
 	void    string_iterate_lines(char ** strings, void (*closure)(char *));
 
 	/**
-	* @brief Retorna una array separando los elementos
-	*        de un string con formato de array
+	* @brief   Retorna una array separando los elementos
+	*          de un string con formato de array
 	* @relates string
 	*
 	*
@@ -255,8 +254,8 @@
 	char**  string_get_string_as_array(char* text);
 
 	/**
-	 * @brief Retorna el texto invertido. No se maneja el caso de NULL,
-	 *        si se pasa NULL su comportamiento no esta determinado.
+	 * @brief   Retorna el texto invertido. No se maneja el caso de NULL,
+	 *          si se pasa NULL su comportamiento no esta determinado.
 	 * @relates string
 	 *
 	 *
@@ -268,8 +267,8 @@
 	char*   string_reverse(char* text);
 
 	/**
-	* @brief Retorna una copia de un string con todas las ocurrencias
-	*        de un substring no vacío siendo reemplazadas por otro string.
+	* @brief   Retorna una copia de un string con todas las ocurrencias
+	*          de un substring no vacío siendo reemplazadas por otro string.
 	* @relates string
 	*
 	* @code
@@ -282,51 +281,51 @@
 	char*   string_replace(char* text, char* substring, char* replacement);
 
 	/**
-	 * @brief Retorna un boolean que indica si text contiene o no
-	 *        a substring.
+	 * @brief   Retorna un boolean que indica si text contiene o no
+	 *          a substring.
 	 * @relates string
 	 */
 	bool    string_contains(char* text, char *substring);
 
 	/**
-	* @brief Crea un array de strings vacio
+	* @brief   Crea un array de strings vacio
 	* @relates string
 	*/
 	char**  string_array_new();
 
 	/**
-	* @brief Destruye un array con sus strings
+	* @brief   Destruye un array con sus strings
 	* @relates string
 	*/
 	void    string_array_destroy(char** array);
 
 	/**
-	* @brief Retorna la cantidad de líneas del array de strings
+	* @brief   Retorna la cantidad de líneas del array de strings
 	* @relates string
 	*/
 	int     string_array_size(char** array);
 
 	/**
-	* @brief Verifica si el array de strings está vacío
+	* @brief   Verifica si el array de strings está vacío
 	* @relates string
 	*/
 	bool    string_array_is_empty(char** array);
 
 	/**
-	* @brief Agrega un string al final del array
+	* @brief   Agrega un string al final del array
 	* @relates string
 	*/
 	void    string_array_push(char*** array, char* text);
 
 	/**
-	* @brief Reemplaza un string en un array por otro, retornando
+	* @brief   Reemplaza un string en un array por otro, retornando
 	* @relates string
 	*        el anterior
 	*/
 	char*   string_array_replace(char** array, int pos, char* text);
 
 	/**
-	* @brief Quita el último string del array y lo retorna
+	* @brief   Quita el último string del array y lo retorna
 	* @relates string
 	*/
 	char*   string_array_pop(char** array);

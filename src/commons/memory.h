@@ -29,17 +29,17 @@
 
   /**
    * @struct memory
-   * @brief Funciones para impresión de dumps de memoria
+   * @brief  Funciones para impresión de dumps de memoria
    */
 
   /**
-    * @brief Devuelve un dump hexadecimal en formato string de una porción de memoria dada
+    * @brief   Devuelve un dump hexadecimal en formato string de una porción de memoria dada
     * @relates memory
     */
   char *mem_hexstring(void *source, size_t length);
 
   /**
-    * @brief Imprime un dump hexadecimal por pantalla de una porción de memoria dada
+    * @brief   Imprime un dump hexadecimal por pantalla de una porción de memoria dada
     * @relates memory
     */
   void mem_hexdump(void *source, size_t length);
