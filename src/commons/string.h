@@ -23,12 +23,14 @@
 	/**
 	* @fn    string_new
 	* @brief Crea un string vacio
+	* @note Cuando se termina de usar, se debe liberar con free()
 	*/
 	char*   string_new();
 
 	/**
 	* @fn    string_itoa
 	* @brief Crea un string a partir de un numero
+	* @note Cuando se termina de usar, se debe liberar con free()
 	*/
 	char*   string_itoa(int number);
 
@@ -42,6 +44,7 @@
 	*
 	* => saludo = "Hola mundo"
 	* @endcode
+	* @note Cuando se termina de usar, se debe liberar con free()
 	*/
 	char*   string_from_format(const char* format, ...) __attribute__((format(printf, 1, 2)));
 
@@ -49,6 +52,7 @@
 	* @fn    string_from_vformat
 	* @brief Crea un nuevo string a partir de un formato especificado
 	*        pasando un va_list con los argumentos
+	* @note Cuando se termina de usar, se debe liberar con free()
 	*/
 	char*   string_from_vformat(const char* format, va_list arguments);
 
@@ -60,6 +64,7 @@
 	* @code
 	* string_repeat('a', 5) = "aaaaa"
 	* @endcode
+	* @note Cuando se termina de usar, se debe liberar con free()
 	*/
 	char*   string_repeat(char ch, int count);
 
@@ -75,6 +80,7 @@
 	*
 	* => unaPalabra = "HOLA PEPE"
 	* @endcode
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_append(char ** original, char * string_to_add);
 
@@ -91,6 +97,7 @@
 	*
 	* => unaPalabra = "HOLA PEP"
 	* @endcode
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_n_append(char** original, char* string_to_add, int n);
 
@@ -108,48 +115,56 @@
 	*
 	* => saludo = "HOLA PEPE!"
 	* @endcode
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_append_with_format(char **original, const char *format, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	* @fn    string_duplicate
 	* @brief Retorna una copia del string pasado como argumento
+	* @note Cuando se termina de usar, se debe liberar con free()
 	*/
 	char*   string_duplicate(char* original);
 
 	/**
 	* @fn    string_to_upper
 	* @brief Pone en mayuscula todos los caracteres de un string
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_to_upper(char * text);
 
 	/**
 	* @fn    string_to_lower
 	* @brief Pone en minuscula todos los caracteres de un string
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_to_lower(char * text);
 
 	/**
 	* @fn    string_capitalized
 	* @brief Capitaliza un string
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_capitalized(char * text);
 
 	/**
 	* @fn    string_trim
 	* @brief Remueve todos los caracteres vacios de la derecha y la izquierda
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_trim(char ** text);
 
 	/**
 	* @fn    string_trim_left
 	* @brief Remueve todos los caracteres vacios de la izquierda
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_trim_left(char ** text);
 
 	/**
 	* @fn    string_trim_right
 	* @brief Remueve todos los caracteres vacios de la derecha
+	* @note No devuelve una copia, esta modificando directamente el string original
 	*/
 	void    string_trim_right(char ** text);
 
@@ -190,33 +205,46 @@
 	* @fn    string_split
 	* @brief Separa un string dado un separador
 	*
-	* @Return: Retorna un array con cada palabra y en la última posición un NULL
+	* @return Retorna un array con cada palabra y en la última posición un NULL
 	*
 	* @example
 	* @code
 	* string_split("hola, mundo", ",") => ["hola", " mundo", NULL]
 	* @endcode
+	* @note El array retornado contiene copias de los caracteres del string original, 
+	*		este debe liberarse con string_array_destroy() cuando se deja de usar
 	*/
-	char**  string_split(char * text, char * separator);
+	char **string_split(char * text, char * separator);
 
 
 	/**
-	 * @fn    string_n_split
-	 * @brief Separa un string tantas veces por su separador como n lo permita
-	 *
-	 * @example
-	 * @code
-	 * string_n_split("hola, mundo, bueno", 2, ",") => ["hola", " mundo, bueno", NULL]
-	 * string_n_split("hola, mundo, bueno", 3, ",") => ["hola", " mundo", " bueno", NULL]
-	 * string_n_split("hola, mundo, bueno", 10, ",") => ["hola", " mundo", " bueno", NULL]
-	 * @endcode
-	 */
+	* @fn    string_n_split
+	* @brief Separa un string tantas veces por su separador como n lo permita
+	* @return Retorna un array con cada palabra mientras n lo permita y en la última posición un NULL
+	*
+	* @example
+	* @code
+	* string_n_split("hola, mundo, bueno", 2, ",") => ["hola", " mundo, bueno", NULL]
+	* string_n_split("hola, mundo, bueno", 3, ",") => ["hola", " mundo", " bueno", NULL]
+	* string_n_split("hola, mundo, bueno", 10, ",") => ["hola", " mundo", " bueno", NULL]
+	* @endcode
+	* @note El array retornado contiene copias de los caracteres del string original, 
+	*	    este debe liberarse con string_array_destroy() cuando se deja de usar
+	*/
 	char**  string_n_split(char* text, int n, char* separator);
 
 	/**
 	* @fn    string_substring
 	* @brief Retorna los length caracteres de text empezando en start
 	*        en un nuevo string
+	*
+	* @example
+	* @code
+	* string_substring("hola, mundo, bueno", 0, 4) => "hola"
+	* string_substring("hola, mundo, bueno", 7, 5) => "mundo"
+	* string_n_split("hola, mundo, bueno", 1, 3) => "ola"
+	* @endcode
+	* @note Cuando se termina de usar, se debe liberar con free()
 	*/
 	char*   string_substring(char* text, int start, int length);
 
@@ -224,12 +252,16 @@
 	* @fn    string_substring_from
 	* @brief Retorna el substring de text desde el indice start hasta
 	*        el último de la palabra
+	* @note Cuando se termina de usar, se debe liberar con free()
+	*
 	*/
 	char*   string_substring_from(char *text, int start);
 
 	/**
 	* @fn    string_substring_until
 	* @brief Retorna los primeros length caracteres de text como un nuevo string
+	* @note Cuando se termina de usar, se debe liberar con free()
+	*
 	*/
 	char*   string_substring_until(char *text, int length);
 
@@ -237,6 +269,7 @@
 	* @fn    string_iterate_lines
 	* @brief Itera un array de strings aplicando
 	*        el closure a cada string, hasta que encuentre un NULL
+	* @note No devuelve una copia, esta modificando directamente los strings del array directamente
 	*/
 	void    string_iterate_lines(char ** strings, void (*closure)(char *));
 
@@ -250,20 +283,23 @@
 	* char* array_string = "[1,2,3,4]"
 	* string_get_value_as_array(array_string) => ["1","2","3","4",NULL]
 	* @endcode
+	* @note El array retornado contiene copias de los caracteres del string original, 
+	*	    este debe liberarse con string_array_destroy() cuando se deja de usar
 	*/
 	char**  string_get_string_as_array(char* text);
 
 	/**
-	 * @fn    string_reverse
-	 * @brief Retorna el texto invertido. No se maneja el caso de NULL,
-	 * si se pasa NULL su comportamiento no esta determinado.
-	 *
-	 * @example
-	 * @code
-	 * char* original = "boo";
-	 * string_reverse(original) => "oob"
-	 * @endcode
-	 */
+	* @fn    string_reverse
+	* @brief Retorna el texto invertido. No se maneja el caso de NULL,
+	* si se pasa NULL su comportamiento no esta determinado.
+	*
+	* @example
+	* @code
+	* char* original = "boo";
+	* string_reverse(original) => "oob"
+	* @endcode
+	* @note Cuando se termina de usar, se debe liberar con free()
+	*/
 	char*   string_reverse(char* text);
 
 	/**
@@ -278,6 +314,7 @@
 	* string_replace(original, "l", ""); => "heo"
 	* string_replace(original, "not a substring", "yay!"); => "hello"
 	* @endcode
+	* @note Cuando se termina de usar, se debe liberar con free()
 	*/
 	char*   string_replace(char* text, char* substring, char* replacement);
 
@@ -291,6 +328,7 @@
 	/**
 	* @fn    string_array_new
 	* @brief Crea un array de strings vacio
+	* @note Se libera con string_array_destroy()
 	*/
 	char**  string_array_new();
 
@@ -315,6 +353,7 @@
 	/**
 	* @fn    string_array_push
 	* @brief Agrega un string al final del array
+	* @note No genera una copia del string_array, solo lo modifica
 	*/
 	void    string_array_push(char*** array, char* text);
 
@@ -322,12 +361,16 @@
 	* @fn    string_array_replace
 	* @brief Reemplaza un string en un array por otro, retornando
 	*        el anterior
+	* @note No genera una copia del string_array, solo lo modifica
 	*/
 	char*   string_array_replace(char** array, int pos, char* text);
 
 	/**
 	* @fn    string_array_pop
 	* @brief Quita el último string del array y lo retorna
+	*
+	* @note No genera una copia del string_array, solo lo modifica, 
+	*       el elemento retornado no es una copia y debe liberarse con free() cuando se deja de usar
 	*/
 	char*   string_array_pop(char** array);
 

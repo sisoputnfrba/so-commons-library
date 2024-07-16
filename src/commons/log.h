@@ -49,6 +49,7 @@
 	 * @note si file ya existe, se escribirá al final del archivo
 	 * @note si file no existe, se creará un nuevo archivo en el directorio indicado
 	 * @note si el directorio hacia file no existe, se producirá un error
+	 * @note el log creado, en caso de dejar de usarse, debe ser liberado con log_destroy
 	 *
 	 * @example si level es LOG_LEVEL_INFO, se loguearán los mensajes de nivel INFO, WARNING y ERROR
 	 *          y se ignorarán los mensajes de nivel DEBUG y TRACE
@@ -106,6 +107,7 @@
 	/**
 	* @fn    log_level_as_string
 	* @brief Convierte un t_log_level a su representacion en string
+	* @note Este string debe ser liberado con free() si se deja de usar.
 	*/
 	char 		*log_level_as_string(t_log_level level);
 

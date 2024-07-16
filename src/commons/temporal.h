@@ -47,12 +47,14 @@
 	* temporal_get_string_time("%H:%M:%S:%MS") => "12:51:59:331"
 	* temporal_get_string_time("%d/%m/%y %H:%M:%S") => "30/09/20 12:51:59"
 	* @endcode
+	* @note Este string debe ser liberado con free() al dejar de usarse.
 	*/
 	char *temporal_get_string_time(const char* format);
 
 	/**
 	* @fn    temporal_create
 	* @brief Crea una variable temporal e inicia su cronómetro.
+	* @note Esta debe ser destruida con temporal_destroy() al dejar de usarse.
 	*/
 	t_temporal* temporal_create(void);
 

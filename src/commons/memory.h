@@ -29,6 +29,7 @@
   /**
     * @fn    mem_hexstring
     * @brief Devuelve un dump hexadecimal en formato string de una porción de memoria dada
+    * @note Este dump se debe liberar con free() cuando se termina de usar
     */
   char *mem_hexstring(void *source, size_t length);
 

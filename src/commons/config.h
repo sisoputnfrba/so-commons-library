@@ -31,6 +31,7 @@
 	* @param path Ruta hacia el archivo de configuracion
 	* @return     Retorna un puntero hacia la estructura creada, o NULL
 	*             en caso de no encontrar el archivo en el path especificado.
+	* @note Esta se tiene que liberar cuando se deja de usar con config_destroy().
 	*/
 	t_config *config_create(char *path);
 
@@ -43,6 +44,7 @@
 	/**
 	* @fn    config_get_string_value
 	* @brief Retorna un string con el valor asociado a key.
+	* @note Este string debe ser liberado con free() si se deja de usar. (Tal vez?)
 	*/
 	char 	 *config_get_string_value(t_config*, char *key);
 
@@ -73,6 +75,7 @@
 	*
 	* @example VALORES=[1,2,3,4,5]
 	* @note    El array que devuelve termina en NULL
+	* @note    El array debe ser liberado con string_array_destroy().
 	*/
 	char**    config_get_array_value(t_config*, char* key);
 
