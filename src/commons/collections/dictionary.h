@@ -23,6 +23,10 @@
 	#include <stdbool.h>
 	#include "list.h"
 
+	/**
+	 * @struct t_dictionary
+	 * @brief  Estructura de un diccionario que contiene pares string->puntero
+	 */
 	typedef struct {
 		t_hash_element **elements;
 		int table_max_size;
@@ -31,94 +35,94 @@
 	} t_dictionary;
 
 	/**
-	* @fn    dictionary_create
-	* @brief Crea el diccionario
+	* @brief   Crea el diccionario
+	* @relates t_dictionary
 	*/
 	t_dictionary *dictionary_create();
 
 	/**
-	* @fn    dictionary_put
-	* @brief Inserta un nuevo par (key->element) al diccionario, en caso de ya existir la key actualiza el elemento.
+	* @brief   Inserta un nuevo par (key->element) al diccionario, en caso de ya existir la key actualiza el elemento.
+	* @relates t_dictionary
 	*
 	* @warning Tener en cuenta que esto no va a liberar la memoria del `element` original.
 	*/
 	void 		  dictionary_put(t_dictionary *, char *key, void *element);
 
 	/**
-	* @fn    dictionary_get
-	* @brief Obtiene el elemento asociado a la key.
+	* @brief   Obtiene el elemento asociado a la key.
+	* @relates t_dictionary
 	*/
 	void 		 *dictionary_get(t_dictionary *, char *key);
 
 	/**
-	* @fn    dictionary_remove
-	* @brief Remueve un elemento del diccionario y lo retorna.
+	* @brief   Remueve un elemento del diccionario y lo retorna.
+	* @relates t_dictionary
 	*/
 	void 		 *dictionary_remove(t_dictionary *, char *key);
 
 	/**
-	* @fn    dictionary_remove_and_destroy
-	* @brief Remueve un elemento del diccionario y lo destruye.
+	* @brief   Remueve un elemento del diccionario y lo destruye.
+	* @relates t_dictionary
 	*/
 	void 		  dictionary_remove_and_destroy(t_dictionary *, char *, void(*element_destroyer)(void*));
 
 	/**
-	* @fn    dictionary_iterator
-	* @brief Aplica closure a todos los elementos del diccionario.
+	* @brief   Aplica closure a todos los elementos del diccionario.
+	* @relates t_dictionary
 	*/
 	void 		  dictionary_iterator(t_dictionary *, void(*closure)(char* key, void* element));
 
 	/**
-	* @fn    dictionary_clean
-	* @brief Quita todos los elementos del diccionario
+	* @brief   Quita todos los elementos del diccionario
+	* @relates t_dictionary
 	*/
 	void 		  dictionary_clean(t_dictionary *);
 
 	/**
-	* @fn    dictionary_clean_and_destroy_elements
-	* @brief Quita todos los elementos del diccionario y los destruye
+	* @brief   Quita todos los elementos del diccionario y los destruye
+	* @relates t_dictionary
 	*/
 	void 		  dictionary_clean_and_destroy_elements(t_dictionary *, void(*element_destroyer)(void*));
 
 	/**
-	* @fn    dictionary_has_key
-	* @brief Retorna true si key se encuentra en el diccionario
+	* @brief   Retorna true si key se encuentra en el diccionario
+	* @relates t_dictionary
 	*/
 	bool 		  dictionary_has_key(t_dictionary *, char* key);
 
 	/**
-	* @fn    dictionary_is_empty
-	* @brief Retorna true si el diccionario está vacío
+	* @brief   Retorna true si el diccionario está vacío
+	* @relates t_dictionary
 	*/
 	bool 		  dictionary_is_empty(t_dictionary *);
 
 	/**
-	* @fn    dictionary_size
-	* @brief Retorna la cantidad de elementos del diccionario
+	* @brief   Retorna la cantidad de elementos del diccionario
+	* @relates t_dictionary
 	*/
 	int 		  dictionary_size(t_dictionary *);
 
 	/**
-	* @fn    dictionary_keys
-	* @brief Retorna todas las keys en una lista
+	* @brief   Retorna todas las keys en una lista
+	* @relates t_dictionary
 	*/
 	t_list 		  *dictionary_keys(t_dictionary *self);
 
 	/**
-	* @fn    dictionary_elements
-	* @brief Retorna todos los elementos en una lista
+	* @brief   Retorna todos los elementos en una lista
+	* @relates t_dictionary
 	*/
 	t_list 		  *dictionary_elements(t_dictionary *self);
 
 	/**
-	* @fn    dictionary_destroy
-	* @brief Destruye el diccionario
+	* @brief   Destruye el diccionario
+	* @relates t_dictionary
 	*/
 	void 		  dictionary_destroy(t_dictionary *);
 
 	/**
-	* @fn    dictionary_destroy_and_destroy_elements
-	* @brief Destruye el diccionario y destruye sus elementos
+	* @brief   Destruye el diccionario y destruye sus elementos
+	* @relates t_dictionary
 	*/
 	void 		  dictionary_destroy_and_destroy_elements(t_dictionary *, void(*element_destroyer)(void*));
 

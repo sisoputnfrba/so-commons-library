@@ -25,23 +25,22 @@
 	#define BIT_CHAR(bit)         ((bit) / CHAR_BIT)
 
 	/**
-	 * @brief Define el orden bajo el cual se guardarán los bits a la hora de llenar los bytes.
+	 * @enum    bit_numbering_t
+	 * @brief   Define el orden bajo el cual se guardarán los bits a la hora de llenar los bytes
+	 * @relates t_bitarray
+	 *
 	 * @note  La mayoría de las implementaciones de bitmap usan LSB_FIRST. Si no estás seguro
 	 *        de cuál usar, probablemente quieras usar esta.
 	 */
 	typedef enum {
-		/**
-		 *  @brief   Completa los bits en un byte priorizando el bit menos significativo:
-		 *  @example 00000001 00000000
-		 */
-		LSB_FIRST,
-		/**
-		 *  @brief   Completa los bits en un byte priorizando el bit más significativo:
-		 *  @example 10000000 00000000
-		 */
-		MSB_FIRST
+		LSB_FIRST, //!< Completa los bits en un byte priorizando el bit menos significativo: 00000001 00000000
+		MSB_FIRST //!< Completa los bits en un byte priorizando el bit más significativo: 10000000 00000000
 	} bit_numbering_t;
 
+	/**
+	 * @struct t_bitarray
+	 * @brief  Manipulación de un bloque de memoria a nivel de bits
+	 */
 	typedef struct {
 		char *bitarray;
 		size_t size;
@@ -49,32 +48,31 @@
 	} t_bitarray;
 
 	/**
-	* @deprecated Esta función se encuentra en revisión y probablemente cambie en próximas versiones.
-	*             Usar bitarray_create_with_mode.
+	* @warning Esta función se encuentra en revisión y probablemente cambie en próximas versiones.
+	*          Usar bitarray_create_with_mode().
 	*
-	* @fn    bitarray_create
-	* @brief Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
+	* @brief   Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
+	* @relates t_bitarray
 	*
 	* @param bitarray El bloque de memoria que contiene los bits a leer/escribir
 	* @param size     La cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
 	*
-	* @example bitarray de 8 posiciones (bits),
 	* @code
 	* void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
 	* bitarray_create(puntero_a_bits, 1)
 	* @endcode
+	*
 	*/
 	t_bitarray 	*bitarray_create(char *bitarray, size_t size) __attribute__((deprecated));
 
 	/**
-	* @fn    bitarray_create_with_mode
-	* @brief Crea y devuelve un puntero a una estructura t_bitarray
+	* @brief   Crea y devuelve un puntero a una estructura t_bitarray
+	* @relates t_bitarray
 	*
 	* @param bitarray El bloque de memoria que contiene los bits a leer/escribir
 	* @param size     La cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
 	* @param mode     LSB_FIRST o MSB_FIRST @see bit_numbering_t
 	*
-	* @example bitarray de 8 posiciones (bits) con LSB_FIRST,
 	* @code
 	* void* puntero_a_bits = //un byte de memoria, como por ejemplo malloc(1)
 	* bitarray_create_with_mode(puntero_a_bits, 1, LSB_FIRST)
@@ -83,32 +81,32 @@
 	t_bitarray	*bitarray_create_with_mode(char *bitarray, size_t size, bit_numbering_t mode);
 
 	/**
-	* @fn    bitarray_test_bit
-	* @brief Devuelve el valor del bit de la posicion indicada
+	* @brief   Devuelve el valor del bit de la posicion indicada
+	* @relates t_bitarray
 	*/
 	bool 		 bitarray_test_bit(t_bitarray*, off_t bit_index);
 
 	/**
-	* @fn    bitarray_set_bit
-	* @brief Setea el valor del bit de la posicion indicada
+	* @brief   Setea el valor del bit de la posicion indicada
+	* @relates t_bitarray
 	*/
 	void		 bitarray_set_bit(t_bitarray*, off_t bit_index);
 
 	/**
-	* @fn    bitarray_clean_bit
-	* @brief Limpia el valor del bit de la posicion indicada
+	* @brief   Limpia el valor del bit de la posicion indicada
+	* @relates t_bitarray
 	*/
 	void		 bitarray_clean_bit(t_bitarray*, off_t bit_index);
 
 	/**
-	* @fn    bitarray_get_max_bit
-	* @brief Devuelve la cantidad de bits en el bitarray
+	* @brief   Devuelve la cantidad de bits en el bitarray
+	* @relates t_bitarray
 	*/
 	size_t		 bitarray_get_max_bit(t_bitarray*);
 
 	/**
-	* @fn    bitarray_destroy
-	* @brief Destruye el bit array
+	* @brief   Destruye el bit array
+	* @relates t_bitarray
 	*/
 	void 		 bitarray_destroy(t_bitarray*);
 

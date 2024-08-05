@@ -16,12 +16,14 @@
 #ifndef ERROR_H_
 #define ERROR_H_
 
+	/** @cond INCLUDE_INTERNALS */
 
 	/**
-	* @fn    error_show
 	* @brief imprime un mensaje con el siguiente formato
 	* 	     [[ERROR]] MESSAGE
 	*/
 	void error_show(char *message, ...);
+
+	/** @endcond */
 
 #endif /* ERROR_H_ */

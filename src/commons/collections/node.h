@@ -17,6 +17,7 @@
 #ifndef NODE_H_
 #define NODE_H_
 
+	/** @cond INCLUDE_INTERNALS */
 
 	struct link_element{
 		void *data;
@@ -38,5 +39,7 @@
 		struct hash_element *next;
 	};
 	typedef struct hash_element t_hash_element;
+
+	/** @endcond */
 
 #endif /*NODE_H_*/
