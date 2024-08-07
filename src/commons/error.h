@@ -22,7 +22,7 @@
 	* @brief imprime un mensaje con el siguiente formato
 	* 	     [[ERROR]] MESSAGE
 	*/
-	void error_show(char *message, ...);
+	void error_show(char *message, ...) __attribute__((format(printf, 1, 2)));
 
 	/** @endcond */
 
