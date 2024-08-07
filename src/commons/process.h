@@ -19,17 +19,17 @@
 
 /**
  * @struct process
- * @brief  Funciones para obtener información del proceso
+ * @brief Funciones para obtener información del proceso
  */
 
 /**
-* @brief   Obtiene el ID del thread actual
+* @brief Obtiene el ID del thread actual
 * @relates process
 */
 unsigned int process_get_thread_id();
 
 /**
-* @brief   Obtiene el ID del proceso actual
+* @brief Obtiene el ID del proceso actual
 * @relates process
 */
 unsigned int process_getpid();
