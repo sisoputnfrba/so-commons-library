@@ -26,6 +26,19 @@ Algunas de las consideraciones a tener a la hora de su uso:
 * Ninguna de las implementaciones utiliza semáforos, por lo que el uso concurrente debe ser implementado por el usuario de estas.
 * Ninguna de las funciones implementadas posee validaciones para manejo de errores.
 
+## Para usuarios de MacOS
+### Pre-requisitos
+- gcc-14
+- gcp
+
+Recomendamos tener instalado [brew](https://brew.sh/) para poder instalar los pre requisitos de la siguiente forma:
+```Bash
+brew install gcc@14
+brew install coreutils
+```
+
+Al seguir la guia, antes de hacer los comandos make como se explican abajo deben hacer `cd src/`
+
 ## Guía de Instalación
 
 Esta biblioteca utiliza CSpec para testear todas las funcionalidades, más información en: https://github.com/mumuki/cspec
@@ -42,7 +55,7 @@ Instrucciones de instalación:
 
 1. Linkear con `-lcommons`
 
-2. Para usarla en un .c/.h deberá incluirse de la siguiente forma: `commons/<Nombre_TAD>`
+2. Para usarla en un .c/.h deberá incluirse de la siguiente forma: `<commons/Nombre_TAD>`
 
 Por ejemplo:
 

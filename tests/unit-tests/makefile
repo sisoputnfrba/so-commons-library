@@ -1,6 +1,14 @@
 RM=rm -rf
 CC=gcc
 
+ifeq ($(shell uname -s),Linux)
+    CC=gcc
+else ifeq ($(shell uname -s),Darwin)
+    CC=gcc-14
+else
+    $(error 'OS not supported!')
+endif
+
 BASE_DIR=../..
 
 C_SPEC=$(BASE_DIR)/cspec
