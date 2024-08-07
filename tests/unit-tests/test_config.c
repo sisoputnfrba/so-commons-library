@@ -74,11 +74,15 @@ context (test_config) {
                 } end
 
                 it ("should get string value") {
-                    should_string(config_get_string_value(config, "IP")) be equal to("127.0.0.1");
+                    char *value = config_get_string_value(config, "IP");
+                    should_string(value) be equal to("127.0.0.1");
+                    free(value);
                 } end
 
                 it ("should get string value with equals sign in value") {
-                    should_string(config_get_string_value(config, "WITH_EQUALS")) be equal to("this=value");
+                    char *value = config_get_string_value(config, "WITH_EQUALS");
+                    should_string(value) be equal to("this=value");
+                    free(value);
                 } end
 
                 it ("should get double value") {
@@ -86,10 +90,13 @@ context (test_config) {
                 } end
 
                 it ("should get an empty array value") {
-                    should_string(config_get_string_value(config, "EMPTY_ARRAY")) be equal to("[]");
-                    char** empty_array  = config_get_array_value(config, "EMPTY_ARRAY");
-
                     char* empty_array_expected[] = {NULL};
+
+                    char *string_value = config_get_string_value(config, "EMPTY_ARRAY");
+                    should_string(string_value) be equal to("[]");
+                    free(string_value);
+
+                    char** empty_array = config_get_array_value(config, "EMPTY_ARRAY");
                     _assert_equals_array(empty_array_expected, empty_array, 0);
 
                     string_array_destroy(empty_array);
@@ -97,7 +104,10 @@ context (test_config) {
 
                 it ("should get an array with values") {
                     char* numbers_expected[] = {"1", "2", "3", "4", "5", NULL};
-                    should_string(config_get_string_value(config, "NUMBERS")) be equal to("[1, 2, 3, 4, 5]");
+
+                    char *string_value = config_get_string_value(config, "NUMBERS");
+                    should_string(string_value) be equal to("[1, 2, 3, 4, 5]");
+                    free(string_value);
 
                     char** numbers = config_get_array_value(config, "NUMBERS");
                     _assert_equals_array(numbers_expected, numbers, 5);
@@ -107,7 +117,10 @@ context (test_config) {
 
                 it ("should get an array with values without spaces between entries") {
                   char *strings_expected[] = {"One", "String", "Next", "to", "another", NULL};
-                  should_string(config_get_string_value(config, "NO_SPACES")) be equal to("[One,String,Next,to,another]");
+
+                  char* string_value = config_get_string_value(config, "NO_SPACES");
+                  should_string(string_value) be equal to("[One,String,Next,to,another]");
+                  free(string_value);
 
                   char** strings = config_get_array_value(config, "NO_SPACES");
                   _assert_equals_array(strings_expected, strings, 5);
@@ -116,7 +129,10 @@ context (test_config) {
                 } end
 
                 it ("should get a value ignoring trailing spaces") {
-                    should_string(config_get_string_value(config, "TRAILING_WHITESPACES")) be equal to("42");
+                    char *string_value = config_get_string_value(config, "TRAILING_WHITESPACES");
+                    should_string(string_value) be equal to("42");
+                    free(string_value);
+
                     should_int(config_get_int_value(config, "TRAILING_WHITESPACES")) be equal to(42);
                 } end
 
@@ -136,7 +152,7 @@ context (test_config) {
 
     describe("Set value") {
         t_config* config;
-        
+
         before {
             config = config_create("resources/config.cfg");
         } end
@@ -149,14 +165,20 @@ context (test_config) {
             char* key = "PORT";
             char* expected = "3000";
             config_set_value(config, key, expected);
-            should_string(config_get_string_value(config, key)) be equal to (expected);
+
+            char *value = config_get_string_value(config, key);
+            should_string(value) be equal to (expected);
+            free(value);
     	} end
 
     	it ("should add an non existing value to the config") {
             char* key = "ANEWKEY";
             char* expected = "lorem ipsum";
             config_set_value(config, key, expected);
-            should_string(config_get_string_value(config, key)) be equal to (expected);
+
+            char *value = config_get_string_value(config, key);
+            should_string(value) be equal to (expected);
+            free(value);
     	} end
     } end
 
@@ -185,8 +207,10 @@ context (test_config) {
             config_set_value(config, key, expected);
             int result = config_save_in_file(config, new_file_path);
             t_config *new_config = config_create(new_file_path);
-            should_string(config_get_string_value(new_config, key)) be equal to (expected);
-            config_destroy(new_config);    	    
+            char *value = config_get_string_value(new_config, key);
+            should_string(value) be equal to (expected);
+            free(value);
+            config_destroy(new_config);
         } end
 
         it ("should create a config file without the specified key") {
@@ -199,8 +223,8 @@ context (test_config) {
             should_bool(config_has_property(new_config, key)) be falsey;
             should_bool(config_has_property(new_config, "WITH_EQUALS")) be truthy;
             should_bool(config_has_property(new_config, "NUMBERS")) be truthy;
-            
-            config_destroy(new_config);         
+
+            config_destroy(new_config);
         } end
     } end
 

@@ -41,7 +41,7 @@ t_config *config_create(char *path) {
 	char* buffer = calloc(1, stat_file.st_size + 1);
 	fread(buffer, stat_file.st_size, 1, file);
 
-	if (strstr(buffer, "\r\n")) {
+	if (string_contains(buffer, "\r\n")) {
 		printf("\n\nconfig_create - WARNING: the file %s contains a \\r\\n sequence "
 		 "- the Windows new line sequence. The \\r characters will remain as part "
 		 "of the value, as Unix newlines consist of a single \\n. You can install "
@@ -74,26 +74,27 @@ bool config_has_property(t_config *self, char* key) {
 }
 
 char *config_get_string_value(t_config *self, char *key) {
-	return dictionary_get(self->properties, key);
+	char *value = dictionary_get(self->properties, key);
+	return string_duplicate(value);
 }
 
 int config_get_int_value(t_config *self, char *key) {
-	char *value = config_get_string_value(self, key);
+	char *value = dictionary_get(self->properties, key);
 	return atoi(value);
 }
 
 long config_get_long_value(t_config *self, char *key) {
-	char *value = config_get_string_value(self, key);
+	char *value = dictionary_get(self->properties, key);
 	return atol(value);
 }
 
 double config_get_double_value(t_config *self, char *key) {
-	char *value = config_get_string_value(self, key);
+	char *value = dictionary_get(self->properties, key);
 	return atof(value);
 }
 
 char** config_get_array_value(t_config* self, char* key) {
-	char* value_in_dictionary = config_get_string_value(self, key);
+	char* value_in_dictionary = dictionary_get(self->properties, key);
 	return string_get_string_as_array(value_in_dictionary);
 }
 
@@ -112,13 +113,13 @@ void config_set_value(t_config *self, char *key, char *value) {
 
 	char* duplicate_value = string_duplicate(value);
 
-	dictionary_put(self->properties, key, (void*)duplicate_value);
+	dictionary_put(self->properties, key, duplicate_value);
 }
 
 void config_remove_key(t_config *self, char *key) {
 	t_dictionary* dictionary = self->properties;
 
-	if(dictionary_has_key(dictionary, key)) {
+	if (dictionary_has_key(dictionary, key)) {
 		dictionary_remove_and_destroy(dictionary, key, free);
 	}
 }
@@ -131,7 +132,7 @@ int config_save_in_file(t_config *self, char* path) {
 	FILE* file = fopen(path, "wb+");
 
 	if (file == NULL) {
-			return -1;
+		return -1;
 	}
 
 	char* lines = string_new();
