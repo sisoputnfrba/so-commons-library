@@ -16,6 +16,7 @@
 
 #include "error.h"
 
+#include <errno.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -23,16 +24,11 @@
 
 #include "string.h"
 
-
 void error_show(char *message, ...) {
 	va_list arguments;
 	va_start(arguments, message);
-
-	char *error_message = string_duplicate("[[ERROR]]");
-	string_append(&error_message, message);
-
-	vprintf(error_message, arguments);
-
+	char *error_message = string_from_format("[[ERROR]] %s: %s\n", message, strerror(errno));
+	vfprintf(stderr, error_message, arguments);
 	free(error_message);
 	va_end(arguments);
 }
