@@ -1,5 +1,5 @@
 RM=rm -rf
-CC=gcc
+CC=gcc -Wno-trampolines -Wl,--no-warn-execstack
 
 C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
 H_SRCS=$(shell find . -iname "*.h" | tr '\n' ' ')
