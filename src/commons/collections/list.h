@@ -57,17 +57,37 @@
 	t_list * list_create(void);
 
 	/**
-	* @brief Destruye una lista sin liberar los elementos contenidos en los nodos
+	* @brief Agrega un elemento al final de la lista
+	* @param element: El elemento a agregar. Este elemento pasará a pertenecer
+	*                 a la lista, por lo que no debe ser liberado por fuera de ésta.
+	* @return El índice en el que se agregó el elemento
 	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
+	* t_list* people = list_create();
+	*
 	* t_person* person_create(char* name, int age) {
 	*     t_person* person = malloc(sizeof(t_person));
 	*     person->name = string_duplicate(name);
 	*     person->age = age;
 	*     return person;
 	* }
+	* list_add(people, person_create("Lionel Messi", 33)); // 0x1234
+	* list_add(people, person_create("Cristiano Ronaldo", 35)); // 0x5678
+	* list_add(people, person_create("Neymar Jr.", 29)); // 0x9abc
+	*
+	* => people = [0x1234, 0x5678, 0x9abc]
+	* @endcode
+	*/
+	int list_add(t_list* self, void *element);
+
+	/**
+	* @brief Destruye una lista sin liberar los elementos contenidos en los nodos
+	* @relates t_list
+	*
+	* Ejemplo de uso:
+	* @code
 	* t_person* messi = person_create("Lionel Messi", 33); // 0x1234
 	* t_person* ronaldo = person_create("Cristiano Ronaldo", 35); // 0x5678
 	* t_person* neymar = person_create("Neymar Jr.", 29); // 0x9abc
@@ -112,25 +132,6 @@
 	void list_destroy_and_destroy_elements(t_list* self, void(*element_destroyer)(void*));
 
 	/**
-	* @brief Agrega un elemento al final de la lista
-	* @param element: El elemento a agregar. Este elemento pasará a pertenecer
-	*                 a la lista, por lo que no debe ser liberado por fuera de ésta.
-	* @return El índice en el que se agregó el elemento
-	* @relates t_list
-	*
-	* Ejemplo de uso:
-	* @code
-	* t_list* people = list_create();
-	* list_add(people, person_create("Lionel Messi", 33)); // 0x1234
-	* list_add(people, person_create("Cristiano Ronaldo", 35)); // 0x5678
-	* list_add(people, person_create("Neymar Jr.", 29)); // 0x9abc
-	*
-	* => people = [0x1234, 0x5678, 0x9abc]
-	* @endcode
-	*/
-	int list_add(t_list* self, void *element);
-
-	/**
 	* @brief Agrega un elemento en una posicion determinada de la lista
 	* @param index: La posicion en la que se quiere agregar el elemento
 	* @param element: El elemento a agregar. Este elemento pasará a pertenecer
@@ -140,11 +141,13 @@
 	* Ejemplo de uso:
 	* @code
 	* t_list* people = list_create();
-	* list_add_in_index(people, 0, person_create("Lionel Messi", 33)); // 0x1234
-	* list_add_in_index(people, 1, person_create("Cristiano Ronaldo", 35)); // 0x5678
-	* list_add_in_index(people, 1, person_create("Neymar Jr.", 29)); // 0x9abc
+	* list_add(people, 0, person_create("Lionel Messi", 33)); // 0x1234
+	* list_add(people, 1, person_create("Cristiano Ronaldo", 35)); // 0x5678
+	* list_add(people, 1, person_create("Neymar Jr.", 29)); // 0x9abc
 	*
-	* => people = [0x1234, 0x9abc, 0x5678]
+	* list_add_in_index(people, 1, person_create("Kylian Mbappé", 22)); // 0xdef0
+	*
+	* => people = [0x1234, 0xdef0, 0x5678, 0x9abc]
 	* @endcode
 	*/
 	void list_add_in_index(t_list* self, int index, void *element);
@@ -162,17 +165,18 @@
 	* Ejemplo de uso:
 	* @code
 	* t_list* people = list_create();
+	* list_add(people, person_create("Kylian Mbappé", 22)); // 0x1234
+	* list_add(people, person_create("Lionel Messi", 33)); // 0x5678
+	* list_add(people, person_create("Cristiano Ronaldo", 35)); // 0x9abc
 	*
 	* bool _has_age_less_than(void* a, void* b) {
 	*     t_person* person_a = (t_person*) a;
 	*     t_person* person_b = (t_person*) b;
 	*     return person_a->age < person_b->age;
 	* }
-	* list_add_sorted(people, person_create("Lionel Messi", 33), _has_age_less_than); // 0x1234
-	* list_add_sorted(people, person_create("Cristiano Ronaldo", 35), _has_age_less_than); // 0x5678
-	* list_add_sorted(people, person_create("Neymar Jr.", 29), _has_age_less_than); // 0x9abc
+	* list_add_sorted(people, person_create("Neymar Jr.", 29), _has_age_less_than); // 0xdef0
 	*
-	* => people = [0x9abc, 0x1234, 0x5678]
+	* => people = [0x1234, 0xdef0, 0x5678, 0x9abc]
 	* @endcode
 	*/
 	int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*));
