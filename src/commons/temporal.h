@@ -20,15 +20,17 @@
 	#include <time.h>
 
 	/**
-	* @brief Estado de una variable temporal.
+	* @enum t_temporal_status Estado del cronómetro
+	* @relates t_temporal
 	*/
 	typedef enum {
-		TEMPORAL_STATUS_STOPPED,
-		TEMPORAL_STATUS_RUNNING
+		TEMPORAL_STATUS_STOPPED, //!< Cronómetro detenido
+		TEMPORAL_STATUS_RUNNING  //!< Cronómetro en marcha
 	} t_temporal_status;
 
 	/**
-	* @brief Estructura de una Variable temporal.
+	* @struct t_temporal
+	* @brief Manejo de tiempo con cronómetro
 	*/
 	typedef struct {
 		struct timespec current;
@@ -37,11 +39,9 @@
 	} t_temporal;
 
 	/**
-	* @fn    temporal_get_string_time
-	* @brief Retorna un string con la hora actual, con el formato recibido por
-	*        parámetro.
+	* @brief Retorna un string con la hora actual con el formato recibido por parámetro.
+	* @relates t_temporal
 	*
-	* @example
 	* @code
 	* temporal_get_string_time("%d/%m/%y") => "30/09/20"
 	* temporal_get_string_time("%H:%M:%S:%MS") => "12:51:59:331"
@@ -52,53 +52,53 @@
 	char *temporal_get_string_time(const char* format);
 
 	/**
-	* @fn    temporal_create
 	* @brief Crea una variable temporal e inicia su cronómetro.
-	* @note Esta debe ser destruida con temporal_destroy() al dejar de usarse.
+	* @return La variable temporal creada debe ser liberada con temporal_destroy().
+	* @relates t_temporal
 	*/
 	t_temporal* temporal_create(void);
 
 	/**
-	* @fn    temporal_destroy
 	* @brief Destruye una variable temporal.
+	* @relates t_temporal
 	*
-	* @param temporal Variable temporal a destruir.
+	* @param temporal: Variable temporal a destruir.
 	*/
 	void temporal_destroy(t_temporal* temporal);
 
 	/**
-	* @fn    temporal_gettime
 	* @brief Retorna el tiempo total transcurrido mientras el cronómetro estuvo
 	*        activo en milisegundos.
+	* @relates t_temporal
 	*
-	* @param temporal Variable temporal.
+	* @param temporal: Variable temporal.
 	*/
 	int64_t temporal_gettime(t_temporal* temporal);
 
 	/**
-	* @fn    temporal_stop
 	* @brief Detiene el cronómetro de una variable temporal.
+	* @relates t_temporal
 	*
-	* @param temporal Variable temporal a frenar.
+	* @param temporal: Variable temporal a frenar.
 	*/
 	void temporal_stop(t_temporal* temporal);
 
 	/**
-	* @fn    temporal_resume
 	* @brief Reanuda el cronómetro de una variable temporal.
+	* @relates t_temporal
 	*
-	* @param temporal Variable temporal a reanudar.
+	* @param temporal: Variable temporal a reanudar.
 	*/
 	void temporal_resume(t_temporal* temporal);
 
 	/**
-	* @fn    temporal_diff
 	* @brief Retorna la diferencia del tiempo total transcurrido entre dos
 	*        variables temporales en milisegundos
+	* @relates t_temporal
 	*
-	* @param temporal_1 Primera variable temporal.
-	* @param temporal_2 Segunda variable temporal.
+	* @param temporal_1: Primera variable temporal.
+	* @param temporal_2: Segunda variable temporal.
 	*/
 	int64_t temporal_diff(t_temporal* temporal_1, t_temporal* temporal_2);
-	
+
 #endif /* TEMPORAL_H_ */

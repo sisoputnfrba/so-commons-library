@@ -19,99 +19,104 @@
 
 	#include "collections/dictionary.h"
 
+	/**
+	 * @struct t_config
+	 * @brief Manejo de archivos de configuracion
+	 */
 	typedef struct {
 		char *path;
 		t_dictionary *properties;
 	} t_config;
 
 	/**
-	* @fn    config_create
 	* @brief Crea una estructura t_config
+	* @relates t_config
 	*
 	* @param path Ruta hacia el archivo de configuracion
-	* @return     Retorna un puntero hacia la estructura creada, o NULL
-	*             en caso de no encontrar el archivo en el path especificado.
-	* @note Esta se tiene que liberar cuando se deja de usar con config_destroy().
+	* @return Retorna un puntero hacia la estructura creada, o NULL
+	*         en caso de no encontrar el archivo en el path especificado.
+	*         Una vez que se deje de usar, se debe liberar con config_destroy().
 	*/
 	t_config *config_create(char *path);
 
 	/**
-	* @fn    config_has_property
 	* @brief Retorna true si key se encuentra en la configuracion.
+	* @relates t_config
 	*/
 	bool 	  config_has_property(t_config*, char* key);
 
 	/**
-	* @fn    config_get_string_value
 	* @brief Retorna un string con el valor asociado a key.
-	* @note Este string debe ser liberado con free() si se deja de usar. (Tal vez?)
+	* @relates t_config
 	*/
 	char 	 *config_get_string_value(t_config*, char *key);
 
 	/**
-	* @fn    config_get_int_value
 	* @brief Retorna un int con el valor asociado a key.
+	* @relates t_config
 	*/
 	int 	  config_get_int_value(t_config*, char *key);
 
 	/**
-	* @fn    config_get_long_value
 	* @brief Retorna un long con el valor asociado a key.
+	* @relates t_config
 	*/
 	long	  config_get_long_value(t_config*, char *key);
 
 	/**
-	* @fn    config_get_double_value
 	* @brief Retorna un double con el valor asociado a key.
+	* @relates t_config
 	*/
 	double 	  config_get_double_value(t_config*, char *key);
 
 	/**
-	* @fn    config_get_array_value
 	* @brief Retorna un array con los valores asociados a la key especificada.
+	* @relates t_config
 	*
 	* @note En el archivo de configuracion un valor de este tipo debería ser representado
-	*       de la siguiente forma [lista_valores_separados_por_coma]
+	*       de la siguiente forma [lista_valores_separados_por_coma]. Ejemplo:
 	*
-	* @example VALORES=[1,2,3,4,5]
-	* @note    El array que devuelve termina en NULL
-	* @note    El array debe ser liberado con string_array_destroy().
+	* @code
+	* VALORES=[1,2,3,4,5]
+	* @endcode
+	*
+	* @note El array que devuelve termina en NULL
 	*/
 	char**    config_get_array_value(t_config*, char* key);
 
 	/**
-	* @fn    config_key_amount
 	* @brief Retorna la cantidad de keys.
+	* @relates t_config
 	*/
 	int 	  config_keys_amount(t_config*);
 
 	/**
-	* @fn    config_destroy
 	* @brief Destruye la estructura config.
+	* @relates t_config
 	*/
 	void 	  config_destroy(t_config *config);
 
 	/**
-	* @fn    config_set_value
 	* @brief Setea el valor en el archivo de config, a la key asociada.
+	* @relates t_config
 	*/
 	void      config_set_value(t_config*, char *key, char *value);
 
 	/**
-	* @fn    config_remove_key
 	* @brief Remueve la clave y su valor asociado del archivo de config.
+	* @relates t_config
 	*/
 	void      config_remove_key(t_config*, char *key);
 
 	/**
-	* @fn    config_save
 	* @brief Reescribe el archivo de configuracion con los valores del config.
+	* @relates t_config
 	*/
 	int       config_save(t_config*);
 
 	/**
-	* @fn    config_save_in_file
 	* @brief Escribe un archivo de configuracion en el path indicado con los valores del config.
+	* @relates t_config
 	*/
 	int       config_save_in_file(t_config*, char *path);
 
