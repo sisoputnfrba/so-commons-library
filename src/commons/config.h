@@ -46,6 +46,8 @@
 
 	/**
 	* @brief Retorna un string con el valor asociado a key.
+	* @warning Devuelve un puntero perteneciente a la estructura t_config, por lo
+	*          que no debe ser liberado por fuera de la misma.
 	* @relates t_config
 	*/
 	char 	 *config_get_string_value(t_config*, char *key);
@@ -71,6 +73,8 @@
 	/**
 	* @brief Retorna un array con los valores asociados a la key especificada.
 	* @relates t_config
+	* @return Devuelve un array de strings terminado en NULL. Debe ser liberado
+	*         con string_array_destroy() una vez que se deje de usar.
 	*
 	* @note En el archivo de configuracion un valor de este tipo debería ser representado
 	*       de la siguiente forma [lista_valores_separados_por_coma]. Ejemplo:
@@ -78,8 +82,6 @@
 	* @code
 	* VALORES=[1,2,3,4,5]
 	* @endcode
-	*
-	* @note El array que devuelve termina en NULL
 	*/
 	char**    config_get_array_value(t_config*, char* key);
 
@@ -109,12 +111,14 @@
 
 	/**
 	* @brief Reescribe el archivo de configuracion con los valores del config.
+	* @return Retorna mayor a 0 si se pudo guardar el archivo, -1 en caso de error.
 	* @relates t_config
 	*/
 	int       config_save(t_config*);
 
 	/**
 	* @brief Escribe un archivo de configuracion en el path indicado con los valores del config.
+	* @return Retorna mayor a 0 si se pudo guardar el archivo, -1 en caso de error.
 	* @relates t_config
 	*/
 	int       config_save_in_file(t_config*, char *path);
