@@ -30,12 +30,11 @@
 
 	/**
 	* @brief Crea una estructura t_config
-	* @relates t_config
-	*
 	* @param path Ruta hacia el archivo de configuracion
 	* @return Retorna un puntero hacia la estructura creada, o NULL
 	*         en caso de no encontrar el archivo en el path especificado.
 	*         Una vez que se deje de usar, se debe liberar con config_destroy().
+	* @relates t_config
 	*/
 	t_config *config_create(char *path);
 

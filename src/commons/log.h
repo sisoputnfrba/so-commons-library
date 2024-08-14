@@ -49,13 +49,13 @@
 	 * @param process_name: El nombre a ser mostrado en los logs
 	 * @param is_active_console: Si lo que se loguea debe mostrarse por consola
 	 * @param level: El nivel de detalle mínimo a loguear (ver definición de t_log_level)
+	 * @return Retorna una instancia de logger, o NULL en caso de error. Debe ser
+	 *         liberada con log_destroy()
 	 *
-	 * @note si file ya existe, se escribirá al final del archivo
-	 * @note si file no existe, se creará un nuevo archivo en el directorio indicado
-	 * @note si el directorio hacia file no existe, se producirá un error
-	 * @note el log creado, en caso de dejar de usarse, debe ser liberado con log_destroy
-	 *
-	 * @return Retorna una instancia de logger, o NULL en caso de error
+	 * @note Se debe tener en cuenta que:
+	 *       - si file ya existe, se escribirá al final del archivo
+	 *       - si file no existe, se creará un nuevo archivo en el directorio indicado
+	 *       - si el directorio hacia file no existe, se producirá un error
 	 */
 	t_log* 		log_create(char* file, char *process_name, bool is_active_console, t_log_level level);
 
@@ -67,7 +67,7 @@
 
 	/**
 	* @brief Loguea un mensaje con el siguiente formato
-	*        [TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	*        `[TRACE] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE`
 	* @relates t_log
 	*
 	*/
@@ -75,7 +75,7 @@
 
 	/**
 	* @brief Loguea un mensaje con el siguiente formato
-	*        [DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	*        `[DEBUG] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE`
 	* @relates t_log
 	*
 	*/
@@ -83,7 +83,7 @@
 
 	/**
 	* @brief Loguea un mensaje con el siguiente formato
-	*        [INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	*        `[INFO] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE`
 	* @relates t_log
 	*
 	*/
@@ -91,7 +91,7 @@
 
 	/**
 	* @brief Loguea un mensaje con el siguiente formato
-	*        [WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	*        `[WARNING] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE`
 	* @relates t_log
 	*
 	*/
@@ -99,7 +99,7 @@
 
 	/**
 	* @brief Loguea un mensaje con el siguiente formato
-	*        [ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE
+	*        `[ERROR] hh:mm:ss:mmmm PROCESS_NAME/(PID:TID): MESSAGE`
 	* @relates t_log
 	*
 	*/

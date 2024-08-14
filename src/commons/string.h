@@ -30,7 +30,7 @@
  * @return El string retornado debe ser liberado con free()
  * @relates string
  */
-char*   string_new(void);
+char*  string_new(void);
 
 /**
  * @brief Crea un string en formato decimal a partir de un número
@@ -44,7 +44,7 @@ char*   string_new(void);
  * => numero = "123"
  * @endcode
  */
-char*   string_itoa(int number);
+char*  string_itoa(int number);
 
 /**
  * @brief Crea un nuevo string a partir de un formato especificado
@@ -58,7 +58,7 @@ char*   string_itoa(int number);
  * => saludo = "Hola mundo"
  * @endcode
  */
-char*   string_from_format(const char* format, ...) __attribute__((format(printf, 1, 2)));
+char*  string_from_format(const char* format, ...) __attribute__((format(printf, 1, 2)));
 
 /**
  * @brief Crea un nuevo string a partir de un formato especificado
@@ -68,7 +68,7 @@ char*   string_from_format(const char* format, ...) __attribute__((format(printf
  * @return Retorna un string que debe ser liberado con free()
  * @relates string
  */
-char*   string_from_vformat(const char* format, va_list arguments);
+char*  string_from_vformat(const char* format, va_list arguments);
 
 /**
  * @brief Crea un string de longitud `count` con el mismo caracter.
@@ -81,7 +81,7 @@ char*   string_from_vformat(const char* format, va_list arguments);
  * string_repeat('a', 5) = "aaaaa"
  * @endcode
  */
-char*   string_repeat(char ch, int count);
+char*  string_repeat(char ch, int count);
 
 /**
  * @brief Agrega al primer string el segundo
@@ -98,7 +98,7 @@ char*   string_repeat(char ch, int count);
  * => unaPalabra = "HOLA PEPE"
  * @endcode
  */
-void    string_append(char ** original, char * string_to_add);
+void   string_append(char ** original, char * string_to_add);
 
 /**
  * @brief Agrega al primer string un máximo de n caracteres del segundo.
@@ -116,7 +116,7 @@ void    string_append(char ** original, char * string_to_add);
  * => unaPalabra = "HOLA PEP"
  * @endcode
  */
-void    string_n_append(char** original, char* string_to_add, int n);
+void   string_n_append(char** original, char* string_to_add, int n);
 
 /**
  * @brief Concatena al primer string el resultado de aplicar los parametros
@@ -135,7 +135,7 @@ void    string_n_append(char** original, char* string_to_add, int n);
  * => saludo = "HOLA PEPE!"
  * @endcode
  */
-void    string_append_with_format(char **original, const char *format, ...) __attribute__((format(printf, 2, 3)));
+void   string_append_with_format(char **original, const char *format, ...) __attribute__((format(printf, 2, 3)));
 
 /**
 * @brief Retorna una copia del string pasado como argumento
@@ -147,7 +147,7 @@ void    string_append_with_format(char **original, const char *format, ...) __at
 * char* copia = string_duplicate("hola");
 * @endcode
 */
-char*   string_duplicate(char* original);
+char*  string_duplicate(char* original);
 
 /**
 * @brief Pone en mayuscula todos los caracteres de un string
@@ -166,7 +166,7 @@ char*   string_duplicate(char* original);
 * string_to_upper(literal_string); => Error!
 * @endcode
 */
-void    string_to_upper(char * text);
+void   string_to_upper(char * text);
 
 /**
 * @brief Pone en minuscula todos los caracteres de un string
@@ -185,7 +185,7 @@ void    string_to_upper(char * text);
 * string_to_lower(literal_string); => Error!
 * @endcode
 */
-void    string_to_lower(char * text);
+void   string_to_lower(char * text);
 
 /**
 * @brief Capitaliza un string
@@ -204,7 +204,7 @@ void    string_to_lower(char * text);
 * string_capitalized(literal_string); => Error!
 * @endcode
 */
-void    string_capitalized(char * text);
+void   string_capitalized(char * text);
 
 /**
 * @brief Remueve todos los caracteres vacios de la derecha y la izquierda
@@ -220,7 +220,7 @@ void    string_capitalized(char * text);
 * string_trim(&stack_string); => Error!
 * @endcode
 */
-void    string_trim(char ** text);
+void   string_trim(char ** text);
 
 /**
 * @brief Remueve todos los caracteres vacios de la izquierda
@@ -236,7 +236,7 @@ void    string_trim(char ** text);
 * string_trim_left(&stack_string); => Error!
 * @endcode
 */
-void    string_trim_left(char ** text);
+void   string_trim_left(char ** text);
 
 /**
 * @brief Remueve todos los caracteres vacios de la derecha
@@ -252,7 +252,7 @@ void    string_trim_left(char ** text);
 * string_trim_right(&stack_string); => Error!
 * @endcode
 */
-void    string_trim_right(char ** text);
+void   string_trim_right(char ** text);
 
 /**
 * @brief Retorna la longitud del string
@@ -263,7 +263,7 @@ void    string_trim_right(char ** text);
 * string_length("hola") => 4
 * @endcode
 */
-int     string_length(char * text);
+int    string_length(char * text);
 
 /**
 * @brief Retorna si un string es ""
@@ -275,7 +275,7 @@ int     string_length(char * text);
 * string_is_empty("") => true
 * @endcode
 */
-bool    string_is_empty(char * text);
+bool   string_is_empty(char * text);
 
 /**
 * @brief Retorna un boolean que indica si el string `text` comienza con el
@@ -289,7 +289,7 @@ bool    string_is_empty(char * text);
 * string_starts_with("hola", "hola mundo") => false
 * @endcode
 */
-bool    string_starts_with(char * text, char * begin);
+bool   string_starts_with(char * text, char * begin);
 
 /**
 * @brief Retorna un boolean que indica si el string `text` finaliza con el
@@ -303,7 +303,7 @@ bool    string_starts_with(char * text, char * begin);
 * string_ends_with("mundo", "hola mundo") => false
 * @endcode
 */
-bool    string_ends_with(char* text, char* end);
+bool   string_ends_with(char* text, char* end);
 
 /**
 * @brief Retorna si dos strings son iguales ignorando las mayusculas y
@@ -318,7 +318,7 @@ bool    string_ends_with(char* text, char* end);
 * string_equals_ignore_case("hola", "mundo") => false
 * @endcode
 */
-bool    string_equals_ignore_case(char * actual, char * expected);
+bool   string_equals_ignore_case(char * actual, char * expected);
 
 /**
 * @brief Separa un string dado un separador
@@ -332,7 +332,7 @@ bool    string_equals_ignore_case(char * actual, char * expected);
 * string_split("hola, mundo", ",") => {"hola", " mundo", NULL}
 * @endcode
 */
-char **string_split(char * text, char * separator);
+char** string_split(char * text, char * separator);
 
 /**
  * @brief Separa un string tantas veces por su separador como n lo permita
@@ -349,7 +349,7 @@ char **string_split(char * text, char * separator);
  * string_n_split("hola, mundo, bueno", 10, ",") => ["hola", " mundo", " bueno", NULL]
  * @endcode
  */
-char**  string_n_split(char* text, int n, char* separator);
+char** string_n_split(char* text, int n, char* separator);
 
 /**
  * @brief Retorna los length caracteres de text empezando en start
@@ -367,7 +367,7 @@ char**  string_n_split(char* text, int n, char* separator);
  * string_n_split("hola, mundo, bueno", 1, 3) => "ola"
  * @endcode
  */
-char*   string_substring(char* text, int start, int length);
+char*  string_substring(char* text, int start, int length);
 
 /**
  * @brief Retorna el substring de text desde el indice start hasta
@@ -378,7 +378,7 @@ char*   string_substring(char* text, int start, int length);
  * @return Retorna un nuevo string que debe ser liberado con free()
  * @relates string
  */
-char*   string_substring_from(char *text, int start);
+char*  string_substring_from(char *text, int start);
 
 /**
  * @brief Retorna los primeros length caracteres de text como un nuevo string
@@ -388,7 +388,7 @@ char*   string_substring_from(char *text, int start);
  * @return Retorna un nuevo string que debe ser liberado con free()
  * @relates string
  */
-char*   string_substring_until(char *text, int length);
+char*  string_substring_until(char *text, int length);
 
 /**
  * @brief Itera un array de strings y aplica la función closure a cada uno
@@ -396,7 +396,7 @@ char*   string_substring_until(char *text, int length);
  * @param[in] closure: Función a aplicar a cada string
  * @relates string
  */
-void    string_iterate_lines(char ** strings, void (*closure)(char *));
+void   string_iterate_lines(char ** strings, void (*closure)(char *));
 
 /**
  * @brief Retorna un array de strings a partir de un string formateado como array
@@ -410,7 +410,7 @@ void    string_iterate_lines(char ** strings, void (*closure)(char *));
  * string_get_value_as_array(array_string) => {"1", "2", "3", "4", NULL}
  * @endcode
  */
-char**  string_get_string_as_array(char* text);
+char** string_get_string_as_array(char* text);
 
 /**
  * @brief Retorna el texto invertido. No se maneja el caso de NULL,
@@ -424,7 +424,7 @@ char**  string_get_string_as_array(char* text);
  * string_reverse(original) => "oob"
  * @endcode
  */
-char*   string_reverse(char* text);
+char*  string_reverse(char* text);
 
 /**
   * @brief Retorna una copia de un string con todas las ocurrencias
@@ -442,7 +442,7 @@ char*   string_reverse(char* text);
   * string_replace(original, "not a substring", "yay!"); => "hello"
   * @endcode
   */
-char*   string_replace(char* text, char* substring, char* replacement);
+char*  string_replace(char* text, char* substring, char* replacement);
 
 /**
  * @brief Retorna un boolean que indica si text contiene o no a substring.
@@ -450,7 +450,7 @@ char*   string_replace(char* text, char* substring, char* replacement);
  * @param[in] substring: Substring a buscar. Admite todo tipo de strings
  * @relates string
  */
-bool    string_contains(char* text, char *substring);
+bool   string_contains(char* text, char *substring);
 
 /**
  * @struct string_array
@@ -462,7 +462,7 @@ bool    string_contains(char* text, char *substring);
 * @return El array retornado debe ser liberado con string_array_destroy()
 * @relates string_array
 */
-char**  string_array_new();
+char** string_array_new();
 
 /**
 * @brief Destruye un array con sus strings
@@ -470,21 +470,21 @@ char**  string_array_new();
 *                       de strings liberables con free() y terminado en NULL
 * @relates string_array
 */
-void    string_array_destroy(char** array);
+void   string_array_destroy(char** array);
 
 /**
 * @brief Retorna la cantidad de líneas del array de strings
 * @param[in] array: Array de strings terminado en NULL
 * @relates string_array
 */
-int     string_array_size(char** array);
+int    string_array_size(char** array);
 
 /**
 * @brief Verifica si el array de strings está vacío
 * @param[in] array: Array de strings terminado en NULL
 * @relates string_array
 */
-bool    string_array_is_empty(char** array);
+bool   string_array_is_empty(char** array);
 
 /**
 * @brief Agrega un string al final del array
@@ -500,7 +500,7 @@ bool    string_array_is_empty(char** array);
 * string_array_push(&array, "mundo"); => {"hola", "mundo", NULL}
 * @endcode
 */
-void    string_array_push(char*** array, char* text);
+void   string_array_push(char*** array, char* text);
 
 /**
 * @brief Reemplaza un string en un array por otro
@@ -512,7 +512,7 @@ void    string_array_push(char*** array, char* text);
 * @return El string reemplazado. Debe ser liberado con free()
 * @relates string_array
 */
-char*   string_array_replace(char** array, int pos, char* text);
+char*  string_array_replace(char** array, int pos, char* text);
 
 /**
 * @brief Quita el último string del array y lo retorna
@@ -522,6 +522,6 @@ char*   string_array_replace(char** array, int pos, char* text);
 *         liberado con free()
 * @relates string_array
 */
-char*   string_array_pop(char** array);
+char*  string_array_pop(char** array);
 
 #endif /* STRING_UTILS_H_ */
