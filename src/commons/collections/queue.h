@@ -21,7 +21,7 @@
 
 	/**
 	 * @struct t_queue
-	 * @brief Estructura que representa una cola
+	 * @brief Estructura que representa una cola. Inicializar con queue_create()
 	 */
 	typedef struct {
 		t_list* elements;
@@ -34,20 +34,17 @@
  *           los elementos que contiene.
  *         - queue_destroy_and_destroy_elements() si se quiere liberar
  *           la cola con los elementos que contiene.
-	* @relates t_queue
 	*/
 	t_queue *queue_create(void);
 
 	/**
 	* @brief Destruye una cola sin liberar los elementos que contiene
-	* @relates t_queue
 	*/
 	void queue_destroy(t_queue *);
 
 	/**
 	* @brief Destruye una cola, recibiendo como argumento el metodo encargado de
 	*        liberar cada elemento de la cola.
-	* @relates t_queue
 	*/
 	void queue_destroy_and_destroy_elements(t_queue*, void(*element_destroyer)(void*));
 
@@ -55,7 +52,6 @@
 	* @brief Agrega un elemento al final de la cola
 	* @param element Elemento a agregar. Este elemento pasará a pertenecer
 	*                a la cola, por lo que no debe ser liberado por fuera de ésta.
-	* @relates t_queue
 	*/
 	void queue_push(t_queue *, void *element);
 
@@ -63,7 +59,6 @@
 	* @brief quita el primer elemento de la cola
 	* @return El elemento extraído de la cola. Este elemento debe ser liberado
 	*         una vez que se deje de usar.
-	* @relates t_queue
 	*/
 	void *queue_pop(t_queue *);
 
@@ -71,31 +66,26 @@
 	* @brief Devuelve el primer elemento de la cola sin extraerlo
 	* @return El primer elemento de la cola. Este elemento no debe ser liberado
 	*         ya que seguirá perteneciendo a la cola.
-	* @relates t_queue
 	*/
 	void *queue_peek(t_queue *);
 
 	/**
 	* @brief Quita todos los elementos de la cola sin liberarlos
-	* @relates t_queue
 	*/
 	void queue_clean(t_queue *);
 
 	/**
 	* @brief Quita y libera todos los elementos de la cola.
-	* @relates t_queue
 	*/
 	void queue_clean_and_destroy_elements(t_queue *, void(*element_destroyer)(void*));
 
 	/**
 	* @brief Devuelve la cantidad de elementos de la cola
-	* @relates t_queue
 	*/
 	int queue_size(t_queue *);
 
 	/**
 	* @brief Verifica si la cola esta vacía
-	* @relates t_queue
 	*/
 	bool queue_is_empty(t_queue *);
 

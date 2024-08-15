@@ -19,8 +19,6 @@
 
 #include <stdio.h>
 
-/** @cond INCLUDE_INTERNALS */
-
 /**
 * @brief Abre un archivo para agregarle contenido al final
 * @note El mismo se debe cerrar con txt_close_file()
@@ -41,7 +39,5 @@ void txt_write_in_stdout(char* string);
 * @brief Cierra el archivo
 */
 void txt_close_file(FILE* file);
-
-/** @endcond */
 
 #endif /* TXT_H_ */

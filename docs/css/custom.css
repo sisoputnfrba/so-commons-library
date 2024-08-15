@@ -1,0 +1,8 @@
+#projectname, #projectbrief {
+    color: var(--header-foreground) !important; /* Inherit color from parent */
+    text-decoration: none; /* Remove underline */
+}
+
+#projectname:hover, #projectbrief:hover {
+    text-decoration: none; /* Ensure no underline on hover */
+}

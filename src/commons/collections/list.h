@@ -21,7 +21,8 @@
 	#include <stdbool.h>
 
 	/**
-	 * @brief Estructura de una lista enlazada
+	 * @struct t_list
+	 * @brief Estructura de una lista enlazada. Inicializar con list_create()
 	 */
 	typedef struct {
 		t_link_element *head;
@@ -29,7 +30,8 @@
 	} t_list;
 
 	/**
-	 * @brief Iterador de listas
+	 * @struct t_list_iterator
+	 * @brief Iterador de listas. Inicializar con list_iterator_create()
 	 */
 	typedef struct {
 		t_list *list;
@@ -45,7 +47,6 @@
 	 *           los elementos que contiene.
 	 *         - list_destroy_and_destroy_elements() si se quiere liberar
 	 *           la lista con los elementos que contiene
-	 * @relates t_list
 	 *
 	 * Ejemplo de uso:
 	 * @code
@@ -61,7 +62,6 @@
 	* @param element: El elemento a agregar. Este elemento pasará a pertenecer
 	*                 a la lista, por lo que no debe ser liberado por fuera de ésta.
 	* @return El índice en el que se agregó el elemento
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -84,7 +84,6 @@
 
 	/**
 	* @brief Destruye una lista sin liberar los elementos contenidos en los nodos
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -110,7 +109,6 @@
 	* @brief Destruye una lista y sus elementos contenidos llamando a la función
 	*        `element_destroyer` sobre cada uno de ellos.
 	* @note En caso de recibir una lista vacía, se comporta como list_destroy().
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -136,7 +134,6 @@
 	* @param index: La posicion en la que se quiere agregar el elemento
 	* @param element: El elemento a agregar. Este elemento pasará a pertenecer
 	*                 a la lista, por lo que no debe ser liberado por fuera de ésta.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -160,7 +157,6 @@
 	* @param comparator: Funcion que compara dos elementos. Debe devolver
 	*                    true si el primer parametro debe aparecer antes que el
 	*                    segundo en la lista
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -186,7 +182,6 @@
 	* @param self: La lista a la que se le agregarán los elementos.
 	* @param other: La lista de la que se tomarán los elementos. Dichos elementos
 	*        pasarán a pertenecer a ambas listas a la vez.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -211,7 +206,6 @@
 	* @return El elemento en la posición index. Este elemento seguirá
 	*         perteneciendo a la lista, por lo que no debe ser liberado por fuera
 	*         de ésta.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -235,7 +229,6 @@
 	* @return El elemento mínimo de la lista. Este elemento seguirá
 	*         perteneciendo a la lista, por lo que no debe ser liberado por fuera
 	*         de ésta.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -264,7 +257,6 @@
 	* @return El elemento máximo de la lista. Este elemento seguirá
 	*         perteneciendo a la lista, por lo que no debe ser liberado por fuera
 	*         de ésta.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -291,7 +283,6 @@
 	* @param count: Cantidad máxima de elementos a tomar.
 	* @return Una nueva lista con los elementos tomados. Seguirán perteneciendo
 	*         a la lista original.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -315,7 +306,6 @@
 	* @param count: Cantidad máxima de elementos a tomar.
 	* @return Una nueva lista con los elementos tomados. Seguirán perteneciendo
 	*         a la lista original.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -338,7 +328,6 @@
 	* @param count: Cantidad máxima de elementos a tomar.
 	* @return Una nueva lista con los elementos tomados. Dichos elementos
 	*         dejarán de pertenecer a la lista original.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -362,7 +351,6 @@
 	* @param count: Cantidad máxima de elementos a tomar.
 	* @return Una nueva lista con los elementos tomados. Dichos elementos
 	*         dejarán de pertenecer a la lista original.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -382,7 +370,6 @@
 	/**
 	* @brief Retorna una nueva lista con los elementos que cumplen la condicion
 	* @return Los elementos de la lista retornada seguirán perteneciendo a la lista original.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -406,7 +393,6 @@
 	/**
 	* @brief Retorna una nueva lista con los elementos transformados
 	* @return Los elementos de la lista retornada seguirán perteneciendo a la lista original.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -431,7 +417,6 @@
 	 * @brief Retorna una nueva lista con los elementos de la lista de listas
 	 *        recibida.
 	 * @return Los elementos de la lista retornada seguirán perteneciendo a las listas originales.
-	 * @relates t_list
 	 *
 	 * Ejemplo de uso:
 	 * @code
@@ -464,7 +449,6 @@
 	* @return El valor ubicado en la posición index antes de ser reemplazado.
 	*         Dejará de pertenecer a la lista, por lo que debe ser liberado
 	*         una vez que no se lo necesite.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -493,7 +477,6 @@
 	*         en caso de no encontrar ningún valor.
 	*         Dejará de pertenecer a la lista, por lo que debe ser liberado
 	*         una vez que no se lo necesite.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -523,7 +506,6 @@
 	*        a la lista, por lo que no debe ser liberado por fuera de ésta.
 	* @param element_destroyer: Función que se encargará de liberar el valor
 	*                           reemplazado.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -546,7 +528,6 @@
 	* @param index: La posicion del elemento a remover
 	* @return El elemento removido. Dejará de pertenecer a la lista, por lo que
 	*         debe ser liberado una vez que no se lo necesite.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -570,7 +551,6 @@
 	*        una vez que no se lo necesite.
 	* @return `true` si el elemento fue removido, `false` en caso de no haber sido
 	*         encontrado.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -594,7 +574,6 @@
 	*        libera la memoria.
 	* @param index: La posicion del elemento a remover
 	* @param element_destroyer: Función que se encargará de liberar el valor
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -615,7 +594,6 @@
 	*        devuelva `true`.
 	* @return El elemento removido. Dejará de pertenecer a la lista, por lo que
 	*         debe ser liberado una vez que no se lo necesite.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -640,7 +618,6 @@
 	* @brief Remueve y libera el primer elemento de la lista que haga que
 	*        condition devuelva `true`.
 	* @param element_destroyer: Función que se encargará de liberar el valor
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -664,7 +641,6 @@
 	* @brief Remueve y destruye todos los elementos de la lista que hagan que
 	*        condition devuelva `true`.
 	* @param element_destroyer: Función que se encargará de liberar cada valor
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -686,7 +662,6 @@
 
 	/**
 	* @brief Quita todos los elementos de la lista, sin liberarlos
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -713,7 +688,6 @@
 	* @brief Quita todos los elementos de la lista y los libera llamando a la
 	*        función `element_destroyer` sobre cada uno de ellos
 	* @note En caso de recibir una lista vacía, se comporta como list_clean().
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -733,7 +707,6 @@
 	* @brief Itera la lista llamando al closure por cada elemento. En caso de
 	*        querer modificar la lista durante la iteración, utilizar
 	*        list_iterator_create() para recorrerla externamente.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -758,7 +731,6 @@
 	/**
 	* @brief Retorna el primer valor encontrado, el cual haga que condition
 	*        devuelva `true`, o NULL en caso de no encontrar ninguno.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -787,7 +759,6 @@
 
 	/**
 	* @brief Retorna el tamaño de la lista
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -806,7 +777,6 @@
 
 	/**
 	* @brief Verifica si la lista esta vacia
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -824,7 +794,6 @@
 	* @param comparator: Funcion que compara dos elementos. Debe devolver
 	*                    true si el primer parametro debe aparecer antes que el
 	*                    segundo en la lista
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -852,7 +821,6 @@
 	*                    segundo en la lista
 	* @return La lista ordenada. Los elementos de la lista retornada seguirán
 	*         perteneciendo a la lista original.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -877,7 +845,6 @@
 	/**
 	* @brief Cuenta la cantidad de elementos de la lista que devuelven true
 	*        al aplicarles la condición
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -901,7 +868,6 @@
 	/**
 	* @brief Determina si algún elemento de la lista devuelve true al aplicarle
 	*        la condición
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -931,7 +897,6 @@
 	/**
 	* @brief Determina si todos los elementos de la lista devuelven true al
 	*        aplicarles la condición
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -962,7 +927,6 @@
 	* @brief Crea una lista nueva con los mismos elementos que la original.
 	* @return La lista duplicada. Los elementos de la lista retornada seguirán
 	*         perteneciendo a la lista original.
-	* @relates t_list
 	*
 	* Ejemplo de uso:
 	* @code
@@ -987,7 +951,6 @@
 	 *        y el segundo es el siguiente elemento de la lista.
 	 *        Debe devolver un valor del mismo tipo que el inicial.
 	 * @return El resultado de aplicar la operación al último elemento de la lista.
-	 * @relates t_list
 	 *
 	 * Ejemplo de uso:
 	 * @code
@@ -1019,7 +982,6 @@
 	 * @param operation: Funcion que recibe dos valores del tipo de los elementos
 	 *        de la lista y devuelve otro valor del mismo tipo.
 	 * @return El resultado de aplicar la operación al último elemento de la lista.
-	 * @relates t_list
 	 *
 	 * Ejemplo de uso:
 	 * @code
@@ -1042,10 +1004,12 @@
 	void* list_fold1(t_list* self, void* (*operation)(void*, void*));
 
 	/**
-	 * @brief Inicializa una iteración externa de la lista. Es útil para recorrer
+	 * @brief Inicializa una iteración externa de la lista. Permite recorrer
 	 *        la lista y modificarla al mismo tiempo. En caso de
-	 *        no querer modificar la lista, puede utilizarse list_iterate().
-	 * @relates t_list_iterator
+	 *        no querer modificar la lista ni romper la iteración, considerar
+	 *        utilizar list_iterate().
+	 * @return Un puntero que debe ser liberado con list_iterator_destroy()
+	 *         una vez finalizada la iteración.
 	 *
 	 * Ejemplo de uso:
 	 * @code
@@ -1053,6 +1017,7 @@
 	 * while(list_iterator_has_next(iterator)) {
 	 *     void* element = list_iterator_next(iterator);
 	 *     // Hacer algo que requiera list_iterator_add() o list_iterator_remove()
+	 *     // o romper la iteración con break o return
 	 * }
 	 * list_iterator_destroy(iterator);
 	 * @endcode
@@ -1061,7 +1026,6 @@
 
 	/**
 	 * @brief Devuelve true si quedan elementos de la lista por recorrer
-	 * @relates t_list_iterator
 	 */
 	bool list_iterator_has_next(t_list_iterator* iterator);
 
@@ -1071,13 +1035,11 @@
 	 * @return El elemento actual de la iteración. Pertenecerá a la lista,
 	 *         por lo que no debe ser liberado por fuera de ésta a menos que
 	 *         se lo remueva con list_iterator_remove().
-	 * @relates t_list_iterator
 	 */
 	void* list_iterator_next(t_list_iterator* iterator);
 
 	/**
 	 * @brief Devuelve el índice del elemento actual de la iteración
-	 * @relates t_list_iterator
 	 */
 	int list_iterator_index(t_list_iterator* iterator);
 
@@ -1086,7 +1048,6 @@
 	 *        del siguiente. Luego, avanza hacia el elemento agregado.
 	 * @param data: El elemento a agregar. Este elemento pasará a pertenecer
 	 *        a la lista, por lo que no debe ser liberado por fuera de ésta.
-	 * @relates t_list_iterator
 	 */
 	void list_iterator_add(t_list_iterator* iterator, void *data);
 
@@ -1095,14 +1056,12 @@
 	 * @note El elemento removido es el último devuelto por list_iterator_next()
 	 *       y dejará de pertenecer a la lista, por lo que debe ser liberado
 	 *       una vez que no se lo necesite.
-	 * @relates t_list_iterator
 	 */
 	void list_iterator_remove(t_list_iterator* iterator);
 
 	/**
 	 * @brief Finaliza la instancia de iteración externa liberando sus recursos
 	 * @note Esta operación no libera la lista ni sus elementos.
-	 * @relates t_list_iterator
 	 */
 	void list_iterator_destroy(t_list_iterator* iterator);
 
