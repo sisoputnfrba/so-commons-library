@@ -1002,7 +1002,7 @@
 	 *         string_append(&acc, ", ");
 	 *     }
 	 *     string_append_with_format(&acc, "%s(%d)", person->name, person->age);
-	 *     return accumulated;
+	 *     return acc;
 	 * }
 	 * char* str = list_fold(people, string_new(), _append_person);
 	 *
