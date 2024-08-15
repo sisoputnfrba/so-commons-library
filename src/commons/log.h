@@ -53,9 +53,10 @@
 	 *         liberada con log_destroy()
 	 *
 	 * @note Se debe tener en cuenta que:
-	 *       - si file ya existe, se escribirá al final del archivo
-	 *       - si file no existe, se creará un nuevo archivo en el directorio indicado
-	 *       - si el directorio hacia file no existe, se producirá un error
+  	 *       - si `file` es NULL, no se imprimirá en ningún archivo
+	 *       - si `file` ya existe, se escribirá al final del archivo
+	 *       - si `file` no existe, se creará un nuevo archivo en el directorio indicado
+	 *       - si el directorio hacia `file` no existe, se producirá un error
 	 */
 	t_log* 		log_create(char* file, char *process_name, bool is_active_console, t_log_level level);
 
