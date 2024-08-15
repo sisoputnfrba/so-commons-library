@@ -27,7 +27,6 @@
 	/**
 	 * @enum bit_numbering_t
 	 * @brief Define el orden bajo el cual se guardarán los bits a la hora de llenar los bytes
-	 * @relates t_bitarray
 	 *
 	 * @note  La mayoría de las implementaciones de bitmap usan LSB_FIRST. Si no estás seguro
 	 *        de cuál usar, probablemente quieras usar esta.
@@ -39,7 +38,7 @@
 
 	/**
 	 * @struct t_bitarray
-	 * @brief Manipulación de un bloque de memoria a nivel de bits
+	 * @brief Manipulación de un bloque de memoria a nivel de bits. Inicializar con `bitarray_create_with_mode()`
 	 */
 	typedef struct {
 		char *bitarray;
@@ -52,7 +51,6 @@
 	*          Usar bitarray_create_with_mode().
 	*
 	* @brief Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
-	* @relates t_bitarray
 	*
 	* @param bitarray: El bloque de memoria que contiene los bits a leer/escribir
 	* @param size: La cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
@@ -67,7 +65,6 @@
 
 	/**
 	* @brief Crea y devuelve un puntero a una estructura t_bitarray
-	* @relates t_bitarray
 	*
 	* @param bitarray: El bloque de memoria que contiene los bits a leer/escribir
 	* @param size: La cantidad de bits del bitarray, expresada en bytes (1 byte = 8 bits)
@@ -82,31 +79,26 @@
 
 	/**
 	* @brief Devuelve el valor del bit de la posicion indicada
-	* @relates t_bitarray
 	*/
 	bool 		 bitarray_test_bit(t_bitarray*, off_t bit_index);
 
 	/**
 	* @brief Setea el valor del bit de la posicion indicada
-	* @relates t_bitarray
 	*/
 	void		 bitarray_set_bit(t_bitarray*, off_t bit_index);
 
 	/**
 	* @brief Limpia el valor del bit de la posicion indicada
-	* @relates t_bitarray
 	*/
 	void		 bitarray_clean_bit(t_bitarray*, off_t bit_index);
 
 	/**
 	* @brief Devuelve la cantidad de bits en el bitarray
-	* @relates t_bitarray
 	*/
 	size_t		 bitarray_get_max_bit(t_bitarray*);
 
 	/**
 	* @brief Destruye el bit array
-	* @relates t_bitarray
 	*/
 	void 		 bitarray_destroy(t_bitarray*);
 
