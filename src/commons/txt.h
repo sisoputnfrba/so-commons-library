@@ -23,6 +23,7 @@
 
 /**
 * @brief Abre un archivo para agregarle contenido al final
+* @note El mismo se debe cerrar con txt_close_file()
 */
 FILE* txt_open_for_append(char* path);
 

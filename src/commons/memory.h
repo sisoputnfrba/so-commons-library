@@ -34,6 +34,7 @@
 
   /**
     * @brief Devuelve un dump hexadecimal en formato string de una porción de memoria dada
+    * @return Un string con el dump hexadecimal. Debe ser liberado con free()
     * @relates memory
     */
   char *mem_hexstring(void *source, size_t length);

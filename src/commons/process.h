@@ -23,15 +23,15 @@
  */
 
 /**
-* @brief Obtiene el ID del thread actual
-* @relates process
-*/
+ * @brief Obtiene el ID del thread actual
+ * @relates process
+ */
 unsigned int process_get_thread_id();
 
 /**
-* @brief Obtiene el ID del proceso actual
-* @relates process
-*/
+ * @brief Obtiene el ID del proceso actual
+ * @relates process
+ */
 unsigned int process_getpid();
 
 #endif /* PROCESS_H_ */

@@ -29,9 +29,9 @@
 	} t_temporal_status;
 
 	/**
-	* @struct t_temporal
-	* @brief Manejo de tiempo con cronómetro
-	*/
+	 * @struct t_temporal
+	 * @brief Manejo de tiempo con cronómetro
+	 */
 	typedef struct {
 		struct timespec current;
 		int64_t elapsed_ms;
@@ -39,10 +39,9 @@
 	} t_temporal;
 
 	/**
-	* @brief Retorna un string con la hora actual, con el formato recibido por
-	*        parámetro.
+	* @brief Retorna un string con la hora actual con el formato recibido por parámetro.
+ 	* @return El string retornado debe ser liberado con free() al dejar de usarse.
 	* @relates t_temporal
-	*
 	*
 	* @code
 	* temporal_get_string_time("%d/%m/%y") => "30/09/20"
@@ -54,50 +53,46 @@
 
 	/**
 	* @brief Crea una variable temporal e inicia su cronómetro.
+	* @return La variable temporal creada debe ser liberada con temporal_destroy().
 	* @relates t_temporal
 	*/
 	t_temporal* temporal_create(void);
 
 	/**
 	* @brief Destruye una variable temporal.
-	* @relates t_temporal
-	*
 	* @param temporal: Variable temporal a destruir.
+	* @relates t_temporal
 	*/
 	void temporal_destroy(t_temporal* temporal);
 
 	/**
 	* @brief Retorna el tiempo total transcurrido mientras el cronómetro estuvo
 	*        activo en milisegundos.
-	* @relates t_temporal
-	*
 	* @param temporal: Variable temporal.
+	* @relates t_temporal
 	*/
 	int64_t temporal_gettime(t_temporal* temporal);
 
 	/**
 	* @brief Detiene el cronómetro de una variable temporal.
-	* @relates t_temporal
-	*
 	* @param temporal: Variable temporal a frenar.
+	* @relates t_temporal
 	*/
 	void temporal_stop(t_temporal* temporal);
 
 	/**
 	* @brief Reanuda el cronómetro de una variable temporal.
-	* @relates t_temporal
-	*
 	* @param temporal: Variable temporal a reanudar.
+	* @relates t_temporal
 	*/
 	void temporal_resume(t_temporal* temporal);
 
 	/**
 	* @brief Retorna la diferencia del tiempo total transcurrido entre dos
 	*        variables temporales en milisegundos
-	* @relates t_temporal
-	*
 	* @param temporal_1: Primera variable temporal.
 	* @param temporal_2: Segunda variable temporal.
+	* @relates t_temporal
 	*/
 	int64_t temporal_diff(t_temporal* temporal_1, t_temporal* temporal_2);
 
