@@ -40,6 +40,7 @@
 
 	/**
 	* @brief Retorna un string con la hora actual con el formato recibido por parámetro.
+ 	* @return El string retornado debe ser liberado con free() al dejar de usarse.
 	* @relates t_temporal
 	*
 	* @code
@@ -47,7 +48,6 @@
 	* temporal_get_string_time("%H:%M:%S:%MS") => "12:51:59:331"
 	* temporal_get_string_time("%d/%m/%y %H:%M:%S") => "30/09/20 12:51:59"
 	* @endcode
-	* @note Este string debe ser liberado con free() al dejar de usarse.
 	*/
 	char *temporal_get_string_time(const char* format);
 
