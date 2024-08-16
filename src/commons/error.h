@@ -24,8 +24,8 @@
 	/**
 	* @brief imprime por `stderr` un mensaje con el siguiente formato
 	* 	     `[[ERROR]] {{message}}: {{errno}}`
-  *
-  * @note [errno](https://man7.org/linux/man-pages/man3/errno.3.html) es un
+	*
+	* @note [errno](https://man7.org/linux/man-pages/man3/errno.3.html) es un
 	* número entero que representa el valor del último error ocurrido en el hilo
 	* actual. Varias funciones de la biblioteca estándar de C setean `errno` y
 	* devuelven un valor especial para indicar que hubo un error. Ejemplo:
