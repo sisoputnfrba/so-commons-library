@@ -17,6 +17,7 @@ Provee los siguientes TADs:
 * Manejo de fechas y timestamps (commons/temporal.h)
 * Información de procesos (commons/process.h)
 * Impresión de dumps de memoria (commons/memory.h)
+* Impresión de errores (commons/error.h)
 * Manejo simple de archivos de texto (commons/txt.h)
 
 ## Notas
