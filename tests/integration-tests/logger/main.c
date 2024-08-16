@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   main.c
  * Author: shinichi
  *
@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <commons/log.h>
+#include <commons/error.h>
 #include <commons/string.h>
 #include <pthread.h>
 
@@ -20,6 +21,7 @@ static void log_in_disk(char* temp_file) {
     log_info(logger, "LOG A NIVEL %s", "INFO");
     log_warning(logger, "LOG A NIVEL %s", "WARNING");
     log_error(logger, "LOG A NIVEL %s", "ERROR");
+    error_show("ERROR DE PRUEBA");
 
     log_destroy(logger);
     free(temp_file);
@@ -27,11 +29,11 @@ static void log_in_disk(char* temp_file) {
 
 int main(int argc, char** argv) {
     pthread_t th1, th2;
-    
+
     char temp_file[] = "build/XXXXXX";
 
     close(mkstemp(temp_file));
-    
+
     if (temp_file != NULL) {
         pthread_create(&th1, NULL, (void*) log_in_disk, string_duplicate(temp_file));
         pthread_create(&th2, NULL, (void*) log_in_disk, string_duplicate(temp_file));
@@ -42,8 +44,7 @@ int main(int argc, char** argv) {
     } else {
         printf("No se pudo generar el archivo de log\n");
     }
-    
-    
+
+
     return (EXIT_SUCCESS);
 }
-
