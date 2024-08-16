@@ -19,10 +19,14 @@
 
 #include <stdio.h>
 
-/** @cond INCLUDE_INTERNALS */
+/**
+ * @file
+ * @brief `#include <commons/txt.h>`
+ */
 
 /**
 * @brief Abre un archivo para agregarle contenido al final
+* @note El mismo se debe cerrar con `txt_close_file()`
 */
 FILE* txt_open_for_append(char* path);
 
@@ -40,7 +44,5 @@ void txt_write_in_stdout(char* string);
 * @brief Cierra el archivo
 */
 void txt_close_file(FILE* file);
-
-/** @endcond */
 
 #endif /* TXT_H_ */

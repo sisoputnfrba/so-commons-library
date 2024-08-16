@@ -20,8 +20,12 @@
 	#include <time.h>
 
 	/**
+	 * @file
+	 * @brief `#include <commons/temporal.h>`
+	 */
+
+	/**
 	* @enum t_temporal_status Estado del cronómetro
-	* @relates t_temporal
 	*/
 	typedef enum {
 		TEMPORAL_STATUS_STOPPED, //!< Cronómetro detenido
@@ -29,9 +33,9 @@
 	} t_temporal_status;
 
 	/**
-	* @struct t_temporal
-	* @brief Manejo de tiempo con cronómetro
-	*/
+	 * @struct t_temporal
+	 * @brief Manejo de tiempo con cronómetro. Inicializar con `temporal_create()`.
+	 */
 	typedef struct {
 		struct timespec current;
 		int64_t elapsed_ms;
@@ -39,10 +43,8 @@
 	} t_temporal;
 
 	/**
-	* @brief Retorna un string con la hora actual, con el formato recibido por
-	*        parámetro.
-	* @relates t_temporal
-	*
+	* @brief Retorna un string con la hora actual con el formato recibido por parámetro.
+ 	* @return El string retornado debe ser liberado con `free()` al dejar de usarse.
 	*
 	* @code
 	* temporal_get_string_time("%d/%m/%y") => "30/09/20"
@@ -54,14 +56,12 @@
 
 	/**
 	* @brief Crea una variable temporal e inicia su cronómetro.
-	* @relates t_temporal
+	* @return La variable temporal creada debe ser liberada con `temporal_destroy()`.
 	*/
 	t_temporal* temporal_create(void);
 
 	/**
 	* @brief Destruye una variable temporal.
-	* @relates t_temporal
-	*
 	* @param temporal: Variable temporal a destruir.
 	*/
 	void temporal_destroy(t_temporal* temporal);
@@ -69,24 +69,18 @@
 	/**
 	* @brief Retorna el tiempo total transcurrido mientras el cronómetro estuvo
 	*        activo en milisegundos.
-	* @relates t_temporal
-	*
 	* @param temporal: Variable temporal.
 	*/
 	int64_t temporal_gettime(t_temporal* temporal);
 
 	/**
 	* @brief Detiene el cronómetro de una variable temporal.
-	* @relates t_temporal
-	*
 	* @param temporal: Variable temporal a frenar.
 	*/
 	void temporal_stop(t_temporal* temporal);
 
 	/**
 	* @brief Reanuda el cronómetro de una variable temporal.
-	* @relates t_temporal
-	*
 	* @param temporal: Variable temporal a reanudar.
 	*/
 	void temporal_resume(t_temporal* temporal);
@@ -94,8 +88,6 @@
 	/**
 	* @brief Retorna la diferencia del tiempo total transcurrido entre dos
 	*        variables temporales en milisegundos
-	* @relates t_temporal
-	*
 	* @param temporal_1: Primera variable temporal.
 	* @param temporal_2: Segunda variable temporal.
 	*/

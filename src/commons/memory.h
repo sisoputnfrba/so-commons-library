@@ -22,25 +22,24 @@
   #include <ctype.h>
   #include "string.h"
 
+	/**
+	 * @file
+	 * @brief `#include <commons/memory.h>`
+	 */
+
   /* amount of hex columns of dump */
   #define HEXDUMP_COLS 16
   /* amount of hex columns allow without a separator */
   #define HEXDUMP_COLS_SEP 8
 
   /**
-    * @struct memory
-    * @brief Funciones para impresión de dumps de memoria
-    */
-
-  /**
     * @brief Devuelve un dump hexadecimal en formato string de una porción de memoria dada
-    * @relates memory
+    * @return Un string con el dump hexadecimal. Debe ser liberado con `free()`
     */
   char *mem_hexstring(void *source, size_t length);
 
   /**
     * @brief Imprime un dump hexadecimal por pantalla de una porción de memoria dada
-    * @relates memory
     */
   void mem_hexdump(void *source, size_t length);
 
