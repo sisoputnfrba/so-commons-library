@@ -21,8 +21,13 @@
 	#include <stdbool.h>
 
 	/**
+	 * @file
+	 * @brief `#include <commons/collections/list.h>`
+	 */
+
+	/**
 	 * @struct t_list
-	 * @brief Estructura de una lista enlazada. Inicializar con list_create()
+	 * @brief Estructura de una lista enlazada. Inicializar con `list_create()`
 	 */
 	typedef struct {
 		t_link_element *head;
@@ -31,7 +36,7 @@
 
 	/**
 	 * @struct t_list_iterator
-	 * @brief Iterador de listas. Inicializar con list_iterator_create()
+	 * @brief Iterador de listas. Inicializar con `list_iterator_create()`
 	 */
 	typedef struct {
 		t_list *list;
@@ -43,9 +48,9 @@
 	/**
 	 * @brief Crea una lista
 	 * @return Retorna un puntero a la lista creada, liberable con:
-	 *         - list_destroy() si se quiere liberar la lista pero no
+	 *         - `list_destroy()` si se quiere liberar la lista pero no
 	 *           los elementos que contiene.
-	 *         - list_destroy_and_destroy_elements() si se quiere liberar
+	 *         - `list_destroy_and_destroy_elements()` si se quiere liberar
 	 *           la lista con los elementos que contiene
 	 *
 	 * Ejemplo de uso:
@@ -108,7 +113,7 @@
 	/**
 	* @brief Destruye una lista y sus elementos contenidos llamando a la función
 	*        `element_destroyer` sobre cada uno de ellos.
-	* @note En caso de recibir una lista vacía, se comporta como list_destroy().
+	* @note En caso de recibir una lista vacía, se comporta como `list_destroy()`.
 	*
 	* Ejemplo de uso:
 	* @code
@@ -687,7 +692,7 @@
 	/**
 	* @brief Quita todos los elementos de la lista y los libera llamando a la
 	*        función `element_destroyer` sobre cada uno de ellos
-	* @note En caso de recibir una lista vacía, se comporta como list_clean().
+	* @note En caso de recibir una lista vacía, se comporta como `list_clean()`.
 	*
 	* Ejemplo de uso:
 	* @code
@@ -706,7 +711,7 @@
 	/**
 	* @brief Itera la lista llamando al closure por cada elemento. En caso de
 	*        querer modificar la lista durante la iteración, utilizar
-	*        list_iterator_create() para recorrerla externamente.
+	*        `list_iterator_create()` para recorrerla externamente.
 	*
 	* Ejemplo de uso:
 	* @code
@@ -1007,8 +1012,8 @@
 	 * @brief Inicializa una iteración externa de la lista. Permite recorrer
 	 *        la lista y modificarla al mismo tiempo. En caso de
 	 *        no querer modificar la lista ni romper la iteración, considerar
-	 *        utilizar list_iterate().
-	 * @return Un puntero que debe ser liberado con list_iterator_destroy()
+	 *        utilizar `list_iterate()`.
+	 * @return Un puntero que debe ser liberado con `list_iterator_destroy()`
 	 *         una vez finalizada la iteración.
 	 *
 	 * Ejemplo de uso:
@@ -1034,7 +1039,7 @@
 	 *        lo devuelve
 	 * @return El elemento actual de la iteración. Pertenecerá a la lista,
 	 *         por lo que no debe ser liberado por fuera de ésta a menos que
-	 *         se lo remueva con list_iterator_remove().
+	 *         se lo remueva con `list_iterator_remove()`.
 	 */
 	void* list_iterator_next(t_list_iterator* iterator);
 
@@ -1053,7 +1058,7 @@
 
 	/**
 	 * @brief Remueve de la lista al elemento actual de la iteración
-	 * @note El elemento removido es el último devuelto por list_iterator_next()
+	 * @note El elemento removido es el último devuelto por `list_iterator_next()`
 	 *       y dejará de pertenecer a la lista, por lo que debe ser liberado
 	 *       una vez que no se lo necesite.
 	 */

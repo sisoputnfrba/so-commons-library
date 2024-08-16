@@ -20,6 +20,10 @@
 	#include <stdbool.h>
 	#include <sys/types.h>
 
+	/**
+	 * @file
+	 * @brief `#include <commons/log.h>`
+	 */
 
 	typedef enum {
 		LOG_LEVEL_TRACE, //!< Loguea todos los mensajes
@@ -49,7 +53,7 @@
 	 * @param is_active_console: Si lo que se loguea debe mostrarse por consola
 	 * @param level: El nivel de detalle mínimo a loguear (ver definición de t_log_level)
 	 * @return Retorna una instancia de logger, o NULL en caso de error. Debe ser
-	 *         liberada con log_destroy()
+	 *         liberada con `log_destroy()`
 	 *
 	 * @note Se debe tener en cuenta que:
   	 *       - si `file` es NULL, no se imprimirá en ningún archivo

@@ -21,15 +21,20 @@
 	#include <stdarg.h>
 
 	/**
+	 * @file
+	 * @brief `#include <commons/string.h>`
+	 */
+
+	/**
 	 * @brief Crea un string vacio
-	 * @return El string retornado debe ser liberado con free()
+	 * @return El string retornado debe ser liberado con `free()`
 	 */
 	char*   string_new(void);
 
 	/**
 	 * @brief Crea un string en formato decimal a partir de un número
 	 * @param[in] number: Número entero a convertir
-	 * @return El string retornado debe ser liberado con free()
+	 * @return El string retornado debe ser liberado con `free()`
 	 *
 	 * @code
 	 * char* numero = string_itoa(123);
@@ -41,8 +46,8 @@
 
 	/**
 	 * @brief Crea un nuevo string a partir de un formato especificado
-	 * @param[in] format: Formato a aplicar, igual que en printf()
-	 * @return El string retornado debe ser liberado con free()
+	 * @param[in] format: Formato a aplicar, igual que en `printf()`
+	 * @return El string retornado debe ser liberado con `free()`
 	 *
 	 * @code
 	 * char* saludo = string_from_format("Hola %s", "mundo");
@@ -55,9 +60,9 @@
 	/**
 	 * @brief Crea un nuevo string a partir de un formato especificado
 	 *        pasando un `va_list` con los argumentos
-	 * @param[in] format: Formato a aplicar, igual que en vprintf()
-	 * @param[in] arguments: Lista de argumentos a aplicar, igual que en vprintf()
-	 * @return Retorna un string que debe ser liberado con free()
+	 * @param[in] format: Formato a aplicar, igual que en `vprintf()`
+	 * @param[in] arguments: Lista de argumentos a aplicar, igual que en `vprintf()`
+	 * @return Retorna un string que debe ser liberado con `free()`
 	 */
 	char*   string_from_vformat(const char* format, va_list arguments);
 
@@ -65,7 +70,7 @@
 	 * @brief Crea un string de longitud `count` con el mismo caracter.
 	 * @param[in] ch: Caracter a repetir
 	 * @param[in] count: Cantidad de veces a repetir el caracter
-	 * @return El string retornado debe ser liberado con free()
+	 * @return El string retornado debe ser liberado con `free()`
 	 *
 	 * @code
 	 * string_repeat('a', 5) = "aaaaa"
@@ -76,7 +81,7 @@
 	/**
 	 * @brief Agrega al primer string el segundo
 	 * @param[in,out] original: Puntero al string al que se le va a concatenar el
-	 *                          segundo. Debe apuntar a un puntero liberable con free()
+	 *                          segundo. Debe apuntar a un puntero liberable con `free()`
 	 * @param[in] string_to_add: String a concatenar. Admite todo tipo de strings
 	 *
 	 * @code
@@ -92,7 +97,7 @@
 	/**
 	 * @brief Agrega al primer string un máximo de n caracteres del segundo.
 	 * @param[in,out] original: Puntero al string a modificar. Debe apuntar a un
-	 *                          string liberable con free()
+	 *                          string liberable con `free()`
 	 * @param[in] string_to_add: String a concatenar. Admite todo tipo de strings
 	 * @param[in] n: Cantidad máxima de caracteres a concatenar
 	 *
@@ -110,8 +115,8 @@
 	 * @brief Concatena al primer string el resultado de aplicar los parametros
 	 *        al formato especificado
 	 * @param[in,out] original: Puntero al string a modificar. Debe apuntar a un
-	 *                          string liberable con free()
-	 * @param[in] format: Formato a aplicar, igual que en printf()
+	 *                          string liberable con `free()`
+	 * @param[in] format: Formato a aplicar, igual que en `printf()`
 	 *
 	 * @code
 	 * char *saludo = "HOLA ";
@@ -127,7 +132,7 @@
 	/**
 	* @brief Retorna una copia del string pasado como argumento
 	* @param[in] original: String a duplicar. Admite todo tipo de strings
-	* @return El string retornado debe ser liberado con free()
+	* @return El string retornado debe ser liberado con `free()`
 	*
 	* @code
 	* char* copia = string_duplicate("hola");
@@ -192,7 +197,7 @@
 	/**
 	* @brief Remueve todos los caracteres vacios de la derecha y la izquierda
 	* @param[in,out] text: Puntero al string a modificar. Debe apuntar a un string
-	*                      liberable con free()
+	*                      liberable con `free()`
 	*
 	* @code
 	* char* heap_string = string_duplicate("  hola  ");
@@ -207,7 +212,7 @@
 	/**
 	* @brief Remueve todos los caracteres vacios de la izquierda
 	* @param[in,out] text: Puntero al string a modificar. Debe apuntar a un string
-	*                      liberable con free()
+	*                      liberable con `free()`
 	*
 	* @code
 	* char* heap_string = string_duplicate("  hola");
@@ -222,7 +227,7 @@
 	/**
 	* @brief Remueve todos los caracteres vacios de la derecha
 	* @param[in,out] text: Puntero al string a modificar. Debe apuntar a un string
-	*                      liberable con free()
+	*                      liberable con `free()`
 	*
 	* @code
 	* char* heap_string = string_duplicate("hola  ");
@@ -300,7 +305,7 @@
 	* @param[in] text: String a separar. Admite todo tipo de strings
 	* @param[in] separator: Separador a utilizar. Admite todo tipo de strings
 	* @return Retorna un array con cada palabra y en la última posición un NULL.
-	*         Debe ser liberado con string_array_destroy()
+	*         Debe ser liberado con `string_array_destroy()`
 	*
 	* @code
 	* string_split("hola, mundo", ",") => {"hola", " mundo", NULL}
@@ -314,7 +319,7 @@
 	 * @param[in] n: Cantidad máxima de veces que se puede separar
 	 * @param[in] separator: String separador a utilizar. Admite todo tipo de strings
 	 * @return Retorna un array de copias de los caracteres en text y en la última
-	 *         posición un NULL. Debe ser liberado con string_array_destroy()
+	 *         posición un NULL. Debe ser liberado con `string_array_destroy()`
 	 *
 	 * @code
 	 * string_n_split("hola, mundo, bueno", 2, ",") => ["hola", " mundo, bueno", NULL]
@@ -331,7 +336,7 @@
 	 *                  tipo de strings
 	 * @param[in] start: Indice desde el cual se obtiene el substring
 	 * @param[in] length: Cantidad de caracteres a obtener
-	 * @return Retorna un nuevo string que debe ser liberado con free()
+	 * @return Retorna un nuevo string que debe ser liberado con `free()`
 	 *
 	 * @code
 	 * string_substring("hola, mundo, bueno", 0, 4) => "hola"
@@ -347,7 +352,7 @@
 	 * @param[in] text: String a partir del cual se obtiene el substring. Admite todo
 	 *                  tipo de strings
 	 * @param[in] start: Indice desde el cual se obtiene el substring
-	 * @return Retorna un nuevo string que debe ser liberado con free()
+	 * @return Retorna un nuevo string que debe ser liberado con `free()`
 	 */
 	char*   string_substring_from(char *text, int start);
 
@@ -356,7 +361,7 @@
 	 * @param[in] text: String a partir del cual se obtiene el substring. Admite todo
 	 *                  tipo de strings
 	 * @param[in] length: Cantidad de caracteres a obtener
-	 * @return Retorna un nuevo string que debe ser liberado con free()
+	 * @return Retorna un nuevo string que debe ser liberado con `free()`
 	 */
 	char*   string_substring_until(char *text, int length);
 
@@ -371,7 +376,7 @@
 	 * @brief Retorna un array de strings a partir de un string formateado como array
 	 * @param[in] text: String a convertir. Admite todo tipo de strings
 	 * @return Retorna un array de copias de los caracteres en text y en la última
-	 *         posición un NULL. Debe ser liberado con string_array_destroy()
+	 *         posición un NULL. Debe ser liberado con `string_array_destroy()`
 	 *
 	 * @code
 	 * char* array_string = "[1,2,3,4]"
@@ -384,7 +389,7 @@
 	 * @brief Retorna el texto invertido. No se maneja el caso de NULL,
 	 *        si se pasa NULL su comportamiento no esta determinado.
 	 * @param[in] text: String a invertir. Admite todo tipo de strings
-	 * @return Retorna un nuevo string que debe ser liberado con free()
+	 * @return Retorna un nuevo string que debe ser liberado con `free()`
 	 *
 	 * @code
 	 * char* original = "boo";
@@ -399,7 +404,7 @@
 		* @param[in] text: String a modificar. Admite todo tipo de strings
 		* @param[in] substring: Substring a reemplazar. Admite todo tipo de strings
 		* @param[in] replacement: String a insertar. Admite todo tipo de strings
-		* @return Retorna un nuevo string que debe ser liberado con free()
+		* @return Retorna un nuevo string que debe ser liberado con `free()`
 		*
 		* @code
 		* char* original = "hello";
@@ -419,9 +424,9 @@
 
 	/**
 	* @brief Crea un array de strings vacio
-	* @return El array retornado debe ser liberado con string_array_destroy()
+	* @return El array retornado debe ser liberado con `string_array_destroy()`
 	*/
-	char**  string_array_new();
+	char**  string_array_new(void);
 
 	/**
 	* @brief Destruye un array con sus strings
@@ -464,7 +469,7 @@
 	* @param[in] pos: Posición del string a reemplazar
 	* @param[in] text: Nuevo string a insertar. Debe ser liberable con free(), pero
 	*                  pasa a formar parte del array, por lo que no debe ser liberado
-	* @return El string reemplazado. Debe ser liberado con free()
+	* @return El string reemplazado. Debe ser liberado con `free()`
 	*/
 	char*   string_array_replace(char** array, int pos, char* text);
 
@@ -473,7 +478,7 @@
 	* @param[in,out] array: Array a modificar. Debe apuntar a un array de strings
 	*                       terminado en NULL
 	* @return El string quitado. Deja de pertenecer al array, por lo que debe ser
-	*         liberado con free()
+	*         liberado con `free()`
 	*/
 	char*   string_array_pop(char** array);
 

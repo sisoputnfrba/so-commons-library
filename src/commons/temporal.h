@@ -20,6 +20,11 @@
 	#include <time.h>
 
 	/**
+	 * @file
+	 * @brief `#include <commons/temporal.h>`
+	 */
+
+	/**
 	* @enum t_temporal_status Estado del cronómetro
 	*/
 	typedef enum {
@@ -29,7 +34,7 @@
 
 	/**
 	 * @struct t_temporal
-	 * @brief Manejo de tiempo con cronómetro. Inicializar con temporal_create().
+	 * @brief Manejo de tiempo con cronómetro. Inicializar con `temporal_create()`.
 	 */
 	typedef struct {
 		struct timespec current;
@@ -39,7 +44,7 @@
 
 	/**
 	* @brief Retorna un string con la hora actual con el formato recibido por parámetro.
- 	* @return El string retornado debe ser liberado con free() al dejar de usarse.
+ 	* @return El string retornado debe ser liberado con `free()` al dejar de usarse.
 	*
 	* @code
 	* temporal_get_string_time("%d/%m/%y") => "30/09/20"
@@ -51,7 +56,7 @@
 
 	/**
 	* @brief Crea una variable temporal e inicia su cronómetro.
-	* @return La variable temporal creada debe ser liberada con temporal_destroy().
+	* @return La variable temporal creada debe ser liberada con `temporal_destroy()`.
 	*/
 	t_temporal* temporal_create(void);
 

@@ -20,8 +20,13 @@
 	#include "collections/dictionary.h"
 
 	/**
+	 * @file
+	 * @brief `#include <commons/config.h>`
+	 */
+
+	/**
 	 * @struct t_config
-	 * @brief Manejo de archivos de configuración. Inicializar con config_create().
+	 * @brief Manejo de archivos de configuración. Inicializar con `config_create()`.
 	 */
 	typedef struct {
 		char *path;
@@ -33,7 +38,7 @@
 	* @param path Ruta hacia el archivo de configuracion
 	* @return Retorna un puntero hacia la estructura creada, o NULL
 	*         en caso de no encontrar el archivo en el path especificado.
-	*         Una vez que se deje de usar, se debe liberar con config_destroy().
+	*         Una vez que se deje de usar, se debe liberar con `config_destroy()`.
 	*/
 	t_config *config_create(char *path);
 
@@ -67,7 +72,7 @@
 	/**
 	* @brief Retorna un array con los valores asociados a la key especificada.
 	* @return Devuelve un array de strings terminado en NULL. Debe ser liberado
-	*         con string_array_destroy() una vez que se deje de usar.
+	*         con `string_array_destroy()` una vez que se deje de usar.
 	*
 	* @note En el archivo de configuracion un valor de este tipo debería ser representado
 	*       de la siguiente forma [lista_valores_separados_por_coma]. Ejemplo:

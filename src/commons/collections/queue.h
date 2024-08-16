@@ -20,8 +20,13 @@
 	#include "list.h"
 
 	/**
+	 * @file
+	 * @brief `#include <commons/collections/queue.h>`
+	 */
+
+	/**
 	 * @struct t_queue
-	 * @brief Estructura que representa una cola. Inicializar con queue_create()
+	 * @brief Estructura que representa una cola. Inicializar con `queue_create()`
 	 */
 	typedef struct {
 		t_list* elements;
@@ -30,9 +35,9 @@
 	/**
 	* @brief Crea una cola
 	* @return Retorna un puntero a la cola creada, liberable con:
- *         - queue_destroy() si se quiere liberar la cola pero no
+ *         - `queue_destroy()` si se quiere liberar la cola pero no
  *           los elementos que contiene.
- *         - queue_destroy_and_destroy_elements() si se quiere liberar
+ *         - `queue_destroy_and_destroy_elements()` si se quiere liberar
  *           la cola con los elementos que contiene.
 	*/
 	t_queue *queue_create(void);

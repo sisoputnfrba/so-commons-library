@@ -24,9 +24,14 @@
 	#include "list.h"
 
 	/**
+	 * @file
+	 * @brief `#include <commons/collections/dictionary.h>`
+	 */
+
+	/**
 	 * @struct t_dictionary
 	 * @brief Estructura de un diccionario que contiene pares string->puntero.
-	 *        Inicializar con dictionary_create().
+	 *        Inicializar con `dictionary_create()`.
 	 */
 	typedef struct {
 		t_hash_element **elements;
@@ -38,9 +43,9 @@
 	/**
 	 * @brief Crea el diccionario
 	 * @return Devuelve un puntero al diccionario creado, liberable con:
-	 *         - dictionary_destroy() si se quiere liberar el diccionario pero no
+	 *         - `dictionary_destroy()` si se quiere liberar el diccionario pero no
 	 *           los elementos que contiene.
-	 *         - dictionary_destroy_and_destroy_elements() si se quieren liberar
+	 *         - `dictionary_destroy_and_destroy_elements()` si se quieren liberar
 	 *           el diccionario con los elementos que contiene.
 	 */
 	t_dictionary *dictionary_create(void);
@@ -127,7 +132,7 @@
 
 	/**
 	 * @brief Destruye el diccionario y destruye sus elementos
-	 * @note En caso de recibir un diccionario vacío, se comporta como dictionary_destroy()
+	 * @note En caso de recibir un diccionario vacío, se comporta como `dictionary_destroy()`
 	 */
 	void          dictionary_destroy_and_destroy_elements(t_dictionary *, void(*element_destroyer)(void*));
 

@@ -21,6 +21,11 @@
 	#include <limits.h>
 	#include <unistd.h>
 
+	/**
+	 * @file
+	 * @brief `#include <commons/bitarray.h>`
+	 */
+
 	/* position of bit within character */
 	#define BIT_CHAR(bit)         ((bit) / CHAR_BIT)
 
@@ -48,7 +53,7 @@
 
 	/**
 	* @warning Esta función se encuentra en revisión y probablemente cambie en próximas versiones.
-	*          Usar bitarray_create_with_mode().
+	*          Usar `bitarray_create_with_mode()`.
 	*
 	* @brief Crea y devuelve un puntero a una estructura t_bitarray con formato LSB_FIRST
 	*

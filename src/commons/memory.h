@@ -22,6 +22,11 @@
   #include <ctype.h>
   #include "string.h"
 
+	/**
+	 * @file
+	 * @brief `#include <commons/memory.h>`
+	 */
+
   /* amount of hex columns of dump */
   #define HEXDUMP_COLS 16
   /* amount of hex columns allow without a separator */
@@ -29,7 +34,7 @@
 
   /**
     * @brief Devuelve un dump hexadecimal en formato string de una porción de memoria dada
-    * @return Un string con el dump hexadecimal. Debe ser liberado con free()
+    * @return Un string con el dump hexadecimal. Debe ser liberado con `free()`
     */
   char *mem_hexstring(void *source, size_t length);
 
