@@ -34,13 +34,31 @@
       "text": "Código fuente",
       "url": "#",
       "children": [
-        { "text": "Repositorio de GitHub ↗", "url": "https://faq.utnso.com.ar/commons" },
-        { "text": "Archivos fuente ↗", "url": "https://faq.utnso.com.ar/commons/tree/master/src/commons" },
-        { "text": "Unit tests ↗", "url": "https://faq.utnso.com.ar/commons/tree/master/tests/unit-tests" }
+        {
+          "text": "Repositorio de GitHub ↗",
+          "url": "https://faq.utnso.com.ar/commons\" target=\"_blank\" rel=\"noopener noreferrer"
+        },
+        {
+          "text": "Archivos fuente ↗",
+          "url": "https://faq.utnso.com.ar/commons/tree/master/src/commons\" target=\"_blank\" rel=\"noopener noreferrer"
+        },
+        {
+          "text": "Unit tests ↗",
+          "url": "https://faq.utnso.com.ar/commons/tree/master/tests/unit-tests\" target=\"_blank\" rel=\"noopener noreferrer"
+        }
       ]
     },
-    { "text": "Blog ↗", "url": "https://faq.utnso.com.ar/blog" },
-    { "text": "Guías ↗", "url": "https://faq.utnso.com.ar/docs" },
-    { "text": "Inscripciones ↗", "url": "https://faq.utnso.com.ar/inscripciones" }
+    {
+      "text": "Blog ↗",
+      "url": "https://faq.utnso.com.ar/blog\" target=\"_blank\" rel=\"noopener noreferrer"
+    },
+    {
+      "text": "Guías ↗",
+      "url": "https://faq.utnso.com.ar/docs\" target=\"_blank\" rel=\"noopener noreferrer"
+    },
+    {
+      "text": "Inscripciones ↗",
+      "url": "https://faq.utnso.com.ar/inscripciones\" target=\"_blank\" rel=\"noopener noreferrer"
+    }
   ]
 }
