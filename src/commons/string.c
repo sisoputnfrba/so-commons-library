@@ -22,11 +22,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-static void _string_do(char *text, void (*closure)(char*));
+static void _string_do(char *text, void (*closure)(char* c));
 static void _string_lower_element(char* ch);
 static void _string_upper_element(char* ch);
 void _string_append_with_format_list(const char* format, char** original, va_list arguments);
-char** _string_split(char* text, char* separator, bool(*is_last_token)(int));
 static void _string_array_push(char*** array, char* text, int size);
 static bool _string_match(char* text, char* pattern, char **where);
 
@@ -153,17 +152,23 @@ bool string_equals_ignore_case(char *actual, char *expected) {
 }
 
 char **string_split(char *text, char *separator) {
-	bool _is_last_token(int _) {
-		return false;
-	}
-	return _string_split(text, separator, _is_last_token);
+	return string_n_split(text, -1, separator);
 }
 
 char** string_n_split(char *text, int n, char* separator) {
-	bool _is_last_token(int index) {
-		return index == (n - 1);
+	char **substrings = string_array_new();
+	int index = 0;
+
+	char *start = text;
+	char *end;
+
+	while (_string_match(start, separator, &end) && index != (n - 1)) {
+		_string_array_push(&substrings, string_substring_until(start, end - start), index++);
+		start = end + string_length(separator);
 	}
-	return _string_split(text, separator, _is_last_token);
+
+	_string_array_push(&substrings, string_duplicate(start), index);
+	return substrings;
 }
 
 char**  string_get_string_as_array(char* text) {
@@ -253,11 +258,9 @@ void string_array_destroy(char** array) {
 
 int string_array_size(char** array) {
 	int size = 0;
-	void _count_lines(char* _) {
+	while (array[size] != NULL) {
 		size++;
 	}
-	string_iterate_lines(array, _count_lines);
-
 	return size;
 }
 
@@ -311,22 +314,6 @@ void _string_append_with_format_list(const char* format, char** original, va_lis
 	va_end(copy_arguments);
 	string_append(original, temporal);
 	free(temporal);
-}
-
-char** _string_split(char* text, char* separator, bool(*is_last_token)(int)) {
-	char **substrings = string_array_new();
-	int index = 0;
-
-	char *start = text;
-	char *end;
-
-	while (_string_match(start, separator, &end) && !is_last_token(index)) {
-		_string_array_push(&substrings, string_substring_until(start, end - start), index++);
-		start = end + string_length(separator);
-	}
-
-	_string_array_push(&substrings, string_duplicate(start), index);
-	return substrings;
 }
 
 static void _string_array_push(char*** array, char* text, int size) {
