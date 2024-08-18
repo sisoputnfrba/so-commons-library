@@ -1061,6 +1061,8 @@
 	 * @note El elemento removido es el último devuelto por `list_iterator_next()`
 	 *       y dejará de pertenecer a la lista, por lo que debe ser liberado
 	 *       una vez que no se lo necesite.
+	 * @warning Solo se puede llamar a `list_iterator_remove()` una vez por cada
+	 *          llamada a `list_iterator_next()`.
 	 */
 	void list_iterator_remove(t_list_iterator* iterator);
 
@@ -1068,7 +1070,7 @@
 	 * @brief Reemplaza el elemento actual de la iteración por otro
 	 * @param data: El elemento a agregar. Este elemento pasará a pertenecer
 	 *        a la lista, por lo que no debe ser liberado por fuera de ésta.
-	 * @note El elemento removido es el último devuelto por list_iterator_next()
+	 * @note El elemento removido es el último devuelto por `list_iterator_next()`
 	 *       y dejará de pertenecer a la lista, por lo que debe ser liberado
 	 *       una vez que no se lo necesite.
 	 */
