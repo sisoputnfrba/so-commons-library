@@ -173,7 +173,7 @@
 	* bool _has_age_less_than(void* a, void* b) {
 	*     t_person* person_a = (t_person*) a;
 	*     t_person* person_b = (t_person*) b;
-	*     return person_a->age < person_b->age;
+	*     return person_a->age <= person_b->age;
 	* }
 	* list_add_sorted(people, person_create("Neymar Jr.", 29), _has_age_less_than); // 0xdef0
 	*
@@ -245,7 +245,7 @@
 	* void* _min_age(void* a, void* b) {
 	*     t_person* person_a = (t_person*) a;
 	*     t_person* person_b = (t_person*) b;
-	*     return person_a->age < person_b->age ? person_a : person_b;
+	*     return person_a->age <= person_b->age ? person_a : person_b;
 	* }
 	* t_person* youngest = list_get_minimum(people, _min_age);
 	*
@@ -273,7 +273,7 @@
 	* void* _max_age(void* a, void* b) {
 	*     t_person* person_a = (t_person*) a;
 	*     t_person* person_b = (t_person*) b;
-	*     return person_a->age > person_b->age ? person_a : person_b;
+	*     return person_a->age >= person_b->age ? person_a : person_b;
 	* }
 	* t_person* oldest = list_get_maximum(people, _max_age);
 	*
@@ -397,7 +397,8 @@
 
 	/**
 	* @brief Retorna una nueva lista con los elementos transformados
-	* @return Los elementos de la lista retornada seguirán perteneciendo a la lista original.
+	* @return Los punteros contenidos en la lista retornada serán los
+	*         devueltos por `transformer`.
 	*
 	* Ejemplo de uso:
 	* @code
@@ -736,6 +737,8 @@
 	/**
 	* @brief Retorna el primer valor encontrado, el cual haga que condition
 	*        devuelva `true`, o NULL en caso de no encontrar ninguno.
+ 	* @return El elemento retornado seguirá perteneciendo a la lista, por
+	*         lo que no debe ser liberado por fuera de ésta.
 	*
 	* Ejemplo de uso:
 	* @code
@@ -810,7 +813,7 @@
 	* bool _has_age_less_than(void* a, void* b) {
 	*     t_person* person_a = (t_person*) a;
 	*     t_person* person_b = (t_person*) b;
-	*     return person_a->age < person_b->age;
+	*     return person_a->age <= person_b->age;
 	* }
 	* list_sort(people, _has_age_less_than);
 	*
@@ -837,7 +840,7 @@
 	* bool _has_age_less_than(void* a, void* b) {
 	*     t_person* person_a = (t_person*) a;
 	*     t_person* person_b = (t_person*) b;
-	*     return person_a->age < person_b->age;
+	*     return person_a->age <= person_b->age;
 	* }
 	* t_list* sorted = list_sorted(people, _has_age_less_than);
 	*
