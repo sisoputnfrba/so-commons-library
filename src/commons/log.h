@@ -51,7 +51,7 @@
 	 * @param file: La ruta hacia el archivo donde se van a generar los logs
 	 * @param process_name: El nombre a ser mostrado en los logs
 	 * @param is_active_console: Si lo que se loguea debe mostrarse por consola
-	 * @param level: El nivel de detalle mínimo a loguear (ver definición de t_log_level)
+	 * @param level: El nivel de detalle máximo a loguear (ver definición de t_log_level)
 	 * @return Retorna una instancia de logger, o NULL en caso de error. Debe ser
 	 *         liberada con `log_destroy()`
 	 *
