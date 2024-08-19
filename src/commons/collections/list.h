@@ -143,9 +143,9 @@
 	* Ejemplo de uso:
 	* @code
 	* t_list* people = list_create();
-	* list_add(people, 0, person_create("Lionel Messi", 33)); // 0x1234
-	* list_add(people, 1, person_create("Cristiano Ronaldo", 35)); // 0x5678
-	* list_add(people, 1, person_create("Neymar Jr.", 29)); // 0x9abc
+	* list_add(people, person_create("Lionel Messi", 33)); // 0x1234
+	* list_add(people, person_create("Cristiano Ronaldo", 35)); // 0x5678
+	* list_add(people, person_create("Neymar Jr.", 29)); // 0x9abc
 	*
 	* list_add_in_index(people, 1, person_create("Kylian Mbappé", 22)); // 0xdef0
 	*
