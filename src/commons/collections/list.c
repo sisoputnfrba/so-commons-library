@@ -190,24 +190,26 @@ t_list* list_take(t_list* self, int count) {
 }
 
 t_list* list_slice(t_list* self, int start, int count) {
-	t_list_iterator sublist_iterator = list_iterator_init(list_create());
+	t_list *sublist = list_create();
+	t_list_iterator sublist_iterator = list_iterator_init(sublist);
 	t_list_iterator self_iterator = list_iterator_init(self);
 	list_iterator_advance_to_index(&self_iterator, start);
 	for (int i = 0; i < count && list_iterator_has_next(&self_iterator); ++i) {
 		list_iterator_add(&sublist_iterator, list_iterator_next(&self_iterator));
 	}
-	return sublist_iterator.list;
+	return sublist;
 }
 
 t_list* list_slice_and_remove(t_list* self, int start, int count) {
-	t_list_iterator sublist_iterator = list_iterator_init(list_create());
+	t_list *sublist = list_create();
+	t_list_iterator sublist_iterator = list_iterator_init(sublist);
 	t_list_iterator self_iterator = list_iterator_init(self);
 	list_iterator_advance_to_index(&self_iterator, start);
 	for (int i = 0; i < count && list_iterator_has_next(&self_iterator); ++i) {
 		list_iterator_add(&sublist_iterator, list_iterator_next(&self_iterator));
 		list_iterator_remove(&self_iterator);
 	}
-	return sublist_iterator.list;
+	return sublist;
 }
 
 t_list* list_take_and_remove(t_list* self, int count) {
@@ -215,7 +217,8 @@ t_list* list_take_and_remove(t_list* self, int count) {
 }
 
 t_list* list_filter(t_list* self, bool(*condition)(void*)) {
-	t_list_iterator sublist_iterator = list_iterator_init(list_create());
+	t_list *sublist = list_create();
+	t_list_iterator sublist_iterator = list_iterator_init(sublist);
 	t_list_iterator self_iterator = list_iterator_init(self);
 	while (list_iterator_has_next(&self_iterator)) {
 		void* data = list_iterator_next(&self_iterator);
@@ -223,20 +226,22 @@ t_list* list_filter(t_list* self, bool(*condition)(void*)) {
 			list_iterator_add(&sublist_iterator, data);
 		}
 	}
-	return sublist_iterator.list;
+	return sublist;
 }
 
 t_list* list_map(t_list* self, void*(*transformer)(void*)){
-	t_list_iterator transformed_iterator = list_iterator_init(list_create());
+	t_list *transformed = list_create();
+	t_list_iterator transformed_iterator = list_iterator_init(transformed);
 	t_list_iterator self_iterator = list_iterator_init(self);
 	while (list_iterator_has_next(&self_iterator)) {
 		list_iterator_add(&transformed_iterator, transformer(list_iterator_next(&self_iterator)));
 	}
-	return transformed_iterator.list;
+	return transformed;
 }
 
 t_list* list_flatten(t_list* self) {
-	t_list_iterator flattened_iterator = list_iterator_init(list_create());
+	t_list *flattened = list_create();
+	t_list_iterator flattened_iterator = list_iterator_init(flattened);
 	t_list_iterator self_iterator = list_iterator_init(self);
 	while (list_iterator_has_next(&self_iterator)) {
 		t_list_iterator sublist_iterator = list_iterator_init(list_iterator_next(&self_iterator));
@@ -244,7 +249,7 @@ t_list* list_flatten(t_list* self) {
 			list_iterator_add(&flattened_iterator, list_iterator_next(&sublist_iterator));
 		}
 	}
-	return flattened_iterator.list;
+	return flattened;
 }
 
 int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
