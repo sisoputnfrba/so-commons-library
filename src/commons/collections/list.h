@@ -1021,8 +1021,8 @@
 	 * t_list_iterator* iterator = list_iterator_create(list);
 	 * while(list_iterator_has_next(iterator)) {
 	 *     void* element = list_iterator_next(iterator);
-	 *     // Hacer algo que requiera list_iterator_add() o list_iterator_remove()
-	 *     // o romper la iteración con break o return
+	 *     // Modificar la lista con list_iterator_add(), list_iterator_replace() o list_iterator_remove()
+	 *     // y/o romper la iteración con un break o return
 	 * }
 	 * list_iterator_destroy(iterator);
 	 * @endcode
