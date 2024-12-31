@@ -299,7 +299,13 @@ bool list_any_satisfy(t_list* self, bool(*condition)(void*)) {
 }
 
 bool list_all_satisfy(t_list* self, bool(*condition)(void*)) {
-	return list_count_satisfying(self, condition) == list_size(self);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		if (!condition(list_iterator_next(&self_iterator))) {
+			return false;
+		}
+	}
+	return true;
 }
 
 t_list* list_duplicate(t_list* self) {
@@ -402,8 +408,8 @@ static void* list_iterator_next_data(t_list_iterator *iterator) {
 }
 
 static void list_iterator_advance(t_list_iterator *iterator) {
-	iterator->actual = iterator->next;
 	iterator->index++;
+	iterator->actual = iterator->next;
 	iterator->next = &(*iterator->actual)->next;
 }
 
