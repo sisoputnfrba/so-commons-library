@@ -28,6 +28,7 @@ static void            list_iterator_advance(t_list_iterator *iterator);
 static void            list_iterator_retreat(t_list_iterator *iterator);
 static void            list_iterator_advance_to_index(t_list_iterator* iterator, int index);
 static bool            list_iterator_advance_to_condition(t_list_iterator* iterator, bool(*condition)(void*));
+static void            list_iterator_advance_to_end(t_list_iterator* iterator);
 static void            list_iterator_add_all(t_list_iterator* iterator, t_list* other);
 static int             list_iterator_add_sorted(t_list_iterator *iterator, void *data, bool (*comparator)(void*,void*));
 static void*           list_iterator_fold(t_list_iterator* iterator, void* seed, void*(*operation)(void*, void*));
@@ -41,14 +42,14 @@ t_list *list_create() {
 
 int list_add(t_list *self, void *data) {
 	t_list_iterator self_iterator = list_iterator_init(self);
-	list_iterator_advance_to_index(&self_iterator, list_size(self));
+	list_iterator_advance_to_end(&self_iterator);
 	list_iterator_add(&self_iterator, data);
 	return list_iterator_index(&self_iterator);
 }
 
 void list_add_all(t_list* self, t_list* other) {
 	t_list_iterator self_iterator = list_iterator_init(self);
-	list_iterator_advance_to_index(&self_iterator, list_size(self));
+	list_iterator_advance_to_end(&self_iterator);
 	list_iterator_add_all(&self_iterator, other);
 }
 
@@ -433,6 +434,12 @@ static bool list_iterator_advance_to_condition(t_list_iterator *iterator, bool(*
 		list_iterator_advance(iterator);
 	}
 	return false;
+}
+
+static void list_iterator_advance_to_end(t_list_iterator* iterator) {
+	while (list_iterator_has_next(iterator)) {
+		list_iterator_advance(iterator);
+	}
 }
 
 static void list_iterator_add_all(t_list_iterator* iterator, t_list* other) {
