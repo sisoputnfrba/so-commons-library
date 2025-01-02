@@ -162,6 +162,7 @@
 	* @param comparator: Funcion que compara dos elementos. Debe devolver
 	*                    true si el primer parametro debe aparecer antes que el
 	*                    segundo en la lista
+ 	* @return El índice en el que se agregó el elemento
 	*
 	* Ejemplo de uso:
 	* @code
@@ -1040,6 +1041,7 @@
 	 * @return El elemento actual de la iteración. Pertenecerá a la lista,
 	 *         por lo que no debe ser liberado por fuera de ésta a menos que
 	 *         se lo remueva con `list_iterator_remove()`.
+  	 * @note Invocar esta función solo si `list_iterator_has_next()` es true.
 	 */
 	void* list_iterator_next(t_list_iterator* iterator);
 
@@ -1053,16 +1055,19 @@
 	 *        del siguiente. Luego, avanza hacia el elemento agregado.
 	 * @param data: El elemento a agregar. Este elemento pasará a pertenecer
 	 *        a la lista, por lo que no debe ser liberado por fuera de ésta.
+  	 * @note Invocar esta función luego de obtener el elemento actual
+	 *       con `list_iterator_next()`
 	 */
 	void list_iterator_add(t_list_iterator* iterator, void *data);
 
 	/**
 	 * @brief Remueve de la lista al elemento actual de la iteración
-	 * @note El elemento removido es el último devuelto por `list_iterator_next()`
-	 *       y dejará de pertenecer a la lista, por lo que debe ser liberado
-	 *       una vez que no se lo necesite.
+	 * @note Invocar esta función luego de obtener el elemento actual
+	 *       con `list_iterator_next()`. El elemento removido es el último
+	 *       devuelto por dicha función y dejará de pertenecer a la lista,
+	 *       por lo que debe ser liberado una vez que no se lo necesite.
 	 * @warning Solo se puede llamar a `list_iterator_remove()` una vez por cada
-	 *          llamada a `list_iterator_next()`.
+	 *          llamado a `list_iterator_next()`.
 	 */
 	void list_iterator_remove(t_list_iterator* iterator);
 
@@ -1070,9 +1075,10 @@
 	 * @brief Reemplaza el elemento actual de la iteración por otro
 	 * @param data: El elemento a agregar. Este elemento pasará a pertenecer
 	 *        a la lista, por lo que no debe ser liberado por fuera de ésta.
-	 * @note El elemento removido es el último devuelto por `list_iterator_next()`
-	 *       y dejará de pertenecer a la lista, por lo que debe ser liberado
-	 *       una vez que no se lo necesite.
+	 * @note Invocar esta función luego de obtener el elemento actual
+	 *       con `list_iterator_next()`. El elemento removido es el último
+	 *       devuelto por dicha función y dejará de pertenecer a la lista,
+	 *       por lo que debe ser liberado una vez que no se lo necesite.
 	 */
 	void list_iterator_replace(t_list_iterator* iterator, void *data);
 
