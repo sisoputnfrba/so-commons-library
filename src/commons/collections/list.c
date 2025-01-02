@@ -25,7 +25,7 @@ static void            list_unlink_element(t_list* self, t_link_element** indire
 static t_list_iterator list_iterator_init(t_list* list);
 static void*           list_iterator_peek(t_list_iterator *iterator);
 static void            list_iterator_advance(t_list_iterator *iterator);
-static void            list_iterator_rewind(t_list_iterator *iterator);
+static void            list_iterator_retreat(t_list_iterator *iterator);
 static void            list_iterator_advance_to_index(t_list_iterator* iterator, int index);
 static bool            list_iterator_advance_to_condition(t_list_iterator* iterator, bool(*condition)(void*));
 static void            list_iterator_add_all(t_list_iterator* iterator, t_list* other);
@@ -357,7 +357,7 @@ void list_iterator_add(t_list_iterator* iterator, void *data) {
 }
 
 void list_iterator_remove(t_list_iterator* iterator) {
-	list_iterator_rewind(iterator);
+	list_iterator_retreat(iterator);
 	list_unlink_element(iterator->list, iterator->next);
 }
 
@@ -413,14 +413,14 @@ static void list_iterator_advance(t_list_iterator *iterator) {
 	iterator->next = &(*iterator->actual)->next;
 }
 
-static void list_iterator_rewind(t_list_iterator *iterator) {
+static void list_iterator_retreat(t_list_iterator *iterator) {
 	iterator->next = iterator->actual;
 	iterator->actual = NULL;
 	iterator->index--;
 }
 
 static void list_iterator_advance_to_index(t_list_iterator *iterator, int index) {
-	while (list_iterator_index(iterator) + 1 < index) {
+	while (list_iterator_index(iterator) < (index - 1)) {
 		list_iterator_advance(iterator);
 	}
 }
