@@ -955,6 +955,61 @@ context (test_list) {
             } end
         } end
 
+        describe ("Replace") {
+            void _replace_all_by_name(char *filter) {
+                char *names[] = { "Matias", "Gaston", "Sebastian", "Daniela" };
+                int i = 0;
+
+                while(list_iterator_has_next(list_iterator)) {
+                    t_person* person = list_iterator_next(list_iterator);
+                    should_string(person->name) be equal to (names[i++]);
+
+                    if (string_contains(person->name, filter)) {
+                        list_iterator_replace(list_iterator, persona_create("Agustin", 23));
+                        persona_destroy(person);
+                    }
+                }
+            }
+
+            before {
+                list_add(list, persona_create("Matias"   , 24));
+                list_add(list, persona_create("Gaston"   , 25));
+                list_add(list, persona_create("Sebastian", 21));
+                list_add(list, persona_create("Daniela"  , 19));
+            } end
+
+            it("Should replace first element") {
+                _replace_all_by_name("Matias");
+
+                should_int(list->elements_count) be equal to (4);
+                assert_person_in_list(list, 0, "Agustin"  , 23);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Daniela"  , 19);
+            } end
+
+            it("Should replace an element in the middle") {
+                _replace_all_by_name("Gaston");
+
+                should_int(list->elements_count) be equal to (4);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Agustin"  , 23);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Daniela"  , 19);
+            } end
+
+            it("Should replace last element") {
+                _replace_all_by_name("Daniela");
+
+                should_int(list->elements_count) be equal to (4);
+                assert_person_in_list(list, 0, "Matias"   , 24);
+                assert_person_in_list(list, 1, "Gaston"   , 25);
+                assert_person_in_list(list, 2, "Sebastian", 21);
+                assert_person_in_list(list, 3, "Agustin"  , 23);
+            } end
+
+        } end
+
     } end
 
 }
