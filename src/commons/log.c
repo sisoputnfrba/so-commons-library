@@ -44,11 +44,6 @@ static bool _is_level_enabled(t_log* logger, t_log_level level);
 
 
 t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_level detail) {
-        if (!string_ends_with(file, ".log")) {
-            perror("Log file must have .log extension");
-            return NULL;
-        }
-
 	t_log* logger = malloc(sizeof(t_log));
 
 	if (logger == NULL) {
@@ -59,6 +54,10 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
 	FILE *file_opened = NULL;
 
 	if (file != NULL) {
+		if (!string_ends_with(file, ".log")) {
+			error_show("Log file must have .log extension");
+			return NULL;
+		}
 		file_opened = txt_open_for_append(file);
 
 		if (file_opened == NULL) {
