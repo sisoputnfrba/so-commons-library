@@ -48,7 +48,7 @@
 	/**
 	 * @brief Crea una instancia de logger
 	 *
-	 * @param file: La ruta hacia el archivo donde se van a generar los logs
+	 * @param file: La ruta hacia el archivo donde se van a generar los logs, debe tener extensión `.log`
 	 * @param process_name: El nombre a ser mostrado en los logs
 	 * @param is_active_console: Si lo que se loguea debe mostrarse por consola
 	 * @param level: El nivel de detalle máximo a loguear (ver definición de t_log_level)
