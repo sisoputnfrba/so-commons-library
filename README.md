@@ -26,19 +26,6 @@ Algunas de las consideraciones a tener a la hora de su uso:
 * Ninguna de las implementaciones utiliza semáforos, por lo que el uso concurrente debe ser implementado por el usuario de estas.
 * Ninguna de las funciones implementadas posee validaciones para manejo de errores.
 
-## Para usuarios de MacOS
-### Pre-requisitos
-- gcc-14
-- gcp
-
-Recomendamos tener instalado [brew](https://brew.sh/) para poder instalar los pre requisitos de la siguiente forma:
-```Bash
-brew install gcc@14
-brew install coreutils
-```
-
-Al seguir la guia, antes de hacer los comandos make como se explican abajo deben hacer `cd src/`
-
 ## Guía de Instalación
 
 Esta biblioteca utiliza CSpec para testear todas las funcionalidades, más información en: https://github.com/mumuki/cspec
@@ -70,3 +57,11 @@ Por ejemplo:
 2. Buscar `GCC Linker` > `Libraries` > `Libraries`. Notar que entre paréntesis dice `-l`, el parámetro de `gcc` que estamos buscando.
 3. Darle click en el botón de `+`, y poner el nombre de la biblioteca sin el `-l` (en este caso, `commons`).
 4. Aceptar y buildear el proyecto.
+
+## Contribucion
+
+Para contribuir se puede desarrollar dentro del container configurado por `.devcontainer/devcontainer.json`.
+
+1. Abrir `Command Palette`
+2. Correr el comando `Dev Containers: Rebuild and Reopen in Container`
+3. Abrir una terminal y compilar con el comando `make`
