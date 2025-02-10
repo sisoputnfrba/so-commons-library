@@ -43,7 +43,7 @@ Instrucciones de instalación:
 
 1. Linkear con `-lcommons`
 
-2. Para usarla en un .c/.h deberá incluirse de la siguiente forma: `commons/<Nombre_TAD>`
+2. Para usarla en un .c/.h deberá incluirse de la siguiente forma: `<commons/Nombre_TAD>`
 
 Por ejemplo:
 
@@ -58,3 +58,11 @@ Por ejemplo:
 2. Buscar `GCC Linker` > `Libraries` > `Libraries`. Notar que entre paréntesis dice `-l`, el parámetro de `gcc` que estamos buscando.
 3. Darle click en el botón de `+`, y poner el nombre de la biblioteca sin el `-l` (en este caso, `commons`).
 4. Aceptar y buildear el proyecto.
+
+## Contribucion
+
+Para contribuir se puede desarrollar dentro del container configurado por `.devcontainer/devcontainer.json`.
+
+1. Abrir `Command Palette`
+2. Correr el comando `Dev Containers: Rebuild and Reopen in Container`
+3. Abrir una terminal y compilar con el comando `make`
