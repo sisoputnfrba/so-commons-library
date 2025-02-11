@@ -1,9 +1,9 @@
 {
-  "image": "docker.io/library/ubuntu:22.04",
-  "postCreateCommand": "apt-get update && apt-get install -y --no-install-recommends make git valgrind gcc libc6-dev && git config --global --add safe.directory /workspaces/so-commons-library",
+  "build": { "dockerfile": "Dockerfile" },
+  "workspaceFolder": "/workspaces/so-commons-library/commons.code-workspace",
   "customizations": {
     "vscode": {
-        "extensions": ["ms-vscode.cpptools", "ms-vscode.cpptools-themes"]
+      "extensions": ["ms-vscode.cpptools", "ms-vscode.cpptools-themes"]
     }
   }
 }
