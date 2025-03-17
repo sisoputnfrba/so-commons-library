@@ -1,0 +1,9 @@
+{
+  "build": { "dockerfile": "Dockerfile" },
+  "workspaceFolder": "/workspaces/so-commons-library/commons.code-workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-vscode.cpptools", "ms-vscode.cpptools-themes"]
+    }
+  }
+}

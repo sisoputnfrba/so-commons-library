@@ -4,9 +4,26 @@
 		"files.associations": {
 			"*.h": "c",
 		},
+		"files.exclude": {
+			".devcontainer/**": true,
+			".github/**": true,
+			"cspec/**": true,
+			"src/**": true,
+			"tests/**": true,
+		},
 		"C_Cpp.errorSquiggles": "disabled",
 	},
 	"folders": [
+		{
+			"name": "so-commons-library",
+			"path": "."
+		},
+		{
+			"path": ".devcontainer"
+		},
+		{
+			"path": ".github"
+		},
 		{
 			"path": "src"
 		},
