@@ -17,10 +17,12 @@ jobs:
     if: github.repository_owner == 'sisoputnfrba' && ! github.event.pull_request.draft
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends cmake valgrind
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake valgrind
 
       - name: Build project
         run: make debug

@@ -1,0 +1,13 @@
+#titlearea {
+    color: var(--header-foreground) !important; /* Inherit color from parent */
+    text-decoration: none; /* Remove underline */
+}
+
+#titlearea:hover {
+    text-decoration: none; /* Ensure no underline on hover */
+}
+
+a[href="#details"],
+a[href$="source.html"] {
+    display: none; /* Hide links to details section and source files */
+}

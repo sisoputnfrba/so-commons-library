@@ -20,25 +20,27 @@
 #include <stdio.h>
 
 /**
-* @fn    txt_open_for_append
+ * @file
+ * @brief `#include <commons/txt.h>`
+ */
+
+/**
 * @brief Abre un archivo para agregarle contenido al final
+* @note El mismo se debe cerrar con `txt_close_file()`
 */
 FILE* txt_open_for_append(char* path);
 
 /**
-* @fn    txt_write_in_file
 * @brief Agrega contenido al final del archivo
 */
 void txt_write_in_file(FILE* file, char* string);
 
 /**
-* @fn    txt_write_in_stdout
 * @brief Imprime un mensaje en la salida estandar
 */
 void txt_write_in_stdout(char* string);
 
 /**
-* @fn    txt_close_file
 * @brief Cierra el archivo
 */
 void txt_close_file(FILE* file);

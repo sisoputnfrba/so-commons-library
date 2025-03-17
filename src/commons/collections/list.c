@@ -18,17 +18,20 @@
 
 #include "list.h"
 
-static t_link_element *list_create_element(void* data);
-static void list_link_element(t_list* self, t_link_element** indirect, t_link_element* element);
-static t_link_element *list_unlink_element(t_list* self, t_link_element** indirect);
-static t_link_element **list_get_indirect_in_index(t_list *self, int index);
-static t_link_element **list_get_indirect_by_condition(t_list *self, bool(*condition)(void*));
-static void list_add_element(t_list *self, t_link_element **indirect, void *data);
-static void *list_replace_indirect(t_link_element **indirect, void *data);
-static void *list_remove_indirect(t_list *self, t_link_element **indirect);
-static void list_iterate_indirects(t_list* self, int start, int count, bool (*removed)(t_link_element**));
-static int list_add_element_sorted(t_list *self, t_link_element* element, bool (*comparator)(void*,void*));
-static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*));
+static t_link_element* list_create_element(void* data);
+static void            list_destroy_element(t_link_element* element);
+static t_list_iterator list_iterator_init(t_list* list);
+static void*           list_iterator_peek(t_list_iterator *iterator);
+static void            list_iterator_add_element(t_list_iterator* iterator, t_link_element* element);
+static void            list_iterator_add_element_sorted(t_list_iterator *iterator, t_link_element *element, bool (*comparator)(void*,void*));
+static t_link_element* list_iterator_remove_element(t_list_iterator* iterator);
+static void            list_iterator_advance(t_list_iterator *iterator);
+static void            list_iterator_advance_to_index(t_list_iterator* iterator, int index);
+static bool            list_iterator_advance_to_condition(t_list_iterator* iterator, bool(*condition)(void*));
+static void            list_iterator_advance_to_end(t_list_iterator* iterator);
+static void            list_iterator_retreat(t_list_iterator *iterator);
+static void            list_iterator_add_all(t_list_iterator* iterator, t_list* other);
+static void*           list_iterator_fold(t_list_iterator* iterator, void* seed, void*(*operation)(void*, void*));
 
 t_list *list_create() {
 	t_list *list = malloc(sizeof(t_list));
@@ -38,38 +41,46 @@ t_list *list_create() {
 }
 
 int list_add(t_list *self, void *data) {
-	t_link_element **indirect = list_get_indirect_in_index(self, list_size(self));
-	list_add_element(self, indirect, data);
-	return list_size(self) - 1;
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_advance_to_end(&self_iterator);
+	list_iterator_add(&self_iterator, data);
+	return list_iterator_index(&self_iterator);
 }
 
 void list_add_all(t_list* self, t_list* other) {
-	t_link_element **indirect = list_get_indirect_in_index(self, list_size(self));
-	void _add_data(void *data) {
-		list_add_element(self, indirect, data);
-		indirect = &(*indirect)->next;
-	}
-	list_iterate(other, _add_data);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_advance_to_end(&self_iterator);
+	list_iterator_add_all(&self_iterator, other);
 }
 
 void* list_get(t_list *self, int index) {
-	t_link_element **indirect = list_get_indirect_in_index(self, index);
-	return (*indirect)->data;
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_advance_to_index(&self_iterator, index);
+	return list_iterator_next(&self_iterator);
 }
 
 void list_add_in_index(t_list *self, int index, void *data) {
-	t_link_element **indirect = list_get_indirect_in_index(self, index);
-	list_add_element(self, indirect, data);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_advance_to_index(&self_iterator, index);
+	list_iterator_add(&self_iterator, data);
 }
 
 void *list_replace(t_list *self, int index, void *data) {
-	t_link_element **indirect = list_get_indirect_in_index(self, index);
-	return list_replace_indirect(indirect, data);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_advance_to_index(&self_iterator, index);
+	void *old_data = list_iterator_next(&self_iterator);
+	list_iterator_replace(&self_iterator, data);
+	return old_data;
 }
 
 void *list_replace_by_condition(t_list* self, bool(*condition)(void*), void* element) {
-	t_link_element **indirect = list_get_indirect_by_condition(self, condition);
-	return (*indirect) != NULL ? list_replace_indirect(indirect, element) : NULL;
+	t_list_iterator self_iterator = list_iterator_init(self);
+	if (list_iterator_advance_to_condition(&self_iterator, condition)) {
+		void *old_data = list_iterator_next(&self_iterator);
+		list_iterator_replace(&self_iterator, element);
+		return old_data;
+	}
+	return NULL;
 }
 
 void list_replace_and_destroy_element(t_list *self, int index, void *data, void(*element_destroyer)(void*)) {
@@ -78,33 +89,47 @@ void list_replace_and_destroy_element(t_list *self, int index, void *data, void(
 }
 
 void* list_find(t_list *self, bool(*condition)(void*)) {
-	t_link_element **indirect = list_get_indirect_by_condition(self, condition);
-	return (*indirect) != NULL ? (*indirect)->data : NULL;
+	t_list_iterator self_iterator = list_iterator_init(self);
+	if (list_iterator_advance_to_condition(&self_iterator, condition)) {
+		return list_iterator_next(&self_iterator);
+	}
+	return NULL;
 }
 
 void list_iterate(t_list* self, void(*closure)(void*)) {
-	t_link_element **indirect = &self->head;
-	while ((*indirect) != NULL) {
-		closure((*indirect)->data);
-		indirect = &(*indirect)->next;
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		closure(list_iterator_next(&self_iterator));
 	}
 }
 
 void *list_remove(t_list *self, int index) {
-	t_link_element **indirect = list_get_indirect_in_index(self, index);
-	return list_remove_indirect(self, indirect);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_advance_to_index(&self_iterator, index);
+	void *data = list_iterator_next(&self_iterator);
+	list_iterator_remove(&self_iterator);
+	return data;
 }
 
 bool list_remove_element(t_list *self, void *element) {
-	bool _is_the_element(void *data) {
-		return element == data;
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		if (list_iterator_next(&self_iterator) == element) {
+			list_iterator_remove(&self_iterator);
+			return true;
+		}
 	}
-	return list_remove_by_condition(self, _is_the_element) != NULL;
+	return false;
 }
 
 void* list_remove_by_condition(t_list *self, bool(*condition)(void*)) {
-	t_link_element **indirect = list_get_indirect_by_condition(self, condition);
-	return (*indirect) != NULL ? list_remove_indirect(self, indirect) : NULL;
+	t_list_iterator self_iterator = list_iterator_init(self);
+	if (list_iterator_advance_to_condition(&self_iterator, condition)) {
+		void *data = list_iterator_next(&self_iterator);
+		list_iterator_remove(&self_iterator);
+		return data;
+	}
+	return NULL;
 }
 
 void list_remove_and_destroy_element(t_list *self, int index, void(*element_destroyer)(void*)) {
@@ -120,13 +145,13 @@ void list_remove_and_destroy_by_condition(t_list *self, bool(*condition)(void*),
 }
 
 void list_remove_and_destroy_all_by_condition(t_list *self, bool(*condition)(void*), void(*element_destroyer)(void*)) {
-	t_link_element **indirect = &self->head;
-	while ((*indirect) != NULL) {
-		if (condition((*indirect)->data)) {
-			element_destroyer(list_remove_indirect(self, indirect));
-			continue;
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		void* data = list_iterator_next(&self_iterator);
+		if (condition(data)) {
+			list_iterator_remove(&self_iterator);
+			element_destroyer(data);
 		}
-		indirect = &(*indirect)->next;
 	}
 }
 
@@ -139,8 +164,9 @@ bool list_is_empty(t_list *list) {
 }
 
 void list_clean(t_list *self) {
-	while (!list_is_empty(self)) {
-		list_remove_indirect(self, &self->head);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		list_destroy_element(list_iterator_remove_element(&self_iterator));
 	}
 }
 
@@ -164,30 +190,26 @@ t_list* list_take(t_list* self, int count) {
 }
 
 t_list* list_slice(t_list* self, int start, int count) {
-	t_list* sublist = list_create();
-	t_link_element **sublist_indirect = &sublist->head;
-
-	bool _add_to_sublist(t_link_element **self_indirect) {
-		list_add_element(sublist, sublist_indirect, (*self_indirect)->data);
-		sublist_indirect = &(*sublist_indirect)->next;
-		return false;
+	t_list *sublist = list_create();
+	t_list_iterator sublist_iterator = list_iterator_init(sublist);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_advance_to_index(&self_iterator, start);
+	for (int i = 0; i < count && list_iterator_has_next(&self_iterator); ++i) {
+		list_iterator_add(&sublist_iterator, list_iterator_next(&self_iterator));
 	}
-	list_iterate_indirects(self, start, count, _add_to_sublist);
-
 	return sublist;
 }
 
 t_list* list_slice_and_remove(t_list* self, int start, int count) {
-	t_list* sublist = list_create();
-	t_link_element **sublist_indirect = &sublist->head;
-
-	bool _move_from_self_to_sublist(t_link_element **self_indirect) {
-		list_link_element(sublist, sublist_indirect, list_unlink_element(self, self_indirect));
-		sublist_indirect = &(*sublist_indirect)->next;
-		return true;
+	t_list *sublist = list_create();
+	t_list_iterator sublist_iterator = list_iterator_init(sublist);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_advance_to_index(&self_iterator, start);
+	for (int i = 0; i < count && list_iterator_has_next(&self_iterator); ++i) {
+		t_link_element *element = list_iterator_remove_element(&self_iterator);
+		list_iterator_add_element(&sublist_iterator, element);
+		list_iterator_advance(&sublist_iterator);
 	}
-	list_iterate_indirects(self, start, count, _move_from_self_to_sublist);
-
 	return sublist;
 }
 
@@ -195,61 +217,67 @@ t_list* list_take_and_remove(t_list* self, int count) {
 	return list_slice_and_remove(self, 0, count);
 }
 
-t_list* list_filter(t_list* self, bool(*condition)(void*)){
+t_list* list_filter(t_list* self, bool(*condition)(void*)) {
 	t_list *sublist = list_create();
-	t_link_element **indirect = &sublist->head;
-
-	void _add_by_condition(void* data) {
+	t_list_iterator sublist_iterator = list_iterator_init(sublist);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		void* data = list_iterator_next(&self_iterator);
 		if (condition(data)) {
-			list_add_element(sublist, indirect, data);
-			indirect = &(*indirect)->next;
+			list_iterator_add(&sublist_iterator, data);
 		}
 	}
-	list_iterate(self, _add_by_condition);
-
 	return sublist;
 }
 
 t_list* list_map(t_list* self, void*(*transformer)(void*)){
-	t_list *sublist = list_create();
-	t_link_element **indirect = &sublist->head;
-
-	void _map_data(void* data) {
-		list_add_element(sublist, indirect, transformer(data));
-		indirect = &(*indirect)->next;
+	t_list *transformed = list_create();
+	t_list_iterator transformed_iterator = list_iterator_init(transformed);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		void *data = list_iterator_next(&self_iterator);
+		list_iterator_add(&transformed_iterator, transformer(data));
 	}
-	list_iterate(self, _map_data);
-
-	return sublist;
+	return transformed;
 }
 
 t_list* list_flatten(t_list* self) {
-	t_list *sublist = list_create();
-	t_link_element **indirect = &sublist->head;
-
-	void _flatten_data(t_list* list) {
-		void _add_data(void* data) {
-			list_add_element(sublist, indirect, data);
-			indirect = &(*indirect)->next;
-		}
-		list_iterate(list, (void*) _add_data);
+	t_list *flattened = list_create();
+	t_list_iterator flattened_iterator = list_iterator_init(flattened);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		t_list *sublist = list_iterator_next(&self_iterator);
+		list_iterator_add_all(&flattened_iterator, sublist);
 	}
-	list_iterate(self, (void*) _flatten_data);
-
-	return sublist;
+	return flattened;
 }
 
 int list_add_sorted(t_list *self, void* data, bool (*comparator)(void*,void*)) {
-	return list_add_element_sorted(self, list_create_element(data), comparator);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	list_iterator_add_element_sorted(&self_iterator, list_create_element(data), comparator);
+	return list_iterator_index(&self_iterator) + 1;
 }
 
 void list_sort(t_list *self, bool (*comparator)(void *, void *)) {
-	t_list *aux = list_create();
-	while (!list_is_empty(self)) {
-		list_add_element_sorted(aux, list_unlink_element(self, &self->head), comparator);
+	if (list_size(self) < 2) {
+		return;
 	}
-	*self = *aux;
-	free(aux);
+
+	t_list *left = list_take_and_remove(self, list_size(self) / 2);
+	list_sort(left, comparator);
+	t_list_iterator left_iterator = list_iterator_init(left);
+
+	t_list *right = self;
+	list_sort(right, comparator);
+	t_list_iterator right_iterator = list_iterator_init(right);
+
+	while (list_iterator_has_next(&left_iterator)) {
+		t_link_element *element = list_iterator_remove_element(&left_iterator);
+		list_iterator_add_element_sorted(&right_iterator, element, comparator);
+		list_iterator_advance(&right_iterator);
+	}
+
+	list_destroy(left);
 }
 
 t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
@@ -260,21 +288,28 @@ t_list* list_sorted(t_list* self, bool (*comparator)(void *, void *)) {
 
 int list_count_satisfying(t_list* self, bool(*condition)(void*)){
 	int result = 0;
-	void _count_by_condition(void* element_data) {
-		if (condition(element_data)) {
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		if (condition(list_iterator_next(&self_iterator))) {
 			result++;
 		}
 	}
-	list_iterate(self, _count_by_condition);
 	return result;
 }
 
-bool list_any_satisfy(t_list* self, bool(*condition)(void*)){
-	return list_count_satisfying(self, condition) > 0;
+bool list_any_satisfy(t_list* self, bool(*condition)(void*)) {
+	t_list_iterator self_iterator = list_iterator_init(self);
+	return list_iterator_advance_to_condition(&self_iterator, condition);
 }
 
-bool list_all_satisfy(t_list* self, bool(*condition)(void*)){
-	return list_count_satisfying(self, condition) == self->elements_count;
+bool list_all_satisfy(t_list* self, bool(*condition)(void*)) {
+	t_list_iterator self_iterator = list_iterator_init(self);
+	while (list_iterator_has_next(&self_iterator)) {
+		if (!condition(list_iterator_next(&self_iterator))) {
+			return false;
+		}
+	}
+	return true;
 }
 
 t_list* list_duplicate(t_list* self) {
@@ -284,11 +319,13 @@ t_list* list_duplicate(t_list* self) {
 }
 
 void* list_fold1(t_list* self, void* (*operation)(void*, void*)) {
-	return list_fold_elements(self->head->next, self->head->data, operation);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	return list_iterator_fold(&self_iterator, list_iterator_next(&self_iterator), operation);
 }
 
 void* list_fold(t_list* self, void* seed, void*(*operation)(void*, void*)) {
-	return list_fold_elements(self->head, seed, operation);
+	t_list_iterator self_iterator = list_iterator_init(self);
+	return list_iterator_fold(&self_iterator, seed, operation);
 }
 
 void* list_get_minimum(t_list* self, void* (*minimum)(void*, void*)) {
@@ -301,10 +338,7 @@ void* list_get_maximum(t_list* self, void* (*maximum)(void*, void*)) {
 
 t_list_iterator* list_iterator_create(t_list* list) {
 	t_list_iterator* new = malloc(sizeof(t_list_iterator));
-	new->list = list;
-	new->actual = NULL;
-	new->next = &list->head;
-	new->index = -1;
+	*new = list_iterator_init(list);
 	return new;
 }
 
@@ -313,9 +347,7 @@ bool list_iterator_has_next(t_list_iterator* iterator) {
 }
 
 void* list_iterator_next(t_list_iterator* iterator) {
-	iterator->actual = iterator->next;
-	iterator->next = &(*iterator->next)->next;
-	iterator->index++;
+	list_iterator_advance(iterator);
 	return (*iterator->actual)->data;
 }
 
@@ -324,16 +356,17 @@ int list_iterator_index(t_list_iterator* iterator) {
 }
 
 void list_iterator_add(t_list_iterator* iterator, void *data) {
-	iterator->actual = iterator->next;
-	list_add_element(iterator->list, iterator->actual, data);
-	iterator->next = &(*iterator->actual)->next;
-	iterator->index++;
+	list_iterator_add_element(iterator, list_create_element(data));
+	list_iterator_advance(iterator);
 }
 
 void list_iterator_remove(t_list_iterator* iterator) {
-	list_remove_indirect(iterator->list, iterator->actual);
-	iterator->next = iterator->actual;
-	iterator->index--;
+	list_iterator_retreat(iterator);
+	list_destroy_element(list_iterator_remove_element(iterator));
+}
+
+void list_iterator_replace(t_list_iterator* iterator, void *data) {
+	(*iterator->actual)->data = data;
 }
 
 void list_iterator_destroy(t_list_iterator* iterator) {
@@ -349,81 +382,91 @@ static t_link_element* list_create_element(void* data) {
 	return element;
 }
 
-static void list_link_element(t_list* self, t_link_element** indirect, t_link_element* element) {
-	element->next = *indirect;
-	*indirect = element;
-	self->elements_count++;
+static void list_destroy_element(t_link_element* element) {
+	free(element);
 }
 
-static t_link_element* list_unlink_element(t_list* self, t_link_element** indirect) {
-	t_link_element* element = *indirect;
-	*indirect = element->next;
-	self->elements_count--;
+static t_list_iterator list_iterator_init(t_list* list) {
+	return (t_list_iterator) {
+		.list = list,
+		.actual = NULL,
+		.next = &list->head,
+		.index = -1
+	};
+}
+
+static void* list_iterator_peek(t_list_iterator *iterator) {
+	return (*iterator->next)->data;
+}
+
+static void list_iterator_add_element(t_list_iterator *iterator, t_link_element *element) {
+	element->next = *iterator->next;
+	*iterator->next = element;
+	iterator->list->elements_count++;
+}
+
+static t_link_element* list_iterator_remove_element(t_list_iterator *iterator) {
+	t_link_element* element = *iterator->next;
+	*iterator->next = element->next;
+	iterator->list->elements_count--;
 	return element;
 }
 
-static t_link_element **list_get_indirect_in_index(t_list *self, int index) {
-	t_link_element **indirect = &self->head;
-	for (int i = 0; i < index; ++i) {
-		indirect = &(*indirect)->next;
-	}
-	return indirect;
+static void list_iterator_advance(t_list_iterator *iterator) {
+	iterator->index++;
+	iterator->actual = iterator->next;
+	iterator->next = &(*iterator->actual)->next;
 }
 
-static t_link_element **list_get_indirect_by_condition(t_list *self, bool(*condition)(void*)) {
-	t_link_element** indirect = &self->head;
-	while ((*indirect) != NULL && !condition((*indirect)->data)) {
-		indirect = &(*indirect)->next;
-	}
-	return indirect;
+static void list_iterator_retreat(t_list_iterator *iterator) {
+	iterator->next = iterator->actual;
+	iterator->actual = NULL;
+	iterator->index--;
 }
 
-static void list_add_element(t_list *self, t_link_element **indirect, void *data) {
-	list_link_element(self, indirect, list_create_element(data));
-}
-
-static void *list_replace_indirect(t_link_element **indirect, void *data) {
-	void *old_data = (*indirect)->data;
-	(*indirect)->data = data;
-	return old_data;
-}
-
-static void *list_remove_indirect(t_list *self, t_link_element **indirect) {
-	t_link_element *element = list_unlink_element(self, indirect);
-	void *data = element->data;
-	free(element);
-	return data;
-}
-
-static void list_iterate_indirects(t_list *self, int start, int count, bool (*removed)(t_link_element**)) {
-	t_link_element **indirect = list_get_indirect_in_index(self, start);
-	int i = 0;
-	while ((i < count) && (*indirect) != NULL) {
-		if (!removed(indirect)) {
-			indirect = &(*indirect)->next;
+static void list_iterator_add_element_sorted(t_list_iterator *iterator, t_link_element *element, bool (*comparator)(void*,void*)) {
+	while (list_iterator_has_next(iterator)) {
+		if (comparator(element->data, list_iterator_peek(iterator))) {
+			break;
 		}
-		++i;
+		list_iterator_advance(iterator);
+	}
+	list_iterator_add_element(iterator, element);
+}
+
+static void list_iterator_advance_to_index(t_list_iterator *iterator, int index) {
+	while (list_iterator_index(iterator) < (index - 1)) {
+		list_iterator_advance(iterator);
 	}
 }
 
-static int list_add_element_sorted(t_list *self, t_link_element* element, bool (*comparator)(void*,void*)) {
-	t_link_element **indirect = &self->head;
-	int index = 0;
-	while ((*indirect) != NULL && comparator((*indirect)->data, element->data)) {
-		indirect = &(*indirect)->next;
-		index++;
+static bool list_iterator_advance_to_condition(t_list_iterator *iterator, bool(*condition)(void*)) {
+	while (list_iterator_has_next(iterator)) {
+		if (condition(list_iterator_peek(iterator))) {
+			return true;
+		}
+		list_iterator_advance(iterator);
 	}
-	list_link_element(self, indirect, element);
-
-	return index;
+	return false;
 }
 
-static void* list_fold_elements(t_link_element* element, void* seed, void*(*operation)(void*, void*)) {
-	void* result = seed;
-	while (element != NULL) {
-		result = operation(result, element->data);
-		element = element->next;
+static void list_iterator_advance_to_end(t_list_iterator* iterator) {
+	while (list_iterator_has_next(iterator)) {
+		list_iterator_advance(iterator);
 	}
+}
 
+static void list_iterator_add_all(t_list_iterator* iterator, t_list* other) {
+	t_list_iterator other_iterator = list_iterator_init(other);
+	while (list_iterator_has_next(&other_iterator)) {
+		list_iterator_add(iterator, list_iterator_next(&other_iterator));
+	}
+}
+
+static void *list_iterator_fold(t_list_iterator* iterator, void* seed, void*(*operation)(void*, void*)) {
+	void *result = seed;
+	while (list_iterator_has_next(iterator)) {
+		result = operation(result, list_iterator_next(iterator));
+	}
 	return result;
 }

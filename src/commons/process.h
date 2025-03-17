@@ -18,16 +18,18 @@
 #define PROCESS_H_
 
 /**
-* @fn    process_get_thread_id
-* @brief Obtiene el ID del thread actual
-*/
-unsigned int process_get_thread_id();
+ * @file
+ * @brief `#include <commons/process.h>`
+ */
 
 /**
-* @fn    process_getpid
-* @brief Obtiene el ID del proceso actual
-*/
-unsigned int process_getpid();
+ * @brief Obtiene el ID del thread actual
+ */
+unsigned int process_get_thread_id(void);
 
+/**
+ * @brief Obtiene el ID del proceso actual
+ */
+unsigned int process_getpid(void);
 
 #endif /* PROCESS_H_ */

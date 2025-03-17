@@ -5,6 +5,7 @@ all:
 clean:
 	-cd src && $(MAKE) clean
 	-cd tests/unit-tests && $(MAKE) clean
+	-cd docs && $(MAKE) clean
 
 debug:
 	-cd src && $(MAKE) debug
@@ -21,3 +22,8 @@ uninstall:
 
 valgrind: debug
 	cd tests/unit-tests && $(MAKE) valgrind
+
+docs:
+	-cd docs && $(MAKE) all
+
+.PHONY: all clean debug test install uninstall valgrind docs

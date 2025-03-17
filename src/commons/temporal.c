@@ -55,7 +55,11 @@ t_temporal* temporal_create(void) {
 	self->elapsed_ms = 0;
 	self->status = TEMPORAL_STATUS_RUNNING;
 
-	clock_gettime(CLOCK_MONOTONIC_RAW, &self->current);
+	if (clock_gettime(CLOCK_MONOTONIC_RAW, &self->current) == -1) {
+		error_show("Error getting time!");
+		free(self);
+		return NULL;
+	}
 
 	return self;
 }
@@ -89,7 +93,10 @@ void temporal_resume(t_temporal* temporal) {
 	}
 
 	temporal->status = TEMPORAL_STATUS_RUNNING;
-	clock_gettime(CLOCK_MONOTONIC_RAW, &temporal->current);
+
+	if (clock_gettime(CLOCK_MONOTONIC_RAW, &temporal->current) == -1) {
+		error_show("Error getting time!");
+	}
 }
 
 int64_t temporal_diff(t_temporal* temporal_1, t_temporal* temporal_2) {
@@ -98,9 +105,11 @@ int64_t temporal_diff(t_temporal* temporal_1, t_temporal* temporal_2) {
 
 static int64_t calculate_delta_ms(t_temporal* temporal) {
 	struct timespec now;
-	clock_gettime(CLOCK_MONOTONIC_RAW, &now);
+	if (clock_gettime(CLOCK_MONOTONIC_RAW, &now) == -1) {
+		error_show("Error getting time!");
+		return 0;
+	}
 
-	int64_t delta_ms = (now.tv_sec - temporal->current.tv_sec) * 1000 + (now.tv_nsec - temporal->current.tv_nsec) / 1000000;
-
-	return delta_ms;
+	return (now.tv_sec - temporal->current.tv_sec) * 1000
+		+ (now.tv_nsec - temporal->current.tv_nsec) / 1000000;
 }

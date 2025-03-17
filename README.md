@@ -9,15 +9,16 @@ Provee los siguientes TADs:
 * Logging (commons/log.h)
 * Manipulación de Strings (commons/string.h)
 * Manipulación de archivos de configuración (commons/config.h)
-* Funciones de fechas (commons/temporal.h)
-* Manejo de array de bits (commons/bitarray.h)
-* Manejo de timestamps (commons/temporal.h)
-* Información de procesos (commons/process.h)
-* Manejo simple de archivos de texto (commons/txt.h)
-* Conjunto de elementos
+* Colecciones de elementos
   * List (commons/collections/list.h)
   * Dictionary (commons/collections/dictionary.h)
   * Queue (commons/collections/queue.h)
+* Manejo de array de bits (commons/bitarray.h)
+* Manejo de fechas y timestamps (commons/temporal.h)
+* Información de procesos (commons/process.h)
+* Impresión de dumps de memoria (commons/memory.h)
+* Impresión de errores (commons/error.h)
+* Manejo simple de archivos de texto (commons/txt.h)
 
 ## Notas
 
