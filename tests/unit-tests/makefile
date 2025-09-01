@@ -21,10 +21,10 @@ $(BIN_DIR):
 	mkdir -p $@
 
 $(BIN): $(COMMONS_SO) $(BIN_DIR) $(OBJS)
-	$(CC) -L"$(COMMONS_BIN)" -L"$(C_SPEC_BIN)" -o "$@" $(OBJS) -lcommons -lcrypto -lcspecs
+	$(CC) -L"$(COMMONS_BIN)" -o "$@" $(OBJS) -lcommons -lcrypto -lcspecs
 
 build/%.o: ./%.c | $(DEPS)
-	$(CC) -I"$(COMMONS)" -I"$(C_SPEC)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	$(CC) -I"$(COMMONS)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 /usr/include/cspecs/%.h:
 	$(eval TMP := $(shell mktemp -d))
@@ -39,12 +39,12 @@ clean:
 	$(RM) build
 
 test: all
-	LD_LIBRARY_PATH="$(COMMONS_BIN):$(C_SPEC_BIN)" ./$(BIN)
+	LD_LIBRARY_PATH="$(COMMONS_BIN)" ./$(BIN)
 
 $(COMMONS_SO): $(COMMONS_SRCS)
 	-cd $(COMMONS) && $(MAKE) all
 
 valgrind: debug
-	LD_LIBRARY_PATH="$(COMMONS_BIN)/:$(C_SPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
+	LD_LIBRARY_PATH="$(COMMONS_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
 
 .PHONY: all debug clean test valgrind
