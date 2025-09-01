@@ -11,11 +11,17 @@ SUDO=sudo
 endif
 
 ifneq ($(shell which apt-get 2>/dev/null),)
-OPENSSL=apt-get update && apt-get install -y libssl-dev
+UPDATE=apt-get update
+INSTALL=apt-get install -y
+OPENSSL=libssl-dev
 else ifneq ($(shell which dnf 2>/dev/null),)
-OPENSSL=dnf install -y openssl-devel
+UPDATE=dnf check-update
+INSTALL=dnf install -y
+OPENSSL=openssl-devel
 else ifneq ($(shell which yum 2>/dev/null),)
-OPENSSL=yum install -y openssl-devel
+UPDATE=yum check-update
+INSTALL=yum install -y
+OPENSSL=openssl-devel
 endif
 
 # Clean and compile .so
@@ -40,7 +46,8 @@ sources:
 
 # Install OpenSSL development package with apt, dnf or yum
 /usr/include/openssl/%.h:
-	$(SUDO) $(OPENSSL)
+	$(SUDO) $(UPDATE)
+	$(SUDO) $(INSTALL) $(OPENSSL)
 
 # Clean build files
 clean:
