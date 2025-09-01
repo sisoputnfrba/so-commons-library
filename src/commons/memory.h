@@ -41,7 +41,7 @@
 	 * char *dump = mem_hexstring("Hello World", 12);
 	 *
 	 * => "
-	 * 0x00000000: 48 65 6c 6c 6f 20 57 6f  72 6c 64 00              |Hello World.....|"
+	 * 0x00000000: 48 65 6c 6c 6f 20 57 6f  72 6c 64 00              |Hello World.|"
 	 * @endcode
 	 *
 	 * @note Este formato es similar al comando `hexdump -C` de Linux.
