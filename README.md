@@ -43,6 +43,8 @@ Esta biblioteca depende de las siguientes bibliotecas:
 
 - `make uninstall` -> desinstala la biblioteca
 
+> Nota: Es posible que en un momento de la instalación aparezca una pantalla con un menú a raiz de la instalación del paquete de `libssl-dev`, simplemente con apretar Enter alcanza para continuar con la instalación.
+
 ## Guía para el uso
 
 1. Linkear con `-lcommons` y `-lcrypto`
