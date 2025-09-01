@@ -62,3 +62,5 @@ uninstall:
 	$(SUDO) rm -rf /usr/include/commons
 
 .PHONY: all debug sources clean install uninstall
+
+.PRECIOUS: $(DEPS)

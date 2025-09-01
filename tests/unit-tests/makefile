@@ -49,3 +49,5 @@ valgrind: debug
 	LD_LIBRARY_PATH="$(COMMONS_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
 
 .PHONY: all debug clean test valgrind
+
+.PRECIOUS: $(DEPS)
