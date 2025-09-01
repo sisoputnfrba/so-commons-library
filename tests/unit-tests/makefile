@@ -31,6 +31,7 @@ build/%.o: ./%.c | $(DEPS)
 	curl -fsSL "https://github.com/mumuki/cspec/archive/043089d9c55871526f1d6728af4d0febdbe8c38a.tar.gz" \
 		| tar -xzC $(TMP) --strip-components=1
 	$(MAKE) --no-print-directory -C $(TMP) install
+	$(RM) $(TMP)
 
 debug: CC += -DDEBUG -g
 debug: all
