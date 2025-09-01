@@ -5,8 +5,7 @@
     {
       "name": "Linux",
       "includePath": [
-        "${workspaceFolder}/../../src",
-        "${workspaceFolder}/../../cspec"
+        "${workspaceFolder}/../../src"
       ],
       "defines": [],
       "compilerPath": "/usr/bin/gcc",

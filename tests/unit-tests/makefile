@@ -3,10 +3,6 @@ CC=gcc
 
 BASE_DIR=../..
 
-C_SPEC=$(BASE_DIR)/cspec
-C_SPEC_BIN=$(C_SPEC)/release
-C_SPEC_SO=$(C_SPEC_BIN)/libcspecs.so
-
 COMMONS=$(BASE_DIR)/src
 COMMONS_BIN=$(COMMONS)/build
 COMMONS_SO=$(COMMONS_BIN)/libcommons.so
@@ -24,7 +20,7 @@ all: $(BIN)
 $(BIN_DIR):
 	mkdir -p $@
 
-$(BIN): $(C_SPEC_SO) $(COMMONS_SO) $(BIN_DIR) $(OBJS)
+$(BIN): $(COMMONS_SO) $(BIN_DIR) $(OBJS)
 	$(CC) -L"$(COMMONS_BIN)" -L"$(C_SPEC_BIN)" -o "$@" $(OBJS) -lcommons -lcrypto -lcspecs
 
 build/%.o: ./%.c | $(DEPS)
@@ -47,10 +43,6 @@ test: all
 
 $(COMMONS_SO): $(COMMONS_SRCS)
 	-cd $(COMMONS) && $(MAKE) all
-
-$(C_SPEC_SO):
-	-cd $(BASE_DIR) && git submodule init && git submodule update
-	-cd $(C_SPEC) && $(MAKE) all
 
 valgrind: debug
 	LD_LIBRARY_PATH="$(COMMONS_BIN)/:$(C_SPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
