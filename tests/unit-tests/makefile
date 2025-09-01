@@ -31,9 +31,10 @@ build/%.o: ./%.c | $(DEPS)
 	$(CC) -I"$(COMMONS)" -I"$(C_SPEC)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 /usr/include/cspecs/%.h:
+	$(eval TMP := $(shell mktemp -d))
 	curl -fsSL "https://github.com/mumuki/cspec/archive/043089d9c55871526f1d6728af4d0febdbe8c38a.tar.gz" \
-		| tar -xzC /tmp/cspecs --strip-components=1
-	$(MAKE) --no-print-directory -C /tmp/cspecs install
+		| tar -xzC $(TMP) --strip-components=1
+	$(MAKE) --no-print-directory -C $(TMP) install
 
 debug: CC += -DDEBUG -g
 debug: all
