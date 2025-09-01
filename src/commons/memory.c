@@ -44,8 +44,8 @@ char *mem_hexstring(void *source, size_t length) {
       unsigned int ascii_iterator = mem_index - (HEXDUMP_COLS - 1);
       string_append(&dump, "|");
       while(ascii_iterator <= mem_index) {
-        if (ascii_iterator >= length) { // No more blocks to dump, so it adds .
-          string_append(&dump, ".");
+        if (ascii_iterator >= length) { // No more blocks to dump, so it stops iteration
+          break;
         } else if (isprint(((char *)source)[ascii_iterator])) { // Is printable char
           string_append_with_format(&dump, "%c", 0xFF & ((char *)source)[ascii_iterator]);
         }

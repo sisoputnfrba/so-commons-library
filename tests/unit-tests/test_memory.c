@@ -32,7 +32,7 @@ context (test_memory) {
 
         char *dumped_format =
             "\n0x00000000: 53 69 73 6f 70 43 6f 6d  6d 6f 6e 73 4c 69 62 72  |SisopCommonsLibr|"
-            "\n0x00000010: 61 72 79 00                                       |ary.............|";
+            "\n0x00000010: 61 72 79 00                                       |ary.|";
 
         it ("return a string with plain hexdump format") {
             char *result = mem_hexstring_plain(memory, strlen(memory));
@@ -60,7 +60,7 @@ context (test_memory) {
         };
 
         char *plain_format = "0500000048657864756d7078000000";
-        char *dumped_format = "\n0x00000000: 05 00 00 00 48 65 78 64  75 6d 70 78 00 00 00     |....Hexdumpx....|";
+        char *dumped_format = "\n0x00000000: 05 00 00 00 48 65 78 64  75 6d 70 78 00 00 00     |....Hexdumpx...|";
 
         it ("return a string with plain hexdump format") {
             char *result = mem_hexstring_plain(stream, sizeof stream);
