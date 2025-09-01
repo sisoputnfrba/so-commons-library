@@ -17,7 +17,7 @@
 #ifndef CRYPTO_H_
 #define CRYPTO_H_
 
-  #include <openssl/evp.h>
+	#include <openssl/evp.h>
 	#include "memory.h"
 
 	/**
@@ -25,19 +25,19 @@
 	 * @brief `#include <commons/crypto.h>`
 	 */
 
-  /**
-   * @brief Dada una porción de memoria, calcula su hash MD5 y lo devuelve como
-   *        una cadena de caracteres ASCII.
-   *
-   * @return El hash MD5 en formato hexadecimal, o NULL en caso de error.
-   *         Debe ser liberado con `free()`.
-   *
+	/**
+	 * @brief Dada una porción de memoria, calcula su hash MD5 y lo devuelve como
+	 *        una cadena de caracteres ASCII.
+	 *
+	 * @return El hash MD5 en formato hexadecimal, o NULL en caso de error.
+	 *         Debe ser liberado con `free()`.
+	 *
 	 * @code
 	 * char *digest = crypto_md5("Hello World", 12);
 	 *
 	 * => "b10a8db164e0754105b7a99be72e3fe5"
 	 * @endcode
-   */
-  char *crypto_md5(void *source, size_t length);
+	 */
+	char *crypto_md5(void *source, size_t length);
 
 #endif /* CRYPTO_H_ */
