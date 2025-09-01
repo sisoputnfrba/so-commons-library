@@ -26,12 +26,24 @@
 context (test_memory) {
 
     describe ("Stringified Hexstring") {
+        char *memory = "SisopCommonsLibrary";
 
-        char *memory = "Hexdump";
-        char *dumped_format = "\n0x00000000: 48 65 78 64 75 6d 70 00  00 00 00 00 00 00 00 00  |Hexdump.........|";
+        char *plain_format = "5369736f70436f6d6d6f6e734c696272617279";
 
-        it ("return a string with hexdump format") {
-            char *result = mem_hexstring(memory, strlen(memory));
+        char *dumped_format =
+            "\n0x00000000: 53 69 73 6f 70 43 6f 6d  6d 6f 6e 73 4c 69 62 72  |SisopCommonsLibr|"
+            "\n0x00000010: 61 72 79 00                                       |ary.............|";
+
+        it ("return a string with plain hexdump format") {
+            char *result = mem_hexstring_plain(memory, strlen(memory));
+
+            should_string( result ) be equal to(plain_format);
+
+            free(result);
+        } end
+
+        it ("return a string with canonical hex+ASCII hexdump format") {
+            char *result = mem_hexstring(memory, strlen(memory) + 1);
 
             should_string( result ) be equal to(dumped_format);
 
@@ -41,25 +53,28 @@ context (test_memory) {
     } end
 
     describe ("Stream Hexstring") {
+        unsigned char stream[] = {
+            5, 0, 0, 0, // integer 5 in little-endian
+            'H', 'e', 'x', 'd', 'u', 'm', 'p', // "Hexdump" string
+            120, 0, 0, 0 // integer 120 in little-endian
+        };
 
-        char *dumped_format = "\n0x00000000: 05 00 00 00 48 65 78 64  75 6d 70 78 00 00 00 00  |....Hexdumpx....|";
+        char *plain_format = "0500000048657864756d7078000000";
+        char *dumped_format = "\n0x00000000: 05 00 00 00 48 65 78 64  75 6d 70 78 00 00 00     |....Hexdumpx....|";
 
-        it ("return a string with hexdump format") {
-            int first_data = 5; // Como "05 00 00 00" Debido al endianess
-            char *string = "Hexdump";
-            int second_data = 120; // As "78 00 00 00 00" -> 78 == 'x'
-            int total_size = sizeof(int) + strlen(string) + sizeof(int);
-            char *stream = calloc(sizeof(char), total_size);
+        it ("return a string with plain hexdump format") {
+            char *result = mem_hexstring_plain(stream, sizeof stream);
 
-            memcpy(stream, &first_data, sizeof(int));
-            memcpy(stream + sizeof(int), string, strlen(string));
-            memcpy(stream + sizeof(int) + strlen(string), &second_data, sizeof(int));
+            should_string( result ) be equal to(plain_format);
 
-            char *result = mem_hexstring(stream, total_size);
+            free(result);
+        } end
+
+        it ("return a string with canonical hex+ASCII hexdump format") {
+            char *result = mem_hexstring(stream, sizeof stream);
 
             should_string( result ) be equal to(dumped_format);
 
-            free(stream);
             free(result);
         } end
 

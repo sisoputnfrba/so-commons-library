@@ -10,10 +10,11 @@ C_SPEC_SO=$(C_SPEC_BIN)/libcspecs.so
 COMMONS=$(BASE_DIR)/src
 COMMONS_BIN=$(COMMONS)/build
 COMMONS_SO=$(COMMONS_BIN)/libcommons.so
-COMMONS_SRCS=$(patsubst ./%,$(COMMONS)/%,$(shell make --no-print-directory -C $(COMMONS) sources)) 
+COMMONS_SRCS=$(patsubst ./%,$(COMMONS)/%,$(shell make --no-print-directory -C $(COMMONS) sources))
 
 C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
 OBJS=$(C_SRCS:./%.c=build/%.o)
+DEPS=/usr/include/cspecs/cspec.h
 
 BIN_DIR=build
 BIN=$(BIN_DIR)/commons-unit-test
@@ -24,10 +25,15 @@ $(BIN_DIR):
 	mkdir -p $@
 
 $(BIN): $(C_SPEC_SO) $(COMMONS_SO) $(BIN_DIR) $(OBJS)
-	$(CC) -L"$(COMMONS_BIN)" -L"$(C_SPEC_BIN)" -o "$@" $(OBJS) -lcommons -lcspecs
+	$(CC) -L"$(COMMONS_BIN)" -L"$(C_SPEC_BIN)" -o "$@" $(OBJS) -lcommons -lcrypto -lcspecs
 
-build/%.o: ./%.c
+build/%.o: ./%.c | $(DEPS)
 	$(CC) -I"$(COMMONS)" -I"$(C_SPEC)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+
+/usr/include/cspecs/%.h:
+	curl -fsSL "https://github.com/mumuki/cspec/archive/043089d9c55871526f1d6728af4d0febdbe8c38a.tar.gz" \
+		| tar -xzC /tmp/cspecs --strip-components=1
+	$(MAKE) --no-print-directory -C /tmp/cspecs install
 
 debug: CC += -DDEBUG -g
 debug: all

@@ -19,7 +19,7 @@ create-dirs:
 	mkdir -p build/.
 
 $(BIN): dependents create-dirs $(OBJS)
-	$(CC) -L"../../../src/build" -o "$(BIN)" $(OBJS) -lcommons -lpthread
+	$(CC) -L"../../../src/build" -o "$(BIN)" $(OBJS) -lcommons -lcrypto -lpthread
 
 build/%.o: ./%.c
 	$(CC) -I"../../../src" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
