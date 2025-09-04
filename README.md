@@ -32,7 +32,8 @@ Algunas de las consideraciones a tener a la hora de su uso:
 
 Esta biblioteca depende de las siguientes bibliotecas:
 
-* OpenSSL para funciones de criptografía: https://packages.debian.org/sid/libssl-dev
+* OpenSSL para funciones de criptografía: `sudo apt install libssl-dev`
+
 * CSpec para pruebas unitarias: https://github.com/mumuki/cspec
 
 ## Guía de Instalación
@@ -47,7 +48,7 @@ Esta biblioteca depende de las siguientes bibliotecas:
 
 ## Guía para el uso
 
-1. Linkear con `-lcommons` y `-lcrypto`
+1. Linkear con `-lcommons`
 
 2. Para usarla en un .c/.h deberá incluirse de la siguiente forma: `commons/<Nombre_TAD>`
 
@@ -62,5 +63,5 @@ Por ejemplo:
 
 1. Ir a las Properties del proyecto (en el Project Explorer - la columna de la izquierda - la opción aparece dándole click derecho al proyecto), y dentro de la categoría `C/C++ Build` entrar a `Settings`, y ahí a `Tool Settings`.
 2. Buscar `GCC Linker` > `Libraries` > `Libraries`. Notar que entre paréntesis dice `-l`, el parámetro de `gcc` que estamos buscando.
-3. Darle click en el botón de `+`, y poner el nombre de la biblioteca sin el `-l` (en este caso, `commons` y `crypto`).
+3. Darle click en el botón de `+`, y poner el nombre de la biblioteca sin el `-l` (en este caso, `commons`).
 4. Aceptar y buildear el proyecto.
