@@ -32,7 +32,8 @@ Algunas de las consideraciones a tener a la hora de su uso:
 
 Esta biblioteca depende de las siguientes bibliotecas:
 
-* OpenSSL para funciones de criptografía: https://packages.debian.org/sid/libssl-dev
+* OpenSSL para funciones de criptografía: `sudo apt install libssl-dev`
+
 * CSpec para pruebas unitarias: https://github.com/mumuki/cspec
 
 ## Guía de Instalación
