@@ -9,6 +9,7 @@ ifneq ($(shell id -un),root)
 SUDO=sudo
 endif
 
+LIBS=-lcrypto
 DEPS=openssl/evp.h
 
 define check_deps
@@ -28,7 +29,7 @@ build/commons/collections:
 	mkdir -p $@
 
 build/libcommons.so: build/commons/collections $(OBJS)
-	$(CC) -shared -o "$@" $(OBJS)
+	$(CC) -shared -o "$@" $(OBJS) $(LIBS)
 
 build/%.o: %.c | $(DEPS)
 	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
