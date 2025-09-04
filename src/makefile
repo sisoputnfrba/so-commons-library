@@ -31,7 +31,7 @@ build/commons/collections:
 build/libcommons.so: build/commons/collections $(OBJS)
 	$(CC) -shared -o "$@" $(OBJS) $(LIBS)
 
-build/%.o: %.c | $(DEPS)
+build/%.o: %.c
 	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # Add debug parameters and compile
