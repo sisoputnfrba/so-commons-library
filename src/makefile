@@ -1,27 +1,12 @@
 RM=rm -rf
-CC=gcc
+CC=gcc $(shell pkg-config --cflags --libs openssl)
 
 C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
 H_SRCS=$(shell find . -iname "*.h" | tr '\n' ' ')
 OBJS=$(C_SRCS:./%.c=build/%.o)
-DEPS=/usr/include/openssl/evp.h
 
 ifneq ($(shell id -un),root)
 SUDO=sudo
-endif
-
-ifneq ($(shell which apt-get 2>/dev/null),)
-UPDATE=apt-get update
-INSTALL=apt-get install -y
-OPENSSL=libssl-dev
-else ifneq ($(shell which dnf 2>/dev/null),)
-UPDATE=dnf check-update
-INSTALL=dnf install -y
-OPENSSL=openssl-devel
-else ifneq ($(shell which yum 2>/dev/null),)
-UPDATE=yum check-update
-INSTALL=yum install -y
-OPENSSL=openssl-devel
 endif
 
 # Clean and compile .so

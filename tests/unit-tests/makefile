@@ -21,7 +21,7 @@ $(BIN_DIR):
 	mkdir -p $@
 
 $(BIN): $(COMMONS_SO) $(BIN_DIR) $(OBJS)
-	$(CC) -L"$(COMMONS_BIN)" -o "$@" $(OBJS) -lcommons -lcrypto -lcspecs
+	$(CC) -L"$(COMMONS_BIN)" -o "$@" $(OBJS) -lcommons -lcspecs
 
 build/%.o: ./%.c | $(DEPS)
 	$(CC) -I"$(COMMONS)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
