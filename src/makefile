@@ -18,7 +18,7 @@ build/commons/collections:
 build/libcommons.so: build/commons/collections $(OBJS)
 	$(CC) -shared -o "$@" $(OBJS)
 
-build/%.o: %.c | $(DEPS)
+build/%.o: %.c
 	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # Add debug parameters and compile
@@ -28,11 +28,6 @@ debug: all
 # Print all sources
 sources:
 	@echo $(C_SRCS) $(H_SRCS)
-
-# Install OpenSSL development package with apt, dnf or yum
-/usr/include/openssl/%.h:
-	$(SUDO) $(UPDATE)
-	$(SUDO) $(INSTALL) $(OPENSSL)
 
 # Clean build files
 clean:
