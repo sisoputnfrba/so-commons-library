@@ -1,5 +1,6 @@
 RM=rm -rf
-CC=gcc $(shell pkg-config --cflags --libs openssl)
+CC=gcc
+DEPS=openssl
 
 C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
 H_SRCS=$(shell find . -iname "*.h" | tr '\n' ' ')
@@ -16,10 +17,14 @@ build/commons/collections:
 	mkdir -p $@
 
 build/libcommons.so: build/commons/collections $(OBJS)
-	$(CC) -shared -o "$@" $(OBJS)
+	$(CC) $(shell pkg-config --libs $(DEPS)) -shared -o "$@" $(OBJS)
 
 build/%.o: %.c
-	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+ifeq ($(shell pkg-config --exists $(DEPS); echo $$?),0)
+	$(CC) $(shell pkg-config --cflags $(DEPS)) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+else
+	$(error "Dependencies not found. Please check README.md for installation instructions.")
+endif
 
 # Add debug parameters and compile
 debug: CC += -DDEBUG -g
@@ -42,5 +47,3 @@ uninstall:
 	$(SUDO) rm -rf /usr/include/commons
 
 .PHONY: all debug sources clean install uninstall
-
-.PRECIOUS: $(DEPS)
