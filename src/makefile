@@ -17,7 +17,7 @@ build/commons/collections:
 	mkdir -p $@
 
 build/libcommons.so: build/commons/collections $(OBJS)
-	$(CC) $(shell pkg-config --libs $(DEPS)) -shared -o "$@" $(OBJS)
+	$(CC) -shared -o "$@" $(OBJS) $(shell pkg-config --libs $(DEPS))
 
 build/%.o: %.c
 ifeq ($(shell pkg-config --exists $(DEPS); echo $$?),0)
