@@ -31,7 +31,7 @@ $(BIN_DIR) $(VENDOR_DIR):
 	mkdir -p $@
 
 $(BIN): $(COMMONS_SO) $(BIN_DIR) $(OBJS)
-	$(CC) -L"$(COMMONS_BIN)" -o "$@" $(OBJS) -lcommons -lcspecs -Wl,-rpath,"$(COMMONS_BIN):$(CSPEC_BIN)"
+	$(CC) -L"$(COMMONS_BIN)" -L"$(CSPEC_BIN)" -o "$@" $(OBJS) -lcommons -lcspecs
 
 build/%.o: ./%.c $(CSPEC_SO)
 	$(CC) -I"$(COMMONS)" -I"$(CSPEC)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
@@ -43,7 +43,7 @@ clean:
 	$(RM) build
 
 test: all
-	./$(BIN)
+	LD_LIBRARY_PATH="$(COMMONS_BIN):$(CSPEC_BIN)" ./$(BIN)
 
 $(COMMONS_SO): $(COMMONS_SRCS)
 	-cd $(COMMONS) && $(MAKE) all
@@ -55,6 +55,6 @@ $(CSPEC): $(VENDOR_DIR)
 	curl -fsSL "$(CSPEC_REPO)/archive/$(CSPEC_VERSION).tar.gz" | tar -xzC $(VENDOR_DIR)
 
 valgrind: debug
-	valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
+	LD_LIBRARY_PATH="$(COMMONS_BIN):$(CSPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
 
 .PHONY: all debug clean test valgrind
