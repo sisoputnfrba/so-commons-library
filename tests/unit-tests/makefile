@@ -48,13 +48,13 @@ test: all
 $(COMMONS_SO): $(COMMONS_SRCS)
 	-cd $(COMMONS) && $(MAKE) all
 
-valgrind: debug
-	valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
-
 $(CSPEC_SO): $(CSPEC)
 	$(MAKE) -C $(CSPEC)
 
 $(CSPEC): $(VENDOR_DIR)
 	curl -fsSL "$(CSPEC_REPO)/archive/$(CSPEC_VERSION).tar.gz" | tar -xzC $(VENDOR_DIR)
+
+valgrind: debug
+	valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
 
 .PHONY: all debug clean test valgrind
