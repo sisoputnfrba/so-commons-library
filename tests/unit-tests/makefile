@@ -21,10 +21,6 @@ OBJS=$(C_SRCS:%.c=build/%.o)
 BIN_DIR=build
 BIN=$(BIN_DIR)/commons-unit-test
 
-ifneq ($(shell id -un),root)
-SUDO=sudo
-endif
-
 all: $(BIN)
 
 $(BIN_DIR) $(VENDOR_DIR):
