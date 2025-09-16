@@ -31,7 +31,7 @@ build/commons/collections:
 	mkdir -p $@
 
 build/libcommons.so: build/commons/collections $(OBJS)
-	$(CC) -shared -o "$@" $(OBJS)
+	$(CC) -shared -o "$@" $(OBJS) -lcrypto
 
 build/%.o: %.c | $(DEPS)
 	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
