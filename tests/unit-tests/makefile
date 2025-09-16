@@ -16,7 +16,7 @@ BIN=$(BIN_DIR)/commons-unit-test
 
 CSPEC_REPO=https://github.com/mumuki/cspec
 CSPEC_VERSION=043089d9c55871526f1d6728af4d0febdbe8c38a
-CSPEC=$(BIN_DIR)/cspec-$(CSPEC_VERSION)
+CSPEC=cspec
 CSPEC_BIN=$(CSPEC)/release
 CSPEC_SO=$(CSPEC_BIN)/libcspecs.so
 
@@ -44,10 +44,12 @@ $(COMMONS_SO): $(COMMONS_SRCS)
 	-cd $(COMMONS) && $(MAKE) all
 
 $(CSPEC_SO): $(CSPEC)
-	$(MAKE) -C $(CSPEC)
+	$(MAKE) -C "$<"
 
-$(CSPEC): | $(BIN_DIR)
-	curl -fsSL "$(CSPEC_REPO)/archive/$(CSPEC_VERSION).tar.gz" | tar -xzC $(BIN_DIR)
+$(CSPEC):
+	mkdir -p "$@"
+	curl -fsSL "$(CSPEC_REPO)/archive/$(CSPEC_VERSION).tar.gz" \
+		| tar -xzC "$@" --strip-components=1
 
 valgrind: debug
 	LD_LIBRARY_PATH="$(COMMONS_BIN):$(CSPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
