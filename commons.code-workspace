@@ -19,15 +19,15 @@
     },
     {
       "path": "src",
-			"name": "src"
+      "name": "src"
     },
     {
       "path": "tests/unit-tests",
-			"name": "tests/unit-tests"
+      "name": "tests/unit-tests"
     },
     {
       "path": "tests/integration-tests/temporal",
-			"name": "tests/temporal"
+      "name": "tests/temporal"
     },
     {
       "path": "tests/integration-tests/logger",
@@ -39,7 +39,7 @@
     },
     {
       "path": ".",
-			"name": "so-commons-library"
+      "name": "so-commons-library"
     }
   ]
 }
