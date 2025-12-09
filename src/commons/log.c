@@ -56,6 +56,7 @@ t_log* log_create(char* file, char *program_name, bool is_active_console, t_log_
 	if (file != NULL) {
 		if (!string_ends_with(file, ".log")) {
 			error_show("Log file must have .log extension");
+			free(logger);
 			return NULL;
 		}
 		file_opened = txt_open_for_append(file);

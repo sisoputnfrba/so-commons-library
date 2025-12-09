@@ -19,25 +19,31 @@ Provee los siguientes TADs:
 * Impresión de dumps de memoria (commons/memory.h)
 * Impresión de errores (commons/error.h)
 * Manejo simple de archivos de texto (commons/txt.h)
+* Funciones de criptografía (commons/crypto.h)
 
 ## Notas
 
 Algunas de las consideraciones a tener a la hora de su uso:
 
-* Ninguna de las implementaciones utiliza semáforos, por lo que el uso concurrente debe ser implementado por el usuario de estas.
+* Ninguna de las implementaciones utiliza semáforos, por lo que el uso concurrente debe ser implementado por el usuario de éstas.
 * Ninguna de las funciones implementadas posee validaciones para manejo de errores.
 
+## Dependencias
+
+Esta biblioteca depende de las siguientes bibliotecas:
+
+* OpenSSL para funciones de criptografía: https://packages.debian.org/sid/libssl-dev
+* CSpec para pruebas unitarias: https://github.com/mumuki/cspec
+
 ## Guía de Instalación
-
-Esta biblioteca utiliza CSpec para testear todas las funcionalidades, más información en: https://github.com/mumuki/cspec
-
-Instrucciones de instalación:
 
 - Clonar el repositorio desde git (no usar el link de **Download ZIP** que provee GitHub).
 
 - `make install` -> instala la biblioteca en el sistema
 
 - `make uninstall` -> desinstala la biblioteca
+
+> Nota: Es posible que en un momento de la instalación aparezca una pantalla con un menú a raiz de la instalación del paquete de `libssl-dev`, simplemente con apretar Enter alcanza para continuar con la instalación.
 
 ## Guía para el uso
 

@@ -1,43 +1,50 @@
 {
-	"settings": {
-		"debug.onTaskErrors": "abort",
-		"files.associations": {
-			"*.h": "c",
-		},
-		"files.exclude": {
+  "settings": {
+    "debug.onTaskErrors": "abort",
+    "files.associations": {
+      "*.h": "c"
+    },
+    "files.exclude": {
 			".devcontainer/**": true,
-			".github/**": true,
-			"cspec/**": true,
-			"src/**": true,
-			"tests/**": true,
-		},
-		"C_Cpp.errorSquiggles": "disabled",
-	},
-	"folders": [
+      ".github/**": true,
+      "docs/**": true,
+      "src/**": true,
+      "tests/**": true
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+  },
+  "folders": [
 		{
-			"name": "so-commons-library",
-			"path": "."
+			"path": ".devcontainer",
+      "name": ".devcontainer"
 		},
-		{
-			"path": ".devcontainer"
-		},
-		{
-			"path": ".github"
-		},
-		{
-			"path": "src"
-		},
-		{
-			"path": "tests/unit-tests"
-		},
-		{
-			"path": "tests/integration-tests/temporal"
-		},
-		{
-			"path": "tests/integration-tests/logger"
-		},
-		{
-			"path": "docs"
-		},
-	]
+    {
+      "path": ".github",
+      "name": ".github"
+    },
+    {
+      "path": "src",
+      "name": "src"
+    },
+    {
+      "path": "tests/unit-tests",
+      "name": "tests/unit-tests"
+    },
+    {
+      "path": "tests/integration-tests/temporal",
+      "name": "tests/temporal"
+    },
+    {
+      "path": "tests/integration-tests/logger",
+      "name": "tests/logger"
+    },
+    {
+      "path": "docs",
+      "name": "docs"
+    },
+    {
+      "path": ".",
+      "name": "so-commons-library"
+    }
+  ]
 }

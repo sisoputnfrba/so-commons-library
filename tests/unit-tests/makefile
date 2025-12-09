@@ -3,31 +3,33 @@ CC=gcc
 
 BASE_DIR=../..
 
-C_SPEC=$(BASE_DIR)/cspec
-C_SPEC_BIN=$(C_SPEC)/release
-C_SPEC_SO=$(C_SPEC_BIN)/libcspecs.so
-
 COMMONS=$(BASE_DIR)/src
 COMMONS_BIN=$(COMMONS)/build
 COMMONS_SO=$(COMMONS_BIN)/libcommons.so
-COMMONS_SRCS=$(patsubst ./%,$(COMMONS)/%,$(shell make --no-print-directory -C $(COMMONS) sources)) 
+COMMONS_SRCS=$(patsubst ./%,$(COMMONS)/%,$(shell make --no-print-directory -C $(COMMONS) sources))
 
-C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
-OBJS=$(C_SRCS:./%.c=build/%.o)
+C_SRCS=$(wildcard *.c)
+OBJS=$(C_SRCS:%.c=build/%.o)
 
 BIN_DIR=build
 BIN=$(BIN_DIR)/commons-unit-test
+
+CSPEC_REPO=https://github.com/mumuki/cspec
+CSPEC_VERSION=043089d9c55871526f1d6728af4d0febdbe8c38a
+CSPEC=cspec
+CSPEC_BIN=$(CSPEC)/release
+CSPEC_SO=$(CSPEC_BIN)/libcspecs.so
 
 all: $(BIN)
 
 $(BIN_DIR):
 	mkdir -p $@
 
-$(BIN): $(C_SPEC_SO) $(COMMONS_SO) $(BIN_DIR) $(OBJS)
-	$(CC) -L"$(COMMONS_BIN)" -L"$(C_SPEC_BIN)" -o "$@" $(OBJS) -lcommons -lcspecs
+$(BIN): $(COMMONS_SO) $(OBJS) | $(BIN_DIR) $(CSPEC_SO)
+	$(CC) -L"$(COMMONS_BIN)" -L"$(CSPEC_BIN)" -o "$@" $(OBJS) -lcommons -lcspecs
 
-build/%.o: ./%.c
-	$(CC) -I"$(COMMONS)" -I"$(C_SPEC)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+build/%.o: ./%.c $(CSPEC_SO) | $(BIN_DIR)
+	$(CC) -I"$(COMMONS)" -I"$(CSPEC)" -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 debug: CC += -DDEBUG -g
 debug: all
@@ -36,16 +38,20 @@ clean:
 	$(RM) build
 
 test: all
-	LD_LIBRARY_PATH="$(COMMONS_BIN):$(C_SPEC_BIN)" ./$(BIN)
+	LD_LIBRARY_PATH="$(COMMONS_BIN):$(CSPEC_BIN)" ./$(BIN)
 
 $(COMMONS_SO): $(COMMONS_SRCS)
 	-cd $(COMMONS) && $(MAKE) all
 
-$(C_SPEC_SO):
-	-cd $(BASE_DIR) && git submodule init && git submodule update
-	-cd $(C_SPEC) && $(MAKE) all
+$(CSPEC_SO): $(CSPEC)
+	$(MAKE) -C "$<"
+
+$(CSPEC):
+	mkdir -p "$@"
+	curl -fsSL "$(CSPEC_REPO)/archive/$(CSPEC_VERSION).tar.gz" \
+		| tar -xzC "$@" --strip-components=1
 
 valgrind: debug
-	LD_LIBRARY_PATH="$(COMMONS_BIN)/:$(C_SPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
+	LD_LIBRARY_PATH="$(COMMONS_BIN):$(CSPEC_BIN)" valgrind --error-exitcode=42 --leak-check=full -v ./$(BIN)
 
 .PHONY: all debug clean test valgrind

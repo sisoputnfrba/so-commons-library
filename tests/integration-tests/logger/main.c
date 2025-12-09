@@ -35,12 +35,12 @@ int main(int argc, char** argv) {
     close(mkstemp(temp_file));
 
     if (temp_file != NULL) {
-        pthread_create(&th1, NULL, (void*) log_in_disk, string_duplicate(temp_file));
-        pthread_create(&th2, NULL, (void*) log_in_disk, string_duplicate(temp_file));
+        pthread_create(&th1, NULL, (void*) log_in_disk, string_from_format("%s.log", temp_file));
+        pthread_create(&th2, NULL, (void*) log_in_disk, string_from_format("%s.log", temp_file));
 
         pthread_join(th1, NULL);
         pthread_join(th2, NULL);
-        printf("\nRevisar el archivo de log que se creo en: %s\n", temp_file);
+        printf("\nRevisar el archivo de log que se creo en: %s.log\n", temp_file);
     } else {
         printf("No se pudo generar el archivo de log\n");
     }

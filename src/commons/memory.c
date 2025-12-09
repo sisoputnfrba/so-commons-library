@@ -32,8 +32,8 @@ char *mem_hexstring(void *source, size_t length) {
     // Adds hex data (00 00 00 00 00...)
     if (mem_index < length) {
       string_append_with_format(&dump, "%02x ", 0xFF & ((char *)source)[mem_index]);
-    } else { // No more blocks to dump, so it adds 00
-      string_append(&dump, "00 ");
+    } else { // No more blocks to dump, so it adds empty spaces
+      string_append(&dump, "   ");
     }
     // Adds an extra space if hex data is the last column of HEXDUMP_COLS_SEP
     if (mem_index % HEXDUMP_COLS_SEP == (HEXDUMP_COLS_SEP -1)) {
@@ -44,8 +44,8 @@ char *mem_hexstring(void *source, size_t length) {
       unsigned int ascii_iterator = mem_index - (HEXDUMP_COLS - 1);
       string_append(&dump, "|");
       while(ascii_iterator <= mem_index) {
-        if (ascii_iterator >= length) { // No more blocks to dump, so it adds .
-          string_append(&dump, ".");
+        if (ascii_iterator >= length) { // No more blocks to dump, so it stops iteration
+          break;
         } else if (isprint(((char *)source)[ascii_iterator])) { // Is printable char
           string_append_with_format(&dump, "%c", 0xFF & ((char *)source)[ascii_iterator]);
         }
@@ -57,6 +57,14 @@ char *mem_hexstring(void *source, size_t length) {
       string_append(&dump, "|");
     }
     mem_index++;
+  }
+  return dump;
+}
+
+char *mem_hexstring_plain(void *source, size_t length) {
+  char *dump = string_new();
+  for (size_t i = 0; i < length; i++) {
+    string_append_with_format(&dump, "%02x", 0xFF & ((unsigned char *)source)[i]);
   }
   return dump;
 }
