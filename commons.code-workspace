@@ -5,7 +5,7 @@
       "*.h": "c"
     },
     "files.exclude": {
-			".devcontainer/**": true,
+      ".devcontainer/**": true,
       ".github/**": true,
       "docs/**": true,
       "src/**": true,
@@ -14,10 +14,10 @@
     "C_Cpp.errorSquiggles": "disabled"
   },
   "folders": [
-		{
-			"path": ".devcontainer",
+    {
+      "path": ".devcontainer",
       "name": ".devcontainer"
-		},
+    },
     {
       "path": ".github",
       "name": ".github"
