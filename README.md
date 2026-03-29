@@ -65,7 +65,7 @@ Por ejemplo:
 3. Darle click en el botón de `+`, y poner el nombre de la biblioteca sin el `-l` (en este caso, `commons`).
 4. Aceptar y buildear el proyecto.
 
-## Contribucion
+## Contribución
 
 Para contribuir se puede desarrollar dentro del container configurado por `.devcontainer/devcontainer.json`.
 
