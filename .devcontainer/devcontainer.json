@@ -1,9 +1,18 @@
 {
-  "build": { "dockerfile": "Dockerfile" },
-  "workspaceFolder": "/workspaces/so-commons-library/commons.code-workspace",
+  "name": "SisOp Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "remoteUser": "vscode",
   "customizations": {
     "vscode": {
-      "extensions": ["ms-vscode.cpptools", "ms-vscode.cpptools-themes"]
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.hexeditor",
+        "nhoizey.gremlins",
+        "eamodio.gitlens"
+      ]
     }
   }
 }

@@ -1,21 +1,15 @@
-FROM docker.io/library/ubuntu:22.04
+FROM ghcr.io/sisoputnfrba/entorno-docker/ubuntu:22.04
 
-ARG CSPEC_VERSION=396445c217b366fd3a41c33a38e9a8dd75c3f0e5
+ARG CSPEC_COMMIT=043089d9c55871526f1d6728af4d0febdbe8c38a
+ARG COMMONS_VERSION=1.9.0
 
-RUN apt-get update -y \
-    && apt-get install make git valgrind gcc gdb libc6-dev -y --no-install-recommends \
-    && git config --global --add safe.directory /workspaces/so-commons-library \
-    && git config --global --add safe.directory /workspaces/so-commons-library/cspec
+RUN useradd -m -s /bin/bash vscode \
+    && echo "vscode ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/vscode \
+    && chmod 0440 /etc/sudoers.d/vscode
 
-WORKDIR /workspaces
+RUN curl -L https://github.com/mumuki/cspec/archive/${CSPEC_COMMIT}.tar.gz \
+    | tar -xz -C /tmp \
+    && make -C /tmp/cspec-${CSPEC_COMMIT} debug install \
+    && rm -rf /tmp/cspec-${CSPEC_COMMIT}
 
-ADD https://github.com/mumuki/cspec/archive/${CSPEC_VERSION}.tar.gz cspec.tar.gz
-
-RUN tar -xzf cspec.tar.gz \
-    && rm cspec.tar.gz \
-    && make -C cspec-${CSPEC_VERSION} install \
-    && rm -rf cspec
-
-WORKDIR /workspaces/so-commons-library
-
-CMD [ "/bin/bash" ]
+USER vscode
