@@ -1,0 +1,21 @@
+{
+  "name": "SisOp Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.hexeditor",
+        "nhoizey.gremlins",
+        "eamodio.gitlens"
+      ]
+    }
+  }
+}
