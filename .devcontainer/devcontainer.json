@@ -5,6 +5,9 @@
     "context": "."
   },
   "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [
