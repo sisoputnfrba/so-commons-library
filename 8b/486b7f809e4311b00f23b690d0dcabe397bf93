@@ -1,0 +1,37 @@
+src/commons/socket.c
+  s_4692ad3ba0273f::t_2ad0df3253c866 1-100
+src/commons/serialization.c
+  s_4692ad3ba0273f::t_6710fa12a45fce 1-52,54-105,107-145,147-176
+  s_4692ad3ba0273f::t_587d8ba320e9e2 53,106
+  s_4692ad3ba0273f::t_0e4b29d6139590 146
+README.md
+  s_4692ad3ba0273f::t_6710fa12a45fce 23
+  s_4692ad3ba0273f::t_2ad0df3253c866 24
+src/commons/serialization.h
+  s_4692ad3ba0273f::t_6710fa12a45fce 1-33,36-121
+  s_4692ad3ba0273f::t_8005554e0d2e96 34-35
+tests/unit-tests/test_serialization.c
+  s_4692ad3ba0273f::t_2ad0df3253c866 18
+  s_4692ad3ba0273f::t_10ab226595bfc1 156-170
+  s_4692ad3ba0273f::t_33e7b067841c51 196-233
+  s_4692ad3ba0273f::t_587d8ba320e9e2 65,68,70,81,90,122
+  s_4692ad3ba0273f::t_6710fa12a45fce 1-17,19-64,66-67,69,71-80,82-89,91-121,123-155,171-195,234-235
+src/commons/socket.h
+  s_4692ad3ba0273f::t_2ad0df3253c866 1-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "8b486b7f809e4311b00f23b690d0dcabe397bf93",
+  "prompts": {},
+  "sessions": {
+    "s_4692ad3ba0273f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e2d20-676d-72b3-a764-e51ea977cdc2",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Juan Ignacio Mesaglio <juan.mesaglio@gmail.com>"
+    }
+  }
+}
