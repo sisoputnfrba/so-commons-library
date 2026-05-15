@@ -19,6 +19,9 @@ Provee los siguientes TADs:
 * Impresión de dumps de memoria (commons/memory.h)
 * Impresión de errores (commons/error.h)
 * Manejo simple de archivos de texto (commons/txt.h)
+* Funciones de criptografía (commons/crypto.h)
+* Serialización de buffers para transporte binario (commons/serialization.h)
+* Utilidades para envio y recepcion por sockets (commons/socket.h)
 
 ## Notas
 
