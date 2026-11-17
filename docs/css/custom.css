@@ -1,13 +1,109 @@
-#titlearea {
-    color: var(--header-foreground) !important; /* Inherit color from parent */
-    text-decoration: none; /* Remove underline */
+html {
+    --font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --page-background-color: #fafafa;
+    --header-background: #f5f5f5;
+    --separator-color: #e5e5e5;
+    --side-nav-background: #f0f0f0;
+    --code-background: #f0f0f0;
+    --fragment-background: #f0f0f0;
+    --tablehead-background: #f0f0f0;
+    --blockquote-background: #f0f0f0;
 }
 
-#titlearea:hover {
-    text-decoration: none; /* Ensure no underline on hover */
+html.dark-mode {
+    --primary-color: #93c5fd;
+    --primary-dark-color: #bfdbfe;
+    --primary-light-color: #60a5fa;
+    --on-primary-color: #0a0a0a;
+    --page-background-color: #0a0a0a;
+    --header-background: #111111;
+    --separator-color: #262626;
+    --side-nav-background: #171717;
+    --code-background: #171717;
+    --fragment-background: #171717;
+    --tablehead-background: #171717;
+    --blockquote-background: #171717;
+}
+
+html.light-mode {
+    color-scheme: light;
+}
+
+body {
+    overflow-x: clip;
+}
+
+utnso-header {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 48px;
+    background: #fafafa;
+}
+
+html.dark-mode utnso-header {
+    background: #0a0a0a;
+}
+
+#top {
+    position: sticky;
+    top: 48px;
+    z-index: 90;
+    min-height: 48px;
+}
+
+#titlearea {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 24px;
+}
+
+#projectname {
+    color: var(--header-foreground);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+#projectnumber {
+    color: var(--page-secondary-foreground-color);
+    font-size: 12px;
+}
+
+#main-nav {
+    position: relative;
+    padding: 4px 16px;
+}
+
+a.anchor {
+    scroll-margin-top: 112px;
 }
 
 a[href="#details"],
 a[href$="source.html"] {
-    display: none; /* Hide links to details section and source files */
+    display: none;
+}
+
+@media (max-width: 767px) {
+    a.anchor {
+        scroll-margin-top: 144px;
+    }
+
+    #titlearea {
+        padding: 8px 24px 4px;
+    }
+}
+
+@media (min-width: 768px) {
+    #main-menu a span.sub-arrow {
+        top: 50%;
+        transform: translateY(-65%) rotate(45deg);
+    }
+
+    #main-menu ul a span.sub-arrow {
+        transform: translateY(-50%) rotate(-45deg);
+    }
 }
